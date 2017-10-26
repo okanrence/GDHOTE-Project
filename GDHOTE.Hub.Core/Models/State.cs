@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GDHOTE.Hub.Core
+namespace GDHOTE.Hub.Core.Models
 {
-    public class Class1
+    public class State
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

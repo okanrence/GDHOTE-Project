@@ -1,0 +1,27 @@
+﻿@model List<GDHOTE.Hub.Core.Models.State>
+
+@{
+    ViewBag.Title = "States";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>States</h2>
+<div>
+    <table id="movies" class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var state in Model)
+        {
+            <tr>
+                <td>@state.Id</td>
+                <td>@state.Name</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
