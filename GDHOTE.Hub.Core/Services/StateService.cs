@@ -30,7 +30,7 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var states = db.Query<State>("select * from GDH_States");
+                    var states = db.Fetch<State>();
                     return states;
                 }
             }

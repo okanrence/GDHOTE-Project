@@ -29,7 +29,7 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Query<Country>("select * from GDH_Countries");
+                    var countries = db.Fetch<Country>();
                     return countries;
                 }
             }
