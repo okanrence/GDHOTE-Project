@@ -5,6 +5,11 @@
 }
 
 <h2>Countries</h2>
+<p>
+    @Html.ActionLink("New Country", "New", "Country", null, new { @class = "btn btn-primary" })
+</p>
+
+
 @if (Model == null || Model.Count == 0)
 {
     <p>No record(s) found</p>
@@ -17,14 +22,17 @@ else
                 <tr>
                     <th>Code</th>
                     <th>Name</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var country in Model)
                 {
                     <tr>
-                        <td>@country.CountryCode</td>
+                        <td>@Html.ActionLink(country.CountryCode, "Edit", "Country", new { id = country.Id }, null)</td>
                         <td>@country.CountryName</td>
+                        <td><button data-customer-id="@country.Id" class="btn btn-link js-delete">Delete</button></td>
+
                     </tr>
                 }
             </tbody>

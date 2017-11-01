@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,12 +10,17 @@ using NPoco;
 namespace GDHOTE.Hub.Core.Models
 {
     [TableName("HUB_States")]
-    [PrimaryKey("StateKey")]
     public class State
     {
-        public int StateKey { get; set; }
-        public int CountryKey { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        public string CountryCode { get; set; }
+        [Required]
+        [Display(Name = "State Code")]
         public string StateCode { get; set; }
+        [Required]
+        [Display(Name = "State Name")]
         public string StateName { get; set; }
+        public DateTime RecordDate { get; set; }
     }
 }

@@ -1,0 +1,54 @@
+﻿@model  GDHOTE.Hub.Core.Models.Country
+@{
+    ViewBag.Title = "CountryForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model == null ? "New Country" : "Edit Country";
+    }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "Country"))
+{
+    <div>
+        @*@Html.ValidationSummary(true, "Please fix the below errors.")*@
+        <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12">
+            <div class="form-group">
+                <div class="col-md-4">
+                    @Html.LabelFor(c => c.CountryCode)
+                </div>
+                <div class="col-md-6">
+                    @Html.TextBoxFor(c => c.CountryCode, new { @class = "form-control" })
+                </div>
+                @Html.ValidationMessageFor(c => c.CountryCode)
+            </div>
+            <div class="form-group">
+                <div class="col-md-4">
+                    @Html.LabelFor(c => c.CountryName)
+                </div>
+                <div class="col-md-6">
+                    @Html.TextBoxFor(c => c.CountryName, new { @class = "form-control" })
+                </div>
+                @Html.ValidationMessageFor(c => c.CountryName)
+            </div>
+            <div class="form-group">
+                <div class="col-md-10">
+                    <div>@Html.HiddenFor(c => c.Id)</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+

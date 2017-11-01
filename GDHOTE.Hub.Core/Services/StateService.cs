@@ -9,18 +9,20 @@ namespace GDHOTE.Hub.Core.Services
 {
     public class StateService : BaseService
     {
-        public void SaveState(State state)
+        public static string SaveState(State state)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
                     var result = db.Insert(state);
+                    return result.ToString();
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                if (ex.Message.Contains("The duplicate key")) throw new Exception("Cannot Insert duplicate record");
+                throw new Exception("Error occured while trying to insert state");
             }
         }
 
@@ -39,5 +41,36 @@ namespace GDHOTE.Hub.Core.Services
                 throw ex;
             }
         }
+        public static State GetState(int id)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var state = db.Fetch<State>().SingleOrDefault(s => s.Id == id);
+                    return state;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static int UpdateState(State state)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var result = db.Update(state);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

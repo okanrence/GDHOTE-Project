@@ -1,0 +1,56 @@
+﻿@model List<GDHOTE.Hub.Core.Models.Member>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Members</h2>
+<p>
+    @Html.ActionLink("New Member", "New", "Member", null, new { @class = "btn btn-primary" })
+</p>
+
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No record(s) found</p>
+}
+else
+{
+    <div>
+        <table id="movies" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Member Code</th>
+                    <th>Last Name</th>
+                    <th>Other Name(s)</th>
+                    <th>Sex</th>
+                    <th>Martial Status</th>
+                    <th>Status</th>
+                    <th>Date Of Birth</th>
+                    <th>Magus</th>
+                    <th>Magus Date</th>
+                    <th>Record Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var member in Model)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(member.MemberCode, "Edit", "Member", new { id = member.MemberKey }, null)</td>
+                        <td>@member.LastName</td>
+                        <td>@member.FirstName ,  @member.MiddleName </td>
+                        <td>@member.Sex</td>
+                        <td>@member.MartialStatus</td>
+                        <td>@member.StatusCode</td>
+                        <td>@member.DateOfBirth.ToString("dd-MMM-yyyy")</td>
+                        <td>@member.MagusFlag</td>
+                        <td>@member.MagusDate.ToString("dd-MMM-yyyy")</td>
+                        <td>@member.RecordDate.ToString("dd-MMM-yyyy")</td>
+                        <td><button data-customer-id="@member.MemberKey" class="btn btn-link js-delete">Delete</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

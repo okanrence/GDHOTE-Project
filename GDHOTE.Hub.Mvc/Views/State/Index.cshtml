@@ -6,6 +6,10 @@
 }
 
 <h2>States</h2>
+<p>
+    @Html.ActionLink("New State", "New", "State", null, new { @class = "result-list-button" })
+</p>
+
 
 @if (Model == null)
 {
@@ -17,16 +21,20 @@ else
         <table id="movies" class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>Code</th>
                     <th>Name</th>
+                    <th>Code</th>
+                    <th>Country Code</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var state in Model)
                 {
                     <tr>
+                        <td>@Html.ActionLink(state.StateName, "Edit", "State", new { id = state.Id }, null)</td>
                         <td>@state.StateCode</td>
-                        <td>@state.StateName</td>
+                        <td>@state.CountryCode</td>
+                        <td><button data-customer-id="@state.Id" class="btn btn-link js-delete">Delete</button></td>
                     </tr>
                 }
             </tbody>

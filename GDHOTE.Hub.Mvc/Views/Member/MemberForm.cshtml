@@ -1,0 +1,46 @@
+﻿@model GDHOTE.Hub.Core.Models.Member
+
+@{
+    ViewBag.Title = "MemberForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = Model == null ? "New Member" : "Edit Member";
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "Member"))
+{
+    @Html.ValidationSummary(true, "Please fix the below errors.")
+    <div class="form-group">
+        @Html.LabelFor(m => m.MemberCode)
+        @Html.TextBoxFor(m => m.MemberCode, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.MemberCode)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.FirstName)
+        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.FirstName)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.MiddleName)
+        @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.MiddleName)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.LastName)
+        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.LastName)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.DateOfBirth)
+        @Html.TextBoxFor(m => m.DateOfBirth, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.DateOfBirth)
+    </div>
+    <div>@Html.HiddenFor(m => m.MemberKey)</div>
+    <div>
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+}
+
