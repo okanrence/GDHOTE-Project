@@ -37,7 +37,7 @@ else
                 @foreach (var member in Model)
                 {
                     <tr>
-                        <td>@Html.ActionLink(member.MemberCode, "Edit", "Member", new { id = member.MemberKey }, null)</td>
+                        <td>@Html.ActionLink(!string.IsNullOrEmpty(member.MemberCode) ? member.MemberCode : "NA", "Edit", "Member", new { id = member.MemberKey }, null)</td>
                         <td>@member.LastName</td>
                         <td>@member.FirstName ,  @member.MiddleName </td>
                         <td>@member.Sex</td>
@@ -45,7 +45,8 @@ else
                         <td>@member.StatusCode</td>
                         <td>@member.DateOfBirth.ToString("dd-MMM-yyyy")</td>
                         <td>@member.MagusFlag</td>
-                        <td>@member.MagusDate.ToString("dd-MMM-yyyy")</td>
+                        <td>@*((@member.MagusDate.HasValue) ? @member.MagusDate.Value.Date.ToString("dd-MMM-yyyy") : "" )*@</td>
+                        <td>@*@member.MagusDate.Value.Date.ToString("dd-MMM-yyyy")*@</td>
                         <td>@member.RecordDate.ToString("dd-MMM-yyyy")</td>
                         <td><button data-customer-id="@member.MemberKey" class="btn btn-link js-delete">Delete</button></td>
                     </tr>

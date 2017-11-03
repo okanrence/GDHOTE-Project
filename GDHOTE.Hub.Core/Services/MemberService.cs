@@ -9,13 +9,14 @@ namespace GDHOTE.Hub.Core.Services
 {
     public class MemberService : BaseService
     {
-        public void Save(Member member)
+        public static string SaveMember(Member member)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    db.Insert(member);
+                   var result= db.Insert(member);
+                    return result.ToString();
                 }
             }
             catch (Exception ex)
@@ -51,6 +52,21 @@ namespace GDHOTE.Hub.Core.Services
             catch (Exception ex)
             {
                 throw new Exception("Error occured while trying to fetch member");
+            }
+        }
+        public static int UpdateState(Member member)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var result = db.Update(member);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

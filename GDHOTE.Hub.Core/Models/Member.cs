@@ -13,7 +13,6 @@ namespace GDHOTE.Hub.Core.Models
     public class Member
     {
         public int MemberKey { get; set; }
-        [Required]
         [Display(Name = "Member Code")]
         public string MemberCode { get; set; }
         [Required]
@@ -23,15 +22,21 @@ namespace GDHOTE.Hub.Core.Models
         [Required]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
+        [Required]
         public string Sex { get; set; }
-        public string MagusFlag { get; set; }
+        public bool MagusFlag { get; set; }
+        [Required]
         public string MartialStatus { get; set; }
         public string StatusCode { get; set; }
+        public string DeleteFlag { get; set; }
+        public string ApprovedFlag { get; set; }
         [Required]
         [Display(Name = "Date Of Birth")]
         public DateTime DateOfBirth { get; set; }
-        public DateTime MagusDate { get; set; }
+        public DateTime? MagusDate { get; set; }
         public DateTime RecordDate { get; set; }
         public DateTime PostedDate { get; set; }
+        public DateTime? ApprovedDate { get; set; }
+        public DateTime? LastUpdatedDate { get; set; }
     }
 }

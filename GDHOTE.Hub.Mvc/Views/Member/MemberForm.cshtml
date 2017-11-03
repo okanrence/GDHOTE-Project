@@ -1,4 +1,4 @@
-﻿@model GDHOTE.Hub.Core.Models.Member
+﻿@model GDHOTE.Hub.Core.ViewModels.MemberFormViewModel
 
 @{
     ViewBag.Title = "MemberForm";
@@ -6,38 +6,58 @@
 }
 
 @{
-    var pagename = Model == null ? "New Member" : "Edit Member";
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model.Member.MemberKey == 0 ? "New Member" : "Edit Member";
+    }
+
 }
 <h2>@pagename</h2>
 @using (Html.BeginForm("Save", "Member"))
 {
     @Html.ValidationSummary(true, "Please fix the below errors.")
+    @*<div class="form-group">
+            @Html.LabelFor(m => m.Member.MemberCode)
+            @Html.TextBoxFor(m => m.Member.MemberCode, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Member.MemberCode)
+        </div>*@
     <div class="form-group">
-        @Html.LabelFor(m => m.MemberCode)
-        @Html.TextBoxFor(m => m.MemberCode, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MemberCode)
+        @Html.LabelFor(m => m.Member.FirstName)
+        @Html.TextBoxFor(m => m.Member.FirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Member.FirstName)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.FirstName)
-        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.FirstName)
+        @Html.LabelFor(m => m.Member.MiddleName)
+        @Html.TextBoxFor(m => m.Member.MiddleName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Member.MiddleName)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.MiddleName)
-        @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MiddleName)
+        @Html.LabelFor(m => m.Member.LastName)
+        @Html.TextBoxFor(m => m.Member.LastName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Member.LastName)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.LastName)
-        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.LastName)
+        @Html.LabelFor(m => m.Member.DateOfBirth)
+        @Html.TextBoxFor(m => m.Member.DateOfBirth, "{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Member.DateOfBirth)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.DateOfBirth)
-        @Html.TextBoxFor(m => m.DateOfBirth, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.DateOfBirth)
+        @Html.LabelFor(m => m.Member.Sex)
+        @Html.DropDownListFor(m => m.Member.Sex, new SelectList(Model.Sexs, "Code", "Description"), "Select Sex", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Member.Sex)
     </div>
-    <div>@Html.HiddenFor(m => m.MemberKey)</div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Member.MartialStatus)
+        @Html.DropDownListFor(m => m.Member.MartialStatus, new SelectList(Model.MaritalStatus, "Code", "Description"), "Select Status", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Member.MartialStatus)
+    </div>
+    <div class="checkbox">
+        <label>
+            @Html.CheckBoxFor(m => m.Member.MagusFlag) Is Magus?
+        </label>
+    </div>
+    <div>@Html.HiddenFor(m => m.Member.MemberKey)</div>
     <div>
         @Html.AntiForgeryToken()
         <button type="submit" class="btn btn-primary">Save</button>
