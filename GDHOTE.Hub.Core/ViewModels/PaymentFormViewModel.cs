@@ -11,5 +11,6 @@ namespace GDHOTE.Hub.Core.ViewModels
     {
         public Payment Payment { get; set; }
         public List<PaymentType> PaymentTypes { get; set; }
+        public List<PaymentMode> ModeOfPayments { get; set; }
     }
 }

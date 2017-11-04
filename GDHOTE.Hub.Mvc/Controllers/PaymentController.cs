@@ -19,10 +19,12 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult New()
         {
+            var paymentModes = PaymentModeService.GetPaymentModes().ToList();
             var paymentTypes = PaymentTypeService.GetPaymentTypes().ToList();
             var paymentViewModel = new PaymentFormViewModel
             {
                 Payment = new Payment(),
+                ModeOfPayments = paymentModes,
                 PaymentTypes = paymentTypes
             };
             return View("PaymentForm", paymentViewModel);

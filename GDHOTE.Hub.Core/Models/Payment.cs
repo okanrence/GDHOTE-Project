@@ -20,6 +20,9 @@ namespace GDHOTE.Hub.Core.Models
         [Required]
         [Display(Name = "Payment Type")]
         public int PaymentTypeId { get; set; }
+        [Required]
+        [Display(Name = "Mode of Payment")]
+        public string ModeOfPayment { get; set; }
         public string Narration { get; set; }
         public int CreatedBy { get; set; }
         public DateTime RecordDate { get; set; }
