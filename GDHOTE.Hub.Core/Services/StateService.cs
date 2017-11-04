@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using GDHOTE.Hub.Core.Models;
@@ -9,7 +10,7 @@ namespace GDHOTE.Hub.Core.Services
 {
     public class StateService : BaseService
     {
-        public static string SaveState(State state)
+        public static string Save(State state)
         {
             try
             {
@@ -56,7 +57,7 @@ namespace GDHOTE.Hub.Core.Services
                 throw ex;
             }
         }
-        public static int UpdateState(State state)
+        public static int Update(State state)
         {
             try
             {
@@ -71,6 +72,21 @@ namespace GDHOTE.Hub.Core.Services
                 throw ex;
             }
         }
-
+        public static int Delete(int id)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var result = db.Delete<State>(id);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                throw new Exception("Error occured while trying to delete record");
+            }
+        }
     }
 }

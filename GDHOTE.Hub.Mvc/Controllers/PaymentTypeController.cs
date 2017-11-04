@@ -30,14 +30,14 @@ namespace GDHOTE.Hub.Mvc.Controllers
             if (paymentType.PaymentTypeId == 0)
             {
                 paymentType.Status = "A";
-                var result = PaymentTypeService.SavePaymentType(paymentType);
+                var result = PaymentTypeService.Save(paymentType);
             }
             else
             {
                 var paymentTypeInDb = PaymentTypeService.GetPaymentType(paymentType.PaymentTypeId);
                 if (paymentTypeInDb == null) return HttpNotFound();
                 paymentTypeInDb.Description = paymentType.Description;
-                var result = PaymentTypeService.UpdatePaymentType(paymentTypeInDb);
+                var result = PaymentTypeService.Update(paymentTypeInDb);
             }
             return RedirectToAction("Index", "PaymentType");
         }

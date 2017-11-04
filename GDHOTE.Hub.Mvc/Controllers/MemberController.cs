@@ -66,7 +66,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             member.PostedDate = DateTime.Now;
             if (member.MemberKey == 0)
             {
-                var result = MemberService.SaveMember(member);
+                var result = MemberService.Save(member);
             }
             else
             {
@@ -77,7 +77,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 memberInDb.MiddleName = member.MiddleName;
                 memberInDb.DateOfBirth = member.DateOfBirth;
                 memberInDb.LastUpdatedDate = DateTime.Now;
-                var result = MemberService.UpdateState(memberInDb);
+                var result = MemberService.Update(memberInDb);
             }
             return RedirectToAction("Index", "Member");
             

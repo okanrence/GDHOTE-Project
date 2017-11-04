@@ -45,14 +45,14 @@ namespace GDHOTE.Hub.Mvc.Controllers
             state.RecordDate = DateTime.Now;
             if (state.Id == 0)
             {
-                var result = StateService.SaveState(state);
+                var result = StateService.Save(state);
             }
             else
             {
                 var stateInDb = StateService.GetState(state.Id);
                 if (stateInDb == null) return HttpNotFound();
                 stateInDb.StateName = state.StateName;
-                var result = StateService.UpdateState(stateInDb);
+                var result = StateService.Update(stateInDb);
             }
             return RedirectToAction("Index", "State");
         }

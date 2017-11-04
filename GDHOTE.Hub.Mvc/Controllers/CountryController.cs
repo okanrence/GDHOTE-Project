@@ -34,14 +34,14 @@ namespace GDHOTE.Hub.Mvc.Controllers
             country.Status = "A";
             if (country.Id == 0)
             {
-                var result = CountryService.SaveCountry(country);
+                var result = CountryService.Save(country);
             }
             else
             {
                 var countryInDb = CountryService.GetCountry(country.Id);
                 if (countryInDb == null) return HttpNotFound();
                 countryInDb.CountryName = country.CountryName;
-                var result = CountryService.UpdateCountry(countryInDb);
+                var result = CountryService.Update(countryInDb);
             }
             return RedirectToAction("Index", "Country");
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using GDHOTE.Hub.Core.Models;
@@ -9,7 +10,7 @@ namespace GDHOTE.Hub.Core.Services
 {
     public class MemberService : BaseService
     {
-        public static string SaveMember(Member member)
+        public static string Save(Member member)
         {
             try
             {
@@ -54,7 +55,7 @@ namespace GDHOTE.Hub.Core.Services
                 throw new Exception("Error occured while trying to fetch member");
             }
         }
-        public static int UpdateState(Member member)
+        public static int Update(Member member)
         {
             try
             {
@@ -67,6 +68,22 @@ namespace GDHOTE.Hub.Core.Services
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+        public static int Delete(int id)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var result = db.Delete<Member>(id);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                throw new Exception("Error occured while trying to delete record");
             }
         }
     }

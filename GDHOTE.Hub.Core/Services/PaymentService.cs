@@ -10,7 +10,7 @@ namespace GDHOTE.Hub.Core.Services
 {
     public class PaymentService : BaseService
     {
-        public static string SavePayment(Payment payment)
+        public static string Save(Payment payment)
         {
             try
             {
@@ -33,8 +33,24 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var Payments = db.Fetch<Payment>();
-                    return Payments;
+                    var payments = db.Fetch<Payment>();
+                    return payments;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                throw new Exception("Error occured while trying to get payments");
+            }
+        }
+        public static Payment GetPayment(int id)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var payment = db.Fetch<Payment>().SingleOrDefault(p => p.PaymentId == id);
+                    return payment;
                 }
             }
             catch (Exception ex)
@@ -42,6 +58,22 @@ namespace GDHOTE.Hub.Core.Services
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 if (ex.Message.Contains("The duplicate key")) throw new Exception("Cannot Insert duplicate record");
                 throw new Exception("Error occured while trying to get payment");
+            }
+        }
+        public static int Delete(int id)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var result = db.Delete<Payment>(id);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                throw new Exception("Error occured while trying to delete record");
             }
         }
     }

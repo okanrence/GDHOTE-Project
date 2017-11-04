@@ -10,7 +10,7 @@ namespace GDHOTE.Hub.Core.Services
 {
     public class PaymentTypeService : BaseService
     {
-        public static string SavePaymentType(PaymentType paymentType)
+        public static string Save(PaymentType paymentType)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace GDHOTE.Hub.Core.Services
                 throw new Exception("Error occured while trying to get payment types");
             }
         }
-        public static int UpdatePaymentType(PaymentType paymentType)
+        public static int Update(PaymentType paymentType)
         {
             try
             {
@@ -74,6 +74,22 @@ namespace GDHOTE.Hub.Core.Services
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+        public static int Delete(int id)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var result = db.Delete<PaymentType>(id);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                throw new Exception("Error occured while trying to delete record");
             }
         }
     }

@@ -10,7 +10,7 @@ namespace GDHOTE.Hub.Core.Services
 {
     public class CountryService : BaseService
     {
-        public static string SaveCountry(Country country)
+        public static string Save(Country country)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace GDHOTE.Hub.Core.Services
                 throw new Exception("Error occured while trying to fetch country");
             }
         }
-        public static int UpdateCountry(Country country)
+        public static int Update(Country country)
         {
             try
             {
@@ -70,6 +70,22 @@ namespace GDHOTE.Hub.Core.Services
             catch (Exception ex)
             {
                 throw new Exception("Error occured while trying to fetch country");
+            }
+        }
+        public static int Delete(int id)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var result = db.Delete<Country>(id);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                throw new Exception("Error occured while trying to delete record");
             }
         }
     }
