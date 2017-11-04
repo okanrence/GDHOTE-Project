@@ -17,11 +17,11 @@
 else
 {
     <div>
-        <table id="movies" class="table table-bordered table-hover">
+        <table id="members" class="table table-bordered table-hover">
             <thead>
                 <tr>
                     <th>Member Code</th>
-                    <th>Last Name</th>
+                    <th>Surname</th>
                     <th>Other Name(s)</th>
                     <th>Sex</th>
                     <th>Martial Status</th>
@@ -38,8 +38,8 @@ else
                 {
                     <tr>
                         <td>@Html.ActionLink(!string.IsNullOrEmpty(member.MemberCode) ? member.MemberCode : "NA", "Edit", "Member", new { id = member.MemberKey }, null)</td>
-                        <td>@member.LastName</td>
-                        <td>@member.FirstName ,  @member.MiddleName </td>
+                        <td>@member.Surname</td>
+                        <td>@member.FirstName,  @member.MiddleName </td>
                         <td>@member.Sex</td>
                         <td>@member.MartialStatus</td>
                         <td>@member.StatusCode</td>

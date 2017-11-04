@@ -1,0 +1,43 @@
+﻿@model List<GDHOTE.Hub.Core.Models.Payment>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Payments</h2>
+<p>
+    @Html.ActionLink("New Payment", "New", "Payment", null, new { @class = "result-list-button" })
+</p>
+
+
+@if (Model == null)
+{
+    <p>No record(s) found</p>
+}
+else
+{
+    <div>
+        <table id="paymentTypes" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var payment in Model)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(payment.Narration, "Edit", "Payment", new { id = payment.PaymentId }, null)</td>
+                        <td>@payment.Narration</td>
+                        <td>@payment.Amount </td>
+                        <td>@payment.RecordDate</td>
+                        <td><button data-customer-id="@payment.PaymentTypeId" class="btn btn-link js-delete">Delete</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

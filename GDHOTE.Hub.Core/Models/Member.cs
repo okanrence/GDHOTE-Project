@@ -20,8 +20,7 @@ namespace GDHOTE.Hub.Core.Models
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         [Required]
-        [Display(Name = "Last Name")]
-        public string LastName { get; set; }
+        public string Surname { get; set; }
         [Required]
         public string Sex { get; set; }
         public bool MagusFlag { get; set; }

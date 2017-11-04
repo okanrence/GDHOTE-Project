@@ -73,8 +73,9 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 var memberInDb = MemberService.GetMember(member.MemberKey);
                 if (memberInDb == null) return HttpNotFound();
                 memberInDb.FirstName = member.FirstName;
-                memberInDb.LastName = member.LastName;
+                memberInDb.Surname = member.Surname;
                 memberInDb.MiddleName = member.MiddleName;
+                memberInDb.DateOfBirth = member.DateOfBirth;
                 memberInDb.LastUpdatedDate = DateTime.Now;
                 var result = MemberService.UpdateState(memberInDb);
             }
