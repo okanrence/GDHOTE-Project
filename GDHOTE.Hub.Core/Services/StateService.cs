@@ -22,8 +22,9 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("The duplicate key")) throw new Exception("Cannot Insert duplicate record");
-                throw new Exception("Error occured while trying to insert state");
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
+                return "Error occured while trying to insert state";
             }
         }
 
@@ -39,7 +40,8 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                throw ex;
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return new List<State>();
             }
         }
         public static State GetState(int id)
@@ -54,38 +56,40 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                throw ex;
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return new State();
             }
         }
-        public static int Update(State state)
+        public static string Update(State state)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
                     var result = db.Update(state);
-                    return result;
+                    return result.ToString();
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return "Error occured while trying to update state";
             }
         }
-        public static int Delete(int id)
+        public static string  Delete(int id)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
                     var result = db.Delete<State>(id);
-                    return result;
+                    return result.ToString();
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                throw new Exception("Error occured while trying to delete record");
+                return "Error occured while trying to delete record";
             }
         }
     }

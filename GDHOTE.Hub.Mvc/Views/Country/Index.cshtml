@@ -31,11 +31,35 @@ else
                     <tr>
                         <td>@Html.ActionLink(country.CountryCode, "Edit", "Country", new { id = country.Id }, null)</td>
                         <td>@country.CountryName</td>
-                        <td><button data-customer-id="@country.Id" class="btn btn-link js-delete">Delete</button></td>
+                        <td><button data-country-id="@country.Id" class="btn btn-link js-delete">Delete</button></td>
 
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+}
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#countries").DataTable();
+
+            $("#countries").on("click", ".js-delete", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to proceed?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/country/" + button.attr("data-country-id"),
+                            method: "DELETE",
+                            success: function () {
+                                button.parents("tr").remove();
+                            }
+                        });
+                    }
+                });
+
+            });
+        });
+    </script>
 }

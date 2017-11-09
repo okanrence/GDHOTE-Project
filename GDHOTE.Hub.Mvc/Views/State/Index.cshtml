@@ -1,4 +1,4 @@
-﻿@model List<GDHOTE.Hub.Core.Models.State>
+﻿@*@model List<GDHOTE.Hub.Core.Models.State>*@
 
 @{
     ViewBag.Title = "States";
@@ -11,33 +11,80 @@
 </p>
 
 
-@if (Model == null)
+@*@if (Model == null)
 {
     <p>No record(s) found</p>
 }
 else
 {
-    <div>
-        <table id="states" class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Code</th>
-                    <th>Country Code</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var state in Model)
-                {
-                    <tr>
-                        <td>@Html.ActionLink(state.StateName, "Edit", "State", new { id = state.Id }, null)</td>
-                        <td>@state.StateCode</td>
-                        <td>@state.CountryCode</td>
-                        <td><button data-customer-id="@state.Id" class="btn btn-link js-delete">Delete</button></td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    
+}*@
+<div>
+    <table id="states" class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Country Code</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @*@foreach (var state in Model)
+        {
+            <tr>
+                <td>@Html.ActionLink(state.StateName, "Edit", "State", new { id = state.Id }, null)</td>
+                <td>@state.StateCode</td>
+                <td>@state.CountryCode</td>
+                <td><button data-state-id="@state.Id" class="btn btn-link js-delete">Delete</button></td>
+            </tr>
+        }*@
+        </tbody>
+    </table>
+</div>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#states").DataTable({
+                ajax: {
+                    url: "/api/state",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "stateName",
+                        render: function (data, type, state) {
+                            return "<a href='/state/edit/" + state.id + "'>" + state.stateName + "</a>";
+                        }
+                    },
+                    {
+                        data: "stateName"
+                    },
+                    {
+                        data: "id",
+                        render: function (data) {
+                            return "<button class='btn btn- link js-delete' data-state-id=" + data + ">Delete</button>";
+                        }
+                    }
+                ]
+            });
+
+            $("#states").on("click", ".js-delete", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to proceed?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/state/" + button.attr("data-state-id"),
+                            method: "DELETE",
+                            success: function () {
+                                button.parents("tr").remove();
+                            }
+                        });
+                    }
+                });
+
+            });
+        });
+    </script>
 }

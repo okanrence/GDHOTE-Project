@@ -23,8 +23,8 @@ namespace GDHOTE.Hub.Core.Services
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                if (ex.Message.Contains("The duplicate key")) throw new Exception("Cannot Insert duplicate record");
-                throw new Exception("Error occured while trying to insert country");
+                if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
+                return "Error occured while trying to insert country";
             }
         }
         public static IEnumerable<Country> GetCountries()
@@ -39,7 +39,8 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error occured while trying to fetch countries");
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return new List<Country>();
             }
         }
         public static Country GetCountry(int id)
@@ -54,38 +55,40 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error occured while trying to fetch country");
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return new Country();
             }
         }
-        public static int Update(Country country)
+        public static string Update(Country country)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
                     var result = db.Update(country);
-                    return result;
+                    return result.ToString();
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Error occured while trying to fetch country");
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return "Error occured while trying to update Country";
             }
         }
-        public static int Delete(int id)
+        public static string Delete(int id)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
                     var result = db.Delete<Country>(id);
-                    return result;
+                    return result.ToString();
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                throw new Exception("Error occured while trying to delete record");
+                return "Error occured while trying to delete record";
             }
         }
     }

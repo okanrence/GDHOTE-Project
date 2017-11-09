@@ -14,8 +14,9 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: State
         public ActionResult Index()
         {
-            var states = StateService.GetStates().ToList();
-            return View(states);
+            //var states = StateService.GetStates().ToList();
+            //return View(states);
+            return View();
         }
         public ActionResult New()
         {
