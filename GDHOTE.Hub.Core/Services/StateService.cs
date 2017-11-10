@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using GDHOTE.Hub.Core.Dtos;
 using GDHOTE.Hub.Core.Models;
 
 namespace GDHOTE.Hub.Core.Services
@@ -35,6 +36,7 @@ namespace GDHOTE.Hub.Core.Services
                 using (var db = GdhoteConnection())
                 {
                     var states = db.Fetch<State>().OrderBy(s => s.StateName);
+                    //var states = db.Query<State>().Include(s => s.Country).ToList();//.OrderBy(s => s.StateName).ToList();
                     return states;
                 }
             }

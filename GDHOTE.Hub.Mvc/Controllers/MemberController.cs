@@ -66,6 +66,12 @@ namespace GDHOTE.Hub.Mvc.Controllers
             member.PostedDate = DateTime.Now;
             if (member.MemberKey == 0)
             {
+                //Validate DOB
+                var dob = member.DateOfBirth;
+                //if (DateTime.TryParse(member.DateOfBirth, out temp))
+                //{
+
+                //}
                 var result = MemberService.Save(member);
             }
             else

@@ -17,11 +17,6 @@
 @using (Html.BeginForm("Save", "Member"))
 {
     @Html.ValidationSummary(true, "Please fix the below errors.")
-    @*<div class="form-group">
-            @Html.LabelFor(m => m.Member.MemberCode)
-            @Html.TextBoxFor(m => m.Member.MemberCode, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Member.MemberCode)
-        </div>*@
     <div class="form-group">
         @Html.LabelFor(m => m.Member.FirstName)
         @Html.TextBoxFor(m => m.Member.FirstName, new { @class = "form-control" })
@@ -69,3 +64,29 @@
     </div>
 }
 
+@section scripts
+{
+    <script>
+
+        $('#Member_MagusFlag').change(function () {
+            $("#Member_MagusDate").attr("disabled", !this.checked);
+        });
+
+        $(function () {
+            $('#Member_DateOfBirth').datepicker({
+                format: 'dd-M-yyyy',
+                autoclose: 1,
+                todayHighlight: 1
+            });
+        });
+
+
+        $(function () {
+            $('#Member_MagusDate').datepicker({
+                format: 'dd-M-yyyy',
+                autoclose: 1,
+                todayHighlight: 1
+            });
+        });
+    </script>
+}

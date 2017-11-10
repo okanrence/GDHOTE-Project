@@ -12,33 +12,33 @@
 
 
 @*@if (Model == null)
-{
-    <p>No record(s) found</p>
-}
-else
-{
-    
-}*@
+    {
+        <p>No record(s) found</p>
+    }
+    else
+    {
+
+    }*@
 <div>
     <table id="states" class="table table-bordered table-hover">
         <thead>
-        <tr>
-            <th>Name</th>
-            <th>Code</th>
-            <th>Country Code</th>
-            <th></th>
-        </tr>
+            <tr>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Country Code</th>
+                <th></th>
+            </tr>
         </thead>
         <tbody>
-        @*@foreach (var state in Model)
-        {
-            <tr>
-                <td>@Html.ActionLink(state.StateName, "Edit", "State", new { id = state.Id }, null)</td>
-                <td>@state.StateCode</td>
-                <td>@state.CountryCode</td>
-                <td><button data-state-id="@state.Id" class="btn btn-link js-delete">Delete</button></td>
-            </tr>
-        }*@
+            @*@foreach (var state in Model)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(state.StateName, "Edit", "State", new { id = state.Id }, null)</td>
+                        <td>@state.StateCode</td>
+                        <td>@state.CountryCode</td>
+                        <td><button data-state-id="@state.Id" class="btn btn-link js-delete">Delete</button></td>
+                    </tr>
+                }*@
         </tbody>
     </table>
 </div>
@@ -46,7 +46,7 @@ else
 {
     <script>
         $(document).ready(function () {
-            $("#states").DataTable({
+            var table = $("#states").DataTable({
                 ajax: {
                     url: "/api/state",
                     dataSrc: ""
@@ -59,12 +59,15 @@ else
                         }
                     },
                     {
+                        data: "stateCode"
+                    },
+                    {
                         data: "stateName"
                     },
                     {
                         data: "id",
                         render: function (data) {
-                            return "<button class='btn btn- link js-delete' data-state-id=" + data + ">Delete</button>";
+                            return "<button class='btn btn-link js-delete' data-state-id=" + data + ">Delete</button>";
                         }
                     }
                 ]
@@ -78,7 +81,8 @@ else
                             url: "/api/state/" + button.attr("data-state-id"),
                             method: "DELETE",
                             success: function () {
-                                button.parents("tr").remove();
+                                table.row(button.parents("tr")).remove().draw();
+                                //button.parents("tr").remove();
                             }
                         });
                     }
