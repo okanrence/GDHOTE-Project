@@ -11,13 +11,21 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
 {
     public class CountryController : ApiController
     {
-        public IHttpActionResult GetState()
+        public IHttpActionResult GetCountries()
         {
             var countries = new List<Country>();
             countries = CountryService.GetCountries().ToList();
             if (countries.Count == 0) return NotFound();
             return Ok(countries);
         }
+
+        public IHttpActionResult GetCountry(int id)
+        {
+            var country = CountryService.GetCountry(id);
+            if (country == null) return NotFound();
+            return Ok(country);
+        }
+
         [HttpDelete]
         public IHttpActionResult DeleteCountry(int id)
         {

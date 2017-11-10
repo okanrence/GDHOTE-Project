@@ -34,7 +34,7 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var states = db.Fetch<State>();
+                    var states = db.Fetch<State>().OrderBy(s => s.StateName);
                     return states;
                 }
             }
@@ -76,7 +76,7 @@ namespace GDHOTE.Hub.Core.Services
                 return "Error occured while trying to update state";
             }
         }
-        public static string  Delete(int id)
+        public static string Delete(int id)
         {
             try
             {

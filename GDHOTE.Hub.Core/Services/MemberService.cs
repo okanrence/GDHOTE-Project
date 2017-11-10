@@ -16,13 +16,15 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                   var result= db.Insert(member);
+                    var result = db.Insert(member);
                     return result.ToString();
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Error occured while trying to insert member");
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
+                return "Error occured while trying to insert member";
             }
         }
         public static IEnumerable<Member> GetMembers()
@@ -31,13 +33,14 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var members = db.Fetch<Member>();
+                    var members = db.Fetch<Member>().OrderBy(m => m.MemberKey);
                     return members;
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Error occured while trying to fetch member");
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return new List<Member>();
             }
         }
         public static Member GetMember(int id)
@@ -52,38 +55,56 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error occured while trying to fetch member");
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return new Member();
             }
         }
-        public static int Update(Member member)
+        public static string Update(Member member)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
                     var result = db.Update(member);
-                    return result;
+                    return result.ToString();
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return "Error occured while trying to update member";
             }
         }
-        public static int Delete(int id)
+        public static string Delete(int id)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
                     var result = db.Delete<Member>(id);
-                    return result;
+                    return result.ToString();
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                throw new Exception("Error occured while trying to delete record");
+                return "Error occured while trying to delete record";
+            }
+        }
+        public static IEnumerable<Member> GetMembersPendingApproval()
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var members = db.Fetch<Member>().Where(m => m.ApprovedFlag == "N").OrderBy(m => m.MemberKey); 
+                    return members;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return new List<Member>();
             }
         }
     }

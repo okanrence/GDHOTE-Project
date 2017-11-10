@@ -12,13 +12,20 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
     //[RoutePrefix("api/state")]
     public class StateController : ApiController
     {
-        public IHttpActionResult GetState()
+        public IHttpActionResult GetStates()
         {
             var states = new List<State>();
             states = StateService.GetStates().ToList();
             if (states.Count == 0) return NotFound();
             return Ok(states);
         }
+        public IHttpActionResult GetState(int id)
+        {
+            var state = StateService.GetState(id);
+            if (state == null) return NotFound();
+            return Ok(state);
+        }
+
         [HttpDelete]
         public IHttpActionResult DeleteState(int id)
         {

@@ -80,7 +80,11 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 var result = MemberService.Update(memberInDb);
             }
             return RedirectToAction("Index", "Member");
-            
+        }
+        public ActionResult ApproveMember()
+        {
+            var members = MemberService.GetMembersPendingApproval().ToList();
+            return View(members);
         }
     }
 }

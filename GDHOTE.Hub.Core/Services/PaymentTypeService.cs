@@ -40,8 +40,7 @@ namespace GDHOTE.Hub.Core.Services
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                if (ex.Message.Contains("The duplicate key")) throw new Exception("Cannot Insert duplicate record");
-                throw new Exception("Error occured while trying to get payment types");
+                return new List<PaymentType>();
             }
         }
         public static PaymentType GetPaymentType(int id)
@@ -50,46 +49,46 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var paymentType = db.Fetch<PaymentType>().SingleOrDefault(p=> p.PaymentTypeId ==id);
+                    var paymentType = db.Fetch<PaymentType>().SingleOrDefault(p => p.PaymentTypeId == id);
                     return paymentType;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                if (ex.Message.Contains("The duplicate key")) throw new Exception("Cannot Insert duplicate record");
-                throw new Exception("Error occured while trying to get payment types");
+                return new PaymentType();
             }
         }
-        public static int Update(PaymentType paymentType)
+        public static string Update(PaymentType paymentType)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
                     var result = db.Update(paymentType);
-                    return result;
+                    return result.ToString();
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return "Error occured while trying to update payment";
             }
         }
-        public static int Delete(int id)
+        public static string Delete(int id)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
                     var result = db.Delete<PaymentType>(id);
-                    return result;
+                    return result.ToString();
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                throw new Exception("Error occured while trying to delete record");
+                return "Error occured while trying to delete record";
             }
         }
     }

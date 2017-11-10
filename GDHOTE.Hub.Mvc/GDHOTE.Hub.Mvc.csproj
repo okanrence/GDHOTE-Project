@@ -178,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiControllers\CountryController.cs" />
+    <Compile Include="ApiControllers\MemberController.cs" />
     <Compile Include="ApiControllers\StateController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -445,6 +446,7 @@
     <Content Include="Views\PaymentType\PaymentTypeForm.cshtml" />
     <Content Include="Views\Payment\Index.cshtml" />
     <Content Include="Views\Payment\PaymentForm.cshtml" />
+    <Content Include="Views\Member\ApproveMember.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

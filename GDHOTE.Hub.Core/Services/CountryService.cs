@@ -33,7 +33,7 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Fetch<Country>().Where(c => c.Status == "A");
+                    var countries = db.Fetch<Country>().Where(c => c.Status == "A").OrderBy(c => c.CountryName);
                     return countries;
                 }
             }
