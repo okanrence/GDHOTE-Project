@@ -44,6 +44,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 return View("StateForm", viewModel);
             }
             state.RecordDate = DateTime.Now;
+            state.StateCode =  state.StateCode.ToUpper();
+            state.StateName =  state.StateName;
             if (state.Id == 0)
             {
                 var result = StateService.Save(state);

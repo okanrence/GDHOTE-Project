@@ -4,14 +4,16 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using GDHOTE.Hub.Core.BusinessLogic;
 using GDHOTE.Hub.Core.Models;
 using GDHOTE.Hub.Core.Services;
 
 namespace GDHOTE.Hub.Mvc.ApiControllers
 {
-    //[RoutePrefix("api/state")]
+    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "state")]
     public class StateController : ApiController
     {
+        [Route("getstates")]
         public IHttpActionResult GetStates()
         {
             var states = new List<State>();
@@ -19,6 +21,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
             if (states.Count == 0) return NotFound();
             return Ok(states);
         }
+        [Route("getstate")]
         public IHttpActionResult GetState(int id)
         {
             var state = StateService.GetState(id);
@@ -27,6 +30,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         }
 
         [HttpDelete]
+        [Route("deletestate")]
         public IHttpActionResult DeleteState(int id)
         {
             var stateInDb = StateService.GetState(id);

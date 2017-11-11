@@ -32,7 +32,6 @@ else
                         <td>@Html.ActionLink(country.CountryCode, "Edit", "Country", new { id = country.Id }, null)</td>
                         <td>@country.CountryName</td>
                         <td><button data-country-id="@country.Id" class="btn btn-link js-delete">Delete</button></td>
-
                     </tr>
                 }
             </tbody>
@@ -50,7 +49,8 @@ else
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: "/api/country/" + button.attr("data-country-id"),
+                            //url: "/api/country/" + button.attr("data-country-id"),
+                            url: "/api/hub/country/deletecountry?id=" + button.attr("data-country-id"),
                             method: "DELETE",
                             success: function () {
                                 button.parents("tr").remove();
