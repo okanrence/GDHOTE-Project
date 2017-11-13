@@ -1,0 +1,82 @@
+﻿@model List<GDHOTE.Hub.Core.Models.User>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Users</h2>
+<p>
+    @Html.ActionLink("New user", "NewUser", "User", null, new { @class = "btn btn-primary" })
+</p>
+
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No record(s) found</p>
+}
+else
+{
+    <div>
+        <table id="users" class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>EmailAddress</th>
+                <th>UserStatus</th>
+                <th>Role</th>
+                <th>CreatedDate</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+@*            @foreach (var user in Model)*@
+@*            {*@
+@*                <tr>*@
+@*                    <td>@Html.ActionLink("Edit", "Edit", new { id = user.User.UserId }, null)</td>*@
+@*                    <td>@user.User.Username</td>*@
+@*                    <td>@user.User.EmailAddress</td>*@
+@*                    <td>@user.User.AccountStatus == "A"?"Active":"Deleted"</td>*@
+@*                    <td>@user.Role.Name</td>*@
+@*                    <td>@user.User.CreatedDate.ToString("dd-MMM-yyyy")</td>*@
+@*                    <td><button data-user-id="@user.User.UserId" class="btn btn-link js-delete">Delete</button></td>*@
+@*                </tr>*@
+            @*            }*@
+                
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@Html.ActionLink("Edit", "Edit", new { id = user.UserId }, null)</td>
+                    <td>@user.EmailAddress</td>
+                    <td>@user.UserStatusId == "A"?"Active":"Deleted"</td>
+                    @*<td>@user.Role.Name</td>*@
+                    <td>@user.CreatedDate.ToString("dd-MMM-yyyy")</td>
+                    <td><button data-user-id="@user.UserId" class="btn btn-link js-delete">Delete</button></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#users").DataTable();
+
+            $("#users").on("click", ".js-delete", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to proceed?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/user/" + button.attr("data-user-id"),
+                            method: "DELETE",
+                            success: function () {
+                                button.parents("tr").remove();
+                            }
+                        });
+                    }
+                });
+
+            });
+        });
+    </script>
+}

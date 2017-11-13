@@ -1,0 +1,79 @@
+﻿@model GDHOTE.Hub.Core.ViewModels.UserFormViewModel
+
+@{
+    ViewBag.Title = "UserForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model.User.UserId == 0 ? "New User" : "Edit User";
+    }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "User"))
+{
+    @Html.ValidationSummary(true, "Please correct the items highlighted in red.")
+   
+    <div class="form-group">
+        @Html.LabelFor(m => m.User.EmailAddress)
+        @Html.TextBoxFor(m => m.User.EmailAddress, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.User.EmailAddress)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.User.Password)
+        @Html.PasswordFor(m => m.User.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.User.Password)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword)
+        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.ConfirmPassword)
+    </div>
+   
+    <div class="form-group">
+        @Html.LabelFor(m => m.Roles)
+        @Html.DropDownListFor(m =>m.Roles, new SelectList(Model.Roles, "RoleId", "Name"), "Select Role", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Roles)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.UserStatus)
+        @Html.DropDownListFor(m =>m.UserStatus, new SelectList(Model.UserStatus, "UserStatusId", "Name"), "Select Status", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.UserStatus)
+    </div>
+   <div>@Html.HiddenFor(m => m.User.UserId)</div>
+    <div>
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+}
+
+@section scripts
+{
+    <script>
+
+        $('#User_MagusFlag').change(function () {
+            $("#User_MagusDate").attr("disabled", !this.checked);
+        });
+
+        $(function () {
+            $('#User_DateOfBirth').datepicker({
+                format: 'dd-M-yyyy',
+                autoclose: 1,
+                todayHighlight: 1
+            });
+        });
+
+
+        $(function () {
+            $('#User_MagusDate').datepicker({
+                format: 'dd-M-yyyy',
+                autoclose: 1,
+                todayHighlight: 1
+            });
+        });
+    </script>
+}
