@@ -80,11 +80,11 @@
     <Compile Include="Services\PaymentModeService.cs" />
     <Compile Include="Services\PaymentService.cs" />
     <Compile Include="Services\PaymentTypeService.cs" />
-<<<<<<< HEAD
+
     <Compile Include="Services\UserStatusService.cs" />
-=======
+
     <Compile Include="Services\SequenceService.cs" />
->>>>>>> Sequence Logic started
+
     <Compile Include="Services\SexService.cs" />
     <Compile Include="Services\RolesService.cs" />
     <Compile Include="Services\UserService.cs" />
