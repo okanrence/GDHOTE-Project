@@ -13,6 +13,7 @@ namespace GDHOTE.Hub.Core.Services
             Info = 1, Warning = 2, Error = 3, Fatal = 4
         }
 
+<<<<<<< HEAD
         public enum SignInStatus
         {
             Success = 1, Failure = 2, LockedOut = 3
@@ -31,5 +32,11 @@ namespace GDHOTE.Hub.Core.Services
             Base64 = 2,
         }
 
+=======
+        public enum OfficerType
+        {
+            NormalMember = 100
+        }
+>>>>>>> Sequence Logic started
     }
 }

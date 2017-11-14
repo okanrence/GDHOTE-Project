@@ -40,10 +40,10 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         [Route("approvemember")]
         public IHttpActionResult ApproveMember(MemberDto memberDto)
         {
-            int id = 19;
-            var member = MemberService.GetMember(id);
-            if (member == null) return NotFound();
-            return Ok(member);
+            var result = ApproveMemberManager.ApproveMember(memberDto);
+            if (string.IsNullOrEmpty(result)) return BadRequest();
+            if (string.IsNullOrEmpty(result)) return InternalServerError();
+            return Ok(result);
         }
     }
 }

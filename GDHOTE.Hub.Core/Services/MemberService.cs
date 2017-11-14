@@ -97,7 +97,7 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var members = db.Fetch<Member>().Where(m => m.ApprovedFlag == "N").OrderBy(m => m.MemberKey); 
+                    var members = db.Fetch<Member>().Where(m => m.ApprovedFlag == "N").OrderBy(m => m.MemberKey);
                     return members;
                 }
             }
