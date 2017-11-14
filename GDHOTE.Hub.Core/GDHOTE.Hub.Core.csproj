@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\ApproveMemberManager.cs" />
+    <Compile Include="BusinessLogic\StringCaseManager.cs" />
     <Compile Include="BusinessLogic\ConstantManager.cs" />
     <Compile Include="BusinessLogic\SequenceManager.cs" />
     <Compile Include="Dtos\CountryDto.cs" />
@@ -80,11 +81,8 @@
     <Compile Include="Services\PaymentModeService.cs" />
     <Compile Include="Services\PaymentService.cs" />
     <Compile Include="Services\PaymentTypeService.cs" />
-
     <Compile Include="Services\UserStatusService.cs" />
-
     <Compile Include="Services\SequenceService.cs" />
-
     <Compile Include="Services\SexService.cs" />
     <Compile Include="Services\RolesService.cs" />
     <Compile Include="Services\UserService.cs" />
