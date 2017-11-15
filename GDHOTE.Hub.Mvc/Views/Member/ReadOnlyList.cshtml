@@ -30,15 +30,14 @@ else
                     <th>Magus</th>
                     <th>Magus Date</th>
                     <th>Record Date</th>
-                    <th></th>
-                    <th></th>
+                    @*<th></th>*@
                 </tr>
             </thead>
             <tbody>
                 @foreach (var member in Model)
                 {
                     <tr>
-                        <td>@Html.ActionLink(!string.IsNullOrEmpty(member.MemberCode) ? member.MemberCode : "NA", "Edit", "Member", new { id = member.MemberKey }, null)</td>
+                        <td>@member.MemberCode</td>
                         <td>@member.Surname</td>
                         <td>@member.FirstName,  @member.MiddleName </td>
                         <td>@member.Sex</td>
@@ -48,8 +47,6 @@ else
                         <td>@member.MagusFlag</td>
                         <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy") ?? "") </td>
                         <td>@member.RecordDate.ToString("dd-MMM-yyyy")</td>
-                        <td>@Html.ActionLink("Contact Details", "Edit", "MemberDetails", new { id = member.MemberKey }, null)</td>
-                        <td><button data-member-id="@member.MemberKey" class="btn btn-link js-delete">Delete</button></td>
                     </tr>
                 }
             </tbody>

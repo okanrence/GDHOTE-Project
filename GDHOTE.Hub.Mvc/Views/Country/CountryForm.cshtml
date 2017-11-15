@@ -23,7 +23,7 @@
                     @Html.LabelFor(c => c.CountryCode)
                 </div>
                 <div class="col-md-6">
-                    @Html.TextBoxFor(c => c.CountryCode, new { @class = "form-control" })
+                    @Html.TextBoxFor(c => c.CountryCode, new { @class = "form-control gdhote-text-uppercase" })
                 </div>
                 @Html.ValidationMessageFor(c => c.CountryCode)
             </div>
@@ -32,7 +32,7 @@
                     @Html.LabelFor(c => c.CountryName)
                 </div>
                 <div class="col-md-6">
-                    @Html.TextBoxFor(c => c.CountryName, new { @class = "form-control" })
+                    @Html.TextBoxFor(c => c.CountryName, new { @class = "form-control gdhote-text-capitalize" })
                 </div>
                 @Html.ValidationMessageFor(c => c.CountryName)
             </div>

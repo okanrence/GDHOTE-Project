@@ -1,0 +1,68 @@
+﻿@model List<GDHOTE.Hub.Core.Models.YearGroup>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Year Group</h2>
+<p>
+    @Html.ActionLink("New Year Group", "New", "Country", null, new { @class = "btn btn-primary" })
+</p>
+
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No record(s) found</p>
+}
+else
+{
+    <div>
+        <table id="yeargroups" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var yearGroup in Model)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(yearGroup.YearGroupCode, "Edit", "Country", new { id = yearGroup.Id }, null)</td>
+                        <td>@yearGroup.Name</td>
+                        <td>@yearGroup.Status</td>
+                    <td><button data-country-id="@yearGroup.Id" class="btn btn-link js-delete">Delete</button></td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#yeargroups").DataTable();
+
+            $("#yeargroups").on("click", ".js-delete", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to proceed?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/hub/yeargroup/deleteyeargroup?id=" + button.attr("data-country-id"),
+                            method: "DELETE",
+                            success: function () {
+                                button.parents("tr").remove();
+                            }
+                        });
+                    }
+                });
+
+            });
+        });
+    </script>
+}
+

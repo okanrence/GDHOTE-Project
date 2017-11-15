@@ -10,7 +10,7 @@
     {
         pagename = Model.State.Id == 0 ? "New State" : "Edit State";
     }
-   
+
 }
 <h2>@pagename</h2>
 @using (Html.BeginForm("Save", "State"))
@@ -23,7 +23,7 @@
                     @Html.LabelFor(s => s.State.StateCode)
                 </div>
                 <div class="col-md-6">
-                    @Html.TextBoxFor(s => s.State.StateCode, new { @class = "form-control" })
+                    @Html.TextBoxFor(s => s.State.StateCode, new { @class = "form-control gdhote-text-uppercase" })
                 </div>
                 @Html.ValidationMessageFor(s => s.State.StateCode)
             </div>
@@ -32,7 +32,7 @@
                     @Html.LabelFor(s => s.State.StateName)
                 </div>
                 <div class="col-md-6">
-                    @Html.TextBoxFor(s => s.State.StateName, new { @class = "form-control" })
+                    @Html.TextBoxFor(s => s.State.StateName, new { @class = "form-control gdhote-text-capitalize" })
                 </div>
                 @Html.ValidationMessageFor(s => s.State.StateName)
             </div>

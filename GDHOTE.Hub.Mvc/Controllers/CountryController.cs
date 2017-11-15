@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using GDHOTE.Hub.Core.BusinessLogic;
 using GDHOTE.Hub.Core.Models;
 using GDHOTE.Hub.Core.Services;
 
@@ -14,7 +15,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         public ActionResult Index()
         {
             var countries = CountryService.GetCountries().ToList();
-            return View(countries);
+            return View("CountryIndex",countries);
         }
         public ActionResult New()
         {
@@ -32,6 +33,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
             }
             country.RecordDate = DateTime.Now;
             country.Status = "A";
+            country.CountryCode = country.CountryCode.ToUpper();
+            country.CountryName = StringCaseManager.TitleCase(country.CountryName);
             if (country.Id == 0)
             {
                 var result = CountryService.Save(country);
