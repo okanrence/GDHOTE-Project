@@ -17,32 +17,35 @@
 
 @using (Html.BeginForm("Save", "Member"))
 {
-    @Html.ValidationSummary(true, "Please fix the below errors.")
-    <div class="form-group">
-        @Html.LabelFor(p => p.Payment.Narration)
-        @Html.TextBoxFor(p => p.Payment.Narration, new { @class = "form-control" })
-        @Html.ValidationMessageFor(p => p.Payment.Narration)
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(p => p.Payment.Amount)
-        @Html.TextBoxFor(p => p.Payment.Amount, new { @class = "form-control" })
-        @Html.ValidationMessageFor(p => p.Payment.Amount)
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(p => p.Payment.PaymentTypeId)
-        @Html.DropDownListFor(p => p.Payment.PaymentTypeId, new SelectList(Model.PaymentTypes, "PaymentTypeId", "Description"), "Select Payment Type", new { @class = "form-control" })
-        @Html.ValidationMessageFor(p => p.Payment.PaymentTypeId)
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(p => p.Payment.ModeOfPayment)
-        @Html.DropDownListFor(p => p.Payment.ModeOfPayment, new SelectList(Model.ModeOfPayments, "Code", "Description"), "Select Method Of Payment", new { @class = "form-control" })
-        @Html.ValidationMessageFor(p => p.Payment.ModeOfPayment)
-    </div>
-    <div>@Html.HiddenFor(p => p.Payment.PaymentId)</div>
     <div>
-        @Html.AntiForgeryToken()
-        <button type="submit" class="btn btn-primary">Save</button>
+        @Html.ValidationSummary(true, "Please fix the below errors.")
+        <div class="form-group">
+            @Html.LabelFor(p => p.Payment.Narration)
+            @Html.TextBoxFor(p => p.Payment.Narration, new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.Payment.Narration)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.Payment.Amount)
+            @Html.TextBoxFor(p => p.Payment.Amount, new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.Payment.Amount)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.Payment.PaymentTypeId)
+            @Html.DropDownListFor(p => p.Payment.PaymentTypeId, new SelectList(Model.PaymentTypes, "PaymentTypeId", "Description"), "Select Payment Type", new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.Payment.PaymentTypeId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.Payment.ModeOfPayment)
+            @Html.DropDownListFor(p => p.Payment.ModeOfPayment, new SelectList(Model.ModeOfPayments, "Code", "Description"), "Select Method Of Payment", new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.Payment.ModeOfPayment)
+        </div>
+        <div>@Html.HiddenFor(p => p.Payment.PaymentId)</div>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div>@Html.AntiForgeryToken()</div>
     </div>
+
 }
 
 

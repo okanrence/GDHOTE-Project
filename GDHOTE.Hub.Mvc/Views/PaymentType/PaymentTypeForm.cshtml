@@ -25,9 +25,9 @@
         </div>
         <div>@Html.HiddenFor(p => p.PaymentTypeId)</div>
         <div>
-            @Html.AntiForgeryToken()
             <button type="submit" class="btn btn-primary">Save</button>
         </div>
+        <div>@Html.AntiForgeryToken()</div>
     </div>
 }
 

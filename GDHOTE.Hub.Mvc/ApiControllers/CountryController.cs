@@ -17,8 +17,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         [Route("getcountries")]
         public IHttpActionResult GetCountries()
         {
-            var countries = new List<Country>();
-            countries = CountryService.GetCountries().ToList();
+            var countries = CountryService.GetCountries().ToList();
             if (countries.Count == 0) return NotFound();
             return Ok(countries);
         }

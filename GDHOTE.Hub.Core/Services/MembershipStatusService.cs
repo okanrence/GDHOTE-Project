@@ -8,15 +8,15 @@ using GDHOTE.Hub.Core.Models;
 
 namespace GDHOTE.Hub.Core.Services
 {
-    public class YearGroupService : BaseService
+    public class MembershipStatusService : BaseService
     {
-        public static string Save(YearGroup yearGroup)
+        public static string Save(MembershipStatus membershipStatus)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Insert(yearGroup);
+                    var result = db.Insert(membershipStatus);
                     return result.ToString();
                 }
             }
@@ -24,71 +24,55 @@ namespace GDHOTE.Hub.Core.Services
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
-                return "Error occured while trying to insert YearGroup";
+                return "Error occured while trying to insert MembershipStatus";
             }
         }
-        public static IEnumerable<YearGroup> GetActiveYearGroups()
+        public static IEnumerable<MembershipStatus> GetCMembershipStatuses()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Fetch<YearGroup>().Where(c => c.Status == "A").OrderBy(c => c.Description);
+                    var countries = db.Fetch<MembershipStatus>().OrderBy(c => c.StatusDescription);
                     return countries;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return new List<YearGroup>();
+                return new List<MembershipStatus>();
             }
         }
-        public static IEnumerable<YearGroup> GetYearGroups()
+        public static MembershipStatus GetMembershipStatus(int id)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Fetch<YearGroup>().OrderBy(c => c.Description);
-                    return countries;
+                    var MembershipStatus = db.Fetch<MembershipStatus>().SingleOrDefault(c => c.Id == id);
+                    return MembershipStatus;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return new List<YearGroup>();
+                return new MembershipStatus();
             }
         }
-        public static YearGroup GetYearGroup(int id)
+        public static string Update(MembershipStatus membershipStatus)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var yearGroup = db.Fetch<YearGroup>().SingleOrDefault(c => c.Id == id);
-                    return yearGroup;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return new YearGroup();
-            }
-        }
-        public static string Update(YearGroup yearGroup)
-        {
-            try
-            {
-                using (var db = GdhoteConnection())
-                {
-                    var result = db.Update(yearGroup);
+                    var result = db.Update(membershipStatus);
                     return result.ToString();
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return "Error occured while trying to update YearGroup";
+                return "Error occured while trying to update MembershipStatus";
             }
         }
         public static string Delete(int id)
@@ -97,7 +81,7 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Delete<YearGroup>(id);
+                    var result = db.Delete<MembershipStatus>(id);
                     return result.ToString();
                 }
             }
@@ -107,6 +91,5 @@ namespace GDHOTE.Hub.Core.Services
                 return "Error occured while trying to delete record";
             }
         }
-
     }
 }

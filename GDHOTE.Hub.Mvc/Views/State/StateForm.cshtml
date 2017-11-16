@@ -46,16 +46,25 @@
                 @Html.ValidationMessageFor(s => s.State.CountryCode)
             </div>
             <div class="form-group">
+                <div class="col-md-4">
+                    @Html.LabelFor(s => s.State.Status)
+                </div>
+                <div class="col-md-6">
+                    @Html.DropDownListFor(s => s.State.Status, new SelectList(Model.Status, "Code", "Description"), "Select Status", new { @class = "form-control" })
+                </div>
+                @Html.ValidationMessageFor(s => s.State.Status)
+            </div>
+            <div class="form-group">
                 <div class="col-md-10">
                     <div>@Html.HiddenFor(s => s.State.Id)</div>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-10">
-                    @Html.AntiForgeryToken()
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </div>
+            <div>@Html.AntiForgeryToken()</div>
         </div>
     </div>
 

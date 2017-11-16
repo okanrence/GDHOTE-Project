@@ -23,6 +23,8 @@ namespace GDHOTE.Hub.Core.Models
         [Required]
         [Display(Name = "State Name")]
         public string StateName { get; set; }
+        [Required]
+        public String Status { get; set; }
         public DateTime RecordDate { get; set; }
         //public CountryDto Country { get; set; }
     }

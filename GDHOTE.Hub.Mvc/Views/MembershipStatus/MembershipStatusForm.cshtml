@@ -1,0 +1,37 @@
+﻿@model GDHOTE.Hub.Core.Models.MembershipStatus
+@{
+    ViewBag.Title = "MembershipStatusForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model.Id == 0 ? "New Membership Status" : "Edit Membership Status";
+    }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "MembershipStatus"))
+{
+    <div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.StatusCode)
+            @Html.TextBoxFor(m => m.StatusCode, new { @class = "form-control gdhote-text-uppercase" })
+            @Html.ValidationMessageFor(m => m.StatusCode)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.StatusDescription)
+            @Html.TextBoxFor(m => m.StatusDescription, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(m => m.StatusDescription)
+        </div>
+        <div class="form-group">
+            <div>@Html.HiddenFor(m => m.Id)</div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div>@Html.AntiForgeryToken()</div>
+    </div>
+}

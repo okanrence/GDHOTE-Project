@@ -17,13 +17,15 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             //var states = StateService.GetStates().ToList();
             //return View(states);
-            return View();
+            return View("StateIndex");
         }
         public ActionResult New()
         {
             var countries = CountryService.GetCountries().ToList();
+            var statuses = StatusService.GetStatus().ToList();
             var viewModel = new StateFormViewModel
             {
+                Status =  statuses,
                 Countries = countries,
                 State = new State()
             };
@@ -37,10 +39,12 @@ namespace GDHOTE.Hub.Mvc.Controllers
             if (!ModelState.IsValid)
             {
                 var countries = CountryService.GetCountries().ToList();
+                var statuses = StatusService.GetStatus().ToList();
                 var viewModel = new StateFormViewModel
                 {
+                    Status =statuses,
                     Countries = countries,
-                    State = new State()
+                    State = state
                 };
                 return View("StateForm", viewModel);
             }
@@ -55,6 +59,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 var stateInDb = StateService.GetState(state.Id);
                 if (stateInDb == null) return HttpNotFound();
+                stateInDb.Status = state.Status;
                 stateInDb.StateName = state.StateName;
                 var result = StateService.Update(stateInDb);
             }
@@ -65,8 +70,10 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var state = StateService.GetState(id);
             if (state == null) return HttpNotFound();
             var countries = CountryService.GetCountries().ToList();
+            var statuses = StatusService.GetStatus().ToList();
             var viewModel = new StateFormViewModel
             {
+                Status =statuses,
                 Countries = countries,
                 State = state
             };

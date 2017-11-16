@@ -7,7 +7,7 @@
 
 <h2>Year Group</h2>
 <p>
-    @Html.ActionLink("New Year Group", "New", "Country", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("New Year Group", "New", "YearGroup", null, new { @class = "btn btn-primary" })
 </p>
 
 
@@ -31,8 +31,8 @@ else
                 @foreach (var yearGroup in Model)
                 {
                     <tr>
-                        <td>@Html.ActionLink(yearGroup.YearGroupCode, "Edit", "Country", new { id = yearGroup.Id }, null)</td>
-                        <td>@yearGroup.Name</td>
+                        <td>@Html.ActionLink(yearGroup.YearGroupCode, "Edit", "YearGroup", new { id = yearGroup.Id }, null)</td>
+                        <td>@yearGroup.Description</td>
                         <td>@yearGroup.Status</td>
                     <td><button data-country-id="@yearGroup.Id" class="btn btn-link js-delete">Delete</button></td>
                 </tr>
@@ -55,6 +55,12 @@ else
                             url: "/api/hub/yeargroup/deleteyeargroup?id=" + button.attr("data-country-id"),
                             method: "DELETE",
                             success: function () {
+                                swal({
+                                    title: "Success",
+                                    text: "success",
+                                    type: "success" 
+                                });
+
                                 button.parents("tr").remove();
                             }
                         });

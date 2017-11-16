@@ -1,0 +1,48 @@
+﻿@model GDHOTE.Hub.Core.ViewModels.YearGroupViewModel
+@{
+    ViewBag.Title = "YearGroupForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model.YearGroup.Id == 0 ? "New Year Group" : "Edit Year Group";
+    }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "YearGroup"))
+{
+    <div>
+        @*@Html.ValidationSummary(true, "Please fix the below errors.")*@
+        <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(y => y.YearGroup.YearGroupCode)
+                @Html.TextBoxFor(y => y.YearGroup.YearGroupCode, new { @class = "form-control gdhote-text-uppercase" })
+                @Html.ValidationMessageFor(y => y.YearGroup.YearGroupCode)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(y => y.YearGroup.Description)
+                @Html.TextBoxFor(y => y.YearGroup.Description, new { @class = "form-control gdhote-text-capitalize" })
+                @Html.ValidationMessageFor(y => y.YearGroup.Description)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(y => y.YearGroup.Status)
+                @Html.DropDownListFor(y => y.YearGroup.Status, new SelectList(Model.Status, "Code", "Description"), "Select Status", new { @class = "form-control" })
+                @Html.ValidationMessageFor(y => y.YearGroup.Status)
+            </div>
+            <div class="form-group">
+                @Html.HiddenFor(y => y.YearGroup.Id)
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+            <div class="form-group">
+                @Html.AntiForgeryToken()
+            </div>
+        </div>
+    </div>
+
+}

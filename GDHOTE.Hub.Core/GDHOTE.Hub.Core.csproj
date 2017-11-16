@@ -63,12 +63,14 @@
     <Compile Include="Models\MaritalStatus.cs" />
     <Compile Include="Models\MemberDetails.cs" />
     <Compile Include="Models\Member.cs" />
+    <Compile Include="Models\MembershipStatus.cs" />
     <Compile Include="Models\Payment.cs" />
     <Compile Include="Models\PaymentMode.cs" />
     <Compile Include="Models\PaymentType.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\Sex.cs" />
     <Compile Include="Models\State.cs" />
+    <Compile Include="Models\Status.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserStatus.cs" />
     <Compile Include="Models\UserRoles.cs" />
@@ -82,9 +84,11 @@
     <Compile Include="Services\MaritalStatusService.cs" />
     <Compile Include="Services\MemberDetailsService.cs" />
     <Compile Include="Services\MemberService.cs" />
+    <Compile Include="Services\MembershipStatusService.cs" />
     <Compile Include="Services\PaymentModeService.cs" />
     <Compile Include="Services\PaymentService.cs" />
     <Compile Include="Services\PaymentTypeService.cs" />
+    <Compile Include="Services\StatusService.cs" />
     <Compile Include="Services\UserStatusService.cs" />
     <Compile Include="Services\SequenceService.cs" />
     <Compile Include="Services\SexService.cs" />
@@ -97,6 +101,7 @@
     <Compile Include="ViewModels\MemberFormViewModel.cs" />
     <Compile Include="ViewModels\PaymentFormViewModel.cs" />
     <Compile Include="ViewModels\StateFormViewModel.cs" />
+    <Compile Include="ViewModels\YearGroupViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

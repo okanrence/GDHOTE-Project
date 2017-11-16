@@ -69,9 +69,9 @@
     <div>@Html.HiddenFor(m => m.MemberDetails.MemberDetailsId)</div>
     <div>@Html.HiddenFor(m => m.MemberDetails.MemberKey)</div>
     <div>
-        @Html.AntiForgeryToken()
         <button type="submit" class="btn btn-primary">Save</button>
     </div>
+    <div>@Html.AntiForgeryToken()</div>
 }
 
 @section scripts

@@ -16,8 +16,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         [Route("getstates")]
         public IHttpActionResult GetStates()
         {
-            var states = new List<State>();
-            states = StateService.GetStates().ToList();
+            var states = StateService.GetStates().ToList();
             if (states.Count == 0) return NotFound();
             return Ok(states);
         }

@@ -26,6 +26,7 @@
                 <th>Name</th>
                 <th>Code</th>
                 <th>Country Code</th>
+                <th>Status</th>
                 <th></th>
             </tr>
         </thead>
@@ -36,6 +37,7 @@
                         <td>@Html.ActionLink(state.StateName, "Edit", "State", new { id = state.Id }, null)</td>
                         <td>@state.StateCode</td>
                         <td>@state.CountryCode</td>
+                        <td>@state.Status</td>
                         <td><button data-state-id="@state.Id" class="btn btn-link js-delete">Delete</button></td>
                     </tr>
                 }*@
@@ -63,6 +65,9 @@
                     },
                     {
                         data: "stateName"
+                    },
+                    {
+                        data: "status"
                     },
                     {
                         data: "id",
