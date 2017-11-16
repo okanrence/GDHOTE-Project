@@ -17,6 +17,11 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var members = MemberService.GetMembers().ToList();
             return View(members);
         }
+        public ActionResult List()
+        {
+            var members = MemberService.GetMembers().ToList();
+            return View("ReadOnlyList", members);
+        }
         public ActionResult New()
         {
             var sexList = SexService.GetSex().ToList();

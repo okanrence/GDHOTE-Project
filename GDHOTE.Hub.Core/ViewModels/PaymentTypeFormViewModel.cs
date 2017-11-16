@@ -7,9 +7,9 @@ using GDHOTE.Hub.Core.Models;
 
 namespace GDHOTE.Hub.Core.ViewModels
 {
-    public class YearGroupViewModel
+    public class PaymentTypeFormViewModel
     {
-        public YearGroup YearGroup { get; set; }
+        public PaymentType PaymentType { get; set; }
         public List<Status> Status { get; set; }
     }
 }

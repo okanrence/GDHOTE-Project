@@ -27,6 +27,22 @@ namespace GDHOTE.Hub.Core.Services
                 return "Error occured while trying to insert payment types";
             }
         }
+        public static IEnumerable<PaymentType> GetActivePaymentTypes() 
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var paymentTypes = db.Fetch<PaymentType>().Where(p => p.Status == "A").OrderBy(p => p.Description);
+                    return paymentTypes;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return new List<PaymentType>();
+            }
+        }
         public static IEnumerable<PaymentType> GetPaymentTypes()
         {
             try

@@ -21,7 +21,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         public ActionResult New()
         {
             var statuses = StatusService.GetStatus().ToList();
-            var viewModel = new YearGroupViewModel
+            var viewModel = new YearGroupFormViewModel
             {
                 Status = statuses,
                 YearGroup = new YearGroup()
@@ -34,7 +34,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var yearGroup = YearGroupService.GetYearGroup(id);
             if (yearGroup == null) return HttpNotFound();
             var statuses = StatusService.GetStatus().ToList();
-            var viewModel = new YearGroupViewModel
+            var viewModel = new YearGroupFormViewModel
             {
                 Status = statuses,
                 YearGroup = yearGroup
@@ -49,7 +49,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             if (!ModelState.IsValid)
             {
                 var statuses = StatusService.GetStatus().ToList();
-                var viewModel = new YearGroupViewModel
+                var viewModel = new YearGroupFormViewModel
                 {
                     Status = statuses,
                     YearGroup = yearGroup

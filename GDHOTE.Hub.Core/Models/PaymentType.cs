@@ -16,6 +16,7 @@ namespace GDHOTE.Hub.Core.Models
         public int PaymentTypeId { get; set; }
         [Required]
         public string Description { get; set; }
+        [Required]
         public string Status { get; set; }
     }
 }

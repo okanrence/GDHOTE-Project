@@ -97,11 +97,13 @@
     <Compile Include="Services\StateService.cs" />
     <Compile Include="Services\YearGroupService.cs" />
     <Compile Include="ViewModels\MemberDetailsFormModel.cs" />
+    <Compile Include="ViewModels\PaymentModeFormViewModel.cs" />
+    <Compile Include="ViewModels\PaymentTypeFormViewModel.cs" />
     <Compile Include="ViewModels\UserFormViewModel.cs" />
     <Compile Include="ViewModels\MemberFormViewModel.cs" />
     <Compile Include="ViewModels\PaymentFormViewModel.cs" />
     <Compile Include="ViewModels\StateFormViewModel.cs" />
-    <Compile Include="ViewModels\YearGroupViewModel.cs" />
+    <Compile Include="ViewModels\YearGroupFormViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

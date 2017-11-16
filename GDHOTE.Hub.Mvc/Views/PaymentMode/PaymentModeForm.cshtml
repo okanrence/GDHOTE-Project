@@ -1,0 +1,38 @@
+﻿@model GDHOTE.Hub.Core.ViewModels.PaymentModeFormViewModel
+@{
+    ViewBag.Title = "PaymentModeForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model.PaymentMode.PaymentModeId == 0 ? "New Payment Mode" : "Edit Payment Mode";
+    }
+
+}
+<h2>@pagename</h2>
+
+@using (Html.BeginForm("Save", "PaymentMode"))
+{
+    <div>
+        @Html.ValidationSummary(true, "Please fix the below errors.")
+        <div class="form-group">
+            @Html.LabelFor(p => p.PaymentMode.Description)
+            @Html.TextBoxFor(p => p.PaymentMode.Description, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(p => p.PaymentMode.Description)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.PaymentMode.Status)
+            @Html.DropDownListFor(p => p.PaymentMode.Status, new SelectList(Model.Status, "Code", "Description"), "Select Status", new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.PaymentMode.Status)
+        </div>
+        <div>@Html.HiddenFor(p => p.PaymentMode.PaymentModeId)</div>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div>@Html.AntiForgeryToken()</div>
+    </div>
+}
+

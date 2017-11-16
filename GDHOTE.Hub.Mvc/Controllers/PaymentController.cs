@@ -19,8 +19,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult New()
         {
-            var paymentModes = PaymentModeService.GetPaymentModes().ToList();
-            var paymentTypes = PaymentTypeService.GetPaymentTypes().ToList();
+            var paymentModes = PaymentModeService.GetActivePaymentModes().ToList();
+            var paymentTypes = PaymentTypeService.GetActivePaymentTypes().ToList();
             var paymentViewModel = new PaymentFormViewModel
             {
                 Payment = new Payment(),
@@ -32,8 +32,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
         public ActionResult Edit(int id)
         {
             var payment = PaymentService.GetPayment(id);
-            var paymentModes = PaymentModeService.GetPaymentModes().ToList();
-            var paymentTypes = PaymentTypeService.GetPaymentTypes().ToList();
+            var paymentModes = PaymentModeService.GetActivePaymentModes().ToList();
+            var paymentTypes = PaymentTypeService.GetActivePaymentTypes().ToList();
             var paymentViewModel = new PaymentFormViewModel
             {
                 Payment = payment,
@@ -47,8 +47,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var paymentModes = PaymentModeService.GetPaymentModes().ToList();
-                var paymentTypes = PaymentTypeService.GetPaymentTypes().ToList();
+                var paymentModes = PaymentModeService.GetActivePaymentModes().ToList();
+                var paymentTypes = PaymentTypeService.GetActivePaymentTypes().ToList();
                 var paymentViewModel = new PaymentFormViewModel
                 {
                     Payment = new Payment(),

@@ -35,9 +35,9 @@
             @Html.ValidationMessageFor(p => p.Payment.PaymentTypeId)
         </div>
         <div class="form-group">
-            @Html.LabelFor(p => p.Payment.ModeOfPayment)
-            @Html.DropDownListFor(p => p.Payment.ModeOfPayment, new SelectList(Model.ModeOfPayments, "Code", "Description"), "Select Method Of Payment", new { @class = "form-control" })
-            @Html.ValidationMessageFor(p => p.Payment.ModeOfPayment)
+            @Html.LabelFor(p => p.Payment.PaymentModeId)
+            @Html.DropDownListFor(p => p.Payment.PaymentModeId, new SelectList(Model.ModeOfPayments, "PaymentModeId", "Description"), "Select Mode Of Payment", new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.Payment.PaymentModeId)
         </div>
         <div>@Html.HiddenFor(p => p.Payment.PaymentId)</div>
         <div>

@@ -14,7 +14,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
     public class PaymentTypeController : ApiController
     {
         [Route("getpaymenttypes")]
-        public IHttpActionResult GetCountries()
+        public IHttpActionResult GetPaymentTypes()
         {
             var paymentTypes = PaymentTypeService.GetPaymentTypes().ToList();
             if (paymentTypes.Count == 0) return NotFound();
