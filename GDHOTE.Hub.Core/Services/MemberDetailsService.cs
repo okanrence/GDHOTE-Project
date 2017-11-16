@@ -8,15 +8,15 @@ using GDHOTE.Hub.Core.Models;
 
 namespace GDHOTE.Hub.Core.Services
 {
-    public class MemberService : BaseService
+    public class MemberDetailsService : BaseService
     {
-        public static string Save(Member member)
+        public static string Save(MemberDetails memberDetails)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Insert(member);
+                    var result = db.Insert(memberDetails);
                     return result.ToString();
                 }
             }
@@ -27,52 +27,68 @@ namespace GDHOTE.Hub.Core.Services
                 return "Error occured while trying to insert member";
             }
         }
-        public static IEnumerable<Member> GetMembers()
+        public static IEnumerable<MemberDetails> GetMembersDetails()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var members = db.Fetch<Member>().OrderBy(m => m.MemberKey);
-                    return members;
+                    var membersdetails = db.Fetch<MemberDetails>().OrderBy(m => m.MemberKey);
+                    return membersdetails;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return new List<Member>();
+                return new List<MemberDetails>();
             }
         }
-        public static Member GetMember(int id)
+        public static MemberDetails GetMemberDetails(int id)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var member = db.Fetch<Member>().SingleOrDefault(m => m.MemberKey == id);
-                    return member;
+                    var memberDetails = db.Fetch<MemberDetails>().SingleOrDefault(m => m.MemberDetailsId == id);
+                    return memberDetails;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return new Member();
+                return new MemberDetails();
             }
         }
-        public static string Update(Member member)
+        public static MemberDetails GetMemberDetailsByMemberKey(int memberKey)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Update(member);
+                    var memberDetails = db.Fetch<MemberDetails>().SingleOrDefault(m => m.MemberKey == memberKey);
+                    return memberDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return new MemberDetails();
+            }
+        }
+        public static string Update(MemberDetails memberDetails)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var result = db.Update(memberDetails);
                     return result.ToString();
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return "Error occured while trying to update member";
+                return "Error occured while trying to update member details";
             }
         }
         public static string Delete(int id)
@@ -81,7 +97,7 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Delete<Member>(id);
+                    var result = db.Delete<MemberDetails>(id);
                     return result.ToString();
                 }
             }
@@ -89,22 +105,6 @@ namespace GDHOTE.Hub.Core.Services
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return "Error occured while trying to delete record";
-            }
-        }
-        public static IEnumerable<Member> GetMembersPendingApproval()
-        {
-            try
-            {
-                using (var db = GdhoteConnection())
-                {
-                    var members = db.Fetch<Member>().Where(m => m.ApprovedFlag == "N").OrderBy(m => m.MemberKey);
-                    return members;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return new List<Member>();
             }
         }
     }

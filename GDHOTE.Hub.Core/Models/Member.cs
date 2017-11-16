@@ -29,6 +29,8 @@ namespace GDHOTE.Hub.Core.Models
         public string StatusCode { get; set; }
         public string DeleteFlag { get; set; }
         public string ApprovedFlag { get; set; }
+        public int CreatedBy { get; set; }
+        public int ApprovedBy { get; set; }
         [Required]
         [Display(Name = "Date Of Birth")]
         [DataType(DataType.Date)]
@@ -38,5 +40,8 @@ namespace GDHOTE.Hub.Core.Models
         public DateTime PostedDate { get; set; }
         public DateTime? ApprovedDate { get; set; }
         public DateTime? LastUpdatedDate { get; set; }
+        public int OfficerId { get; set; }
+        public DateTime OfficerDate { get; set; }
+
     }
 }

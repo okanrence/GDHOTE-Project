@@ -30,6 +30,11 @@ namespace GDHOTE.Hub.Core.Services
             Hex = 1,
             Base64 = 2,
         }
+        
+        public enum OfficerType
+        {
+            NormalMember = 100
+        }
 
     }
 }

@@ -179,6 +179,7 @@
   <ItemGroup>
     <Compile Include="ApiControllers\CountryController.cs" />
     <Compile Include="ApiControllers\MemberController.cs" />
+    <Compile Include="ApiControllers\MemberDetailsController.cs" />
     <Compile Include="ApiControllers\StateController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -197,6 +198,7 @@
     <Compile Include="Controllers\PaymentTypeController.cs" />
     <Compile Include="Controllers\StateController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\YearGroupController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -215,8 +217,6 @@
     <Content Include="Content\bootstrap-datepicker3.min.css" />
     <Content Include="Content\bootstrap-datepicker3.standalone.css" />
     <Content Include="Content\bootstrap-datepicker3.standalone.min.css" />
-    <Content Include="Content\bootstrap-datetimepicker.css" />
-    <Content Include="Content\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -328,6 +328,7 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
+    <Content Include="Content\sweetalert.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -500,6 +501,7 @@
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -535,8 +537,8 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\State\Index.cshtml" />
-    <Content Include="Views\Country\Index.cshtml" />
+    <Content Include="Views\State\StateIndex.cshtml" />
+    <Content Include="Views\Country\CountryIndex.cshtml" />
     <Content Include="Views\Member\Index.cshtml" />
     <Content Include="Views\State\StateForm.cshtml" />
     <Content Include="Views\Member\MemberForm.cshtml" />
@@ -548,10 +550,13 @@
     <Content Include="Views\Member\ApproveMember.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\User\UserForm.cshtml" />
+    <Content Include="Views\Member\ReadOnlyList.cshtml" />
+    <Content Include="Views\MemberDetails\Index.cshtml" />
+    <Content Include="Views\MemberDetails\MemberDetailsForm.cshtml" />
+    <Content Include="Views\YearGroup\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\MemberDetails\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

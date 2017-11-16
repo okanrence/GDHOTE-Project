@@ -82,6 +82,12 @@
                             url: "/api/hub/state/deletestate?id=" + button.attr("data-state-id"),
                             method: "DELETE",
                             success: function () {
+                                swal({
+                                    title: "Success",
+                                    text: "success",
+                                    type: "success" 
+                                });
+
                                 table.row(button.parents("tr")).remove().draw();
                                 //button.parents("tr").remove();
                             }

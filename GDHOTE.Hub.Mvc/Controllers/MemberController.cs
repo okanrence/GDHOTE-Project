@@ -59,11 +59,14 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 };
                 return View("MemberForm", viewModel);
             }
+            member.CreatedBy = 0;
             member.StatusCode = "A";
             member.DeleteFlag = "N";
             member.ApprovedFlag = "N";
             member.RecordDate = DateTime.Now;
             member.PostedDate = DateTime.Now;
+            member.OfficerId = (int)EnumsService.OfficerType.NormalMember;
+            member.OfficerDate = DateTime.Now;
             if (member.MemberKey == 0)
             {
                 //Validate DOB

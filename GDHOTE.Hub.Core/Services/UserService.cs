@@ -28,8 +28,6 @@ namespace GDHOTE.Hub.Core.Services
             }
         }
 
-
-
         public static IEnumerable<User> GetUsers()
         {
             try
@@ -122,7 +120,7 @@ namespace GDHOTE.Hub.Core.Services
                 authenticatedUser = GetUser(emailAddress, password);
 
                 return authenticatedUser == null
-                    ?  EnumsService.SignInStatus.Failure
+                    ? EnumsService.SignInStatus.Failure
                     : EnumsService.SignInStatus.Success;
 
             }

@@ -1,0 +1,92 @@
+﻿@model GDHOTE.Hub.Core.ViewModels.MemberDetailsFormModel
+@{
+    ViewBag.Title = "MemberDetailsForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model.MemberDetails.MemberKey == 0 ? "New Details" : "Edit Details";
+    }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "MemberDetails"))
+{
+    @Html.ValidationSummary(true, "Please fix the below errors.")
+    <div class="form-group">
+        @Html.LabelFor(m => m.MemberDetails.MobileNumber)
+        @Html.TextBoxFor(m => m.MemberDetails.MobileNumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.MemberDetails.MobileNumber)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.MemberDetails.AlternateNumber)
+        @Html.TextBoxFor(m => m.MemberDetails.AlternateNumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.MemberDetails.AlternateNumber)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.MemberDetails.EmailAddress)
+        @Html.TextBoxFor(m => m.MemberDetails.EmailAddress, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.MemberDetails.EmailAddress)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.MemberDetails.YearGroupCode)
+        @Html.DropDownListFor(m => m.MemberDetails.YearGroupCode, new SelectList(Model.YearGroups, "YearGroupCode", "Name"), "Select Year Group", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.MemberDetails.YearGroupCode)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.MemberDetails.CountryOfOriginCode)
+        @Html.DropDownListFor(m => m.MemberDetails.CountryOfOriginCode, new SelectList(Model.Countries, "CountryCode", "CountryName"), "Select Country", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.MemberDetails.CountryOfOriginCode)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.MemberDetails.StateOfOriginCode)
+        @Html.DropDownListFor(m => m.MemberDetails.StateOfOriginCode, new SelectList(Model.States, "StateCode", "StateName"), "Select State", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.MemberDetails.StateOfOriginCode)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.MemberDetails.ResidenceAddress)
+        @Html.TextBoxFor(m => m.MemberDetails.ResidenceAddress, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.MemberDetails.ResidenceAddress)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.MemberDetails.ResidenceCountryCode)
+        @Html.DropDownListFor(m => m.MemberDetails.ResidenceCountryCode, new SelectList(Model.Countries, "CountryCode", "CountryName"), "Select Country", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.MemberDetails.ResidenceCountryCode)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.MemberDetails.ResidenceStateCode)
+        @Html.DropDownListFor(m => m.MemberDetails.ResidenceStateCode, new SelectList(Model.States, "StateCode", "StateName"), "Select State", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.MemberDetails.ResidenceStateCode)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.MemberDetails.DateWedded)
+        @Html.TextBoxFor(m => m.MemberDetails.DateWedded, "{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.MemberDetails.DateWedded)
+    </div>
+    <div>@Html.HiddenFor(m => m.MemberDetails.MemberDetailsId)</div>
+    <div>@Html.HiddenFor(m => m.MemberDetails.MemberKey)</div>
+    <div>
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+}
+
+@section scripts
+{
+    <script>
+
+        $(function () {
+            $('#MemberDetails_DateWedded').datepicker({
+                format: 'dd-M-yyyy',
+                autoclose: 1,
+                todayHighlight: 1
+            });
+        });
+
+
+    </script>
+}
+

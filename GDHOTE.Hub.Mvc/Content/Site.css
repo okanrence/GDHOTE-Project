@@ -36,3 +36,11 @@ input.error {
 .validation-summary-errors {
     color: red;
 }
+
+.gdhote-text-uppercase {
+    text-transform: uppercase;
+}
+
+.gdhote-text-capitalize {
+    text-transform: capitalize;
+}
