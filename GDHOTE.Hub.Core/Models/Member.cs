@@ -33,7 +33,7 @@ namespace GDHOTE.Hub.Core.Models
         public int ApprovedBy { get; set; }
         [Required]
         [Display(Name = "Date Of Birth")]
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
         public DateTime? MagusDate { get; set; }
         public DateTime RecordDate { get; set; }

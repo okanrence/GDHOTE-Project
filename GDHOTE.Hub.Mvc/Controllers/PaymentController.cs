@@ -14,7 +14,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: Payment
         public ActionResult Index()
         {
-            var payments = PaymentService.GetPayments().ToList();
+            //DateTime startDate = DateTime.Now;
+            var payments = PaymentViewService.GetPayments().ToList();
             return View(payments);
         }
         public ActionResult New()
@@ -51,12 +52,15 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 var paymentTypes = PaymentTypeService.GetActivePaymentTypes().ToList();
                 var paymentViewModel = new PaymentFormViewModel
                 {
-                    Payment = new Payment(),
                     ModeOfPayments = paymentModes,
-                    PaymentTypes = paymentTypes
+                    PaymentTypes = paymentTypes,
+                    Payment = payment
                 };
                 return View("PaymentForm", paymentViewModel);
             }
+            payment.CreatedBy = 0;
+            payment.RecordDate = DateTime.Now;
+            payment.PostedDate = DateTime.Now;
             if (payment.PaymentId == 0)
             {
                 //paymentType.Status = "A";
@@ -71,6 +75,17 @@ namespace GDHOTE.Hub.Mvc.Controllers
             }
             return RedirectToAction("Index", "Payment");
         }
-
+        public ActionResult List()
+        {
+            var payments = PaymentViewService.GetPayments().ToList();
+            return View("ReadOnlyList", payments);
+        }
+        public ActionResult List2(string startDate)
+        {
+            DateTime startDateTemp = DateTime.Now;
+            if (string.IsNullOrEmpty(startDate)) startDateTemp = DateTime.Now;
+            var payments = PaymentViewService.GetPaymentsByDate(startDateTemp).ToList();
+            return View("ReadOnlyList");
+        }
     }
 }

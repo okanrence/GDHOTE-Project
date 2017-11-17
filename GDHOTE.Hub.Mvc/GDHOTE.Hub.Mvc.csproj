@@ -181,6 +181,7 @@
     <Compile Include="ApiControllers\MemberController.cs" />
     <Compile Include="ApiControllers\MemberDetailsController.cs" />
     <Compile Include="ApiControllers\MembershipStatusController.cs" />
+    <Compile Include="ApiControllers\PaymentController.cs" />
     <Compile Include="ApiControllers\PaymentModeController.cs" />
     <Compile Include="ApiControllers\PaymentTypeController.cs" />
     <Compile Include="ApiControllers\StateController.cs" />
@@ -361,6 +362,7 @@
     <Content Include="Content\bootstrap-datepicker.standalone.css.map" />
     <Content Include="Content\bootstrap-datepicker.min.css.map" />
     <Content Include="Content\bootstrap-datepicker.css.map" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
@@ -566,6 +568,8 @@
     <Content Include="Views\Shared\_NavMenu.cshtml" />
     <Content Include="Views\PaymentMode\PaymentModeIndex.cshtml" />
     <Content Include="Views\PaymentMode\PaymentModeForm.cshtml" />
+    <Content Include="Views\Payment\ReadOnlyList.cshtml" />
+    <Content Include="Views\Payment\ReadOnlyList2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

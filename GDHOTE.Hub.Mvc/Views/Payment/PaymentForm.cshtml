@@ -15,10 +15,15 @@
 <h2>@pagename</h2>
 
 
-@using (Html.BeginForm("Save", "Member"))
+@using (Html.BeginForm("Save", "Payment"))
 {
     <div>
         @Html.ValidationSummary(true, "Please fix the below errors.")
+        <div class="form-group">
+            @Html.LabelFor(p => p.Payment.MemberKey)
+            @Html.TextBoxFor(p => p.Payment.MemberKey, new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.Payment.MemberKey)
+        </div>
         <div class="form-group">
             @Html.LabelFor(p => p.Payment.Narration)
             @Html.TextBoxFor(p => p.Payment.Narration, new { @class = "form-control" })

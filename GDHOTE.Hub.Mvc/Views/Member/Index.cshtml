@@ -56,6 +56,7 @@ else
         </table>
     </div>
 }
+
 @section scripts
 {
     <script>
@@ -67,7 +68,6 @@ else
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            //url: "/api/member/" + button.attr("data-member-id"),
                             url: "/api/hub/member/deletemember?id=" + button.attr("data-member-id"),
                             method: "DELETE",
                             success: function () {

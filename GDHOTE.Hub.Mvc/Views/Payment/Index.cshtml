@@ -1,4 +1,4 @@
-﻿@model List<GDHOTE.Hub.Core.Models.Payment>
+﻿@model List<GDHOTE.Hub.Core.Models.PaymentView>
 
 @{
     ViewBag.Title = "Index";
@@ -23,6 +23,11 @@ else
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Narration</th>
+                    <th>Amount</th>
+                    <th>Mode</th>
+                    <th>Payment Type</th>
+                    <th>Date</th>
                     <th></th>
                 </tr>
             </thead>
@@ -30,14 +35,27 @@ else
                 @foreach (var payment in Model)
                 {
                     <tr>
-                        <td>@Html.ActionLink(payment.Narration, "Edit", "Payment", new { id = payment.PaymentId }, null)</td>
+                        <td>@Html.ActionLink(payment.Surname + "," + @payment.FirstName, "Edit", "Payment", new { id = payment.PaymentId }, null)</td>
                         <td>@payment.Narration</td>
-                        <td>@payment.Amount </td>
-                        <td>@payment.RecordDate</td>
+                        <td>@($"{payment.Amount:#,##0.00}") </td>
+                        <td>@payment.PaymentModeDescription</td>
+                        <td>@payment.PaymentTypeDescription</td>
+                        <td>@payment.PostedDate.ToString("dd-MMM-yyyy | HH:mm")</td>
                         <td><button data-customer-id="@payment.PaymentTypeId" class="btn btn-link js-delete">Delete</button></td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+}
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#paymentTypes").DataTable();
+
+        });
+    </script>
 }

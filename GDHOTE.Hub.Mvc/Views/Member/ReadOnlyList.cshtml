@@ -26,7 +26,6 @@ else
                     <th>Magus</th>
                     <th>Magus Date</th>
                     <th>Record Date</th>
-                    @*<th></th>*@
                 </tr>
             </thead>
             <tbody>
@@ -35,7 +34,7 @@ else
                     <tr>
                         <td>@member.MemberCode</td>
                         <td>@member.Surname</td>
-                        <td>@member.FirstName,  @member.MiddleName </td>
+                        <td>@member.FirstName, @member.MiddleName </td>
                         <td>@member.Sex</td>
                         <td>@member.MartialStatus</td>
                         <td>@member.StatusCode</td>
@@ -48,29 +47,4 @@ else
             </tbody>
         </table>
     </div>
-}
-@section scripts
-{
-    <script>
-        $(document).ready(function () {
-            $("#members").DataTable();
-
-            $("#members").on("click", ".js-delete", function () {
-                var button = $(this);
-                bootbox.confirm("Are you sure you want to proceed?", function (result) {
-                    if (result) {
-                        $.ajax({
-                            //url: "/api/member/" + button.attr("data-member-id"),
-                            url: "/api/hub/member/deletemember?id=" + button.attr("data-member-id"),
-                            method: "DELETE",
-                            success: function () {
-                                button.parents("tr").remove();
-                            }
-                        });
-                    }
-                });
-
-            });
-        });
-    </script>
 }
