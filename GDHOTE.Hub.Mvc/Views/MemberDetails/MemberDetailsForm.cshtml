@@ -33,7 +33,7 @@
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.MemberDetails.YearGroupCode)
-        @Html.DropDownListFor(m => m.MemberDetails.YearGroupCode, new SelectList(Model.YearGroups, "YearGroupCode", "Name"), "Select Year Group", new { @class = "form-control" })
+        @Html.DropDownListFor(m => m.MemberDetails.YearGroupCode, new SelectList(Model.YearGroups, "YearGroupCode", "Description"), "Select Year Group", new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.MemberDetails.YearGroupCode)
     </div>
     <div class="form-group">

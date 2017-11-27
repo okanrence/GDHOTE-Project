@@ -15,7 +15,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
     public class YearGroupController : ApiController
     {
         [Route("getyeargroups")]
-        public IHttpActionResult GetYearGroup()
+        public IHttpActionResult GetYearGroups()
         {
             var yearGroups = YearGroupService.GetActiveYearGroups().ToList();
             if (yearGroups.Count == 0) return NotFound();

@@ -21,6 +21,8 @@
                         <li>@Html.ActionLink("Member Status", "Index", "MembershipStatus")</li>
                         <li>@Html.ActionLink("Payment Types", "Index", "PaymentType")</li>
                         <li>@Html.ActionLink("Payment Modes", "Index", "PaymentMode")</li>
+                        <li>@Html.ActionLink("Currency", "Index", "Currency")</li>
+                        <li>@Html.ActionLink("ActivityType", "Index", "ActivityType")</li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -28,12 +30,14 @@
                     <ul class="dropdown-menu">
                         <li>@Html.ActionLink("Manage Members", "Index", "Member")</li>
                         <li>@Html.ActionLink("Approve Member", "ApproveMember", "Member")</li>
+                        <li>@Html.ActionLink("Member Details", "Index", "MemberDetails")</li>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Payments<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>@Html.ActionLink("Add Payment", "Index", "Payment")</li>
+                        <li>@Html.ActionLink("Manage Payment", "Manage", "Payment")</li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -44,7 +48,7 @@
                     </ul>
                 </li>
             </ul>
-            @*@Html.Partial("_LoginPartial")*@
+            @Html.Partial("_LoginPartial")
         </div>
     </div>
 </div>

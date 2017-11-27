@@ -177,7 +177,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiControllers\ActivityTypeController.cs" />
     <Compile Include="ApiControllers\CountryController.cs" />
+    <Compile Include="ApiControllers\CurrencyController.cs" />
     <Compile Include="ApiControllers\MemberController.cs" />
     <Compile Include="ApiControllers\MemberDetailsController.cs" />
     <Compile Include="ApiControllers\MembershipStatusController.cs" />
@@ -194,7 +196,9 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ActivityTypeController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
+    <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
@@ -553,7 +557,7 @@
     <Content Include="Views\Country\CountryForm.cshtml" />
     <Content Include="Views\PaymentType\Index.cshtml" />
     <Content Include="Views\PaymentType\PaymentTypeForm.cshtml" />
-    <Content Include="Views\Payment\Index.cshtml" />
+    <Content Include="Views\Payment\PaymentIndex.cshtml" />
     <Content Include="Views\Payment\PaymentForm.cshtml" />
     <Content Include="Views\Member\ApproveMember.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
@@ -570,6 +574,11 @@
     <Content Include="Views\PaymentMode\PaymentModeForm.cshtml" />
     <Content Include="Views\Payment\ReadOnlyList.cshtml" />
     <Content Include="Views\Payment\ReadOnlyList2.cshtml" />
+    <Content Include="Views\Payment\ManagePayment.cshtml" />
+    <Content Include="Views\Currency\CurrencyIndex.cshtml" />
+    <Content Include="Views\Currency\CurrencyForm.cshtml" />
+    <Content Include="Views\ActivityType\Index.cshtml" />
+    <Content Include="Views\ActivityType\ActivityTypeForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

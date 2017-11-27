@@ -1,13 +1,14 @@
-﻿@model List<GDHOTE.Hub.Core.Models.YearGroup>
+﻿@model List<GDHOTE.Hub.Core.Models.ActivityType>
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<h2>Activity Types</h2>
 
-<h2>Year Group</h2>
 <p>
-    @Html.ActionLink("New Year Group", "New", "YearGroup", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("New Activity Type", "New", "ActivityType", null, new { @class = "btn btn-primary" })
 </p>
 
 
@@ -18,24 +19,24 @@
 else
 {
     <div>
-        <table id="yeargroups" class="table table-bordered table-hover">
+        <table id="activitytypes" class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>Code</th>
                     <th>Name</th>
                     <th>Status</th>
+                    <th>Dependency</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var yearGroup in Model)
+                @foreach (var activityType in Model)
                 {
                     <tr>
-                        <td>@Html.ActionLink(yearGroup.YearGroupCode, "Edit", "YearGroup", new { id = yearGroup.Id }, null)</td>
-                        <td>@yearGroup.Description</td>
-                        <td>@yearGroup.Status</td>
-                    <td><button data-yeargroup-id="@yearGroup.Id" class="btn btn-link js-delete">Delete</button></td>
-                </tr>
+                        <td>@Html.ActionLink(activityType.Description, "Edit", "ActivityType", new { id = activityType.ActivityTypeId }, null)</td>
+                        <td>@activityType.Status</td>
+                        <td>@activityType.DependencyTypeId</td>
+                        <td><button data-activitytype-id="@activityType.ActivityTypeId" class="btn btn-link js-delete">Delete</button></td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -45,20 +46,20 @@ else
 {
     <script>
         $(document).ready(function () {
-            $("#yeargroups").DataTable();
+            $("#activitytypes").DataTable();
 
-            $("#yeargroups").on("click", ".js-delete", function () {
+            $("#activitytypes").on("click", ".js-delete", function () {
                 var button = $(this);
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: "/api/hub/yeargroup/deleteyeargroup?id=" + button.attr("data-yeargroup-id"),
+                            url: "/api/hub/activitytype/deleteactivitytype?id=" + button.attr("data-activitytype-id"),
                             method: "DELETE",
                             success: function () {
                                 swal({
                                     title: "Success",
                                     text: "success",
-                                    type: "success" 
+                                    type: "success"
                                 });
 
                                 button.parents("tr").remove();

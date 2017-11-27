@@ -59,7 +59,10 @@
     <Compile Include="BusinessLogic\SequenceManager.cs" />
     <Compile Include="Dtos\CountryDto.cs" />
     <Compile Include="Dtos\MemberDto.cs" />
+    <Compile Include="Models\Activity.cs" />
+    <Compile Include="Models\ActivityType.cs" />
     <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\MaritalStatus.cs" />
     <Compile Include="Models\MemberDetails.cs" />
     <Compile Include="Models\Member.cs" />
@@ -77,8 +80,11 @@
     <Compile Include="Models\UserRoles.cs" />
     <Compile Include="Models\YearGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ActivityService.cs" />
+    <Compile Include="Services\ActivityTypeService.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CommonServices.cs" />
+    <Compile Include="Services\CurrencyService.cs" />
     <Compile Include="Services\CountryService.cs" />
     <Compile Include="Services\EnumsService.cs" />
     <Compile Include="Services\LogService.cs" />
@@ -98,6 +104,7 @@
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Services\StateService.cs" />
     <Compile Include="Services\YearGroupService.cs" />
+    <Compile Include="ViewModels\ActivityTypeFormViewModel.cs" />
     <Compile Include="ViewModels\MemberDetailsFormModel.cs" />
     <Compile Include="ViewModels\PaymentModeFormViewModel.cs" />
     <Compile Include="ViewModels\PaymentTypeFormViewModel.cs" />
@@ -105,6 +112,7 @@
     <Compile Include="ViewModels\MemberFormViewModel.cs" />
     <Compile Include="ViewModels\PaymentFormViewModel.cs" />
     <Compile Include="ViewModels\StateFormViewModel.cs" />
+    <Compile Include="ViewModels\CurrencyFormViewModel.cs" />
     <Compile Include="ViewModels\YearGroupFormViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

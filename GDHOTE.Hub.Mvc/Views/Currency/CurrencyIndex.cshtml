@@ -1,0 +1,67 @@
+﻿@model List<GDHOTE.Hub.Core.Models.Currency>
+    @{
+        ViewBag.Title = "CurrencyIndex";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <h2>Currencies</h2>
+
+    <p>
+        @Html.ActionLink("New Currency", "New", "Currency", null, new { @class = "btn btn-primary" })
+    </p>
+
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <p>No record(s) found</p>
+    }
+    else
+    {
+        <div>
+            <table id="currencies" class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var currency in Model)
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(currency.CurrencyCode, "Edit", "Currency", new { id = currency.CurrencyId }, null)</td>
+                            <td>@currency.Description</td>
+                            <td>@currency.Status</td>
+                            <td><button data-currency-id="@currency.CurrencyId" class="btn btn-link js-delete">Delete</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    @section scripts
+{
+        <script>
+            $(document).ready(function () {
+                $("#currencies").DataTable();
+
+                $("#currencies").on("click", ".js-delete", function () {
+                    var button = $(this);
+                    bootbox.confirm("Are you sure you want to proceed?", function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: "/api/hub/currency/deletecurrency?id=" + button.attr("data-currency-id"),
+                                method: "DELETE",
+                                success: function () {
+                                    button.parents("tr").remove();
+                                }
+                            });
+                        }
+                    });
+
+                });
+            });
+        </script>
+    }

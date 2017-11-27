@@ -23,6 +23,7 @@ namespace GDHOTE.Hub.Core.Models
         public string Surname { get; set; }
         [Required]
         public string Sex { get; set; }
+        public bool InitiationFlag { get; set; }
         public bool MagusFlag { get; set; }
         [Required]
         public string MartialStatus { get; set; }

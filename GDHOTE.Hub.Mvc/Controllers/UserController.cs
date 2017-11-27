@@ -41,7 +41,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
            
 
-            var viewModel = new UserFormViewModel()
+            var viewModel = new UserFormViewModel
             {
                  Roles = _roles,
                  UserStatus = _userStatuses,

@@ -24,12 +24,7 @@
             @Html.TextBoxFor(p => p.Payment.MemberKey, new { @class = "form-control" })
             @Html.ValidationMessageFor(p => p.Payment.MemberKey)
         </div>
-        <div class="form-group">
-            @Html.LabelFor(p => p.Payment.Narration)
-            @Html.TextBoxFor(p => p.Payment.Narration, new { @class = "form-control" })
-            @Html.ValidationMessageFor(p => p.Payment.Narration)
-        </div>
-        <div class="form-group">
+      <div class="form-group">
             @Html.LabelFor(p => p.Payment.Amount)
             @Html.TextBoxFor(p => p.Payment.Amount, new { @class = "form-control" })
             @Html.ValidationMessageFor(p => p.Payment.Amount)
@@ -43,6 +38,16 @@
             @Html.LabelFor(p => p.Payment.PaymentModeId)
             @Html.DropDownListFor(p => p.Payment.PaymentModeId, new SelectList(Model.ModeOfPayments, "PaymentModeId", "Description"), "Select Mode Of Payment", new { @class = "form-control" })
             @Html.ValidationMessageFor(p => p.Payment.PaymentModeId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.Payment.CurrencyId)
+            @Html.DropDownListFor(p => p.Payment.CurrencyId, new SelectList(Model.Currencies, "CurrencyId", "Description"), "Select Currency", new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.Payment.CurrencyId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.Payment.Narration)
+            @Html.TextBoxFor(p => p.Payment.Narration, new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.Payment.Narration)
         </div>
         <div>@Html.HiddenFor(p => p.Payment.PaymentId)</div>
         <div>

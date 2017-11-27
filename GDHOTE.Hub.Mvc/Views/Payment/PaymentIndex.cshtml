@@ -1,0 +1,61 @@
+﻿@model List<GDHOTE.Hub.Core.Models.PaymentView>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Payments</h2>
+<p>
+    @Html.ActionLink("New Payment", "New", "Payment", null, new { @class = "result-list-button" })
+</p>
+
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No record(s) found</p>
+}
+else
+{
+    <div>
+        <table id="paymentTypes" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Narration</th>
+                    <th>Amount</th>
+                    <th>Mode</th>
+                    <th>Payment Type</th>
+                    <th>Currency</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var payment in Model)
+                {
+                    <tr>
+                        <td>@payment.Surname, @payment.FirstName</td>
+                        <td>@payment.Narration</td>
+                        <td>@($"{payment.Amount:#,##0.00}") </td>
+                        <td>@payment.PaymentMode</td>
+                        <td>@payment.PaymentType</td>
+                        <td>@payment.Currency</td>
+                        <td>@payment.PostedDate.ToString("dd-MMM-yyyy | HH:mm")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#paymentTypes").DataTable();
+
+        });
+    </script>
+}

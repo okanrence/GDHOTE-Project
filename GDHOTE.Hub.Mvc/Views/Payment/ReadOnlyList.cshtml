@@ -29,6 +29,7 @@ else
                         <th>Amount</th>
                         <th>Mode</th>
                         <th>Payment Type</th>
+                        <th>Currency</th>
                         <th>PostedBy</th>
                         <th>Date</th>
                     </tr>
@@ -40,8 +41,9 @@ else
                             <td>@payment.Surname, @payment.FirstName</td>
                             <td>@payment.Narration</td>
                             <td>@($"{payment.Amount:#,##0.00}") </td>
-                            <td>@payment.PaymentModeDescription</td>
-                            <td>@payment.PaymentTypeDescription</td>
+                            <td>@payment.PaymentMode</td>
+                            <td>@payment.PaymentType</td>
+                            <td>@payment.Currency</td>
                             <td>@payment.CreatedBy</td>
                             <td>@payment.PostedDate.ToString("dd-MMM-yyyy | HH:mm")</td>
                         </tr>

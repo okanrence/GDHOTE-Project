@@ -16,16 +16,18 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             //DateTime startDate = DateTime.Now;
             var payments = PaymentViewService.GetPayments().ToList();
-            return View(payments);
+            return View("PaymentIndex",payments);
         }
         public ActionResult New()
         {
             var paymentModes = PaymentModeService.GetActivePaymentModes().ToList();
             var paymentTypes = PaymentTypeService.GetActivePaymentTypes().ToList();
+            var currencies = CurrencyService.GetActiveCurrencies().ToList();
             var paymentViewModel = new PaymentFormViewModel
             {
                 Payment = new Payment(),
                 ModeOfPayments = paymentModes,
+                Currencies = currencies,
                 PaymentTypes = paymentTypes
             };
             return View("PaymentForm", paymentViewModel);
@@ -35,10 +37,12 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var payment = PaymentService.GetPayment(id);
             var paymentModes = PaymentModeService.GetActivePaymentModes().ToList();
             var paymentTypes = PaymentTypeService.GetActivePaymentTypes().ToList();
+            var currencies = CurrencyService.GetActiveCurrencies().ToList();
             var paymentViewModel = new PaymentFormViewModel
             {
                 Payment = payment,
                 ModeOfPayments = paymentModes,
+                Currencies= currencies,
                 PaymentTypes = paymentTypes
             };
             if (payment == null) return HttpNotFound();
@@ -50,10 +54,12 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 var paymentModes = PaymentModeService.GetActivePaymentModes().ToList();
                 var paymentTypes = PaymentTypeService.GetActivePaymentTypes().ToList();
+                var currencies = CurrencyService.GetActiveCurrencies().ToList();
                 var paymentViewModel = new PaymentFormViewModel
                 {
                     ModeOfPayments = paymentModes,
                     PaymentTypes = paymentTypes,
+                    Currencies =currencies,
                     Payment = payment
                 };
                 return View("PaymentForm", paymentViewModel);
@@ -79,6 +85,12 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             var payments = PaymentViewService.GetPayments().ToList();
             return View("ReadOnlyList", payments);
+        }
+        public ActionResult Manage()
+        {
+            //DateTime startDate = DateTime.Now;
+            var payments = PaymentViewService.GetPayments().ToList();
+            return View("ManagePayment", payments);
         }
         public ActionResult List2(string startDate)
         {

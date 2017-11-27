@@ -15,8 +15,9 @@ namespace GDHOTE.Hub.Core.Models
         public string Surname { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
-        public string PaymentTypeDescription { get; set; }
-        public string PaymentModeDescription { get; set; }
+        public string PaymentType { get; set; }
+        public string PaymentMode { get; set; }
+        public string Currency { get; set; }
       
     }
 }
