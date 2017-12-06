@@ -27,22 +27,26 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/Login
+         
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public ActionResult Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
             var authenticatedUser = new User();
-            var result = UserService.LoginUser(model.UserName, model.Password,out authenticatedUser);
+            var result = UserService.LoginUser(model.UserName, model.Password, out authenticatedUser);
             if (result == EnumsService.SignInStatus.Success)
             {
-                
+                FormsAuthentication.SetAuthCookie(authenticatedUser.UserName, false);
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.LoginError = "Login details are wrong.";
             }
             return View();
         }

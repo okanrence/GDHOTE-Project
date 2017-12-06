@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using GDHOTE.Hub.Core.BusinessLogic;
 using GDHOTE.Hub.Core.Models;
 using GDHOTE.Hub.Core.Services;
 using GDHOTE.Hub.Core.ViewModels;
@@ -62,7 +63,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 user.UserId = Guid.NewGuid().ToString();
                 user.CreatedDate = DateTime.Now;
-                user.Password = CommonServices.CreateHash(user.Password, EnumsService.HashTypes.Sha256, EnumsService.HashEncoding.Hex);
+                user.Password = PasswordManager.ReturnHashPassword(user.Password); 
                 user.CreatedBy = 0;
                 user.LastUpdatedBy = 0;
                 var result = UserService.Save(user);

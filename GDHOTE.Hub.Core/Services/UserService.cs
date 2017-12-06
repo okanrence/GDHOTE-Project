@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using GDHOTE.Hub.Core.BusinessLogic;
 using GDHOTE.Hub.Core.Dtos;
 using GDHOTE.Hub.Core.Models;
 
@@ -45,15 +46,15 @@ namespace GDHOTE.Hub.Core.Services
             }
         }
 
-        private static User GetUser(string emailAddress, string password)
+        private static User GetUser(string userName, string password)
         {
             try
             {
-                var passwordHash = CommonServices.CreateHash(password, EnumsService.HashTypes.Sha256, EnumsService.HashEncoding.Hex);
+                var passwordHash = PasswordManager.ReturnHashPassword(password);
                 using (var db = GdhoteConnection())
                 {
-                    //var user = db.Fetch<User>().SingleOrDefault(s => s.EmailAddress == emailAddress && s.Password.SequenceEqual(passwordHash));
-                    var user = db.Fetch<User>().SingleOrDefault(s => s.EmailAddress == emailAddress && s.Password.SequenceEqual(passwordHash));
+                    var user = db.Fetch<User>().SingleOrDefault(u => u.UserName.ToLower().Equals(userName.ToLower())
+                         && u.Password.SequenceEqual(passwordHash));
                     return user;
                 }
             }

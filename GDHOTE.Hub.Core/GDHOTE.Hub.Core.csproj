@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="BusinessLogic\ApproveMemberManager.cs" />
     <Compile Include="BusinessLogic\EmailManager.cs" />
+    <Compile Include="BusinessLogic\PasswordManager.cs" />
     <Compile Include="BusinessLogic\SmsManager.cs" />
     <Compile Include="BusinessLogic\StringCaseManager.cs" />
     <Compile Include="BusinessLogic\ConstantManager.cs" />
