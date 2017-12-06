@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace GDHOTE.Hub.Core.ViewModels
         public IEnumerable<UserStatus> UserStatus { get; set; }
         public User User { get; set; }
         [DisplayName("Confirm Password")]
+        [DataType(DataType.Password)]
+        //[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
 }

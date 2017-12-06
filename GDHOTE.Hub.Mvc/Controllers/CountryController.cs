@@ -9,7 +9,7 @@ using GDHOTE.Hub.Core.Services;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class CountryController : Controller
+    public class CountryController : Controller 
     {
         // GET: Country
         public ActionResult Index()

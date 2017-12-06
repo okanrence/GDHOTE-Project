@@ -52,6 +52,7 @@ namespace GDHOTE.Hub.Core.Services
                 var passwordHash = CommonServices.CreateHash(password, EnumsService.HashTypes.Sha256, EnumsService.HashEncoding.Hex);
                 using (var db = GdhoteConnection())
                 {
+                    //var user = db.Fetch<User>().SingleOrDefault(s => s.EmailAddress == emailAddress && s.Password.SequenceEqual(passwordHash));
                     var user = db.Fetch<User>().SingleOrDefault(s => s.EmailAddress == emailAddress && s.Password.SequenceEqual(passwordHash));
                     return user;
                 }
@@ -95,11 +96,29 @@ namespace GDHOTE.Hub.Core.Services
             }
         }
 
-        public static EnumsService.SignInStatus LoginUser(string emailAddress, string password, out User authenticatedUser)
+        public static EnumsService.SignInStatus LoginUser1(string emailAddress, string password, out User authenticatedUser)
         {
             try
             {
                 authenticatedUser = GetUser(emailAddress, password);
+
+                return authenticatedUser == null
+                    ? EnumsService.SignInStatus.Failure
+                    : EnumsService.SignInStatus.Success;
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                authenticatedUser = null;
+                return EnumsService.SignInStatus.Failure;
+            }
+        }
+        public static EnumsService.SignInStatus LoginUser(string username, string password, out User authenticatedUser)
+        {
+            try
+            {
+                authenticatedUser = GetUser(username, password);
 
                 return authenticatedUser == null
                     ? EnumsService.SignInStatus.Failure
