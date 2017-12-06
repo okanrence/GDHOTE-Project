@@ -8,9 +8,9 @@ using GDHOTE.Hub.Core.Models;
 
 namespace GDHOTE.Hub.Core.ViewModels
 {
-   public class UserFormViewModel
+    public class UserFormViewModel
     {
-        public IEnumerable<Role> Roles { get; set; }
+        public IEnumerable<Role> Role { get; set; }
         public IEnumerable<UserStatus> UserStatus { get; set; }
         public User User { get; set; }
         [DisplayName("Confirm Password")]

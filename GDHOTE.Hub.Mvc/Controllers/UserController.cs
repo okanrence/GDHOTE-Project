@@ -11,43 +11,37 @@ namespace GDHOTE.Hub.Mvc.Controllers
 {
     public class UserController : Controller
     {
-        private static IEnumerable<Role> _roles =null;
-        private static IEnumerable<UserStatus> _userStatuses =null;
+        private static IEnumerable<Role> _roles = null;
+        private static IEnumerable<UserStatus> _userStatuses = null;
         public UserController()
         {
-            _roles = RolesService.GetRoles();
+            _roles = RoleService.GetRoles();
             _userStatuses = UserStatusService.GetUserStatuses();
         }
         // GET: User
         public ActionResult Index()
         {
-            var users = UserService.GetUsers().ToList();
-
-            foreach (var user in users)
-            {
-               
-            }
-            return View(users);
+            //var users = UserService.GetUsers().ToList();
+            var users = UserViewService.GetUsers().ToList();
+            return View("UserIndex", users);
         }
 
         // GET: User/Details/5
         public ActionResult Details(int id)
         {
-            return View("Index");
+            return View("UserIndex");
         }
 
         // GET: User/Create
         public ActionResult NewUser()
         {
-           
 
             var viewModel = new UserFormViewModel
             {
-                 Roles = _roles,
-                 UserStatus = _userStatuses,
-                User = new User()
+                Role = _roles,
+                UserStatus = _userStatuses,
+                User = new User(),
             };
-
             return View("UserForm", viewModel);
         }
         [HttpPost]
@@ -56,22 +50,22 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-
-                var viewModel = new UserFormViewModel()
+                var viewModel = new UserFormViewModel
                 {
-                    Roles = _roles,
+                    Role = _roles,
                     UserStatus = _userStatuses,
-                    
                     User = user,
                 };
                 return View("UserForm", viewModel);
             }
-            if (user.UserId == 0)
+            if (user.UserId == null)
             {
+                user.UserId = Guid.NewGuid().ToString();
                 user.CreatedDate = DateTime.Now;
-                user.Password = CommonServices.CreateHash(user.Password, EnumsService.HashTypes.Sha256,
-                    EnumsService.HashEncoding.Hex);
-                UserService.Save(user);
+                user.Password = CommonServices.CreateHash(user.Password, EnumsService.HashTypes.Sha256, EnumsService.HashEncoding.Hex);
+                user.CreatedBy = 0;
+                user.LastUpdatedBy = 0;
+                var result = UserService.Save(user);
             }
             else
             {
@@ -82,16 +76,16 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 userInDb.EmailAddress = user.EmailAddress;
                 userInDb.LastUpdatedBy = user.LastUpdatedBy;
                 userInDb.LastUpdatedTime = DateTime.Now;
-                UserService.Update(userInDb);
+                var result = UserService.Update(userInDb);
             }
             return RedirectToAction("Index", "User");
         }
-    
+
 
         // GET: User/Edit/5
         public ActionResult Edit(int id)
         {
-            return View("Index");
+            return View("UserIndex");
         }
 
         // POST: User/Edit/5
@@ -106,14 +100,14 @@ namespace GDHOTE.Hub.Mvc.Controllers
             }
             catch
             {
-                return View("Index");
+                return View("UserIndex");
             }
         }
 
         // GET: User/Delete/5
         public ActionResult Delete(int id)
         {
-            return View("Index");
+            return View("UserIndex");
         }
 
         // POST: User/Delete/5
@@ -128,7 +122,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             }
             catch
             {
-                return View("Index");
+                return View("UserIndex");
             }
         }
     }

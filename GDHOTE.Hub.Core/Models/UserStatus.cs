@@ -13,9 +13,7 @@ namespace GDHOTE.Hub.Core.Models
     public class UserStatus
     {
         public int UserStatusId { get; set; }
-
         public string Name { get; set; }
-
         public DateTime DateCreated { get; set; }
     }
 }

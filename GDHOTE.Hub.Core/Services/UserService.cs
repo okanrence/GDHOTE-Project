@@ -28,25 +28,7 @@ namespace GDHOTE.Hub.Core.Services
             }
         }
 
-        public static IEnumerable<User> GetUsers()
-        {
-            try
-            {
-                using (var db = GdhoteConnection())
-                {
-                    // var users = db.Fetch<User>().OrderBy(s => s.EmailAddress);
-                    var users = db.Fetch<User>(@"
-  select u.UserId, u.AccountStatus, u.EmailAddress, u.Password, u.CreatedDate, a.RoleId, a.Name RoleName from HUB_Users u left join HUB_Roles a on u.RoleId = a.RoleId");
-                    return users;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return new List<User>();
-            }
-        }
-        public static User GetUser(int id)
+        public static User GetUser(string id)
         {
             try
             {

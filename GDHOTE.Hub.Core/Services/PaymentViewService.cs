@@ -16,8 +16,8 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var PaymentViews = db.Fetch<PaymentView>().OrderBy(p => p.PostedDate);
-                    return PaymentViews;
+                    var paymentViews = db.Fetch<PaymentView>().OrderBy(p => p.PostedDate);
+                    return paymentViews;
                 }
             }
             catch (Exception ex)
@@ -32,8 +32,8 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var PaymentViews = db.Fetch<PaymentView>().Where(p => p.RecordDate == startDate.Date).OrderBy(p => p.PostedDate);
-                    return PaymentViews;
+                    var paymentViews = db.Fetch<PaymentView>().Where(p => p.RecordDate == startDate.Date).OrderBy(p => p.PostedDate);
+                    return paymentViews;
                 }
             }
             catch (Exception ex)

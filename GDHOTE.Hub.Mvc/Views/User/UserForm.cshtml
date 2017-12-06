@@ -9,7 +9,7 @@
     var pagename = "";
     if (Model != null)
     {
-        pagename = Model.User.UserId == 0 ? "New User" : "Edit User";
+        pagename = Model.User.UserId == null ? "New User" : "Edit User";
     }
 
 }
@@ -17,7 +17,11 @@
 @using (Html.BeginForm("Save", "User"))
 {
     @Html.ValidationSummary(true, "Please correct the items highlighted in red.")
-   
+    <div class="form-group">
+        @Html.LabelFor(m => m.User.UserName)
+        @Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.User.UserName)
+    </div>
     <div class="form-group">
         @Html.LabelFor(m => m.User.EmailAddress)
         @Html.TextBoxFor(m => m.User.EmailAddress, new { @class = "form-control" })
@@ -33,18 +37,17 @@
         @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.ConfirmPassword)
     </div>
-   
     <div class="form-group">
-        @Html.LabelFor(m => m.Roles)
-        @Html.DropDownListFor(m =>m.Roles, new SelectList(Model.Roles, "RoleId", "Name"), "Select Role", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Roles)
+        @Html.LabelFor(m => m.User.RoleId )
+        @Html.DropDownListFor(m => m.User.RoleId, new SelectList(Model.Role, "RoleId", "Name"), "Select Role", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.User.RoleId)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.UserStatus)
-        @Html.DropDownListFor(m =>m.UserStatus, new SelectList(Model.UserStatus, "UserStatusId", "Name"), "Select Status", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.UserStatus)
+        @Html.LabelFor(m => m.User.UserStatusId)
+        @Html.DropDownListFor(m => m.User.UserStatusId, new SelectList(Model.UserStatus, "UserStatusId", "Name"), "Select Status", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.User.UserStatusId)
     </div>
-   <div>@Html.HiddenFor(m => m.User.UserId)</div>
+    <div>@Html.HiddenFor(m => m.User.UserId)</div>
     <div>
         @Html.AntiForgeryToken()
         <button type="submit" class="btn btn-primary">Save</button>

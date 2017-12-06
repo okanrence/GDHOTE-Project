@@ -6,10 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using GDHOTE.Hub.Core.Dtos;
 using GDHOTE.Hub.Core.Models;
+using NPoco;
+using NPoco.Expressions;
 
 namespace GDHOTE.Hub.Core.Services
 {
-    public class RolesService : BaseService
+    public class RoleService : BaseService
     {
 
         public static string Save(Role role)
@@ -45,14 +47,14 @@ namespace GDHOTE.Hub.Core.Services
                 return new List<Role>();
             }
         }
-        public static Role GetRole(int id)
+        public static Role GetRole(string id)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var Role = db.Fetch<Role>().SingleOrDefault(s => s.RoleId == id);
-                    return Role;
+                    var role = db.Fetch<Role>().SingleOrDefault(s => s.RoleId == id);
+                    return role;
                 }
             }
             catch (Exception ex)
@@ -78,13 +80,30 @@ namespace GDHOTE.Hub.Core.Services
                 return "Error occured while trying to update Role";
             }
         }
-        public static string Delete(int id)
+        public static string Delete(string roleId)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Delete<Role>(id);
+                    var result = db.Delete<Role>("where RoleId = @0", roleId);
+                    //var result = db.Delete<Role>(roleId);
+                    return result.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return "Error occured while trying to delete record";
+            }
+        }
+        public static string Delete(Role role)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var result = db.Delete<Role>(role);
                     return result.ToString();
                 }
             }

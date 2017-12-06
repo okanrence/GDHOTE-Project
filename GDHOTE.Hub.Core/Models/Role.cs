@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +10,11 @@ namespace GDHOTE.Hub.Core.Models
 {
 
     [TableName("HUB_Roles")]
-    [PrimaryKey("PaymentTypeId")]
+    [PrimaryKey("RoleId", AutoIncrement = false)]
     public class Role
     {
-        public int RoleId { get; set; }
+        public string RoleId { get; set; }
+        [Required]
         public string Name { get; set; }
         public DateTime CreatedDate { get; set; }
     }
