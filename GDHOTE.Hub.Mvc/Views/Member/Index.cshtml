@@ -28,7 +28,7 @@ else
                     <th>Status</th>
                     <th>Date Of Birth</th>
                     <th>Magus</th>
-                    <th>Magus Date</th>
+                    @*<th>Magus Date</th>*@
                     <th>Record Date</th>
                     <th></th>
                     <th></th>
@@ -46,7 +46,7 @@ else
                         <td>@member.StatusCode</td>
                         <td>@member.DateOfBirth.ToString("dd-MMM-yyyy")</td>
                         <td>@member.MagusFlag</td>
-                        <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy") ?? "") </td>
+                        @*<td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy") ) </td>*@
                         <td>@member.RecordDate.ToString("dd-MMM-yyyy")</td>
                         <td>@Html.ActionLink("Contact Details", "Edit", "MemberDetails", new { id = member.MemberKey }, null)</td>
                         <td><button data-member-id="@member.MemberKey" class="btn btn-link js-delete">Delete</button></td>
