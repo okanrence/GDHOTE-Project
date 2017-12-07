@@ -22,7 +22,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             var role = RoleService.GetRole(id);
             if (role == null) return HttpNotFound();
-            var viewModel = new RoleViewModel
+            var viewModel = new RoleFormViewModel
             {
                 Role = role
             };
@@ -30,7 +30,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult New()
         {
-            var viewModel = new RoleViewModel
+            var viewModel = new RoleFormViewModel
             {
                 Role = new Role()
             };
@@ -43,7 +43,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var viewModel = new RoleViewModel
+                var viewModel = new RoleFormViewModel
                 {
                     Role = role
                 };

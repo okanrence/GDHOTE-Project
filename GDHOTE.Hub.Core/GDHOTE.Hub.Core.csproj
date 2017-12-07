@@ -64,6 +64,7 @@
     <Compile Include="Models\ActivityType.cs" />
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\Currency.cs" />
+    <Compile Include="Models\MainMenu.cs" />
     <Compile Include="Models\MaritalStatus.cs" />
     <Compile Include="Models\MemberDetails.cs" />
     <Compile Include="Models\Member.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Models\Sex.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\Status.cs" />
+    <Compile Include="Models\SubMenu.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserStatus.cs" />
     <Compile Include="Models\UserRoles.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="Services\CountryService.cs" />
     <Compile Include="Services\EnumsService.cs" />
     <Compile Include="Services\LogService.cs" />
+    <Compile Include="Services\MainMenuService.cs" />
     <Compile Include="Services\MaritalStatusService.cs" />
     <Compile Include="Services\MemberDetailsService.cs" />
     <Compile Include="Services\MemberService.cs" />
@@ -99,6 +102,7 @@
     <Compile Include="Services\PaymentTypeService.cs" />
     <Compile Include="Services\PaymentViewService.cs" />
     <Compile Include="Services\StatusService.cs" />
+    <Compile Include="Services\SubMenuService.cs" />
     <Compile Include="Services\UserStatusService.cs" />
     <Compile Include="Services\SequenceService.cs" />
     <Compile Include="Services\SexService.cs" />
@@ -108,10 +112,12 @@
     <Compile Include="Services\UserViewService.cs" />
     <Compile Include="Services\YearGroupService.cs" />
     <Compile Include="ViewModels\ActivityTypeFormViewModel.cs" />
+    <Compile Include="ViewModels\MainMenuViewModel.cs" />
     <Compile Include="ViewModels\MemberDetailsFormModel.cs" />
     <Compile Include="ViewModels\PaymentModeFormViewModel.cs" />
     <Compile Include="ViewModels\PaymentTypeFormViewModel.cs" />
-    <Compile Include="ViewModels\RoleViewModel.cs" />
+    <Compile Include="ViewModels\RoleFormViewModel.cs" />
+    <Compile Include="ViewModels\SubMenuFormViewModel.cs" />
     <Compile Include="ViewModels\UserFormViewModel.cs" />
     <Compile Include="ViewModels\MemberFormViewModel.cs" />
     <Compile Include="ViewModels\PaymentFormViewModel.cs" />

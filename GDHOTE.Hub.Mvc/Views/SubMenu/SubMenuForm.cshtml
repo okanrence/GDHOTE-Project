@@ -1,0 +1,58 @@
+﻿@model GDHOTE.Hub.Core.ViewModels.SubMenuFormViewModel
+
+@{
+    ViewBag.Title = "SubMenuForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model == null ? "New Main Menu" : "Edit Main Menu";
+    }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "SubMenu"))
+{
+    <div>
+        <div class="form-group">
+            @Html.LabelFor(s => s.SubMenu.ParentId)
+            @Html.DropDownListFor(s => s.SubMenu.ParentId, new SelectList(Model.MainMenu, "MenuId", "Name"), "Select Menu", new { @class = "form-control" })
+            @Html.ValidationMessageFor(s => s.SubMenu.ParentId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(s => s.SubMenu.Name)
+            @Html.TextBoxFor(s => s.SubMenu.Name, new {@class = "form-control gdhote-text-capitalize"})
+            @Html.ValidationMessageFor(s => s.SubMenu.Name)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(s => s.SubMenu.Url)
+            @Html.TextBoxFor(s => s.SubMenu.Url, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(s => s.SubMenu.Url)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(s => s.SubMenu.DisplaySequence)
+            @Html.TextBoxFor(s => s.SubMenu.DisplaySequence, new {@class = "form-control"})
+            @Html.ValidationMessageFor(s => s.SubMenu.DisplaySequence)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(s => s.SubMenu.Status)
+            @Html.DropDownListFor(s => s.SubMenu.Status, new SelectList(Model.Status, "Code", "Description"), "Select Status", new {@class = "form-control"})
+            @Html.ValidationMessageFor(s => s.SubMenu.Status)
+        </div>
+        <div class="form-group">
+            @Html.HiddenFor(s => s.SubMenu.SubMenuId)
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+    </div>
+
+}
+
+

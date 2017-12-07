@@ -7,10 +7,9 @@ using GDHOTE.Hub.Core.Models;
 
 namespace GDHOTE.Hub.Core.ViewModels
 {
-    public class RoleViewModel
+    public class MainMenuViewModel
     {
-        public Role Role { get; set; }
-        //public List<Status> Status { get; set; }
-
+        public MainMenu MainMenu { get; set; }
+        public List<Status> Status { get; set; }
     }
 }

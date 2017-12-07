@@ -1,0 +1,67 @@
+﻿@model List<GDHOTE.Hub.Core.Models.MainMenu>
+
+@{
+    ViewBag.Title = "MainMenuIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Main Menu</h2>
+<p>
+    @Html.ActionLink("New Main Menu", "New", "MainMenu", null, new { @class = "btn btn-primary" })
+</p>
+
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No record(s) found</p>
+}
+else
+{
+    <div>
+        <table id="mainmenus" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var mainMenu in Model)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(mainMenu.Name, "Edit", "MainMenu", new { id = mainMenu.MenuId }, null)</td>
+                        <td>@mainMenu.Status</td>
+                        <td>@mainMenu.DisplaySequence</td>
+                        <td><button data-mainmenu-id="@mainMenu.MenuId" class="btn btn-link js-delete">Delete</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#mainmenus").DataTable();
+
+            $("#mainmenus").on("click", ".js-delete", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to proceed?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/hub/mainmenu/deletemainmenu?id=" + button.attr("data-mainmenu-id"),
+                            method: "DELETE",
+                            success: function () {
+                                button.parents("tr").remove();
+                            }
+                        });
+                    }
+                });
+
+            });
+        });
+    </script>
+}

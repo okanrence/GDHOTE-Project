@@ -27,7 +27,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return View();
         }
 
-         
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -41,8 +41,27 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var result = UserService.LoginUser(model.UserName, model.Password, out authenticatedUser);
             if (result == EnumsService.SignInStatus.Success)
             {
-                FormsAuthentication.SetAuthCookie(authenticatedUser.UserName, false);
-                return RedirectToAction("Index", "Home");
+                var myIdentity = new ClaimsIdentity(
+                    new[] { 
+                        // adding following 2 claim just for supporting default antiforgery provider
+                        new Claim(ClaimTypes.NameIdentifier, authenticatedUser.UserName),
+                        new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "ASP.NET Identity", "http://www.w3.org/2001/XMLSchema#string"),
+
+                        new Claim(ClaimTypes.Name,authenticatedUser.UserName),
+
+                        // optionally you could add roles if any
+                        new Claim(ClaimTypes.Role, authenticatedUser.RoleId),
+                      },
+                    DefaultAuthenticationTypes.ApplicationCookie);
+                HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties { IsPersistent = false }, myIdentity);
+                if (User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
+
+                //FormsAuthentication.SetAuthCookie(authenticatedUser.UserName, false);
+                //var authTicket = new FormsAuthenticationTicket(1, authenticatedUser.UserName, DateTime.Now, DateTime.Now.AddMinutes(5), false, "");
+                //string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+                //var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+                //HttpContext.Response.Cookies.Add(authCookie);
+                //HttpContext..User = new System.Security.Principal.GenericPrincipal(new FormsIdentity(authTicket), "");
             }
             else
             {
@@ -78,6 +97,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         public ActionResult LogOff()
         {
             FormsAuthentication.SignOut();
+            HttpContext.GetOwinContext().Authentication.SignOut();
             return RedirectToAction("Login", "Account");
         }
     }

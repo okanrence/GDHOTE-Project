@@ -1,0 +1,71 @@
+﻿@model List<GDHOTE.Hub.Core.Models.SubMenu>
+
+@{
+    ViewBag.Title = "SubMenuIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Sub Menu</h2>
+<p>
+    @Html.ActionLink("New Sub Menu", "New", "SubMenu", null, new { @class = "btn btn-primary" })
+</p>
+
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No record(s) found</p>
+}
+else
+{
+    <div>
+        <table id="submenus" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Url</th>
+                    <th>Status</th>
+                    @*<th>ParentId</th>*@
+                    <th>CreatedDate</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var subMenu in Model)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(subMenu.Name, "Edit", "SubMenu", new { id = subMenu.SubMenuId }, null)</td>
+                        <td>@subMenu.Url </td>
+                        <td>@subMenu.Status</td>
+                        @*<td>@subMenu.ParentId</td>*@
+                        <td>@subMenu.CreatedDate.ToString("dd-MMM-yyyy")</td>
+                        <td><button data-submenu-id="@subMenu.SubMenuId" class="btn btn-link js-delete">Delete</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#submenus").DataTable();
+
+            $("#usesubmenusrs").on("click", ".js-delete", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to proceed?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/hub/submenu/deletesubmenu?id=" + button.attr("data-submenu-id"),
+                            method: "DELETE",
+                            success: function () {
+                                button.parents("tr").remove();
+                            }
+                        });
+                    }
+                });
+
+            });
+        });
+    </script>
+}

@@ -219,6 +219,7 @@
     <Compile Include="ApiControllers\ActivityTypeController.cs" />
     <Compile Include="ApiControllers\CountryController.cs" />
     <Compile Include="ApiControllers\CurrencyController.cs" />
+    <Compile Include="ApiControllers\MainMenuController.cs" />
     <Compile Include="ApiControllers\MemberController.cs" />
     <Compile Include="ApiControllers\MemberDetailsController.cs" />
     <Compile Include="ApiControllers\MembershipStatusController.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="ApiControllers\PaymentTypeController.cs" />
     <Compile Include="ApiControllers\RoleController.cs" />
     <Compile Include="ApiControllers\StateController.cs" />
+    <Compile Include="ApiControllers\SubMenuController.cs" />
     <Compile Include="ApiControllers\YearGroupController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -242,6 +244,7 @@
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MainMenuController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\MemberDetailsController.cs" />
@@ -251,6 +254,7 @@
     <Compile Include="Controllers\PaymentTypeController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\StateController.cs" />
+    <Compile Include="Controllers\SubMenuController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\YearGroupController.cs" />
     <Compile Include="Global.asax.cs">
@@ -626,6 +630,10 @@
     <Content Include="Views\ActivityType\ActivityTypeForm.cshtml" />
     <Content Include="Views\Role\RoleIndex.cshtml" />
     <Content Include="Views\Role\RoleForm.cshtml" />
+    <Content Include="Views\MainMenu\MainMenuIndex.cshtml" />
+    <Content Include="Views\MainMenu\MainMenuForm.cshtml" />
+    <Content Include="Views\SubMenu\SubMenuIndex.cshtml" />
+    <Content Include="Views\SubMenu\SubMenuForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

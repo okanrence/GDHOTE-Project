@@ -34,9 +34,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
 
         // GET: User/Create
-        public ActionResult NewUser()
+        public ActionResult New()
         {
-
             var viewModel = new UserFormViewModel
             {
                 Role = _roles,
@@ -63,7 +62,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 user.UserId = Guid.NewGuid().ToString();
                 user.CreatedDate = DateTime.Now;
-                user.Password = PasswordManager.ReturnHashPassword(user.Password); 
+                user.Password = PasswordManager.ReturnHashPassword(user.Password);
                 user.CreatedBy = 0;
                 user.LastUpdatedBy = 0;
                 var result = UserService.Save(user);

@@ -21,7 +21,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
             if (string.IsNullOrEmpty(User.Identity.Name))
             {
-                FormsAuthentication.SignOut();
+                //FormsAuthentication.SignOut();
                 RedirectToAction("Login", "Account");
             }
             ViewBag.LayoutModel = "";//service.getMenuByUsername(User.Identity.Name);
