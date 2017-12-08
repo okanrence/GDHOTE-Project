@@ -10,7 +10,7 @@ using GDHOTE.Hub.Core.ViewModels;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class RoleController : Controller
+    public class RoleController : BaseController
     {
         // GET: Role
         public ActionResult Index()
@@ -18,21 +18,25 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var roles = RoleService.GetRoles().ToList();
             return View("RoleIndex", roles);
         }
+        public ActionResult New()
+        {
+            var statuses = StatusService.GetStatus().ToList();
+            var viewModel = new RoleFormViewModel
+            {
+                Statuses = statuses,
+                Role = new Role()
+            };
+            return View("RoleForm", viewModel);
+        }
         public ActionResult Edit(string id)
         {
             var role = RoleService.GetRole(id);
             if (role == null) return HttpNotFound();
+            var statuses = StatusService.GetStatus().ToList();
             var viewModel = new RoleFormViewModel
             {
+                Statuses = statuses,
                 Role = role
-            };
-            return View("RoleForm", viewModel);
-        }
-        public ActionResult New()
-        {
-            var viewModel = new RoleFormViewModel
-            {
-                Role = new Role()
             };
             return View("RoleForm", viewModel);
         }
@@ -43,8 +47,10 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var statuses = StatusService.GetStatus().ToList();
                 var viewModel = new RoleFormViewModel
                 {
+                    Statuses = statuses,
                     Role = role
                 };
                 return View("RoleForm", viewModel);
@@ -61,6 +67,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 var roleInDb = RoleService.GetRole(role.RoleId);
                 if (roleInDb == null) return HttpNotFound();
                 roleInDb.Name = role.Name;
+                roleInDb.Status = role.Status;
                 var result = RoleService.Update(roleInDb);
             }
             return RedirectToAction("Index");

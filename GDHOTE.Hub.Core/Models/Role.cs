@@ -16,6 +16,8 @@ namespace GDHOTE.Hub.Core.Models
         public string RoleId { get; set; }
         [Required]
         public string Name { get; set; }
+        [Required]
+        public string Status { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }

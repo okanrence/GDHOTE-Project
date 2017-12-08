@@ -18,9 +18,9 @@
 {
     <div>
         <div class="form-group">
-            @Html.LabelFor(s => s.SubMenu.ParentId)
-            @Html.DropDownListFor(s => s.SubMenu.ParentId, new SelectList(Model.MainMenu, "MenuId", "Name"), "Select Menu", new { @class = "form-control" })
-            @Html.ValidationMessageFor(s => s.SubMenu.ParentId)
+            @Html.LabelFor(s => s.SubMenu.MenuId)
+            @Html.DropDownListFor(s => s.SubMenu.MenuId, new SelectList(Model.MainMenu, "MenuId", "Name"), "Select Menu", new { @class = "form-control" })
+            @Html.ValidationMessageFor(s => s.SubMenu.MenuId)
         </div>
         <div class="form-group">
             @Html.LabelFor(s => s.SubMenu.Name)

@@ -1,4 +1,6 @@
-﻿<div class="navbar navbar-inverse navbar-fixed-top">
+﻿@using System.Collections
+@using GDHOTE.Hub.Core.Models
+<div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -10,46 +12,35 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Setups<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("Roles", "Index", "Role")</li>
-                        <li>@Html.ActionLink("Users", "Index", "User")</li>
-                        <li>@Html.ActionLink("States", "Index", "State")</li>
-                        <li>@Html.ActionLink("Country", "Index", "Country")</li>
-                        <li>@Html.ActionLink("Year Group", "Index", "YearGroup")</li>
-                        <li>@Html.ActionLink("Member Status", "Index", "MembershipStatus")</li>
-                        <li>@Html.ActionLink("Payment Types", "Index", "PaymentType")</li>
-                        <li>@Html.ActionLink("Payment Modes", "Index", "PaymentMode")</li>
-                        <li>@Html.ActionLink("Currency", "Index", "Currency")</li>
-                        <li>@Html.ActionLink("Activity Type", "Index", "ActivityType")</li>
-                        <li>@Html.ActionLink("Main Menu", "Index", "MainMenu")</li>
-                        <li>@Html.ActionLink("Sub Menu", "Index", "SubMenu")</li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Members Administration<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("Manage Members", "Index", "Member")</li>
-                        <li>@Html.ActionLink("Approve Member", "ApproveMember", "Member")</li>
-                        <li>@Html.ActionLink("Member Details", "Index", "MemberDetails")</li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Payments<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("Add Payment", "Index", "Payment")</li>
-                        <li>@Html.ActionLink("Manage Payment", "Manage", "Payment")</li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reports<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("Members", "List", "Member")</li>
-                        <li>@Html.ActionLink("Payments", "List", "Payment")</li>
-                    </ul>
-                </li>
+                @{
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    IEnumerable<MainMenu> mainMenus = ViewBag.MainMenu;
+                    IEnumerable<RoleSubMenuView> subMenus = ViewBag.SubMenu;
+
+                    if (mainMenus != null)
+                    {
+                        foreach (var mainMenu in mainMenus)
+                        {
+                            var childrenMenu = subMenus.ToList().Where(s => s.MenuId == mainMenu.MenuId && s.RoleMenuStatus.Equals("A")).OrderBy(s => s.DisplaySequence);
+                            if (childrenMenu.Any())
+                            {
+                                @:<li class="dropdown">
+                                    @:<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@mainMenu.Name<span class="caret"></span></a>
+                                        @:<ul class="dropdown-menu">
+                                        foreach (var child in childrenMenu)
+                                        {
+                                            @:<li><a href="@child.Url">@child.Name</a></li>
+                                           
+                                        }
+                                        @:</ul>
+                                @:</li> 
+                            }
+                           
+                        }
+                    }
+
+                }
+
             </ul>
             @Html.Partial("_LoginPartial")
         </div>

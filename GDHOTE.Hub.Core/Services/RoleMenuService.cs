@@ -8,15 +8,15 @@ using GDHOTE.Hub.Core.Models;
 
 namespace GDHOTE.Hub.Core.Services
 {
-    public class SubMenuService : BaseService
+    public class RoleMenuService : BaseService
     {
-        public static string Save(SubMenu subMenu)
+        public static string Save(RoleMenu roleMenu)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Insert(subMenu);
+                    var result = db.Insert(roleMenu);
                     return result.ToString();
                 }
             }
@@ -24,71 +24,55 @@ namespace GDHOTE.Hub.Core.Services
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
-                return "Error occured while trying to insert SubMenu";
+                return "Error occured while trying to insert RoleMenu";
             }
         }
-        public static IEnumerable<SubMenu> GetSubMenus()
+        public static IEnumerable<RoleMenu> GetRoleMenus()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Fetch<SubMenu>().Where(c => c.Status == "A").OrderBy(c => c.DisplaySequence);
-                    return countries;
+                    var roleMenus = db.Fetch<RoleMenu>().Where(c => c.Status == "A");
+                    return roleMenus;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return new List<SubMenu>();
+                return new List<RoleMenu>();
             }
         }
-        public static IEnumerable<SubMenu> GetSubMenusByRoleId()
+        public static RoleMenu GetRoleMenu(string id)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Fetch<SubMenu>().Where(c => c.Status == "A").OrderBy(c => c.DisplaySequence);
-                    return countries;
+                    var roleMenu = db.Fetch<RoleMenu>().SingleOrDefault(c => c.RoleMenuId == id);
+                    return roleMenu;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return new List<SubMenu>();
+                return new RoleMenu();
             }
         }
-        public static SubMenu GetSubMenu(string id)
+        public static string Update(RoleMenu roleMenu)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var subMenu = db.Fetch<SubMenu>().SingleOrDefault(c => c.SubMenuId == id);
-                    return subMenu;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return new SubMenu();
-            }
-        }
-        public static string Update(SubMenu subMenu)
-        {
-            try
-            {
-                using (var db = GdhoteConnection())
-                {
-                    var result = db.Update(subMenu);
+                    var result = db.Update(roleMenu);
                     return result.ToString();
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return "Error occured while trying to update SubMenu";
+                return "Error occured while trying to update RoleMenu";
             }
         }
         public static string Delete(string id)
@@ -97,7 +81,7 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Delete<SubMenu>(id);
+                    var result = db.Delete<RoleMenu>(id);
                     return result.ToString();
                 }
             }

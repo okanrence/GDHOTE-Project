@@ -1,0 +1,69 @@
+﻿@model List<GDHOTE.Hub.Core.Models.RoleSubMenuView>
+
+@{
+    ViewBag.Title = "RoleMenuIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Role Menu</h2>
+<p>
+    @Html.ActionLink("New Role Menu", "New", "RoleMenu", null, new { @class = "btn btn-primary" })
+</p>
+
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No record(s) found</p>
+}
+else
+{
+    <div>
+        <table id="rolemenus" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Created Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var roleMenu in Model)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(roleMenu.Name, "Edit", "RoleMenu", new { id = roleMenu.RoleMenuId }, null)</td>
+                        <td>@roleMenu.RoleName </td>
+                        <td>@roleMenu.RoleMenuStatus </td>
+                        <td>@roleMenu.RoleMenuDate.ToString("dd-MMM-yyyy")</td>
+                        <td><button data-rolemenu-id="@roleMenu.RoleMenuId" class="btn btn-link js-delete">Delete</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#rolemenus").DataTable();
+
+            $("#rolemenus").on("click", ".js-delete", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to proceed?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/hub/rolemenu/deleterolemenu?id=" + button.attr("data-rolemenu-id"),
+                            method: "DELETE",
+                            success: function () {
+                                button.parents("tr").remove();
+                            }
+                        });
+                    }
+                });
+
+            });
+        });
+    </script>
+}

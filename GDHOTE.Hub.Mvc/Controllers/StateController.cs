@@ -10,7 +10,7 @@ using GDHOTE.Hub.Core.ViewModels;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class StateController : Controller
+    public class StateController : BaseController
     {
         // GET: State
         public ActionResult Index()

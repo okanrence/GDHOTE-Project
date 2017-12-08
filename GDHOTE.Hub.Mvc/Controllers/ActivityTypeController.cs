@@ -10,7 +10,7 @@ using GDHOTE.Hub.Core.ViewModels;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class ActivityTypeController : Controller
+    public class ActivityTypeController : BaseController
     {
         // GET: ActivityType
         public ActionResult Index()

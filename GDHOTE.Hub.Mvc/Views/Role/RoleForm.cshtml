@@ -1,4 +1,4 @@
-﻿@model GDHOTE.Hub.Core.ViewModels.RoleViewModel
+﻿@model GDHOTE.Hub.Core.ViewModels.RoleFormViewModel  
     @{
         ViewBag.Title = "RoleForm";
         Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,7 +9,7 @@
         var pagename = "";
         if (Model != null)
         {
-            pagename = Model == null ? "New Role" : "Edit Role";
+            pagename = Model.Role.RoleId == null ? "New Role" : "Edit Role";
         }
 
     }
@@ -22,6 +22,11 @@
                     @Html.LabelFor(r => r.Role.Name)
                     @Html.TextBoxFor(r => r.Role.Name, new { @class = "form-control gdhote-text-capitalize" })
                     @Html.ValidationMessageFor(r => r.Role.Name)
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(r => r.Role.Status)
+                    @Html.DropDownListFor(r => r.Role.Status, new SelectList(Model.Statuses, "Code", "Description"), "Select Status", new {@class = "form-control"})
+                    @Html.ValidationMessageFor(r => r.Role.Status)
                 </div>
                 <div class="form-group">
                     <div>@Html.HiddenFor(r => r.Role.RoleId)</div>

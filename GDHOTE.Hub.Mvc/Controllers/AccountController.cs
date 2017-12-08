@@ -9,7 +9,7 @@ using System.Web.Security;
 using GDHOTE.Hub.Core.Models;
 using GDHOTE.Hub.Core.Services;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
+//using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using GDHOTE.Hub.Mvc.Models;
 
@@ -41,18 +41,19 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var result = UserService.LoginUser(model.UserName, model.Password, out authenticatedUser);
             if (result == EnumsService.SignInStatus.Success)
             {
-                var myIdentity = new ClaimsIdentity(
-                    new[] { 
+
+
+                var myIdentity = new ClaimsIdentity(new[]
+                    {
                         // adding following 2 claim just for supporting default antiforgery provider
                         new Claim(ClaimTypes.NameIdentifier, authenticatedUser.UserName),
-                        new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "ASP.NET Identity", "http://www.w3.org/2001/XMLSchema#string"),
-
-                        new Claim(ClaimTypes.Name,authenticatedUser.UserName),
-
-                        // optionally you could add roles if any
+                        //new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", 
+                        //"ASP.NET Identity", "http://www.w3.org/2001/XMLSchema#string"),
+                        
+                        new Claim(ClaimTypes.Name, authenticatedUser.UserName),
                         new Claim(ClaimTypes.Role, authenticatedUser.RoleId),
-                      },
-                    DefaultAuthenticationTypes.ApplicationCookie);
+                    }, DefaultAuthenticationTypes.ApplicationCookie
+                   );
                 HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties { IsPersistent = false }, myIdentity);
                 if (User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
 

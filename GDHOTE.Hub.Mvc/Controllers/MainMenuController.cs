@@ -9,7 +9,7 @@ using GDHOTE.Hub.Core.ViewModels;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class MainMenuController : Controller
+    public class MainMenuController : BaseController
     {
         // GET: MainMenu
         public ActionResult Index()

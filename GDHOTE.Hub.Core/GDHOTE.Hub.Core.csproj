@@ -74,6 +74,8 @@
     <Compile Include="Models\PaymentMode.cs" />
     <Compile Include="Models\PaymentType.cs" />
     <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\RoleMenu.cs" />
+    <Compile Include="Models\RoleSubMenuView.cs" />
     <Compile Include="Models\Sex.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\Status.cs" />
@@ -101,6 +103,8 @@
     <Compile Include="Services\PaymentService.cs" />
     <Compile Include="Services\PaymentTypeService.cs" />
     <Compile Include="Services\PaymentViewService.cs" />
+    <Compile Include="Services\RoleMenuService.cs" />
+    <Compile Include="Services\RoleSubMenuViewService.cs" />
     <Compile Include="Services\StatusService.cs" />
     <Compile Include="Services\SubMenuService.cs" />
     <Compile Include="Services\UserStatusService.cs" />
@@ -117,6 +121,7 @@
     <Compile Include="ViewModels\PaymentModeFormViewModel.cs" />
     <Compile Include="ViewModels\PaymentTypeFormViewModel.cs" />
     <Compile Include="ViewModels\RoleFormViewModel.cs" />
+    <Compile Include="ViewModels\RoleMenuFormViewModel.cs" />
     <Compile Include="ViewModels\SubMenuFormViewModel.cs" />
     <Compile Include="ViewModels\UserFormViewModel.cs" />
     <Compile Include="ViewModels\MemberFormViewModel.cs" />

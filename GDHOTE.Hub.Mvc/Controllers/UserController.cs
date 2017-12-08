@@ -10,13 +10,13 @@ using GDHOTE.Hub.Core.ViewModels;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private static IEnumerable<Role> _roles = null;
         private static IEnumerable<UserStatus> _userStatuses = null;
         public UserController()
         {
-            _roles = RoleService.GetRoles();
+            _roles = RoleService.GetActiveRoles();
             _userStatuses = UserStatusService.GetUserStatuses();
         }
         // GET: User

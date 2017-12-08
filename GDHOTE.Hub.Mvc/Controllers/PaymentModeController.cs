@@ -10,7 +10,7 @@ using GDHOTE.Hub.Core.ViewModels;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class PaymentModeController : Controller
+    public class PaymentModeController : BaseController
     {
         // GET: PaymentMode
         public ActionResult Index()

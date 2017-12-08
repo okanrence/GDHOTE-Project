@@ -1,0 +1,59 @@
+﻿@model GDHOTE.Hub.Core.ViewModels.RoleMenuFormViewModel
+
+@{
+    ViewBag.Title = "RoleMenuForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model == null ? "New Role Menu" : "Edit Role Menu";
+    }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "RoleMenu"))
+{
+    <div>
+        <div>
+            <span class="text-danger">@ViewBag.Error</span>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(r => r.RoleMenu.MenuId)
+            @Html.DropDownListFor(r => r.RoleMenu.MenuId, new SelectList(Model.MainMenus, "MenuId", "Name"), "Select Main Menu", new {@class = "form-control"})
+            @Html.ValidationMessageFor(r => r.RoleMenu.MenuId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(r => r.RoleMenu.SubMenuId)
+            @Html.DropDownListFor(r => r.RoleMenu.SubMenuId, new SelectList(Model.SubMenus, "SubMenuId", "Name"), "Select Sub Menu", new {@class = "form-control"})
+            @Html.ValidationMessageFor(r => r.RoleMenu.SubMenuId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(r => r.RoleMenu.RoleId)
+            @Html.DropDownListFor(r => r.RoleMenu.RoleId, new SelectList(Model.Roles, "RoleId", "Name"), "Select Role", new {@class = "form-control"})
+            @Html.ValidationMessageFor(r => r.RoleMenu.RoleId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(r => r.RoleMenu.Status)
+            @Html.DropDownListFor(r => r.RoleMenu.Status, new SelectList(Model.Statuses, "Code", "Description"), "Select Status", new {@class = "form-control"})
+            @Html.ValidationMessageFor(r => r.RoleMenu.Status)
+        </div>
+        <div class="form-group">
+            @Html.HiddenFor(r => r.RoleMenu.RoleMenuId)
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+    </div>
+
+}
+
+
+
+

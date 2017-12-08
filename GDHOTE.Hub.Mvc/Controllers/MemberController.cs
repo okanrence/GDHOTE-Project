@@ -9,7 +9,7 @@ using GDHOTE.Hub.Core.ViewModels;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class MemberController : Controller
+    public class MemberController : BaseController
     {
         // GET: Member
         public ActionResult Index()

@@ -253,6 +253,7 @@
     <Compile Include="Controllers\PaymentModeController.cs" />
     <Compile Include="Controllers\PaymentTypeController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\RoleMenuController.cs" />
     <Compile Include="Controllers\StateController.cs" />
     <Compile Include="Controllers\SubMenuController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -634,6 +635,9 @@
     <Content Include="Views\MainMenu\MainMenuForm.cshtml" />
     <Content Include="Views\SubMenu\SubMenuIndex.cshtml" />
     <Content Include="Views\SubMenu\SubMenuForm.cshtml" />
+    <Content Include="Views\RoleMenu\RoleMenuIndex.cshtml" />
+    <Content Include="Views\RoleMenu\RoleMenuForm.cshtml" />
+    <Content Include="Views\Shared\_NavMenuOld.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

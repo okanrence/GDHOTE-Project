@@ -10,7 +10,7 @@ using GDHOTE.Hub.Core.ViewModels;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class YearGroupController : Controller
+    public class YearGroupController : BaseController
     {
         // GET: YearGroup
         public ActionResult Index()

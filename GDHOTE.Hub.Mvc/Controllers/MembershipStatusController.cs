@@ -8,7 +8,7 @@ using GDHOTE.Hub.Core.Services;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class MembershipStatusController : Controller
+    public class MembershipStatusController : BaseController
     {
         // GET: MembershipStatus
         public ActionResult Index()

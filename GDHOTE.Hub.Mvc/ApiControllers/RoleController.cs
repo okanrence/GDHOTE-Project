@@ -13,7 +13,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
     public class RoleController : ApiController
     {
         [Route("getroles")]
-        public IHttpActionResult GetCountries()
+        public IHttpActionResult GetRoles()
         {
             var roles = RoleService.GetRoles().ToList();
             if (roles.Count == 0) return NotFound();

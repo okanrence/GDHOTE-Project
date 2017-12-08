@@ -9,7 +9,7 @@ using GDHOTE.Hub.Core.ViewModels;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class SubMenuController : Controller
+    public class SubMenuController : BaseController
     {
         // GET: SubMenu
         public ActionResult Index()
@@ -74,7 +74,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 subMenuInDb.Name = subMenu.Name;
                 subMenuInDb.Url = subMenu.Url;
                 subMenuInDb.Name = subMenu.Name;
-                subMenuInDb.ParentId = subMenu.ParentId;
+                subMenuInDb.MenuId = subMenu.MenuId;
                 subMenuInDb.DisplaySequence = subMenu.DisplaySequence;
                 var result = SubMenuService.Update(subMenuInDb);
             }

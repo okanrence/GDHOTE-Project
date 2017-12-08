@@ -10,7 +10,7 @@ using GDHOTE.Hub.Core.ViewModels;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class CurrencyController : Controller
+    public class CurrencyController : BaseController
     {
         // GET: Currency
         public ActionResult Index()

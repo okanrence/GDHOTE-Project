@@ -30,7 +30,6 @@ namespace GDHOTE.Hub.Core.Services
                 return ex.Message.Contains("The duplicate key") ? "Cannot Insert duplicate record" : "Error occured while trying to insert Role";
             }
         }
-
         public static IEnumerable<Role> GetRoles()
         {
             try
@@ -38,6 +37,22 @@ namespace GDHOTE.Hub.Core.Services
                 using (var db = GdhoteConnection())
                 {
                     var roles = db.Fetch<Role>();
+                    return roles;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return new List<Role>();
+            }
+        }
+        public static IEnumerable<Role> GetActiveRoles() 
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var roles = db.Fetch<Role>().Where(r => r.Status == "A");
                     return roles;
                 }
             }
