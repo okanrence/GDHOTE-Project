@@ -58,6 +58,7 @@
     <Compile Include="BusinessLogic\StringCaseManager.cs" />
     <Compile Include="BusinessLogic\ConstantManager.cs" />
     <Compile Include="BusinessLogic\SequenceManager.cs" />
+    <Compile Include="BusinessLogic\UtilityManager.cs" />
     <Compile Include="Dtos\CountryDto.cs" />
     <Compile Include="Dtos\MemberDto.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\SubMenu.cs" />
+    <Compile Include="Models\SubMenuView.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserStatus.cs" />
     <Compile Include="Models\UserRoles.cs" />

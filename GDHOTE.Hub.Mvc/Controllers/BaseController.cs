@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using GDHOTE.Hub.Core.BusinessLogic;
 using GDHOTE.Hub.Core.Services;
 
 namespace GDHOTE.Hub.Mvc.Controllers
@@ -40,6 +41,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
             ViewBag.MainMenu = mainMenus;
             ViewBag.SubMenu = subMenus;
+            ViewBag.DeployedAppName = UtilityManager.DeployedAppName();
 
         }
 

@@ -16,6 +16,7 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     IEnumerable<MainMenu> mainMenus = ViewBag.MainMenu;
                     IEnumerable<RoleSubMenuView> subMenus = ViewBag.SubMenu;
+                    var deployedName = ViewBag.DeployedAppName;
 
                     if (mainMenus != null)
                     {
@@ -29,7 +30,7 @@
                                         @:<ul class="dropdown-menu">
                                         foreach (var child in childrenMenu)
                                         {
-                                            @:<li><a href="@child.Url">@child.Name</a></li>
+                                            @:<li><a href="@deployedName@child.Url">@child.Name</a></li>
                                            
                                         }
                                         @:</ul>
