@@ -28,10 +28,10 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
 
         // GET: User/Details/5
-        public ActionResult Details(int id)
-        {
-            return View("UserIndex");
-        }
+        //public ActionResult Details(int id)
+        //{
+        //    return View("UserIndex");
+        //}
 
         // GET: User/Create
         public ActionResult New()
@@ -44,6 +44,21 @@ namespace GDHOTE.Hub.Mvc.Controllers
             };
             return View("UserForm", viewModel);
         }
+        // GET: User/Edit/5
+        public ActionResult Edit(string id)
+        {
+            var user = UserService.GetUser(id);
+            if (user == null) return HttpNotFound();
+            var viewModel = new UserFormViewModel
+            {
+                Role = _roles,
+                UserStatus = _userStatuses,
+                User = user,
+            };
+            return View("UserForm", viewModel);
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Save(User user)
@@ -82,12 +97,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
 
 
-        // GET: User/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View("UserIndex");
-        }
-
+      
         // POST: User/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)

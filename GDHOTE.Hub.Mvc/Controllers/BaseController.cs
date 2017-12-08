@@ -24,14 +24,18 @@ namespace GDHOTE.Hub.Mvc.Controllers
             }
 
             var currentUser = HttpContext.GetOwinContext().Authentication.User;
-            var identity = (ClaimsIdentity)currentUser.Identity;
-            IEnumerable<Claim> claims = identity.Claims;
-            string roleId = claims.SingleOrDefault(c => c.Type == identity.RoleClaimType)?.Value;
+            IEnumerable<Claim> claims = currentUser.Claims;
+            string roleId = claims.SingleOrDefault(c => c.Type == ClaimsIdentity.DefaultRoleClaimType)?.Value;
+
+
+            //var currentUser2 = System.Web.HttpContext.Current.User;
+            //var identity = (ClaimsIdentity)User.Identity;
+            //IEnumerable<Claim> claims = identity.Claims;
+            //string roleId = claims.SingleOrDefault(c => c.Type == identity.RoleClaimType)?.Value;
 
             //Get UserMenu
             var mainMenus = MainMenuService.GetMainMenus().ToList();
             var subMenus = RoleSubMenuViewService.GetRoleMenuByRole(roleId).ToList();
-
             //var subMenus = RoleSubMenuViewService.GetRoleMenu().ToList();
 
             ViewBag.MainMenu = mainMenus;
