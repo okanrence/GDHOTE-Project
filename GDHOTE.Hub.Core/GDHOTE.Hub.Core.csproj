@@ -109,6 +109,7 @@
     <Compile Include="Services\RoleSubMenuViewService.cs" />
     <Compile Include="Services\StatusService.cs" />
     <Compile Include="Services\SubMenuService.cs" />
+    <Compile Include="Services\SubMenuViewService.cs" />
     <Compile Include="Services\UserStatusService.cs" />
     <Compile Include="Services\SequenceService.cs" />
     <Compile Include="Services\SexService.cs" />

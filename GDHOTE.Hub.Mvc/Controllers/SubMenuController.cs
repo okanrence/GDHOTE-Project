@@ -14,7 +14,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: SubMenu
         public ActionResult Index()
         {
-            var subMenus = SubMenuService.GetSubMenus().ToList();
+            //var subMenus = SubMenuService.GetSubMenus().ToList();
+            var subMenus = SubMenuViewService.GetSubMenusView().ToList();
             return View("SubMenuIndex", subMenus);
         }
         public ActionResult New()

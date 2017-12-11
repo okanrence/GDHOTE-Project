@@ -25,7 +25,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var statuses = StatusService.GetStatus().ToList();
             var viewModel = new StateFormViewModel
             {
-                Status =  statuses,
+                Status = statuses,
                 Countries = countries,
                 State = new State()
             };
@@ -42,22 +42,22 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 var statuses = StatusService.GetStatus().ToList();
                 var viewModel = new StateFormViewModel
                 {
-                    Status =statuses,
+                    Status = statuses,
                     Countries = countries,
                     State = state
                 };
                 return View("StateForm", viewModel);
             }
-            state.RecordDate = DateTime.Now;
-            state.StateCode =  state.StateCode.ToUpper();
+            state.StateCode = state.StateCode.ToUpper();
             state.StateName = StringCaseManager.TitleCase(state.StateName);
-            if (state.Id == 0)
+            if (state.StateCode == null)
             {
+                state.RecordDate = DateTime.Now;
                 var result = StateService.Save(state);
             }
             else
             {
-                var stateInDb = StateService.GetState(state.Id);
+                var stateInDb = StateService.GetState(state.StateId);
                 if (stateInDb == null) return HttpNotFound();
                 stateInDb.Status = state.Status;
                 stateInDb.StateName = state.StateName;
@@ -73,7 +73,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var statuses = StatusService.GetStatus().ToList();
             var viewModel = new StateFormViewModel
             {
-                Status =statuses,
+                Status = statuses,
                 Countries = countries,
                 State = state
             };

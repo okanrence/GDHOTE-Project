@@ -52,7 +52,7 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var state = db.Fetch<State>().SingleOrDefault(s => s.Id == id);
+                    var state = db.Fetch<State>().SingleOrDefault(s => s.StateId == id);
                     return state;
                 }
             }

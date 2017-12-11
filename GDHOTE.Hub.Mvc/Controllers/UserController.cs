@@ -27,11 +27,11 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return View("UserIndex", users);
         }
 
-        // GET: User/Details/5
-        //public ActionResult Details(int id)
-        //{
-        //    return View("UserIndex");
-        //}
+        //GET: User/Details/5
+        public ActionResult Details(string id)
+        {
+            return View("UserIndex");
+        }
 
         // GET: User/Create
         public ActionResult New()
@@ -76,20 +76,21 @@ namespace GDHOTE.Hub.Mvc.Controllers
             if (user.UserId == null)
             {
                 user.UserId = Guid.NewGuid().ToString();
+                user.UserName  = user.UserName.ToLower();
                 user.CreatedDate = DateTime.Now;
                 user.Password = PasswordManager.ReturnHashPassword(user.Password);
-                user.CreatedBy = 0;
-                user.LastUpdatedBy = 0;
+                user.CreatedBy = User.Identity.Name;
                 var result = UserService.Save(user);
             }
             else
             {
                 var userInDb = UserService.GetUser(user.UserId);
                 if (userInDb == null) return HttpNotFound();
+                user.UserName = user.UserName.ToLower();
                 userInDb.UserStatusId = user.UserStatusId;
                 userInDb.RoleId = user.RoleId;
                 userInDb.EmailAddress = user.EmailAddress;
-                userInDb.LastUpdatedBy = user.LastUpdatedBy;
+                userInDb.LastUpdatedBy = User.Identity.Name;
                 userInDb.LastUpdatedTime = DateTime.Now;
                 var result = UserService.Update(userInDb);
             }
@@ -97,7 +98,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
 
 
-      
+
         // POST: User/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)

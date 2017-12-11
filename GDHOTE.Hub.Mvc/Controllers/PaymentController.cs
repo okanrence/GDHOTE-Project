@@ -16,7 +16,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             //DateTime startDate = DateTime.Now;
             var payments = PaymentViewService.GetPayments().ToList();
-            return View("PaymentIndex",payments);
+            return View("PaymentIndex", payments);
         }
         public ActionResult New()
         {
@@ -42,7 +42,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 Payment = payment,
                 ModeOfPayments = paymentModes,
-                Currencies= currencies,
+                Currencies = currencies,
                 PaymentTypes = paymentTypes
             };
             if (payment == null) return HttpNotFound();
@@ -59,17 +59,19 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 {
                     ModeOfPayments = paymentModes,
                     PaymentTypes = paymentTypes,
-                    Currencies =currencies,
+                    Currencies = currencies,
                     Payment = payment
                 };
                 return View("PaymentForm", paymentViewModel);
             }
-            payment.CreatedBy = 0;
-            payment.RecordDate = DateTime.Now;
-            payment.PostedDate = DateTime.Now;
             if (payment.PaymentId == 0)
             {
-                //paymentType.Status = "A";
+                payment.ApprovedFlag = "N";
+                //payment.ApprovedBy = "NA";
+                payment.CreatedBy = User.Identity.Name;
+                payment.RecordDate = DateTime.Now;
+                payment.PostedDate = DateTime.Now;
+                
                 var result = PaymentService.Save(payment);
             }
             else

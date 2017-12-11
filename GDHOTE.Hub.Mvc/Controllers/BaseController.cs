@@ -26,13 +26,10 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
             var currentUser = HttpContext.GetOwinContext().Authentication.User;
             IEnumerable<Claim> claims = currentUser.Claims;
-            string roleId = claims.SingleOrDefault(c => c.Type == ClaimsIdentity.DefaultRoleClaimType)?.Value;
-
-
-            //var currentUser2 = System.Web.HttpContext.Current.User;
-            //var identity = (ClaimsIdentity)User.Identity;
-            //IEnumerable<Claim> claims = identity.Claims;
-            //string roleId = claims.SingleOrDefault(c => c.Type == identity.RoleClaimType)?.Value;
+            //var roles = claims.ToList().Where(c => c.Type == ClaimTypes.Role).ToList();
+            var userClaims = claims.Where(c => c.Type == ClaimTypes.Role).Select(c => new { c.Value }).ToArray();
+            string roleId = userClaims[0].Value;
+            //string roleId = claims.SingleOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
             //Get UserMenu
             var mainMenus = MainMenuService.GetMainMenus().ToList();

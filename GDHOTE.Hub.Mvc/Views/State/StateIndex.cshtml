@@ -57,7 +57,7 @@
                     {
                         data: "stateName",
                         render: function (data, type, state) {
-                            return "<a href='/state/edit/" + state.id + "'>" + state.stateName + "</a>";
+                            return "<a href='/state/edit/" + state.stateId + "'>" + state.stateName + "</a>";
                         }
                     },
                     {
@@ -70,7 +70,7 @@
                         data: "status"
                     },
                     {
-                        data: "id",
+                        data: "stateId",
                         render: function (data) {
                             return "<button class='btn btn-link js-delete' data-state-id=" + data + ">Delete</button>";
                         }

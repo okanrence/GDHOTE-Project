@@ -30,11 +30,10 @@ namespace GDHOTE.Hub.Core.Models
         public string StatusCode { get; set; }
         public string DeleteFlag { get; set; }
         public string ApprovedFlag { get; set; }
-        public int CreatedBy { get; set; }
-        public int ApprovedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public string ApprovedBy { get; set; }
         [Required]
         [Display(Name = "Date Of Birth")]
-        //[DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
         public DateTime? MagusDate { get; set; }
         public DateTime RecordDate { get; set; }

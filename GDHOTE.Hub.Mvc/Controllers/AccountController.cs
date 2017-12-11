@@ -42,10 +42,12 @@ namespace GDHOTE.Hub.Mvc.Controllers
             if (result == EnumsService.SignInStatus.Success)
             {
                 FormsAuthentication.SetAuthCookie(authenticatedUser.UserName, false);
+                string roles = authenticatedUser.RoleId + "," + authenticatedUser.UserId;
                 var authTicket = new FormsAuthenticationTicket(1, authenticatedUser.UserName, DateTime.Now,
-                    DateTime.Now.AddMinutes(5), false, authenticatedUser.RoleId);
+                    DateTime.Now.AddMinutes(5), false, roles);
                 string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
                 var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+                //authCookie.Values.Add("Id", authenticatedUser.UserId);
                 HttpContext.Response.Cookies.Add(authCookie);
                 return RedirectToAction("Index", "Home");
             }
@@ -73,7 +75,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             return code == null ? View("Error") : View();
         }
-        
+
         //
         // POST: /Account/LogOff
         [HttpPost]

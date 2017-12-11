@@ -11,10 +11,10 @@ using NPoco;
 namespace GDHOTE.Hub.Core.Models
 {
     [TableName("HUB_States")]
+    [PrimaryKey("StateId")]
     public class State
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int StateId { get; set; }
         [Required]
         public string CountryCode { get; set; }
         [Required]
@@ -24,8 +24,7 @@ namespace GDHOTE.Hub.Core.Models
         [Display(Name = "State Name")]
         public string StateName { get; set; }
         [Required]
-        public String Status { get; set; }
+        public string Status { get; set; }
         public DateTime RecordDate { get; set; }
-        //public CountryDto Country { get; set; }
     }
 }

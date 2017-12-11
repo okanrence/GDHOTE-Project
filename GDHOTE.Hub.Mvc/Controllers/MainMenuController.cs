@@ -57,7 +57,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 mainMenu.MenuId = Guid.NewGuid().ToString();
                 mainMenu.CreatedDate = DateTime.Now;
-                mainMenu.CreatedBy = 0;
+                mainMenu.CreatedBy = User.Identity.Name;
                 var result = MainMenuService.Save(mainMenu);
             }
             else

@@ -10,8 +10,8 @@ namespace GDHOTE.Hub.Core.BusinessLogic
     {
         public static string DeployedAppName()
         {
-            //return "";
-            return "/gdhote";
+            return "";
+            //return "/gdhote";
         }
     }
 }

@@ -64,14 +64,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 };
                 return View("MemberForm", viewModel);
             }
-            member.CreatedBy = 0;
-            member.StatusCode = "A";
-            member.DeleteFlag = "N";
-            member.ApprovedFlag = "N";
-            member.RecordDate = DateTime.Now;
-            member.PostedDate = DateTime.Now;
-            member.OfficerId = (int)EnumsService.OfficerType.NormalMember;
-            member.OfficerDate = DateTime.Now;
+         
             if (member.MemberKey == 0)
             {
                 //Validate DOB
@@ -80,6 +73,14 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 //{
 
                 //}
+                member.CreatedBy = User.Identity.Name;
+                member.StatusCode = "A";
+                member.DeleteFlag = "N";
+                member.ApprovedFlag = "N";
+                member.RecordDate = DateTime.Now;
+                member.PostedDate = DateTime.Now;
+                member.OfficerId = (int)EnumsService.OfficerType.NormalMember;
+                member.OfficerDate = DateTime.Now;
                 var result = MemberService.Save(member);
             }
             else
@@ -90,6 +91,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 memberInDb.Surname = member.Surname;
                 memberInDb.MiddleName = member.MiddleName;
                 memberInDb.DateOfBirth = member.DateOfBirth;
+                memberInDb.ApprovedBy = User.Identity.Name;
                 memberInDb.LastUpdatedDate = DateTime.Now;
                 var result = MemberService.Update(memberInDb);
             }

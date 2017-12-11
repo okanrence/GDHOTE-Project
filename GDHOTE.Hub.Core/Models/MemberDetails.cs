@@ -36,8 +36,8 @@ namespace GDHOTE.Hub.Core.Models
         [Required]
         [Display(Name = "Residence Address")]
         public string ResidenceAddress { get; set; }
-        public int CreatedBy { get; set; }
-        public int LastUpdatedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public string LastUpdatedBy { get; set; }
         public DateTime? DateWedded { get; set; }
         [Display(Name = "Year Group")]
         public string YearGroupCode { get; set; }

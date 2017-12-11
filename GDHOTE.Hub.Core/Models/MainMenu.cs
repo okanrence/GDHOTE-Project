@@ -17,7 +17,7 @@ namespace GDHOTE.Hub.Core.Models
         public string Name { get; set; }
         [Required]
         public string Status { get; set; }
-        public int CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
         public string DisplaySequence { get; set; }
         public DateTime CreatedDate { get; set; }
     }

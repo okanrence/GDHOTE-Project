@@ -49,7 +49,7 @@ namespace GDHOTE.Hub.Core.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var country = db.Fetch<Country>().SingleOrDefault(c => c.Id == id);
+                    var country = db.Fetch<Country>().SingleOrDefault(c => c.CountryId == id);
                     return country;
                 }
             }

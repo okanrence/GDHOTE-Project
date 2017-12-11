@@ -79,6 +79,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             if (roleMenu.RoleMenuId == null)
             {
                 roleMenu.RoleMenuId = Guid.NewGuid().ToString();
+                roleMenu.CreatedBy = User.Identity.Name; 
                 roleMenu.CreatedDate = DateTime.Now;
                 var result = RoleMenuService.Save(roleMenu);
                 //Review this verbose code
@@ -108,6 +109,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 roleMenuInDb.RoleId = roleMenu.RoleId;
                 roleMenuInDb.SubMenuId = roleMenu.SubMenuId;
                 roleMenuInDb.Status = roleMenu.Status;
+                roleMenuInDb.LastUpdatedBy = User.Identity.Name;
+                roleMenu.LastUpdatedDate = DateTime.Now;
                 var result = RoleMenuService.Update(roleMenuInDb);
             }
             return RedirectToAction("Index");

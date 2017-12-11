@@ -20,8 +20,8 @@ namespace GDHOTE.Hub.Core.Dtos
         public string StatusCode { get; set; }
         public string DeleteFlag { get; set; }
         public string ApprovedFlag { get; set; }
-        public int CreatedBy { get; set; }
-        public int ApprovedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public string ApprovedBy { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTime? MagusDate { get; set; }
         public DateTime RecordDate { get; set; }

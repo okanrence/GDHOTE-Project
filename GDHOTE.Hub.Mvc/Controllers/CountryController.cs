@@ -35,13 +35,13 @@ namespace GDHOTE.Hub.Mvc.Controllers
             country.Status = "A";
             country.CountryCode = country.CountryCode.ToUpper();
             country.CountryName = StringCaseManager.TitleCase(country.CountryName);
-            if (country.Id == 0)
+            if (country.CountryId == 0)
             {
                 var result = CountryService.Save(country);
             }
             else
             {
-                var countryInDb = CountryService.GetCountry(country.Id);
+                var countryInDb = CountryService.GetCountry(country.CountryId);
                 if (countryInDb == null) return HttpNotFound();
                 countryInDb.CountryName = country.CountryName;
                 var result = CountryService.Update(countryInDb);

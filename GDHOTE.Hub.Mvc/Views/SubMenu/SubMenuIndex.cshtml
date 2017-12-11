@@ -1,4 +1,4 @@
-﻿@model List<GDHOTE.Hub.Core.Models.SubMenu>
+﻿@model List<GDHOTE.Hub.Core.Models.SubMenuView>
 
 @{
     ViewBag.Title = "SubMenuIndex";
@@ -22,6 +22,7 @@ else
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Main Menu</th>
                     <th>Url</th>
                     <th>Status</th>
                     <th>Display Sequence</th>
@@ -34,6 +35,7 @@ else
                 {
                     <tr>
                         <td>@Html.ActionLink(subMenu.Name, "Edit", "SubMenu", new { id = subMenu.SubMenuId }, null)</td>
+                        <td>@subMenu.MenuName </td>
                         <td>@subMenu.Url </td>
                         <td>@subMenu.Status</td>
                         <td>@subMenu.DisplaySequence</td>

@@ -10,6 +10,7 @@ namespace GDHOTE.Hub.Core.Models
     [TableName("vx_HUB_SubMenus")]
     public class SubMenuView : SubMenu
     {
+        public string MenuName { get; set; }
 
     }
 }

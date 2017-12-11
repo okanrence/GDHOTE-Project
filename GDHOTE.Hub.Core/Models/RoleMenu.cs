@@ -25,7 +25,9 @@ namespace GDHOTE.Hub.Core.Models
         public string SubMenuId { get; set; }
         [Required]
         public string Status { get; set; }
-        public int CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public string LastUpdatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
+        public DateTime? LastUpdatedDate { get; set; }
     }
 }

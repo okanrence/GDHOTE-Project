@@ -30,8 +30,8 @@ namespace GDHOTE.Hub.Core.Models
         [Required]
         [DisplayName("Role")]
         public string RoleId { get; set; }
-        public int CreatedBy { get; set; }
-        public int LastUpdatedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public string LastUpdatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? LastUpdatedTime { get; set; }
 

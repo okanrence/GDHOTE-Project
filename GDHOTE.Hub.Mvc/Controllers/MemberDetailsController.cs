@@ -66,24 +66,25 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 };
                 return View("MemberDetailsForm", viewModel);
             }
-            memberDetails.CreatedBy = 0;
-            memberDetails.RecordDate = DateTime.Now;
-            memberDetails.PostedDate = DateTime.Now;
-
+            
             if (memberDetails.MemberDetailsId == 0)
             {
+                memberDetails.CreatedBy = User.Identity.Name;
+                memberDetails.RecordDate = DateTime.Now;
+                memberDetails.PostedDate = DateTime.Now;
                 var result = MemberDetailsService.Save(memberDetails);
             }
             else
             {
                 var memberDetailsInDb = MemberDetailsService.GetMemberDetails(memberDetails.MemberDetailsId);
                 if (memberDetailsInDb == null) return HttpNotFound();
-                memberDetailsInDb.YearGroupCode  = memberDetails.YearGroupCode;
+                memberDetailsInDb.YearGroupCode = memberDetails.YearGroupCode;
                 memberDetailsInDb.DateWedded = memberDetails.DateWedded;
                 memberDetailsInDb.ResidenceAddress = memberDetails.ResidenceAddress;
                 memberDetailsInDb.MobileNumber = memberDetails.MobileNumber;
                 memberDetailsInDb.AlternateNumber = memberDetails.AlternateNumber;
                 memberDetailsInDb.EmailAddress = memberDetails.EmailAddress;
+                memberDetailsInDb.LastUpdatedBy = User.Identity.Name;
                 memberDetailsInDb.LastUpdatedDate = DateTime.Now;
                 var result = MemberDetailsService.Update(memberDetailsInDb);
             }

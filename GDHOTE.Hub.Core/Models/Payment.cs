@@ -28,7 +28,9 @@ namespace GDHOTE.Hub.Core.Models
         public int CurrencyId { get; set; }
         [Required]
         public string Narration { get; set; }
-        public int CreatedBy { get; set; }
+        public string ApprovedFlag { get; set; }
+        public string CreatedBy { get; set; }
+        public string ApprovedBy { get; set; }
         public DateTime RecordDate { get; set; }
         public DateTime PostedDate { get; set; }
     }
