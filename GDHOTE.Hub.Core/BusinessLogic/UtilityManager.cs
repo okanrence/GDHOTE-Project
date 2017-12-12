@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GDHOTE.Hub.Core.Services;
 
 namespace GDHOTE.Hub.Core.BusinessLogic
 {
@@ -10,8 +11,10 @@ namespace GDHOTE.Hub.Core.BusinessLogic
     {
         public static string DeployedAppName()
         {
-            return "";
-            //return "/gdhote";
+          
+            string appName = "";
+            appName = BaseService.UseLive() == "Y" ? "/gdhote" : "";
+            return appName;
         }
     }
 }

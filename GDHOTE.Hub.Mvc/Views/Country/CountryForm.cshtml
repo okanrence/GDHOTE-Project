@@ -17,38 +17,24 @@
 {
     <div>
         @*@Html.ValidationSummary(true, "Please fix the below errors.")*@
-        <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12">
-            <div class="form-group">
-                <div class="col-md-4">
-                    @Html.LabelFor(c => c.CountryCode)
-                </div>
-                <div class="col-md-6">
-                    @Html.TextBoxFor(c => c.CountryCode, new { @class = "form-control gdhote-text-uppercase" })
-                </div>
-                @Html.ValidationMessageFor(c => c.CountryCode)
-            </div>
-            <div class="form-group">
-                <div class="col-md-4">
-                    @Html.LabelFor(c => c.CountryName)
-                </div>
-                <div class="col-md-6">
-                    @Html.TextBoxFor(c => c.CountryName, new { @class = "form-control gdhote-text-capitalize" })
-                </div>
-                @Html.ValidationMessageFor(c => c.CountryName)
-            </div>
-            <div class="form-group">
-                <div class="col-md-10">
-                    <div>@Html.HiddenFor(c => c.CountryId)</div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-10">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.AntiForgeryToken()
-            </div>
+        <div class="form-group">
+            @Html.LabelFor(c => c.CountryCode)
+            @Html.TextBoxFor(c => c.CountryCode, new { @class = "form-control gdhote-text-uppercase" })
+            @Html.ValidationMessageFor(c => c.CountryCode)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(c => c.CountryName)
+            @Html.TextBoxFor(c => c.CountryName, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(c => c.CountryName)
+        </div>
+        <div class="form-group">
+            <div>@Html.HiddenFor(c => c.CountryId)</div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div class="form-group">
+            @Html.AntiForgeryToken()
         </div>
     </div>
 

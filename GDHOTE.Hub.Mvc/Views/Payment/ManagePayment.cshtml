@@ -37,8 +37,7 @@ else
                     <tr>
                         <td>@Html.ActionLink(payment.Surname + "," + @payment.FirstName, "Edit", "Payment", new { id = payment.PaymentId }, null)</td>
                         <td>@payment.Narration</td>
-                        @*<td>@($"{payment.Amount:#,##0.00}") </td>*@
-                        <td>@payment.Amount</td>
+                        <td>@($"{payment.Amount:#,##0.00}") </td>
                         <td>@payment.PaymentMode</td>
                         <td>@payment.PaymentType</td>
                         <td>@payment.PostedDate.ToString("dd-MMM-yyyy | HH:mm")</td>

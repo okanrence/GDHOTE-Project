@@ -19,31 +19,29 @@
 {
     <div>
         @*@Html.ValidationSummary(true, "Please fix the below errors.")*@
-        <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12">
-            <div class="form-group">
-                @Html.LabelFor(a => a.ActivityType.Description)
-                @Html.TextBoxFor(a => a.ActivityType.Description, new { @class = "form-control gdhote-text-capitalize" })
-                @Html.ValidationMessageFor(a => a.ActivityType.Description)
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(a => a.ActivityType.Status)
-                @Html.DropDownListFor(a => a.ActivityType.Status, new SelectList(Model.Status, "Code", "Description"), "Select Status", new { @class = "form-control" })
-                @Html.ValidationMessageFor(a => a.ActivityType.Status)
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(a => a.ActivityType.DependencyTypeId)
-                @Html.DropDownListFor(a => a.ActivityType.DependencyTypeId, new SelectList(Model.DependencyTypes, "ActivityTypeId", "Description"), "Select Dependency", new { @class = "form-control" })
-                @Html.ValidationMessageFor(a => a.ActivityType.DependencyTypeId)
-            </div>
-            <div class="form-group">
-                @Html.HiddenFor(a => a.ActivityType.ActivityTypeId)
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-            <div class="form-group">
-                @Html.AntiForgeryToken()
-            </div>
+        <div class="form-group">
+            @Html.LabelFor(a => a.ActivityType.Description)
+            @Html.TextBoxFor(a => a.ActivityType.Description, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(a => a.ActivityType.Description)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(a => a.ActivityType.Status)
+            @Html.DropDownListFor(a => a.ActivityType.Status, new SelectList(Model.Status, "Code", "Description"), "Select Status", new { @class = "form-control" })
+            @Html.ValidationMessageFor(a => a.ActivityType.Status)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(a => a.ActivityType.DependencyTypeId)
+            @Html.DropDownListFor(a => a.ActivityType.DependencyTypeId, new SelectList(Model.DependencyTypes, "ActivityTypeId", "Description"), "Select Dependency", new { @class = "form-control" })
+            @Html.ValidationMessageFor(a => a.ActivityType.DependencyTypeId)
+        </div>
+        <div class="form-group">
+            @Html.HiddenFor(a => a.ActivityType.ActivityTypeId)
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div class="form-group">
+            @Html.AntiForgeryToken()
         </div>
     </div>
 

@@ -18,31 +18,29 @@
 @using (Html.BeginForm("Save", "Currency"))
 {
     <div>
-        <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12">
-            <div class="form-group">
-                @Html.LabelFor(c => c.Currency.CurrencyCode)
-                @Html.TextBoxFor(c => c.Currency.CurrencyCode, new { @class = "form-control gdhote-text-uppercase" })
-                @Html.ValidationMessageFor(c => c.Currency.CurrencyCode)
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(c => c.Currency.Description)
-                @Html.TextBoxFor(c => c.Currency.Description, new { @class = "form-control gdhote-text-capitalize" })
-                @Html.ValidationMessageFor(c => c.Currency.Description)
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(c => c.Currency.Status)
-                @Html.DropDownListFor(c => c.Currency.Status, new SelectList(Model.Status, "Code", "Description"), "Select Status", new { @class = "form-control" })
-                @Html.ValidationMessageFor(c => c.Currency.Status)
-            </div>
-            <div class="form-group">
-                <div>@Html.HiddenFor(c => c.Currency.CurrencyId)</div>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-            <div class="form-group">
-                @Html.AntiForgeryToken()
-            </div>
+        <div class="form-group">
+            @Html.LabelFor(c => c.Currency.CurrencyCode)
+            @Html.TextBoxFor(c => c.Currency.CurrencyCode, new { @class = "form-control gdhote-text-uppercase" })
+            @Html.ValidationMessageFor(c => c.Currency.CurrencyCode)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(c => c.Currency.Description)
+            @Html.TextBoxFor(c => c.Currency.Description, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(c => c.Currency.Description)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(c => c.Currency.Status)
+            @Html.DropDownListFor(c => c.Currency.Status, new SelectList(Model.Status, "Code", "Description"), "Select Status", new { @class = "form-control" })
+            @Html.ValidationMessageFor(c => c.Currency.Status)
+        </div>
+        <div class="form-group">
+            <div>@Html.HiddenFor(c => c.Currency.CurrencyId)</div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div class="form-group">
+            @Html.AntiForgeryToken()
         </div>
     </div>
 

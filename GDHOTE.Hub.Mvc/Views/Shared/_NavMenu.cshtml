@@ -13,7 +13,7 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 @{
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
                     IEnumerable<MainMenu> mainMenus = ViewBag.MainMenu;
                     IEnumerable<RoleSubMenuView> subMenus = ViewBag.SubMenu;
                     var deployedName = ViewBag.DeployedAppName;

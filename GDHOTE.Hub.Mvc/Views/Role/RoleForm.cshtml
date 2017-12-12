@@ -17,26 +17,24 @@
     @using (Html.BeginForm("Save", "Role"))
     {
         <div>
-            <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12">
-                <div class="form-group">
-                    @Html.LabelFor(r => r.Role.Name)
-                    @Html.TextBoxFor(r => r.Role.Name, new { @class = "form-control gdhote-text-capitalize" })
-                    @Html.ValidationMessageFor(r => r.Role.Name)
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(r => r.Role.Status)
-                    @Html.DropDownListFor(r => r.Role.Status, new SelectList(Model.Statuses, "Code", "Description"), "Select Status", new {@class = "form-control"})
-                    @Html.ValidationMessageFor(r => r.Role.Status)
-                </div>
-                <div class="form-group">
-                    <div>@Html.HiddenFor(r => r.Role.RoleId)</div>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-                <div class="form-group">
-                    @Html.AntiForgeryToken()
-                </div>
+            <div class="form-group">
+                @Html.LabelFor(r => r.Role.Name)
+                @Html.TextBoxFor(r => r.Role.Name, new { @class = "form-control gdhote-text-capitalize" })
+                @Html.ValidationMessageFor(r => r.Role.Name)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(r => r.Role.Status)
+                @Html.DropDownListFor(r => r.Role.Status, new SelectList(Model.Statuses, "Code", "Description"), "Select Status", new {@class = "form-control"})
+                @Html.ValidationMessageFor(r => r.Role.Status)
+            </div>
+            <div class="form-group">
+                <div>@Html.HiddenFor(r => r.Role.RoleId)</div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+            <div class="form-group">
+                @Html.AntiForgeryToken()
             </div>
         </div>
 
