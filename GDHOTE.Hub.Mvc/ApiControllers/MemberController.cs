@@ -1,11 +1,12 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using GDHOTE.Hub.Core.BusinessLogic;
-using GDHOTE.Hub.Core.Dtos;
+using GDHOTE.Hub.Core.DataTransferObjects;
 using GDHOTE.Hub.Core.Services;
 
 namespace GDHOTE.Hub.Mvc.ApiControllers
@@ -38,9 +39,9 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         }
         [HttpPost]
         [Route("approvemember")]
-        public IHttpActionResult ApproveMember(MemberDto memberDto)
+        public IHttpActionResult ApproveMember(CreateMemberRequest memberRequest)
         {
-            var result = ApproveMemberManager.ApproveMember(memberDto);
+            var result = ApproveMemberManager.ApproveMember(memberRequest);
             if (string.IsNullOrEmpty(result)) return BadRequest();
             if (string.IsNullOrEmpty(result)) return InternalServerError();
             return Ok(result);

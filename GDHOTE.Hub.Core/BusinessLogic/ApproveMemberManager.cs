@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GDHOTE.Hub.Core.Dtos;
+using GDHOTE.Hub.Core.DataTransferObjects;
 using GDHOTE.Hub.Core.Services;
 
 namespace GDHOTE.Hub.Core.BusinessLogic
 {
     public class ApproveMemberManager
     {
-        public static string ApproveMember(MemberDto memberDto)
+        public static string ApproveMember(CreateMemberRequest memberDto)
         {
             string result = "";
             string sex = memberDto.Sex;

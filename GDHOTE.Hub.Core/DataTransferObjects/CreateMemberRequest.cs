@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GDHOTE.Hub.Core.Dtos
+namespace GDHOTE.Hub.Core.DataTransferObjects
 {
-    public class MemberDto
+    public class CreateMemberRequest
     {
         public int MemberKey { get; set; }
         public string MemberCode { get; set; }

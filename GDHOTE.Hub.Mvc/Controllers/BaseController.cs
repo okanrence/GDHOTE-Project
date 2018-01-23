@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using GDHOTE.Hub.Core.BusinessLogic;
 using GDHOTE.Hub.Core.Services;
+using Microsoft.AspNet.Identity;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -28,8 +29,14 @@ namespace GDHOTE.Hub.Mvc.Controllers
             IEnumerable<Claim> claims = currentUser.Claims;
             //var roles = claims.ToList().Where(c => c.Type == ClaimTypes.Role).ToList();
             var userClaims = claims.Where(c => c.Type == ClaimTypes.Role).Select(c => new { c.Value }).ToArray();
-            string roleId = userClaims[0].Value;
-            //string roleId = claims.SingleOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            string roleId = "", userId = "";
+            if (userClaims != null)
+            {
+                roleId = userClaims[0].Value;
+                userId = userClaims[1].Value;
+                //string roleId = claims.SingleOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            }
+        
 
             //Get UserMenu
             var mainMenus = MainMenuService.GetMainMenus().ToList();

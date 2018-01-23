@@ -5,9 +5,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using GDHOTE.Hub.Core.BusinessLogic;
-using GDHOTE.Hub.Core.Dtos;
+using GDHOTE.Hub.Core.DataTransferObjects;
 using GDHOTE.Hub.Core.Models;
-
+using Newtonsoft.Json;
 namespace GDHOTE.Hub.Core.Services
 {
     public class UserService : BaseService
@@ -97,16 +97,41 @@ namespace GDHOTE.Hub.Core.Services
             }
         }
 
-        public static EnumsService.SignInStatus LoginUser(string username, string password, out User authenticatedUser)
+        public static LoginResponse AuthenticateUser(LoginRequest loginRequest)
+        {
+            try
+            {
+                var loginResponse = new LoginResponse();
+                var authenticatedUser = GetUser(loginRequest.UserName, loginRequest.Password);
+                if (authenticatedUser == null)
+                {
+                    loginResponse.ErrorCode = "100";
+                    loginResponse.ErrorMessage = "Invalid credentials";
+                }
+                else
+                {
+                    var usr = JsonConvert.SerializeObject(authenticatedUser);
+                    loginResponse = JsonConvert.DeserializeObject<LoginResponse>(usr);
+                    loginResponse.ErrorCode = "00";
+                    loginResponse.ErrorMessage = "Login Successful";
+                }
+                return loginResponse;
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return new LoginResponse();
+            }
+        }
+        public static EnumsService.SignInStatus LoginUserOld(string username, string password, out User authenticatedUser)
         {
             try
             {
                 authenticatedUser = GetUser(username, password);
-
-                return authenticatedUser == null
-                    ? EnumsService.SignInStatus.Failure
-                    : EnumsService.SignInStatus.Success;
-
+                if (authenticatedUser == null) return EnumsService.SignInStatus.Failure;
+                return authenticatedUser.UserId == null
+                        ? EnumsService.SignInStatus.Failure
+                        : EnumsService.SignInStatus.Success;
             }
             catch (Exception ex)
             {

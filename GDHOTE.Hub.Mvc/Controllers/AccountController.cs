@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using GDHOTE.Hub.Core.Models;
+using GDHOTE.Hub.Core.DataTransferObjects;
 using GDHOTE.Hub.Core.Services;
-using Microsoft.AspNet.Identity;
-//using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
 using GDHOTE.Hub.Mvc.Models;
 
 namespace GDHOTE.Hub.Mvc.Controllers
@@ -31,23 +28,22 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginViewModel model, string returnUrl)
+        public ActionResult Login(LoginRequest loginRequest, string returnUrl) 
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View(loginRequest);
             }
-            var authenticatedUser = new User();
-            var result = UserService.LoginUser(model.UserName, model.Password, out authenticatedUser);
-            if (result == EnumsService.SignInStatus.Success)
+
+            var result = UserService.AuthenticateUser(loginRequest); 
+            if (result != null)
             {
-                FormsAuthentication.SetAuthCookie(authenticatedUser.UserName, false);
-                string roles = authenticatedUser.RoleId + "," + authenticatedUser.UserId;
-                var authTicket = new FormsAuthenticationTicket(1, authenticatedUser.UserName, DateTime.Now,
+                FormsAuthentication.SetAuthCookie(result.UserName, false);
+                string roles = result.RoleId + "," + result.UserId;
+                var authTicket = new FormsAuthenticationTicket(1, result.UserName, DateTime.Now,
                     DateTime.Now.AddMinutes(5), false, roles);
                 string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
                 var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-                //authCookie.Values.Add("Id", authenticatedUser.UserId);
                 HttpContext.Response.Cookies.Add(authCookie);
                 return RedirectToAction("Index", "Home");
             }

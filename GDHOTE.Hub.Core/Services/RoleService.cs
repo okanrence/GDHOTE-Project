@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using GDHOTE.Hub.Core.Dtos;
 using GDHOTE.Hub.Core.Models;
 using NPoco;
 using NPoco.Expressions;
@@ -46,7 +45,7 @@ namespace GDHOTE.Hub.Core.Services
                 return new List<Role>();
             }
         }
-        public static IEnumerable<Role> GetActiveRoles() 
+        public static IEnumerable<Role> GetActiveRoles()
         {
             try
             {
