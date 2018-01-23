@@ -14,14 +14,14 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
 
     public class YearGroupController : ApiController
     {
-        [Route("getyeargroups")]
+        [Route("get-year-groups")]
         public IHttpActionResult GetYearGroups()
         {
             var yearGroups = YearGroupService.GetActiveYearGroups().ToList();
             if (yearGroups.Count == 0) return NotFound();
             return Ok(yearGroups);
         }
-        [Route("getyeargroup")]
+        [Route("get-year-group")]
         public IHttpActionResult GetYearGroup(int id)
         {
             var yearGroup = YearGroupService.GetYearGroup(id);
@@ -30,7 +30,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         }
 
         [HttpDelete]
-        [Route("deleteyeargroup")]
+        [Route("delete-year-group")]
         public IHttpActionResult DeleteYearGroup(int id)
         {
             var yearGroupInDb = YearGroupService.GetYearGroup(id);

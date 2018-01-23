@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using GDHOTE.Hub.Core.BusinessLogic;
+using GDHOTE.Hub.Core.DataTransferObjects;
 using GDHOTE.Hub.Core.Models;
 using GDHOTE.Hub.Core.Services;
 using GDHOTE.Hub.Core.ViewModels;
@@ -24,83 +26,145 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult New()
         {
-            var sexList = SexService.GetSex().ToList();
-            var maritalStatusList = MaritalStatusService.GetMaritalStatuses().ToList();
-            var viewModel = new MemberFormViewModel
-            {
-                Sexs = sexList,
-                MaritalStatus = maritalStatusList,
-                Member = new Member()
-            };
-
-            return View("MemberForm", viewModel);
+            var viewModel = ReturnMemberFormViewModel();
+            return View("MemberForm", ReturnMemberFormViewModel());
         }
         public ActionResult Edit(int id)
         {
             var member = MemberService.GetMember(id);
-            var sexList = SexService.GetSex().ToList();
-            var maritalStatusList = MaritalStatusService.GetMaritalStatuses().ToList();
+            var genders = GenderService.GetGenders();
+            var maritalStatuses = MaritalStatusService.GetMaritalStatuses();
             var viewModel = new MemberFormViewModel
             {
-                Sexs = sexList,
-                MaritalStatus = maritalStatusList,
-                Member = member
+                Genders = genders,
+                MaritalStatuses = maritalStatuses,
+                //Member = member
             };
-            return View("MemberForm", viewModel);
+            return View("UpdateMemberForm", viewModel);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(Member member)
+        public ActionResult Save(CreateMemberRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
-                var sexList = SexService.GetSex().ToList();
-                var maritalStatusList = MaritalStatusService.GetMaritalStatuses().ToList();
-                var viewModel = new MemberFormViewModel
-                {
-                    Sexs = sexList,
-                    MaritalStatus = maritalStatusList,
-                    Member = member
-                };
-                return View("MemberForm", viewModel);
+                return View("MemberForm", ReturnMemberFormViewModel());
             }
-         
-            if (member.MemberKey == 0)
+            string currentUser = User.Identity.Name;
+            var result = MemberManager.CreateMember(createRequest, currentUser);
+            if (result != null)
             {
-                //Validate DOB
-                var dob = member.DateOfBirth;
-                //if (DateTime.TryParse(member.DateOfBirth, out temp))
-                //{
 
-                //}
-                member.CreatedBy = User.Identity.Name;
-                member.StatusCode = "A";
-                member.DeleteFlag = "N";
-                member.ApprovedFlag = "N";
-                member.RecordDate = DateTime.Now;
-                member.PostedDate = DateTime.Now;
-                member.OfficerId = (int)EnumsService.OfficerType.NormalMember;
-                member.OfficerDate = DateTime.Now;
-                var result = MemberService.Save(member);
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index", "Member");
+                }
+                else
+                {
+                    ViewBag.LoginError = result.ErrorMessage;
+                }
             }
             else
             {
-                var memberInDb = MemberService.GetMember(member.MemberKey);
-                if (memberInDb == null) return HttpNotFound();
-                memberInDb.FirstName = member.FirstName;
-                memberInDb.Surname = member.Surname;
-                memberInDb.MiddleName = member.MiddleName;
-                memberInDb.DateOfBirth = member.DateOfBirth;
-                memberInDb.ApprovedBy = User.Identity.Name;
-                memberInDb.LastUpdatedDate = DateTime.Now;
-                var result = MemberService.Update(memberInDb);
+                //Display Error
+                ViewBag.LoginError = "Unable to complete request";
             }
-            return RedirectToAction("Index", "Member");
+            return View("MemberForm", ReturnMemberFormViewModel());
+
+            //if (member.MemberKey == 0)
+            //{
+            //    //Validate DOB
+            //    var dob = member.DateOfBirth;
+            //    //if (DateTime.TryParse(member.DateOfBirth, out temp))
+            //    //{
+
+            //    //}
+            //    member.CreatedBy = User.Identity.Name;
+            //    member.StatusCode = "A";
+            //    member.DeleteFlag = "N";
+            //    member.ApprovedFlag = "N";
+            //    member.RecordDate = DateTime.Now;
+            //    member.PostedDate = DateTime.Now;
+            //    member.OfficerId = (int)EnumsService.OfficerType.NormalMember;
+            //    member.OfficerDate = DateTime.Now;
+            //    var result = MemberService.Save(member);
+            //}
+            //else
+            //{
+            //    var memberInDb = MemberService.GetMember(member.MemberKey);
+            //    if (memberInDb == null) return HttpNotFound();
+            //    memberInDb.FirstName = member.FirstName;
+            //    memberInDb.Surname = member.Surname;
+            //    memberInDb.MiddleName = member.MiddleName;
+            //    memberInDb.DateOfBirth = member.DateOfBirth;
+            //    memberInDb.ApprovedBy = User.Identity.Name;
+            //    memberInDb.LastUpdatedDate = DateTime.Now;
+            //    var result = MemberService.Update(memberInDb);
+            //}
+
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Update(UpdateMemberRequest updateRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("MemberForm", ReturnMemberFormViewModel());
+            }
+            string currentUser = User.Identity.Name;
+
+            return View();
+            //if (member.MemberKey == 0)
+            //{
+            //    //Validate DOB
+            //    var dob = member.DateOfBirth;
+            //    //if (DateTime.TryParse(member.DateOfBirth, out temp))
+            //    //{
+
+            //    //}
+            //    member.CreatedBy = User.Identity.Name;
+            //    member.StatusCode = "A";
+            //    member.DeleteFlag = "N";
+            //    member.ApprovedFlag = "N";
+            //    member.RecordDate = DateTime.Now;
+            //    member.PostedDate = DateTime.Now;
+            //    member.OfficerId = (int)EnumsService.OfficerType.NormalMember;
+            //    member.OfficerDate = DateTime.Now;
+            //    var result = MemberService.Save(member);
+            //}
+            //else
+            //{
+            //    var memberInDb = MemberService.GetMember(member.MemberKey);
+            //    if (memberInDb == null) return HttpNotFound();
+            //    memberInDb.FirstName = member.FirstName;
+            //    memberInDb.Surname = member.Surname;
+            //    memberInDb.MiddleName = member.MiddleName;
+            //    memberInDb.DateOfBirth = member.DateOfBirth;
+            //    memberInDb.ApprovedBy = User.Identity.Name;
+            //    memberInDb.LastUpdatedDate = DateTime.Now;
+            //    var result = MemberService.Update(memberInDb);
+            //}
+
+        }
+
+
         public ActionResult ApproveMember()
         {
             var members = MemberService.GetMembersPendingApproval().ToList();
             return View(members);
+        }
+        private static MemberFormViewModel ReturnMemberFormViewModel()
+        {
+            var genders = GenderService.GetGenders();
+            var maritalStatuses = MaritalStatusService.GetMaritalStatuses();
+            var viewModel = new MemberFormViewModel
+            {
+                Genders = genders,
+                MaritalStatuses = maritalStatuses
+                //Member = new Member()
+            };
+            return viewModel;
         }
     }
 }

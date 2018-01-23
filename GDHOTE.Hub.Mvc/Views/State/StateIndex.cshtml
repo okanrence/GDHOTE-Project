@@ -50,7 +50,7 @@
         $(document).ready(function () {
             var table = $("#states").DataTable({
                 ajax: {
-                    url: "/api/hub/state/getstates/",
+                    url: "/api/v1/hub/state/get-states/",
                     dataSrc: ""
                 },
                 columns: [
@@ -84,7 +84,7 @@
                     if (result) {
                         $.ajax({
                             //url: "/api/state" + button.attr("data-state-id"),
-                            url: "/api/hub/state/deletestate?id=" + button.attr("data-state-id"),
+                            url: "/api/hub/state/delete-state?id=" + button.attr("data-state-id"),
                             method: "DELETE",
                             success: function () {
                                 swal({

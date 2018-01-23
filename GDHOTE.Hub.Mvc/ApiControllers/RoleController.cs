@@ -12,14 +12,14 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
     [RoutePrefix(ConstantManager.ApiDefaultNamespace + "role")]
     public class RoleController : ApiController
     {
-        [Route("getroles")]
+        [Route("get-roles")]
         public IHttpActionResult GetRoles()
         {
             var roles = RoleService.GetRoles().ToList();
             if (roles.Count == 0) return NotFound();
             return Ok(roles);
         }
-        [Route("getrole")]
+        [Route("get-role")]
         public IHttpActionResult GetRole(string id)
         {
             var role = RoleService.GetRole(id);
@@ -28,7 +28,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         }
 
         [HttpDelete]
-        [Route("deleterole")]
+        [Route("delete-role")]
         public IHttpActionResult DeleteRole(string id)
         {
             var roleInDb = RoleService.GetRole(id);

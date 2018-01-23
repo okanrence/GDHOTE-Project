@@ -9,7 +9,7 @@ namespace GDHOTE.Hub.Core.Services
 {
     public class MaritalStatusService
     {
-        public static IEnumerable<MaritalStatus> GetMaritalStatuses()
+        public static List<MaritalStatus> GetMaritalStatuses()
         {
             var maritalStatuses = new List<MaritalStatus>
             {

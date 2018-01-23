@@ -62,7 +62,7 @@ else
                     if (result) {
                         $.ajax({
                             //url: "/api/member/" + button.attr("data-member-id"),
-                            url: "/api/hub/memberdetails/deletemember?id=" + button.attr("data-member-id"),
+                            url: "/api/v1/hub/memberdetails/delete-member-details?id=" + button.attr("data-member-id"),
                             method: "DELETE",
                             success: function () {
                                 button.parents("tr").remove();

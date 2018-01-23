@@ -9,18 +9,18 @@ using GDHOTE.Hub.Core.Services;
 
 namespace GDHOTE.Hub.Mvc.ApiControllers
 {
-    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "submenu")]
+    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "menu")]
 
     public class SubMenuController : ApiController
     {
-        [Route("getsubmenus")]
+        [Route("get-sub-menus")]
         public IHttpActionResult GetSubMenus()
         {
             var subMenus = SubMenuService.GetSubMenus().ToList();
             if (subMenus.Count == 0) return NotFound();
             return Ok(subMenus);
         }
-        [Route("getsubmenu")]
+        [Route("get-sub-menu")]
         public IHttpActionResult GetSubMenu(string id)
         {
             var subMenu = SubMenuService.GetSubMenu(id);
@@ -29,7 +29,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         }
 
         [HttpDelete]
-        [Route("deletesubmenu")]
+        [Route("delete-sub-menu")]
         public IHttpActionResult DeleteSubMenu(string id)
         {
             var subMenuInDb = SubMenuService.GetSubMenu(id);

@@ -15,21 +15,21 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
     public class ActivityTypeController : ApiController
     {
 
-        [Route("getactivitytypes")]
+        [Route("get-activity-types")]
         public IHttpActionResult GetActivityTypes()
         {
             var activityTypes = ActivityTypeService.GetActivityTypes().ToList();
             if (activityTypes.Count == 0) return NotFound();
             return Ok(activityTypes);
         }
-        [Route("getactivitytype")]
+        [Route("get-activity-type")]
         public IHttpActionResult GetActivityType(int id)
         {
             var activityType = ActivityTypeService.GetActivityType(id);
             if (activityType == null) return NotFound();
             return Ok(activityType);
         }
-        [Route("deleteactivitytype")]
+        [Route("delete-activity-type")]
         public IHttpActionResult DeleteActivityType(int id)
         {
             var activityTypeInDb = ActivityTypeService.GetActivityType(id);

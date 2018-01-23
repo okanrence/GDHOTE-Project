@@ -23,7 +23,7 @@ else
                     <th>Member Code</th>
                     <th>Surname</th>
                     <th>Other Name(s)</th>
-                    <th>Sex</th>
+                    <th>Gender</th>
                     <th>Martial Status</th>
                     <th>Status</th>
                     <th>Date Of Birth</th>
@@ -41,7 +41,7 @@ else
                         <td>@Html.ActionLink(!string.IsNullOrEmpty(member.MemberCode) ? member.MemberCode : "NA", "Edit", "Member", new { id = member.MemberKey }, null)</td>
                         <td>@member.Surname</td>
                         <td>@member.FirstName,  @member.MiddleName </td>
-                        <td>@member.Sex</td>
+                        <td>@member.Gender</td>
                         <td>@member.MartialStatus</td>
                         <td>@member.StatusCode</td>
                         <td>@member.DateOfBirth.ToString("dd-MMM-yyyy")</td>
@@ -68,7 +68,7 @@ else
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: "/api/hub/member/deletemember?id=" + button.attr("data-member-id"),
+                            url: "/api/v1/hub/member/delete-member?id=" + button.attr("data-member-id"),
                             method: "DELETE",
                             success: function () {
                                 button.parents("tr").remove();

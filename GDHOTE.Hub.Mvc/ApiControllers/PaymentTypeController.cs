@@ -9,18 +9,18 @@ using GDHOTE.Hub.Core.Services;
 
 namespace GDHOTE.Hub.Mvc.ApiControllers
 {
-    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "paymenttype")]
+    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "payment")]
 
     public class PaymentTypeController : ApiController
     {
-        [Route("getpaymenttypes")]
+        [Route("get-payment-types")]
         public IHttpActionResult GetPaymentTypes()
         {
             var paymentTypes = PaymentTypeService.GetPaymentTypes().ToList();
             if (paymentTypes.Count == 0) return NotFound();
             return Ok(paymentTypes);
         }
-        [Route("getpaymenttype")]
+        [Route("get-payment-type")]
         public IHttpActionResult GetPaymentType(int id)
         {
             var paymentType = PaymentTypeService.GetPaymentType(id);
@@ -29,7 +29,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         }
 
         [HttpDelete]
-        [Route("deletepaymenttype")]
+        [Route("delete-payment-type")]
         public IHttpActionResult DeletePaymentType(int id)
         {
             var paymentTypeInDb = PaymentTypeService.GetPaymentType(id);

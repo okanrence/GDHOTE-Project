@@ -9,18 +9,18 @@ using GDHOTE.Hub.Core.Services;
 
 namespace GDHOTE.Hub.Mvc.ApiControllers
 {
-    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "MainMenu")]
+    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "menu")]
 
     public class MainMenuController : ApiController
     {
-        [Route("getmainmenus")]
+        [Route("get-main-menus")]
         public IHttpActionResult GetMainMenus()
         {
             var countries = MainMenuService.GetMainMenus().ToList();
             if (countries.Count == 0) return NotFound();
             return Ok(countries);
         }
-        [Route("getmainmenu")]
+        [Route("get-main-menu")]
         public IHttpActionResult GetMainMenu(string id)
         {
             var mainMenu = MainMenuService.GetMainMenu(id);
@@ -29,7 +29,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         }
 
         [HttpDelete]
-        [Route("deletemainmenu")]
+        [Route("delete-main-menu")]
         public IHttpActionResult DeleteMainMenu(string id)
         {
             var mainMenuInDb = MainMenuService.GetMainMenu(id);

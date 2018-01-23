@@ -12,14 +12,14 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
     [RoutePrefix(ConstantManager.ApiDefaultNamespace + "memberdetails")]
     public class MemberDetailsController : ApiController
     {
-        [Route("getmembersdetails")]
-        public IHttpActionResult GetMembers()
+        [Route("get-members-details")]
+        public IHttpActionResult GetMembersDetails()
         {
-            var membersDetails = MemberDetailsService.GetMembersDetails().ToList();
-            return Ok(membersDetails);
+            var memberDetails = MemberDetailsService.GetMembersDetails().ToList();
+            return Ok(memberDetails);
         }
-        [Route("getmemberdetails")]
-        public IHttpActionResult GetMember(int id)
+        [Route("get-member-details")]
+        public IHttpActionResult GetMemberDetails(int id)
         {
             var memberDetails = MemberDetailsService.GetMemberDetails(id);
             if (memberDetails == null) return NotFound();
@@ -27,8 +27,8 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         }
 
         [HttpDelete]
-        [Route("deletememberdetails")]
-        public IHttpActionResult DeleteMember(int id)
+        [Route("delete-member-details")]
+        public IHttpActionResult DeleteMemberDetails(int id)
         {
             var memberDetailsInDb = MemberDetailsService.GetMemberDetails(id);
             if (memberDetailsInDb == null) return NotFound();

@@ -29,7 +29,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         }
 
         [HttpDelete]
-        [Route("deletemember")]
+        [Route("delete-member")]
         public IHttpActionResult DeleteMember(int id)
         {
             var memberInDb = MemberService.GetMember(id);
@@ -38,10 +38,20 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
             return Ok(result);
         }
         [HttpPost]
-        [Route("approvemember")]
-        public IHttpActionResult ApproveMember(CreateMemberRequest memberRequest)
+        [Route("create-member")]
+        public IHttpActionResult CreateNewMember(CreateMemberRequest memberRequest)
         {
-            var result = ApproveMemberManager.ApproveMember(memberRequest);
+            string currentUser = "";
+            var result = MemberManager.CreateMember(memberRequest, currentUser);
+            if (result == null) return BadRequest();
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("approvemember")]
+        public IHttpActionResult ApproveMember(UpdateMemberRequest updateRequest)
+        {
+            var result = MemberManager.ApproveMember(updateRequest);
             if (string.IsNullOrEmpty(result)) return BadRequest();
             if (string.IsNullOrEmpty(result)) return InternalServerError();
             return Ok(result);

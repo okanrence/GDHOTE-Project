@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace GDHOTE.Hub.Core.DataTransferObjects
 {
-   public class CreateMemberResponse : Response
+    public class CreateMemberResponse : Response
     {
+
     }
 }

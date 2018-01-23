@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GDHOTE.Hub.Core.Models
 {
-    public class Sex
+    public class Gender
     {
         public int Id { get; set; }
         public string Code { get; set; }

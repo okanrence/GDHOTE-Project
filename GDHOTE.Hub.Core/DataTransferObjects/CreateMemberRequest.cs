@@ -9,24 +9,27 @@ namespace GDHOTE.Hub.Core.DataTransferObjects
 {
     public class CreateMemberRequest
     {
-        public int MemberKey { get; set; }
-        public string MemberCode { get; set; }
+        [Required(ErrorMessage = "Please specify First name")]
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
+        [Required(ErrorMessage = "Please specify Surname")]
         public string Surname { get; set; }
-        public string Sex { get; set; }
+        [Required(ErrorMessage = "Please specify Gender")]
+        public string Gender { get; set; }
         public bool MagusFlag { get; set; }
+        public bool InitiationFlag { get; set; }
         public string MartialStatus { get; set; }
-        public string StatusCode { get; set; }
-        public string DeleteFlag { get; set; }
-        public string ApprovedFlag { get; set; }
-        public string CreatedBy { get; set; }
-        public string ApprovedBy { get; set; }
+        [Required(ErrorMessage = "Please specify a mobile number")]
+        [RegularExpression("^[0-9]{6,14}$", ErrorMessage = "Please enter a valid mobile number")]
+        [Display(Name = "Mobile Number")]
+        public string MobileNumber { get; set; }
+        public string EmailAddress { get; set; }
+        [Required(ErrorMessage = "Please specify date of birth")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [Display(Name = "Date Of Birth")]
         public DateTime DateOfBirth { get; set; }
         public DateTime? MagusDate { get; set; }
-        public DateTime RecordDate { get; set; }
-        public DateTime PostedDate { get; set; }
-        public DateTime? ApprovedDate { get; set; }
-        public DateTime? LastUpdatedDate { get; set; }
+
     }
 }

@@ -14,14 +14,14 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
 
     public class MembershipStatusController : ApiController
     {
-        [Route("getmembershipstatuses")]
+        [Route("get-membership-statuses")]
         public IHttpActionResult GetMembershipStatus()
         {
             var membershipStatuses = MembershipStatusService.GetCMembershipStatuses().ToList();
             if (membershipStatuses.Count == 0) return NotFound();
             return Ok(membershipStatuses);
         }
-        [Route("getmembershipstatus")]
+        [Route("get-membership-status")]
         public IHttpActionResult GetMembershipStatus(int id)
         {
             var membershipStatus = MembershipStatusService.GetMembershipStatus(id);
@@ -30,7 +30,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         }
 
         [HttpDelete]
-        [Route("deletemembershipstatus")]
+        [Route("delete-membership-status")]
         public IHttpActionResult DeleteMembershipStatus(int id)
         {
             var membershipStatusInDb = MembershipStatusService.GetMembershipStatus(id);

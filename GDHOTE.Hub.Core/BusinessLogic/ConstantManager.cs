@@ -8,6 +8,6 @@ namespace GDHOTE.Hub.Core.BusinessLogic
 {
     public class ConstantManager
     {
-        public const string ApiDefaultNamespace = "api/hub/";
+        public const string ApiDefaultNamespace = "api/v1/hub/";
     }
 }

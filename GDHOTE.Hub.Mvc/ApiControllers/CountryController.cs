@@ -14,14 +14,14 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
 
     public class CountryController : ApiController
     {
-        [Route("getcountries")]
+        [Route("get-countries")]
         public IHttpActionResult GetCountries()
         {
             var countries = CountryService.GetCountries().ToList();
             if (countries.Count == 0) return NotFound();
             return Ok(countries);
         }
-        [Route("getcountry")]
+        [Route("get-country")]
         public IHttpActionResult GetCountry(int id)
         {
             var country = CountryService.GetCountry(id);
@@ -30,7 +30,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         }
 
         [HttpDelete]
-        [Route("deletecountry")]
+        [Route("delete-country")]
         public IHttpActionResult DeleteCountry(int id)
         {
             var countryInDb = CountryService.GetCountry(id);

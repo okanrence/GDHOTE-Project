@@ -54,7 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessLogic\ApproveMemberManager.cs" />
+    <Compile Include="BusinessLogic\MemberManager.cs" />
     <Compile Include="BusinessLogic\EmailManager.cs" />
     <Compile Include="BusinessLogic\PasswordManager.cs" />
     <Compile Include="BusinessLogic\SmsManager.cs" />
@@ -62,7 +62,8 @@
     <Compile Include="BusinessLogic\ConstantManager.cs" />
     <Compile Include="BusinessLogic\SequenceManager.cs" />
     <Compile Include="BusinessLogic\UtilityManager.cs" />
-    <Compile Include="DataTransferObjects\CreateCountry.cs" />
+    <Compile Include="DataTransferObjects\CreateCountryRequest.cs" />
+    <Compile Include="DataTransferObjects\UpdateMemberRequest.cs" />
     <Compile Include="DataTransferObjects\CreateMemberResponse.cs" />
     <Compile Include="DataTransferObjects\LoginRequest.cs" />
     <Compile Include="DataTransferObjects\LoginResponse.cs" />
@@ -84,7 +85,7 @@
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\RoleMenu.cs" />
     <Compile Include="Models\RoleSubMenuView.cs" />
-    <Compile Include="Models\Sex.cs" />
+    <Compile Include="Models\Gender.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\SubMenu.cs" />
@@ -119,7 +120,7 @@
     <Compile Include="Services\SubMenuViewService.cs" />
     <Compile Include="Services\UserStatusService.cs" />
     <Compile Include="Services\SequenceService.cs" />
-    <Compile Include="Services\SexService.cs" />
+    <Compile Include="Services\GenderService.cs" />
     <Compile Include="Services\RoleService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Services\StateService.cs" />

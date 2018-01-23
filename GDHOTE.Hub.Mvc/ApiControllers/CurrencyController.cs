@@ -13,14 +13,14 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
 
     public class CurrencyController : ApiController
     {
-        [Route("getcurries")]
+        [Route("get-currencies")]
         public IHttpActionResult GetCountries()
         {
             var currencies = CurrencyService.GetActiveCurrencies().ToList();
             if (currencies.Count == 0) return NotFound();
             return Ok(currencies);
         }
-        [Route("getcurrency")]
+        [Route("get-currency")]
         public IHttpActionResult GetCurrency(int id)
         {
             var currency = CurrencyService.GetCurrency(id);
@@ -29,7 +29,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         }
 
         [HttpDelete]
-        [Route("deletecurrency")]
+        [Route("delete-currency")]
         public IHttpActionResult DeleteCurrency(int id)
         {
             var currencyInDb = CurrencyService.GetCurrency(id);

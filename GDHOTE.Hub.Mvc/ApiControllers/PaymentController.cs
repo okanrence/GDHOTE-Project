@@ -12,14 +12,14 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
     [RoutePrefix(ConstantManager.ApiDefaultNamespace + "payment")]
     public class PaymentController : ApiController
     {
-        [Route("getpayments")]
+        [Route("get-payments")]
         public IHttpActionResult GetPayments()
         {
             var countries = PaymentService.GetPayments().ToList();
             if (countries.Count == 0) return NotFound();
             return Ok(countries);
         }
-        [Route("getpayment")]
+        [Route("get-payment")]
         public IHttpActionResult GetPayment(int id)
         {
             var Payment = PaymentService.GetPayment(id);
@@ -28,7 +28,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         }
 
         [HttpDelete]
-        [Route("deletepayment")]
+        [Route("delete-payment")]
         public IHttpActionResult DeletePayment(int id)
         {
             var PaymentInDb = PaymentService.GetPayment(id);

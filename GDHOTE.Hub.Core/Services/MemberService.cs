@@ -43,6 +43,24 @@ namespace GDHOTE.Hub.Core.Services
                 return new List<Member>();
             }
         }
+        public static Member CheckIfMemberExist(Member memberRequest)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var member = db.Fetch<Member>().
+                        SingleOrDefault(m => m.Surname == memberRequest.Surname  
+                        && m.FirstName == memberRequest.FirstName);
+                    return member;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                return new Member();
+            }
+        }
         public static Member GetMember(int id)
         {
             try
