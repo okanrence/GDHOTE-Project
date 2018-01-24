@@ -13,14 +13,14 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
     [RoutePrefix(ConstantManager.ApiDefaultNamespace + "state")]
     public class StateController : ApiController
     {
-        [Route("getstates")]
+        [Route("get-states")]
         public IHttpActionResult GetStates()
         {
             var states = StateService.GetStates().ToList();
             if (states.Count == 0) return NotFound();
             return Ok(states);
         }
-        [Route("getstate")]
+        [Route("get-state")]
         public IHttpActionResult GetState(int id)
         {
             var state = StateService.GetState(id);
@@ -29,7 +29,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         }
 
         [HttpDelete]
-        [Route("deletestate")]
+        [Route("delete-state")]
         public IHttpActionResult DeleteState(int id)
         {
             var stateInDb = StateService.GetState(id);

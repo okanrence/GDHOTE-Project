@@ -572,6 +572,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Member\ApproveMember.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -618,7 +619,6 @@
     <Content Include="Views\PaymentType\PaymentTypeForm.cshtml" />
     <Content Include="Views\Payment\PaymentIndex.cshtml" />
     <Content Include="Views\Payment\PaymentForm.cshtml" />
-    <Content Include="Views\Member\ApproveMember.cshtml" />
     <Content Include="Views\User\UserIndex.cshtml" />
     <Content Include="Views\User\UserForm.cshtml" />
     <Content Include="Views\Member\ReadOnlyList.cshtml" />

@@ -84,7 +84,7 @@
                     if (result) {
                         $.ajax({
                             //url: "/api/state" + button.attr("data-state-id"),
-                            url: "/api/hub/state/delete-state?id=" + button.attr("data-state-id"),
+                            url: "/api/v1/hub/state/delete-state?id=" + button.attr("data-state-id"),
                             method: "DELETE",
                             success: function () {
                                 swal({

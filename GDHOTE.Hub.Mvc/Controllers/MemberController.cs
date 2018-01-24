@@ -162,7 +162,6 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 Genders = genders,
                 MaritalStatuses = maritalStatuses
-                //Member = new Member()
             };
             return viewModel;
         }

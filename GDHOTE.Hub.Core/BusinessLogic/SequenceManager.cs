@@ -9,12 +9,12 @@ namespace GDHOTE.Hub.Core.BusinessLogic
 {
     public class SequenceManager
     {
-        public static string ReturnNextSequence(string sex)
+        public static string ReturnNextSequence(string gender)
         {
             string nextSequence = "";
             int nextSequnceTemp = 0;
-            if (sex == "M") nextSequnceTemp = SequenceService.GetNextMaleSequence();
-            if (sex == "F") nextSequnceTemp = SequenceService.GetNextFemaleSequence();
+            if (gender == "M") nextSequnceTemp = SequenceService.GetNextMaleSequence();
+            if (gender == "F") nextSequnceTemp = SequenceService.GetNextFemaleSequence();
             if (nextSequnceTemp == 0) return "";
             nextSequence = nextSequnceTemp.ToString().PadLeft(8, '0');
 
