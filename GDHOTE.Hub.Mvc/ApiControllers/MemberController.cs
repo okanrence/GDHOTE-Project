@@ -44,12 +44,18 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         {
             try
             {
+                string headerKey = "channel";
+                var headers = Request.Headers.GetValues(headerKey);
+                var headerValue = headers.FirstOrDefault();
+
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
                 string currentUser = "";
-                int channelCode = 0;
+                int channelCode = 3; ;
+                if (!(int.TryParse(headerValue, out channelCode))) channelCode = 3;
+
                 var result = MemberManager.CreateMember(memberRequest, currentUser, channelCode);
                 if (result == null) return BadRequest();
                 return Ok(result);

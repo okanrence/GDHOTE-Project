@@ -23,7 +23,7 @@ namespace GDHOTE.Hub.Core.Services
 
         public static string UseLive()
         {
-            return "N";
+            return "Y";
         }
 
     }
