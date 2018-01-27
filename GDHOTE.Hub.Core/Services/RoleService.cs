@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using GDHOTE.Hub.Core.Models;
 using NPoco;
 using NPoco.Expressions;
+using GDHOTE.Hub.Core.Enumerables;
 
 namespace GDHOTE.Hub.Core.Services
 {
@@ -25,7 +26,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return ex.Message.Contains("The duplicate key") ? "Cannot Insert duplicate record" : "Error occured while trying to insert Role";
             }
         }
@@ -41,7 +42,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return new List<Role>();
             }
         }
@@ -57,7 +58,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return new List<Role>();
             }
         }
@@ -73,7 +74,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return new Role();
             }
         }
@@ -90,7 +91,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return "Error occured while trying to update Role";
             }
         }
@@ -107,7 +108,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return "Error occured while trying to delete record";
             }
         }
@@ -123,7 +124,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return "Error occured while trying to delete record";
             }
         }

@@ -4,29 +4,30 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using GDHOTE.Hub.Core.Enumerables;
 
 namespace GDHOTE.Hub.Core.Services
 {
     public class CommonServices
     {
 
-        public static string CreateHash(string input, EnumsService.HashTypes hashType, EnumsService.HashEncoding hashEncoding)
+        public static string CreateHash(string input, HashTypes hashType, HashEncoding hashEncoding)
         {
             HashAlgorithm hashAlgorithm = null;
 
             switch (hashType)
             {
-                case EnumsService.HashTypes.Sha256:
-                    hashAlgorithm = (HashAlgorithm)new SHA256Managed();
+                case HashTypes.Sha256:
+                    hashAlgorithm = new SHA256Managed();
                     break;
-                case EnumsService.HashTypes.Sha512:
-                    hashAlgorithm = (HashAlgorithm)new SHA512Managed();
+                case HashTypes.Sha512:
+                    hashAlgorithm = new SHA512Managed();
                     break;
-                case EnumsService.HashTypes.Sha1:
-                    hashAlgorithm = (HashAlgorithm)new SHA1Managed();
+                case HashTypes.Sha1:
+                    hashAlgorithm = new SHA1Managed();
                     break;
-                case EnumsService.HashTypes.Sha384:
-                    hashAlgorithm = (HashAlgorithm)new SHA384Managed();
+                case HashTypes.Sha384:
+                    hashAlgorithm = new SHA384Managed();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(hashType), hashType, null);
@@ -41,10 +42,10 @@ namespace GDHOTE.Hub.Core.Services
 
             switch (hashEncoding)
             {
-                case EnumsService.HashEncoding.Base64:
+                case HashEncoding.Base64:
                     hashValue = Convert.ToBase64String(hashBytes);
                     break;
-                case EnumsService.HashEncoding.Hex:
+                case HashEncoding.Hex:
                     var hex = BitConverter.ToString(hashBytes);
                     hashValue = hex.Replace("-", "");
                     break;

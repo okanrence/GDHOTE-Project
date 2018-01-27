@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDHOTE.Hub.Core", "GDHOTE.Hub.Core\GDHOTE.Hub.Core.csproj", "{7889078C-DC5C-4AED-8C98-A31B14A19BE6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDHOTE.Hub.Mvc", "GDHOTE.Hub.Mvc\GDHOTE.Hub.Mvc.csproj", "{D1A04E17-20B5-434B-A176-6A78C9DF4E42}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDHOTE.Hub.WebApi", "GDHOTE.Hub.WebApi\GDHOTE.Hub.WebApi.csproj", "{8AAFD060-6383-4D99-B593-1D21D5CADB8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,12 +21,11 @@ Global
 		{D1A04E17-20B5-434B-A176-6A78C9DF4E42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1A04E17-20B5-434B-A176-6A78C9DF4E42}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{D1A04E17-20B5-434B-A176-6A78C9DF4E42}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{8AAFD060-6383-4D99-B593-1D21D5CADB8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8AAFD060-6383-4D99-B593-1D21D5CADB8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8AAFD060-6383-4D99-B593-1D21D5CADB8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8AAFD060-6383-4D99-B593-1D21D5CADB8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F882874B-250C-4082-A6AE-884330845B67}
 	EndGlobalSection
 EndGlobal

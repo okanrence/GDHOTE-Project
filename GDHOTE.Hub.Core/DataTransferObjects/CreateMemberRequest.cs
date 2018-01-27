@@ -18,10 +18,10 @@ namespace GDHOTE.Hub.Core.DataTransferObjects
         public string Gender { get; set; }
         public bool MagusFlag { get; set; }
         public bool InitiationFlag { get; set; }
-        public string MartialStatus { get; set; }
-        [Required(ErrorMessage = "Please specify a mobile number")]
-        [RegularExpression("^[0-9]{6,14}$", ErrorMessage = "Please enter a valid mobile number")]
-        [Display(Name = "Mobile Number")]
+        public string MaritalStatus { get; set; }
+        //[Required(ErrorMessage = "Please specify a mobile number")]
+        //[RegularExpression("^[0-9]{6,14}$", ErrorMessage = "Please enter a valid mobile number")]
+        //[Display(Name = "Mobile Number")]
         public string MobileNumber { get; set; }
         public string EmailAddress { get; set; }
         [Required(ErrorMessage = "Please specify date of birth")]
@@ -29,7 +29,7 @@ namespace GDHOTE.Hub.Core.DataTransferObjects
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         [Display(Name = "Date Of Birth")]
         public DateTime DateOfBirth { get; set; }
-        public DateTime? MagusDate { get; set; }
+        public DateTime? MagusDate { get; set; }          
 
     }
 }

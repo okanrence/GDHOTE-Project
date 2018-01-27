@@ -7,30 +7,32 @@ using GDHOTE.Hub.Core.DataTransferObjects;
 using GDHOTE.Hub.Core.Models;
 using GDHOTE.Hub.Core.Services;
 using Newtonsoft.Json;
+using GDHOTE.Hub.Core.Enumerables;
 
 namespace GDHOTE.Hub.Core.BusinessLogic
 {
     public class MemberManager
     {
-        public static CreateMemberResponse CreateMember(CreateMemberRequest createRequest, string currentUser)
+        public static CreateMemberResponse CreateMember(CreateMemberRequest createRequest, string currentUser, int channelCode)
         {
             var request = JsonConvert.SerializeObject(createRequest);
             var member = JsonConvert.DeserializeObject<Member>(request);
             var createResponse = new CreateMemberResponse();
 
-           
+
             member.CreatedBy = currentUser;
+            member.ChannelCode = channelCode;
             member.StatusCode = "A";
             member.DeleteFlag = "N";
             member.ApprovedFlag = "N";
             member.RecordDate = DateTime.Now;
             member.PostedDate = DateTime.Now;
-            member.OfficerId = (int)EnumsService.OfficerType.NormalMember;
+            member.OfficerId = (int)OfficerType.NormalMember;
             member.OfficerDate = DateTime.Now;
 
             //Check user has not been profiled before
             var memberExist = MemberService.CheckIfMemberExist(member);
-            if(memberExist != null)
+            if (memberExist != null)
             {
                 createResponse.ErrorCode = "01";
                 createResponse.ErrorMessage = "Member already exist";

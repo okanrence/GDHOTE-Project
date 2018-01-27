@@ -26,8 +26,9 @@ namespace GDHOTE.Hub.Core.Models
         public bool InitiationFlag { get; set; }
         public bool MagusFlag { get; set; }
         [Required]
-        public string MartialStatus { get; set; }
+        public string MaritalStatus { get; set; }
         public string StatusCode { get; set; }
+        public int ChannelCode { get; set; }
         public string DeleteFlag { get; set; }
         public string ApprovedFlag { get; set; }
         public string CreatedBy { get; set; }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using GDHOTE.Hub.Core.Enumerables;
 
 namespace GDHOTE.Hub.Core.Services
 {
@@ -21,7 +22,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return 0;
             }
         }
@@ -37,7 +38,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return 0;
             }
         }

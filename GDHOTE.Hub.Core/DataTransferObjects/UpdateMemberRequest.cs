@@ -17,7 +17,7 @@ namespace GDHOTE.Hub.Core.DataTransferObjects
         public string Gender { get; set; }
         public bool InitiationFlag { get; set; }
         public bool MagusFlag { get; set; }
-        public string MartialStatus { get; set; }
+        public string MaritalStatus { get; set; }
         public string StatusCode { get; set; }
         public string DeleteFlag { get; set; }
         public string ApprovedFlag { get; set; }

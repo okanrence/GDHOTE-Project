@@ -50,9 +50,9 @@
         @Html.ValidationMessageFor(m => m.Gender)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.MartialStatus)
-        @Html.DropDownListFor(m => m.MartialStatus, new SelectList(Model.MaritalStatuses, "Code", "Description"), "Select Status", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MartialStatus)
+        @Html.LabelFor(m => m.MaritalStatus)
+        @Html.DropDownListFor(m => m.MaritalStatus, new SelectList(Model.MaritalStatuses, "Code", "Description"), "Select Status", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.MaritalStatus)
     </div>
     <div class="checkbox">
         <label>

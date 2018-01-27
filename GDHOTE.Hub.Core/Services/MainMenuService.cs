@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using GDHOTE.Hub.Core.Models;
+using GDHOTE.Hub.Core.Enumerables;
 
 namespace GDHOTE.Hub.Core.Services
 {
@@ -22,7 +23,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
                 return "Error occured while trying to insert MainMenu";
             }
@@ -39,7 +40,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return new List<MainMenu>();
             }
         }
@@ -55,7 +56,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return new MainMenu();
             }
         }
@@ -71,7 +72,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return "Error occured while trying to update MainMenu";
             }
         }
@@ -87,7 +88,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return "Error occured while trying to delete record";
             }
         }

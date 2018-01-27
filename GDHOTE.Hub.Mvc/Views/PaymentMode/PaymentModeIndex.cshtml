@@ -52,7 +52,7 @@ else
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: "/api/v1/hub/payment/delete-payment-mode?id=" + button.attr("data-paymentmode-id"),
+                            url: "../api/v1/hub/payment/delete-payment-mode?id=" + button.attr("data-paymentmode-id"),
                             method: "DELETE",
                             success: function () {
                                 swal({

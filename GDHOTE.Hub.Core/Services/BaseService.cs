@@ -16,13 +16,14 @@ namespace GDHOTE.Hub.Core.Services
             string dbConnection = "";
             dbConnection = UseLive() == "Y"
                 ? "Data Source=192.99.150.165;Initial Catalog=GDHOTE;user Id=gdhote;password=HolyOrder@123#"
-                : ConfigurationManager.ConnectionStrings["GdhoteConnection"].ConnectionString;
+                : "Data Source=.;Initial Catalog=GDHOTE;user Id=sa;password=Gmt123456";
             return new Database(dbConnection, DatabaseType.SqlServer2012, SqlClientFactory.Instance);
+            //ConfigurationManager.ConnectionStrings["GdhoteConnection"].ConnectionString;
         }
 
         public static string UseLive()
         {
-            return "Y";
+            return "N";
         }
 
     }

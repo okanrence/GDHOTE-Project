@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using GDHOTE.Hub.Core.Models;
-
+using GDHOTE.Hub.Core.Enumerables;
 namespace GDHOTE.Hub.Core.Services
 {
     public class RoleMenuService : BaseService
@@ -22,7 +22,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
                 return "Error occured while trying to insert RoleMenu";
             }
@@ -39,7 +39,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return new List<RoleMenu>();
             }
         }
@@ -55,7 +55,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return new RoleMenu();
             }
         }
@@ -71,7 +71,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return "Error occured while trying to update RoleMenu";
             }
         }
@@ -87,7 +87,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return "Error occured while trying to delete record";
             }
         }

@@ -8,6 +8,8 @@ using GDHOTE.Hub.Core.BusinessLogic;
 using GDHOTE.Hub.Core.DataTransferObjects;
 using GDHOTE.Hub.Core.Models;
 using Newtonsoft.Json;
+using GDHOTE.Hub.Core.Enumerables;
+
 namespace GDHOTE.Hub.Core.Services
 {
     public class UserService : BaseService
@@ -24,7 +26,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return ex.Message.Contains("The duplicate key") ? "Cannot Insert duplicate record" : "Error occured while trying to insert User";
             }
         }
@@ -41,7 +43,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return new User();
             }
         }
@@ -60,7 +62,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return new User();
             }
         }
@@ -76,7 +78,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return "Error occured while trying to update User";
             }
         }
@@ -92,7 +94,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return "Error occured while trying to delete record";
             }
         }
@@ -119,25 +121,25 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return new LoginResponse();
             }
         }
-        public static EnumsService.SignInStatus LoginUserOld(string username, string password, out User authenticatedUser)
+        public static SignInStatus LoginUserOld(string username, string password, out User authenticatedUser)
         {
             try
             {
                 authenticatedUser = GetUser(username, password);
-                if (authenticatedUser == null) return EnumsService.SignInStatus.Failure;
+                if (authenticatedUser == null) return SignInStatus.Failure;
                 return authenticatedUser.UserId == null
-                        ? EnumsService.SignInStatus.Failure
-                        : EnumsService.SignInStatus.Success;
+                        ? SignInStatus.Failure
+                        : SignInStatus.Success;
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 authenticatedUser = null;
-                return EnumsService.SignInStatus.Failure;
+                return SignInStatus.Failure;
             }
         }
     }

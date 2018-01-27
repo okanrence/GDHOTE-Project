@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using GDHOTE.Hub.Core.Models;
+using GDHOTE.Hub.Core.Enumerables;
+using GDHOTE.Hub.Core.Exceptions;
 
 namespace GDHOTE.Hub.Core.Services
 {
@@ -22,9 +24,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
-                return "Error occured while trying to insert member";
+                throw new UnableToCompleteException(ex.Message, MethodBase.GetCurrentMethod().Name);
             }
         }
         public static IEnumerable<Member> GetMembers()
@@ -39,7 +39,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return new List<Member>();
             }
         }
@@ -50,15 +50,15 @@ namespace GDHOTE.Hub.Core.Services
                 using (var db = GdhoteConnection())
                 {
                     var member = db.Fetch<Member>().
-                        SingleOrDefault(m => m.Surname == memberRequest.Surname  
+                        SingleOrDefault(m => m.Surname == memberRequest.Surname
                         && m.FirstName == memberRequest.FirstName);
                     return member;
                 }
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return new Member();
+                //LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                throw new UnableToCompleteException(ex.Message, MethodBase.GetCurrentMethod().Name);
             }
         }
         public static Member GetMember(int id)
@@ -73,7 +73,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return new Member();
             }
         }
@@ -89,7 +89,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return "Error occured while trying to update member";
             }
         }
@@ -105,7 +105,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return "Error occured while trying to delete record";
             }
         }
@@ -121,7 +121,7 @@ namespace GDHOTE.Hub.Core.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(EnumsService.LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
                 return new List<Member>();
             }
         }
