@@ -6,8 +6,8 @@ using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using GDHOTE.Hub.Core.BusinessLogic;
-using GDHOTE.Hub.Core.Services;
+using GDHOTE.Hub.BusinessCore.BusinessLogic;
+using GDHOTE.Hub.BusinessCore.Services;
 using Microsoft.AspNet.Identity;
 
 namespace GDHOTE.Hub.Mvc.Controllers

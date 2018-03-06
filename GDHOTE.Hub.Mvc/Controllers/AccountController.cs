@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
-using GDHOTE.Hub.Core.Services;
+using GDHOTE.Hub.BusinessCore.Services;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {

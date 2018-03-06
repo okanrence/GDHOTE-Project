@@ -1,4 +1,4 @@
-﻿using GDHOTE.Hub.Core.BusinessLogic;
+﻿using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
-using GDHOTE.Hub.Core.Services;
+using GDHOTE.Hub.BusinessCore.Services;
 
 namespace GDHOTE.Hub.WebApi.Controllers
 {

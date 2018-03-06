@@ -4,8 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using GDHOTE.Hub.Core.BusinessLogic;
-using GDHOTE.Hub.Core.Services;
+using GDHOTE.Hub.BusinessCore.BusinessLogic;
+using GDHOTE.Hub.BusinessCore.Services;
 
 namespace GDHOTE.Hub.Mvc.ApiControllers
 {

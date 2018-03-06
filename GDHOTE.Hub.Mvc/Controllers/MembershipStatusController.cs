@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.Core.Services;
+using GDHOTE.Hub.BusinessCore.Services;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {

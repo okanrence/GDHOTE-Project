@@ -70,7 +70,7 @@ else
                         $.ajax({
                             type: 'json',
                             method: "DELETE",
-                            url: "../api/v1/hub/member/delete-member?id=" + button.attr("data-member-id"),
+                            url: "../api/v1/member/delete-member?id=" + button.attr("data-member-id"),
                             success: function () {
                                 button.parents("tr").remove();
                             }
