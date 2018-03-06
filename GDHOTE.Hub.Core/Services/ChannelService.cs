@@ -1,4 +1,4 @@
-﻿using GDHOTE.Hub.Core.Models;
+﻿using GDHOTE.Hub.CoreObject.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

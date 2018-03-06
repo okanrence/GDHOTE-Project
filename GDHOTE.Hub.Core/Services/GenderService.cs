@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GDHOTE.Hub.Core.Models;
+using GDHOTE.Hub.CoreObject.Models;
 
 namespace GDHOTE.Hub.Core.Services
 {

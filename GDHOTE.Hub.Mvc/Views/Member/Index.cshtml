@@ -1,4 +1,4 @@
-﻿@model List<GDHOTE.Hub.Core.Models.Member>
+﻿@model List<GDHOTE.Hub.CoreObject.Models.Member>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -68,8 +68,9 @@ else
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: "/api/v1/hub/member/delete-member?id=" + button.attr("data-member-id"),
+                            type: 'json',
                             method: "DELETE",
+                            url: "../api/v1/hub/member/delete-member?id=" + button.attr("data-member-id"),
                             success: function () {
                                 button.parents("tr").remove();
                             }

@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using GDHOTE.Hub.Core.BusinessLogic;
-using GDHOTE.Hub.Core.Models;
 using GDHOTE.Hub.Core.Services;
 
 namespace GDHOTE.Hub.Mvc.ApiControllers

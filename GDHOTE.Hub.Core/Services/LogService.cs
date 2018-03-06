@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using log4net;
 using NPoco;
-using GDHOTE.Hub.Core.Enumerables;
+using GDHOTE.Hub.CoreObject.Enumerables;
 namespace GDHOTE.Hub.Core.Services
 {
     public class LogService

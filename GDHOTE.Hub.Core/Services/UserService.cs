@@ -5,10 +5,10 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using GDHOTE.Hub.Core.BusinessLogic;
-using GDHOTE.Hub.Core.DataTransferObjects;
-using GDHOTE.Hub.Core.Models;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.CoreObject.Models;
 using Newtonsoft.Json;
-using GDHOTE.Hub.Core.Enumerables;
+using GDHOTE.Hub.CoreObject.Enumerables;
 
 namespace GDHOTE.Hub.Core.Services
 {
@@ -105,7 +105,15 @@ namespace GDHOTE.Hub.Core.Services
             {
                 var loginResponse = new LoginResponse();
                 var authenticatedUser = GetUser(loginRequest.UserName, loginRequest.Password);
+
                 if (authenticatedUser == null)
+                {
+                    loginResponse.ErrorCode = "100";
+                    loginResponse.ErrorMessage = "Invalid credentials";
+                    return loginResponse;
+                }
+
+                if (authenticatedUser.UserId == null)
                 {
                     loginResponse.ErrorCode = "100";
                     loginResponse.ErrorMessage = "Invalid credentials";

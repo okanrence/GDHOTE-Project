@@ -4,11 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GDHOTE.Hub.Core.BusinessLogic;
-using GDHOTE.Hub.Core.DataTransferObjects;
-using GDHOTE.Hub.Core.Models;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.Core.Services;
-using GDHOTE.Hub.Core.ViewModels;
-using GDHOTE.Hub.Core.Enumerables;
+using GDHOTE.Hub.CoreObject.ViewModels;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -52,7 +50,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 return View("MemberForm", ReturnMemberFormViewModel());
             }
             string currentUser = User.Identity.Name;
-            int channelCode = (int)Core.Enumerables.Channel.Web;
+            int channelCode = (int)CoreObject.Enumerables.Channel.Web;
             var result = MemberManager.CreateMember(createRequest, currentUser, channelCode);
             if (result != null)
             {

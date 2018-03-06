@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using GDHOTE.Hub.Core.DataTransferObjects;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.Core.Services;
-using GDHOTE.Hub.Mvc.Models;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -28,20 +27,19 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginRequest loginRequest, string returnUrl) 
+        public ActionResult Login(LoginRequest loginRequest, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
                 return View(loginRequest);
             }
 
-            var result = UserService.AuthenticateUser(loginRequest); 
+            var result = UserService.AuthenticateUser(loginRequest);
             if (result != null)
             {
                 FormsAuthentication.SetAuthCookie(result.UserName, false);
                 string roles = result.RoleId + "," + result.UserId;
-                var authTicket = new FormsAuthenticationTicket(1, result.UserName, DateTime.Now,
-                    DateTime.Now.AddMinutes(5), false, roles);
+                var authTicket = new FormsAuthenticationTicket(1, result.UserName, DateTime.Now, DateTime.Now.AddMinutes(5), false, roles);
                 string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
                 var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
                 HttpContext.Response.Cookies.Add(authCookie);

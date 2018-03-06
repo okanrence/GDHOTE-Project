@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDHOTE.Hub.Core", "GDHOTE.H
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDHOTE.Hub.Mvc", "GDHOTE.Hub.Mvc\GDHOTE.Hub.Mvc.csproj", "{D1A04E17-20B5-434B-A176-6A78C9DF4E42}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDHOTE.Hub.WebApi", "GDHOTE.Hub.WebApi\GDHOTE.Hub.WebApi.csproj", "{8AAFD060-6383-4D99-B593-1D21D5CADB8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDHOTE.Hub.PortalCore", "GDHOTE.Hub.PortalCore\GDHOTE.Hub.PortalCore.csproj", "{F8E5DB1A-D6C7-420B-8049-27F531A7D996}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDHOTE.Hub.CoreObject", "GDHOTE.Hub.CoreObject\GDHOTE.Hub.CoreObject.csproj", "{C6964AC6-CFCE-46F8-AB31-A8AF93F2D133}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +27,18 @@ Global
 		{D1A04E17-20B5-434B-A176-6A78C9DF4E42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1A04E17-20B5-434B-A176-6A78C9DF4E42}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{D1A04E17-20B5-434B-A176-6A78C9DF4E42}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{8AAFD060-6383-4D99-B593-1D21D5CADB8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AAFD060-6383-4D99-B593-1D21D5CADB8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AAFD060-6383-4D99-B593-1D21D5CADB8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AAFD060-6383-4D99-B593-1D21D5CADB8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8E5DB1A-D6C7-420B-8049-27F531A7D996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8E5DB1A-D6C7-420B-8049-27F531A7D996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8E5DB1A-D6C7-420B-8049-27F531A7D996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8E5DB1A-D6C7-420B-8049-27F531A7D996}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6964AC6-CFCE-46F8-AB31-A8AF93F2D133}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6964AC6-CFCE-46F8-AB31-A8AF93F2D133}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6964AC6-CFCE-46F8-AB31-A8AF93F2D133}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6964AC6-CFCE-46F8-AB31-A8AF93F2D133}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

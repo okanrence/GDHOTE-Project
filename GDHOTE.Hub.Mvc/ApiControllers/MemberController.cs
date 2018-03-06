@@ -1,13 +1,15 @@
 ﻿
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using GDHOTE.Hub.Core.BusinessLogic;
-using GDHOTE.Hub.Core.DataTransferObjects;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.Core.Exceptions;
+
 using GDHOTE.Hub.Core.Services;
 
 namespace GDHOTE.Hub.Mvc.ApiControllers
@@ -42,6 +44,19 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
         [Route("create-member")]
         public IHttpActionResult CreateNewMember(CreateMemberRequest memberRequest)
         {
+            //var req = new EmailRequest
+            //{
+            //    Type = EmailType.RegistrationConfirmation,
+            //    RecipientEmailAddress = "abrabfun@yahoo.com",
+            //    Data = new Hashtable
+            //    {
+            //        ["Subject"] = "Welcome to " + BaseService.Get("settings.organisation.name"),
+            //        ["FirstName"] = "Olufunso",
+            //        ["LastName"] = "Olufunso",
+            //    }
+            //};
+            //EmailManager.SendForEmailConfirmation(req);
+
             try
             {
                 string headerKey = "channel";
@@ -53,8 +68,8 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
                     return BadRequest(ModelState);
                 }
                 string currentUser = "";
-                int channelCode = 3; ;
-                if (!(int.TryParse(headerValue, out channelCode))) channelCode = 3;
+                //int channelCode = 0;
+                if (!int.TryParse(headerValue, out var channelCode)) channelCode = 3;
 
                 var result = MemberManager.CreateMember(memberRequest, currentUser, channelCode);
                 if (result == null) return BadRequest();

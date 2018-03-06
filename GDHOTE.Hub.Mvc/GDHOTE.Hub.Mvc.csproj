@@ -436,6 +436,7 @@
     <Content Include="Content\bootstrap-datepicker.standalone.css.map" />
     <Content Include="Content\bootstrap-datepicker.min.css.map" />
     <Content Include="Content\bootstrap-datepicker.css.map" />
+    <Content Include="EmailTemplates\RegistrationConfirmation.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
@@ -676,6 +677,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GDHOTE.Hub.CoreObject\GDHOTE.Hub.CoreObject.csproj">
+      <Project>{c6964ac6-cfce-46f8-ab31-a8af93f2d133}</Project>
+      <Name>GDHOTE.Hub.CoreObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GDHOTE.Hub.Core\GDHOTE.Hub.Core.csproj">
       <Project>{7889078c-dc5c-4aed-8c98-a31b14a19be6}</Project>
       <Name>GDHOTE.Hub.Core</Name>

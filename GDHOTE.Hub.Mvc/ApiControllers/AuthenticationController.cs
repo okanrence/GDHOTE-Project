@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Http;
 using GDHOTE.Hub.Core.BusinessLogic;
-using GDHOTE.Hub.Core.DataTransferObjects;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.Core.Services;
 
 namespace GDHOTE.Hub.Mvc.ApiControllers
@@ -22,8 +22,7 @@ namespace GDHOTE.Hub.Mvc.ApiControllers
                 {
                     return BadRequest(ModelState);
                 }
-                var response = new LoginResponse();
-                response = UserService.AuthenticateUser(model);
+                var response = UserService.AuthenticateUser(model);
                 return Ok(response);
             }
             catch (Exception ex)

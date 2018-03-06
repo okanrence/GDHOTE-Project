@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GDHOTE.Hub.Core.DataTransferObjects;
-using GDHOTE.Hub.Core.Models;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.Core.Services;
 using Newtonsoft.Json;
-using GDHOTE.Hub.Core.Enumerables;
+using GDHOTE.Hub.CoreObject.Enumerables;
+using System.Collections;
 
 namespace GDHOTE.Hub.Core.BusinessLogic
 {
@@ -44,21 +45,47 @@ namespace GDHOTE.Hub.Core.BusinessLogic
             //Insert mobile details
             if (result != null)
             {
-                int memberKey = 0;
-                if (int.TryParse(result, out memberKey))
+                if (int.TryParse(result, out var memberKey))
                 {
                     var memberDetails = new MemberDetails
                     {
                         MemberKey = memberKey,
                         MobileNumber = createRequest.MobileNumber,
+                        EmailAddress = createRequest.EmailAddress,
                         CreatedBy = member.CreatedBy,
                         RecordDate = DateTime.Now,
                         PostedDate = DateTime.Now,
                     };
+
                     var detailsResult = MemberDetailsService.Save(memberDetails);
                     createResponse.ErrorCode = "00";
-                    createResponse.ErrorMessage = "Sucessful";
+                    createResponse.ErrorMessage = "Successful";
                     createResponse.Reference = memberKey.ToString();
+
+                    //Notify member
+                    new Task(() =>
+                    {
+                        var req = new EmailRequest
+                        {
+                            Type = EmailType.RegistrationConfirmation,
+                            RecipientEmailAddress = createRequest.EmailAddress,
+                            Data = new Hashtable
+                            {
+                                ["Subject"] = "Welcome to " + BaseService.Get("settings.organisation.name"),
+                                ["FirstName"] = createRequest.FirstName,
+                                ["LastName"] = createRequest.Surname,
+                            }
+                        };
+
+                        try
+                        {
+                            EmailManager.SendForEmailConfirmation(req);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }).Start();
                 }
             }
 

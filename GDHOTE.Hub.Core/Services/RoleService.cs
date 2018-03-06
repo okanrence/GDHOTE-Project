@@ -4,10 +4,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using GDHOTE.Hub.Core.Models;
+using GDHOTE.Hub.CoreObject.Models;
 using NPoco;
 using NPoco.Expressions;
-using GDHOTE.Hub.Core.Enumerables;
+using GDHOTE.Hub.CoreObject.Enumerables;
 
 namespace GDHOTE.Hub.Core.Services
 {

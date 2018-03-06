@@ -23,8 +23,11 @@ namespace GDHOTE.Hub.Core.Services
 
         public static string UseLive()
         {
-            return "Y";
+            return "N";
         }
-
+        public static string Get(string key)
+        {
+            return ConfigurationManager.AppSettings[key];
+        }
     }
 }
