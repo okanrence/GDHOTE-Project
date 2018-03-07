@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using log4net;
 using GDHOTE.Hub.CoreObject.Enumerables;
 using System.Reflection;
-//using log4net.Repository.Hierarchy;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -16,7 +15,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
         public string Message { get; set; }
         protected ILog Logger;
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        //private static ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+         
 
         protected LogService(string name)
         {
