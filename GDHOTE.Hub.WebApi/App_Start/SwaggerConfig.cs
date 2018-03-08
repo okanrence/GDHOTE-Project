@@ -11,7 +11,7 @@ namespace GDHOTE.Hub.WebApi
     {
         public static string GetRootUrlFromAppConfig()
         {
-            return "http://localhost:49422";
+            return "http://purplesclothier.com";
         }
         public static void Register()
         {
@@ -24,7 +24,7 @@ namespace GDHOTE.Hub.WebApi
                         // However, there may be situations (e.g. proxy and load-balanced environments) where this does not
                         // resolve correctly. You can workaround this by providing your own code to determine the root URL.
                         //
-                        //c.RootUrl(req => GetRootUrlFromAppConfig());
+                        c.RootUrl(req => GetRootUrlFromAppConfig());
 
                         // If schemes are not explicitly provided in a Swagger 2.0 document, then the scheme used to access
                         // the docs is taken as the default. If your API supports multiple schemes and you want to be explicit
@@ -65,7 +65,7 @@ namespace GDHOTE.Hub.WebApi
                         //c.BasicAuth("basic")
                         //    .Description("Basic HTTP Authentication");
                         //
-						// NOTE: You must also configure 'EnableApiKeySupport' below in the SwaggerUI section
+                        // NOTE: You must also configure 'EnableApiKeySupport' below in the SwaggerUI section
                         //c.ApiKey("apiKey")
                         //    .Description("API Key Authentication")
                         //    .Name("apiKey")
@@ -192,7 +192,8 @@ namespace GDHOTE.Hub.WebApi
                         // The file must be included in your project as an "Embedded Resource", and then the resource's
                         // "Logical Name" is passed to the method as shown below.
                         //
-                        //c.InjectStylesheet(containingAssembly, "Swashbuckle.Dummy.SwaggerExtensions.testStyles1.css");
+                        c.InjectStylesheet(thisAssembly, "GDHOTE.Hub.WebApi.Content.Swagger.css");
+
 
                         // Use the "InjectJavaScript" option to invoke one or more custom JavaScripts after the swagger-ui
                         // has loaded. The file must be included in your project as an "Embedded Resource", and then the resource's
@@ -254,6 +255,7 @@ namespace GDHOTE.Hub.WebApi
                         //
                         //c.EnableApiKeySupport("apiKey", "header");
                     });
+
         }
     }
 }
