@@ -5,13 +5,13 @@ VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDHOTE.Hub.Mvc", "GDHOTE.Hub.Mvc\GDHOTE.Hub.Mvc.csproj", "{D1A04E17-20B5-434B-A176-6A78C9DF4E42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDHOTE.Hub.WebApi", "GDHOTE.Hub.WebApi\GDHOTE.Hub.WebApi.csproj", "{8AAFD060-6383-4D99-B593-1D21D5CADB8E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GDHOTE.Hub.BusinessCore", "GDHOTE.Hub.BusinessCore\GDHOTE.Hub.BusinessCore.csproj", "{EA856649-4FF0-4482-8F10-619E6E28402B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDHOTE.Hub.CoreObject", "GDHOTE.Hub.CoreObject\GDHOTE.Hub.CoreObject.csproj", "{FB6352C1-30EC-4CC5-AAA4-6DCAFFCD6AA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GDHOTE.Hub.CoreObject", "GDHOTE.Hub.CoreObject\GDHOTE.Hub.CoreObject.csproj", "{FB6352C1-30EC-4CC5-AAA4-6DCAFFCD6AA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDHOTE.Hub.PortalCore", "GDHOTE.Hub.PortalCore\GDHOTE.Hub.PortalCore.csproj", "{D3E1AE68-832F-42C5-BB57-6D0853FDC397}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GDHOTE.Hub.PortalCore", "GDHOTE.Hub.PortalCore\GDHOTE.Hub.PortalCore.csproj", "{D3E1AE68-832F-42C5-BB57-6D0853FDC397}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDHOTE.Hub.WebApi", "GDHOTE.Hub.WebApi\GDHOTE.Hub.WebApi.csproj", "{08BE01D7-211E-4C68-8636-8B4672338B50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,6 @@ Global
 		{D1A04E17-20B5-434B-A176-6A78C9DF4E42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1A04E17-20B5-434B-A176-6A78C9DF4E42}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{D1A04E17-20B5-434B-A176-6A78C9DF4E42}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{8AAFD060-6383-4D99-B593-1D21D5CADB8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8AAFD060-6383-4D99-B593-1D21D5CADB8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8AAFD060-6383-4D99-B593-1D21D5CADB8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8AAFD060-6383-4D99-B593-1D21D5CADB8E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EA856649-4FF0-4482-8F10-619E6E28402B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EA856649-4FF0-4482-8F10-619E6E28402B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA856649-4FF0-4482-8F10-619E6E28402B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{D3E1AE68-832F-42C5-BB57-6D0853FDC397}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3E1AE68-832F-42C5-BB57-6D0853FDC397}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3E1AE68-832F-42C5-BB57-6D0853FDC397}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08BE01D7-211E-4C68-8636-8B4672338B50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08BE01D7-211E-4C68-8636-8B4672338B50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08BE01D7-211E-4C68-8636-8B4672338B50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08BE01D7-211E-4C68-8636-8B4672338B50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
