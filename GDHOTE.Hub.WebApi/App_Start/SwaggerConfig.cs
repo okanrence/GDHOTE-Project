@@ -12,6 +12,7 @@ namespace GDHOTE.Hub.WebApi
         public static string GetRootUrlFromAppConfig()
         {
             return "http://purplesclothier.com";
+            //return "http://localhost:86/";
         }
         public static void Register()
         {
