@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using System.Web.Security;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.PortalCore.Integrations;
+using GDHOTE.Hub.CoreObject.Models;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -34,16 +36,26 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 return View(loginRequest);
             }
 
+            var integration = new LoginIntegration(loginRequest.UserName, loginRequest.Password);
+            TokenResponse token = integration.Invoke();
+
             var result = UserService.AuthenticateUser(loginRequest);
             if (result != null)
             {
-                FormsAuthentication.SetAuthCookie(result.UserName, false);
-                string roles = result.RoleId + "," + result.UserId;
-                var authTicket = new FormsAuthenticationTicket(1, result.UserName, DateTime.Now, DateTime.Now.AddMinutes(5), false, roles);
-                string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
-                var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-                HttpContext.Response.Cookies.Add(authCookie);
-                return RedirectToAction("Index", "Home");
+                if (!string.IsNullOrEmpty(result.UserName))
+                {
+                    FormsAuthentication.SetAuthCookie(result.UserName, false);
+                    string roles = result.RoleId + "," + result.UserId;
+                    var authTicket = new FormsAuthenticationTicket(1, result.UserName, DateTime.Now, DateTime.Now.AddMinutes(5), false, roles);
+                    string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+                    var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+                    HttpContext.Response.Cookies.Add(authCookie);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ViewBag.LoginError = "Invalid username or password";
+                }
             }
             else
             {

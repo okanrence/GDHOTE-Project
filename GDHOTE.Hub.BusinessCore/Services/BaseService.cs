@@ -23,7 +23,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
         public static string UseLive()
         {
-            return "N";
+            return Get("settings.config.use.live");// "Y";
         }
         public static string Get(string key)
         {

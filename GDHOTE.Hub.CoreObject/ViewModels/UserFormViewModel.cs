@@ -15,5 +15,9 @@ namespace GDHOTE.Hub.CoreObject.ViewModels
         public IEnumerable<Role> Role { get; set; }
         public IEnumerable<UserStatus> UserStatus { get; set; }
         public User User { get; set; }
+        [DisplayName("Confirm Password")]
+        [DataType(DataType.Password)]
+        //[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
     }
 }
