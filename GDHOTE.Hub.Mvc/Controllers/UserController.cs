@@ -36,10 +36,10 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: User/Create
         public ActionResult New()
         {
-            var viewModel = new UserFormViewModel
+            var viewModel = new AdminUserFormViewModel
             {
-                Role = _roles,
-                UserStatus = _userStatuses,
+                Roles = _roles,
+                UserStatuses = _userStatuses,
                 User = new User(),
             };
             return View("UserForm", viewModel);
@@ -49,10 +49,10 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             var user = UserService.GetUser(id);
             if (user == null) return HttpNotFound();
-            var viewModel = new UserFormViewModel
+            var viewModel = new AdminUserFormViewModel
             {
-                Role = _roles,
-                UserStatus = _userStatuses,
+                Roles = _roles,
+                UserStatuses = _userStatuses,
                 User = user,
             };
             return View("UserForm", viewModel);
@@ -65,10 +65,10 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var viewModel = new UserFormViewModel
+                var viewModel = new AdminUserFormViewModel
                 {
-                    Role = _roles,
-                    UserStatus = _userStatuses,
+                    Roles = _roles,
+                    UserStatuses = _userStatuses,
                     User = user,
                 };
                 return View("UserForm", viewModel);

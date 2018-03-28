@@ -23,7 +23,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
                 return "Error occured while trying to insert payment mode";
             }
@@ -40,7 +40,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return new List<PaymentMode>();
             }
         }
@@ -56,7 +56,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return new List<PaymentMode>();
             }
         }
@@ -72,7 +72,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return new PaymentMode();
             }
         }
@@ -88,7 +88,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return "Error occured while trying to update mode of payment";
             }
         }
@@ -104,7 +104,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return "Error occured while trying to delete record";
             }
         }

@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GDHOTE.Hub.CoreObject\GDHOTE.Hub.CoreObject.csproj" />
   </ItemGroup>
 

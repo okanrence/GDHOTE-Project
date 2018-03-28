@@ -1,4 +1,5 @@
-﻿@model List<GDHOTE.Hub.CoreObject.Models.Country>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.CountryViewModel>
+
 @{
     ViewBag.Title = "Countries";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -16,29 +17,37 @@
 }
 else
 {
-    <div>
-        <table id="countries" class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var country in Model)
-                {
+    <div id="responsive">
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+
+        <div>
+            <table id="countries" class="table table-bordered table-hover">
+                <thead>
                     <tr>
-                        <td>@Html.ActionLink(country.CountryCode, "Edit", "Country", new { id = country.CountryId }, null)</td>
-                        <td>@country.CountryName</td>
-                        <td>@country.Status</td>
-                        <td><button data-country-id="@country.CountryId" class="btn btn-link js-delete">Delete</button></td>
+                        <th>Code</th>
+                        <th>Country</th>
+                        <th>Status</th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var country in Model)
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(country.CountryCode, "Edit", "Country", new { id = country.CountryId }, null)</td>
+                            <td>@country.Name</td>
+                            <td>@country.Status</td>
+                            <td><button data-country-id="@country.CountryId" class="btn btn-link js-delete">Delete</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
     </div>
+
 }
 @section scripts
 {
@@ -48,13 +57,36 @@ else
 
             $("#countries").on("click", ".js-delete", function () {
                 var button = $(this);
+                var id = button.attr("data-country-id");
+
+                var form = $('#responsive');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+                //Submit request
+                var request = { __RequestVerificationToken: token };
+
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: "../api/v1/country/delete-country?id=" + button.attr("data-country-id"),
-                            method: "DELETE",
-                            success: function () {
-                                button.parents("tr").remove();
+                            url: '@Url.Action("DeleteCountry", "Country")/' + id,
+                            method: "POST",
+                            data: request,
+                            success: function (data) {
+                                if (data !== null) {
+                                    if (data.ErrorCode === "00") {
+                                        swal({
+                                            title: "Success",
+                                            text: "success",
+                                            type: "success"
+                                        });
+
+                                        window.location.reload(true);
+                                    }
+                                    else {
+                                        alert(data.ErrorMessage);
+                                    }
+                                };
+
                             }
                         });
                     }

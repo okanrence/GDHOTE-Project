@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
-    public class LoginRequest
+    public class AdminLoginRequest
     {
         [Required]
         [Display(Name = "User Name")]

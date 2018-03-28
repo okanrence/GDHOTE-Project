@@ -10,17 +10,11 @@ namespace GDHOTE.Hub.CoreObject.Models
 {
     [TableName("HUB_Currencies")]
     [PrimaryKey("CurrencyId")]
-    public class Currency
+    public class Currency : BaseModel
     {
         public int CurrencyId { get; set; }
-        [Required]
-        [Display(Name = "Currency Code")]
         public string CurrencyCode { get; set; }
-        [Required]
-        [Display(Name = "Currency Description")]
-        public string Description { get; set; }
-        [Required]
-        public string Status { get; set; }
-        public DateTime RecordDate { get; set; }
+        public string Name { get; set; }
+        public int StatusId { get; set; }
     }
 }

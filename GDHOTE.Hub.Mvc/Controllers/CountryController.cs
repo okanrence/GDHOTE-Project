@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.PortalCore.Services;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -14,8 +16,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: Country
         public ActionResult Index()
         {
-            var countries = CountryService.GetCountries().ToList();
-            return View("CountryIndex",countries);
+            var countries = CountryService.GetAllCountries().ToList();
+            return View("CountryIndex", countries);
         }
         public ActionResult New()
         {
@@ -25,35 +27,48 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(Country country)
+        public ActionResult Save(CreateCountryRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
                 return View("CountryForm");
             }
-            country.RecordDate = DateTime.Now;
-            country.Status = "A";
-            country.CountryCode = country.CountryCode.ToUpper();
-            country.CountryName = StringCaseManager.TitleCase(country.CountryName);
-            if (country.CountryId == 0)
+            var result = PortalCountryService.CreateCountry(createRequest);
+            if (result != null)
             {
-                var result = CountryService.Save(country);
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+
             }
             else
             {
-                var countryInDb = CountryService.GetCountry(country.CountryId);
-                if (countryInDb == null) return HttpNotFound();
-                countryInDb.CountryName = country.CountryName;
-                var result = CountryService.Update(countryInDb);
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            return RedirectToAction("Index", "Country");
+            // If we got this far, something failed, redisplay form
+            return View("CountryForm");
         }
+
         public ActionResult Edit(int id)
         {
             var country = CountryService.GetCountry(id);
             if (country == null) return HttpNotFound();
             return View("CountryForm", country);
 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteCountry(string id)
+        {
+            var result = PortalCountryService.DeleteCountry(id);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

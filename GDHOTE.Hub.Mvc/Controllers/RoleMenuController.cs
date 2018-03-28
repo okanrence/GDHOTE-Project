@@ -20,7 +20,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult New()
         {
-            var statuses = StatusService.GetStatus().ToList();
+            var statuses = StatusService.GetStatuses().ToList();
             var subMenus = SubMenuService.GetSubMenus().ToList();
             var mainMenus = MainMenuService.GetMainMenus().ToList();
             var roles = RoleService.GetActiveRoles().ToList();
@@ -39,7 +39,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             var roleMenu = RoleMenuService.GetRoleMenu(id);
             if (roleMenu == null) return HttpNotFound();
-            var statuses = StatusService.GetStatus().ToList();
+            var statuses = StatusService.GetStatuses().ToList();
             var subMenus = SubMenuService.GetSubMenus().ToList();
             var mainMenus = MainMenuService.GetMainMenus().ToList();
             var roles = RoleService.GetActiveRoles().ToList();
@@ -61,7 +61,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var viewModel = new RoleMenuFormViewModel();
             if (!ModelState.IsValid)
             {
-                var statuses = StatusService.GetStatus().ToList();
+                var statuses = StatusService.GetStatuses().ToList();
                 var subMenus = SubMenuService.GetSubMenus().ToList();
                 var mainMenus = MainMenuService.GetMainMenus().ToList();
                 var roles = RoleService.GetActiveRoles().ToList();
@@ -86,7 +86,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 if (result != roleMenu.RoleMenuId)
                 {
                     ViewBag.Error = result;
-                    var statuses = StatusService.GetStatus().ToList();
+                    var statuses = StatusService.GetStatuses().ToList();
                     var subMenus = SubMenuService.GetSubMenus().ToList();
                     var mainMenus = MainMenuService.GetMainMenus().ToList();
                     var roles = RoleService.GetActiveRoles().ToList();

@@ -27,19 +27,19 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 throw new UnableToCompleteException(ex.Message, MethodBase.GetCurrentMethod().Name);
             }
         }
-        public static IEnumerable<Member> GetMembers()
+        public static List<Member> GetMembers()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var members = db.Fetch<Member>().OrderBy(m => m.MemberKey);
+                    var members = db.Fetch<Member>().OrderBy(m => m.MemberKey).ToList();
                     return members;
                 }
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return new List<Member>();
             }
         }
@@ -49,9 +49,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var member = db.Fetch<Member>().
-                        SingleOrDefault(m => m.Surname == memberRequest.Surname
-                        && m.FirstName == memberRequest.FirstName);
+                    var member = db.Fetch<Member>()
+                        .SingleOrDefault(m => m.Surname.ToLower().Equals(memberRequest.Surname.ToLower())
+                        && m.FirstName.ToLower().Equals(memberRequest.FirstName.ToLower()));
                     return member;
                 }
             }
@@ -73,7 +73,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return new Member();
             }
         }
@@ -89,7 +89,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return "Error occured while trying to update member";
             }
         }
@@ -105,23 +105,64 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return "Error occured while trying to delete record";
             }
         }
-        public static IEnumerable<Member> GetMembersPendingApproval()
+        public static List<Member> GetMembersPendingApproval()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var members = db.Fetch<Member>().Where(m => m.ApprovedFlag == "N").OrderBy(m => m.MemberKey);
+                    var members = db.Fetch<Member>().Where(m => m.ApprovedFlag == "N")
+                        .OrderBy(m => m.MemberKey)
+                        .ToList();
                     return members;
                 }
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
+                return new List<Member>();
+            }
+        }
+
+        public static List<Member> GetMembersBySearchQuery(string searchQuery)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var members = db.Fetch<Member>()
+                        .Where(m => m.FirstName == searchQuery || m.Surname == searchQuery)
+                        .OrderBy(m => m.FirstName).ToList();
+                    return members;
+                }
+            }
+            catch (Exception ex)
+            {
+               LogService.Log(ex.Message);
+                return new List<Member>();
+            }
+        }
+
+        public static List<Member> GetMembersByBirthday(string dateOfBirth)
+        {
+            try
+            {
+                DateTime.TryParse(dateOfBirth, out var castDateOfBirth);
+                using (var db = GdhoteConnection())
+                {
+                    var members = db.Fetch<Member>()
+                        .Where(m => m.DateOfBirth.Date == castDateOfBirth.Date)
+                        .OrderBy(m => m.FirstName).ToList();
+                    return members;
+                }
+            }
+            catch (Exception ex)
+            {
+               LogService.Log(ex.Message);
                 return new List<Member>();
             }
         }

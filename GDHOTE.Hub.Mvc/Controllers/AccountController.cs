@@ -29,7 +29,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginRequest loginRequest, string returnUrl)
+        public ActionResult Login(AdminLoginRequest loginRequest, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -37,18 +37,22 @@ namespace GDHOTE.Hub.Mvc.Controllers
             }
 
             var integration = new LoginIntegration(loginRequest.UserName, loginRequest.Password);
-            TokenResponse token = integration.Invoke();
-
-            var result = UserService.AuthenticateUser(loginRequest);
+            TokenResponse result = integration.Invoke();
             if (result != null)
             {
-                if (!string.IsNullOrEmpty(result.UserName))
+                if (!string.IsNullOrEmpty(result.AccessToken))
                 {
-                    FormsAuthentication.SetAuthCookie(result.UserName, false);
-                    string roles = result.RoleId + "," + result.UserId;
-                    var authTicket = new FormsAuthenticationTicket(1, result.UserName, DateTime.Now, DateTime.Now.AddMinutes(5), false, roles);
+
+                    FormsAuthentication.SetAuthCookie(loginRequest.UserName, false);
+                    string roles = result.RoleId;
+                    Session["RefreshToken"] = result.RefreshToken;
+                    Session["AccessToken"] = result.AccessToken;
+
+                    var authTicket = new FormsAuthenticationTicket(1, loginRequest.UserName, DateTime.Now,
+                        DateTime.Now.AddMinutes(5), false, roles);
                     string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
                     var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+
                     HttpContext.Response.Cookies.Add(authCookie);
                     return RedirectToAction("Index", "Home");
                 }
@@ -62,6 +66,30 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 ViewBag.LoginError = "Login details are wrong.";
             }
             return View();
+
+            //var result = AdministratorAuthenticationService.AuthenticateUser(loginRequest);
+            //if (result != null)
+            //{
+            //    if (!string.IsNullOrEmpty(result.User.UserName))
+            //    {
+            //        FormsAuthentication.SetAuthCookie(result.User.UserName, false);
+            //        string roles = result.User.RoleId + "," + result.User.UserId;
+            //        var authTicket = new FormsAuthenticationTicket(1, result.User.UserName, DateTime.Now, DateTime.Now.AddMinutes(5), false, roles);
+            //        string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+            //        var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+            //        HttpContext.Response.Cookies.Add(authCookie);
+            //        return RedirectToAction("Index", "Home");
+            //    }
+            //    else
+            //    {
+            //        ViewBag.LoginError = "Invalid username or password";
+            //    }
+            //}
+            //else
+            //{
+            //    ViewBag.LoginError = "Login details are wrong.";
+            //}
+            //return View();
         }
 
 

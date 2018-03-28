@@ -26,7 +26,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return ex.Message.Contains("The duplicate key") ? "Cannot Insert duplicate record" : "Error occured while trying to insert Role";
             }
         }
@@ -42,7 +42,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return new List<Role>();
             }
         }
@@ -58,7 +58,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return new List<Role>();
             }
         }
@@ -74,7 +74,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return new Role();
             }
         }
@@ -91,7 +91,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return "Error occured while trying to update Role";
             }
         }
@@ -108,7 +108,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return "Error occured while trying to delete record";
             }
         }
@@ -124,7 +124,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return "Error occured while trying to delete record";
             }
         }

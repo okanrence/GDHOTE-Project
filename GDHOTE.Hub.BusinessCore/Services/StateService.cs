@@ -22,7 +22,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
                 return "Error occured while trying to insert state";
             }
@@ -41,7 +41,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return new List<State>();
             }
         }
@@ -57,7 +57,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return new State();
             }
         }
@@ -73,7 +73,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return "Error occured while trying to update state";
             }
         }
@@ -89,7 +89,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return "Error occured while trying to delete record";
             }
         }

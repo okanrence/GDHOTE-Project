@@ -11,9 +11,9 @@ namespace GDHOTE.Hub.BusinessCore.BusinessLogic
     {
         public static string DeployedAppName()
         {
-          
             string appName = "";
-            appName = BaseService.UseLive() == "Y" ? "/gdhote" : "";
+            //appName = BaseService.UseLive() == "Y" ? BaseService.Get("settings.deployed.app.path") : "";
+            appName = BaseService.Get("settings.deployed.app.path");
             return appName;
         }
     }

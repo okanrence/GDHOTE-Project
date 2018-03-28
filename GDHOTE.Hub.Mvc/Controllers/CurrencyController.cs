@@ -6,7 +6,10 @@ using System.Web.Mvc;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -15,60 +18,69 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: Currency
         public ActionResult Index()
         {
-            var currencies = CurrencyService.GetCurrencies().ToList();
+            var currencies = PortalCurrencyService.GetAllCurrencies().ToList();
             return View("CurrencyIndex", currencies);
         }
         public ActionResult New()
         {
-            var statuses = StatusService.GetStatus().ToList();
-            var viewModel = new CurrencyFormViewModel
-            {
-                Status = statuses,
-                Currency = new Currency()
-            };
-            return View("CurrencyForm", viewModel);
+            return View("CurrencyForm", ReturnViewModel());
         }
-        public ActionResult Edit(int id)
+
+        public ActionResult Edit(string id)
         {
-            var currency = CurrencyService.GetCurrency(id);
-            if (currency == null) return HttpNotFound();
-            var statuses = StatusService.GetStatus().ToList();
-            var viewModel = new CurrencyFormViewModel
-            {
-                Status = statuses,
-                Currency = currency
-            };
+            var currency = PortalCurrencyService.GetCurrency(id);
+            var viewModel = ReturnViewModel();
+            var item = JsonConvert.SerializeObject(currency);
+            viewModel = JsonConvert.DeserializeObject<CurrencyFormViewModel>(item);
             return View("CurrencyForm", viewModel);
         }
-        public ActionResult Save(Currency currency)
+        public ActionResult Save(CreateCurrencyRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
-                var statuses = StatusService.GetStatus().ToList();
-                var viewModel = new CurrencyFormViewModel
-                {
-                    Status = statuses,
-                    Currency = currency
-                };
+                var viewModel = ReturnViewModel();
+                var item = JsonConvert.SerializeObject(createRequest);
+                viewModel = JsonConvert.DeserializeObject<CurrencyFormViewModel>(item);
                 return View("CurrencyForm", viewModel);
             }
-            currency.CurrencyCode = currency.CurrencyCode.ToUpper();
-            currency.Description = StringCaseManager.TitleCase(currency.Description);
-            currency.RecordDate = DateTime.Now;
-            if (currency.CurrencyId == 0)
+            var result = PortalCurrencyService.CreateCurrency(createRequest);
+            if (result != null)
             {
-                var result = CurrencyService.Save(currency);
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+
             }
             else
             {
-                var currencyInDb = CurrencyService.GetCurrency(currency.CurrencyId);
-                if (currencyInDb == null) return HttpNotFound();
-                currencyInDb.CurrencyCode = currency.CurrencyCode.ToUpper();
-                currencyInDb.Description = StringCaseManager.TitleCase(currency.Description);
-                currencyInDb.Status = currency.Status;
-                var result = CurrencyService.Update(currencyInDb);
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            return RedirectToAction("Index", "Currency");
+            // If we got this far, something failed, redisplay form
+            return View("CurrencyForm");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteCurrency(string id)
+        {
+            var result = PortalCurrencyService.DeleteCurrency(id);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private static CurrencyFormViewModel ReturnViewModel()
+        {
+            var statuses = PortalStatusService.GetStatuses().ToList();
+            var viewModel = new CurrencyFormViewModel
+            {
+                Statuses = statuses
+            };
+            return viewModel;
         }
     }
 }

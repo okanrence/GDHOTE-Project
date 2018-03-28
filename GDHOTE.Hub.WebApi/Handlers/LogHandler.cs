@@ -82,9 +82,9 @@ namespace GDHOTE.Hub.WebApi.Handlers
                 var response = task.Result;
                 //response.Headers.Add("X-Dummy-Header", Guid.NewGuid().ToString());
                 //call the refresh token and send it as part of the response
-                var refresh_token = GetHeaderValue(request.Headers, "refresh_token");
+                var refreshToken = GetHeaderValue(request.Headers, "refresh_token");
                 //context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
-                if (!string.IsNullOrEmpty(refresh_token))
+                if (!string.IsNullOrEmpty(refreshToken))
                 {
                     try
                     {
@@ -92,13 +92,13 @@ namespace GDHOTE.Hub.WebApi.Handlers
                         var req = new RestRequest(ConfigurationManager.AppSettings["settings.refeesh.token.url"], Method.POST);
                         req.AddHeader("Content-Type", "application/x-www-form-urlencoded");
                         req.AddParameter("grant_type", "refresh_token");
-                        req.AddParameter("refresh_token", refresh_token);
+                        req.AddParameter("refresh_token", refreshToken);
                         var resp = client.Execute<TokenResponse>(req);
                         if (resp?.Data != null)
                         {
-                            response.Headers.Add("access_token", resp.Data.access_token);
+                            response.Headers.Add("access_token", resp.Data.AccessToken);
 
-                            response.Headers.Add("refresh_token", resp.Data.refresh_token);
+                            response.Headers.Add("refresh_token", resp.Data.RefreshToken);
                         }
                     }
                     catch (Exception e)

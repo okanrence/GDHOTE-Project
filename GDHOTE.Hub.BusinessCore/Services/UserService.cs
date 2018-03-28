@@ -26,7 +26,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return ex.Message.Contains("The duplicate key") ? "Cannot Insert duplicate record" : "Error occured while trying to insert User";
             }
         }
@@ -43,12 +43,12 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return new User();
             }
         }
 
-        private static User GetUser(string userName, string password)
+        public static User GetUser(string userName, string password)
         {
             try
             {
@@ -56,16 +56,36 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 using (var db = GdhoteConnection())
                 {
                     var user = db.Fetch<User>().SingleOrDefault(u => u.UserName.ToLower().Equals(userName.ToLower())
-                         && u.Password.SequenceEqual(passwordHash));
+                         && u.Password.Equals(passwordHash));
                     return user;
                 }
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return new User();
             }
         }
+        public static User GetUserByUserName(string userName)
+        {
+            try
+            {
+                userName = string.IsNullOrEmpty(userName) ? "olufunso" : userName;
+
+                using (var db = GdhoteConnection())
+                {
+                    var user = db.Fetch<User>()
+                        .SingleOrDefault(u => u.UserName.ToLower().Equals(userName.ToLower()));
+                    return user;
+                }
+            }
+            catch (Exception ex)
+            {
+               LogService.Log(ex.Message);
+                return new User();
+            }
+        }
+
         public static string Update(User user)
         {
             try
@@ -78,7 +98,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return "Error occured while trying to update User";
             }
         }
@@ -94,62 +114,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return "Error occured while trying to delete record";
-            }
-        }
-
-        public static LoginResponse AuthenticateUser(LoginRequest loginRequest)
-        {
-            try
-            {
-                LogService.Log(LogType.Info, "Testing", MethodBase.GetCurrentMethod().Name, "Am here");
-
-                var loginResponse = new LoginResponse();
-                var authenticatedUser = GetUser(loginRequest.UserName, loginRequest.Password);
-
-                if (authenticatedUser == null)
-                {
-                    loginResponse.ErrorCode = "100";
-                    loginResponse.ErrorMessage = "Invalid credentials";
-                    return loginResponse;
-                }
-
-                if (authenticatedUser.UserId == null)
-                {
-                    loginResponse.ErrorCode = "100";
-                    loginResponse.ErrorMessage = "Invalid credentials";
-                }
-                else
-                {
-                    var usr = JsonConvert.SerializeObject(authenticatedUser);
-                    loginResponse = JsonConvert.DeserializeObject<LoginResponse>(usr);
-                    loginResponse.ErrorCode = "00";
-                    loginResponse.ErrorMessage = "Login Successful";
-                }
-                return loginResponse;
-            }
-            catch (Exception ex)
-            {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return new LoginResponse();
-            }
-        }
-        public static SignInStatus LoginUserOld(string username, string password, out User authenticatedUser)
-        {
-            try
-            {
-                authenticatedUser = GetUser(username, password);
-                if (authenticatedUser == null) return SignInStatus.Failure;
-                return authenticatedUser.UserId == null
-                        ? SignInStatus.Failure
-                        : SignInStatus.Success;
-            }
-            catch (Exception ex)
-            {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                authenticatedUser = null;
-                return SignInStatus.Failure;
             }
         }
     }

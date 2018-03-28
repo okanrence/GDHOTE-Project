@@ -17,7 +17,7 @@
     <AssemblyName>GDHOTE.Hub.Mvc</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -271,10 +271,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiControllers\ActivityTypeController.cs" />
-    <Compile Include="ApiControllers\AuthenticationController.cs" />
-    <Compile Include="ApiControllers\CountryController.cs" />
-    <Compile Include="ApiControllers\CurrencyController.cs" />
     <Compile Include="ApiControllers\MainMenuController.cs" />
     <Compile Include="ApiControllers\MemberController.cs" />
     <Compile Include="ApiControllers\MemberDetailsController.cs" />
@@ -690,7 +686,7 @@
     <Content Include="Views\Payment\ManagePayment.cshtml" />
     <Content Include="Views\Currency\CurrencyIndex.cshtml" />
     <Content Include="Views\Currency\CurrencyForm.cshtml" />
-    <Content Include="Views\ActivityType\Index.cshtml" />
+    <Content Include="Views\ActivityType\ActivityTypeIndex.cshtml" />
     <Content Include="Views\ActivityType\ActivityTypeForm.cshtml" />
     <Content Include="Views\Role\RoleIndex.cshtml" />
     <Content Include="Views\Role\RoleForm.cshtml" />
@@ -748,7 +744,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>19497</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:19497/</IISUrl>
+          <IISUrl>http://localhost/GdhoteWeb</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

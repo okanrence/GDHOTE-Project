@@ -37,6 +37,5 @@ namespace GDHOTE.Hub.CoreObject.Models
         public string LastUpdatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? LastUpdatedTime { get; set; }
-
     }
 }

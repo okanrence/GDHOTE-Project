@@ -28,16 +28,16 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
 
             var refreshTokenId = Guid.NewGuid().ToString("n");
 
-            var service = new RefreshTokenService();
+            //var service = new RefreshTokenService();
             var refreshTokenLifeTime = context.OwinContext.Get<string>("as:clientRefreshTokenLifeTime") == null
                 ? "10"
                 : context.OwinContext.Get<string>("as:clientRefreshTokenLifeTime");
 
-            var token = new RefreshToken()
+            var token = new RefreshToken
             {
 
                 Token = PasswordManager.ReturnHashPassword(refreshTokenId),
-                ClientId = clientid,// Convert.ToInt64(clientid),
+                ClientId = clientid,
                 Subject = context.Ticket.Identity.Name,
                 IssuedUtc = DateTime.UtcNow,
                 ExpiresUtc = DateTime.UtcNow.AddMinutes(Convert.ToDouble(refreshTokenLifeTime))

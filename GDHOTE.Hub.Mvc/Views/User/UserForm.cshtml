@@ -1,4 +1,4 @@
-﻿@model GDHOTE.Hub.CoreObject.ViewModels.UserFormViewModel
+﻿@model GDHOTE.Hub.CoreObject.ViewModels.AdminUserFormViewModel
 
 @{
     ViewBag.Title = "UserForm";
@@ -21,6 +21,16 @@
         @Html.LabelFor(m => m.User.UserName)
         @Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.User.UserName)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.User.FirstName)
+        @Html.TextBoxFor(m => m.User.FirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.User.FirstName)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.User.LastName)
+        @Html.TextBoxFor(m => m.User.LastName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.User.LastName)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.User.EmailAddress)

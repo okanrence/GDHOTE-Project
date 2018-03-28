@@ -4,13 +4,32 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.Enumerables;
-
 namespace GDHOTE.Hub.BusinessCore.Services
 {
     public class UserViewService : BaseService
     {
+        public static UserView GetUser(string userName, string password)
+        {
+            try
+            {
+                var passwordHash = PasswordManager.ReturnHashPassword(password);
+                using (var db = GdhoteConnection())
+                {
+                    var user = db.Fetch<UserView>().
+                        SingleOrDefault(u => u.UserName.ToLower().Equals(userName.ToLower())
+                                             && u.Password.Equals(passwordHash));
+                    return user;
+                }
+            }
+            catch (Exception ex)
+            {
+               LogService.Log(ex.Message);
+                return new UserView();
+            }
+        }
         public static IEnumerable<UserView> GetUsers()
         {
             try
@@ -23,7 +42,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+               LogService.Log(ex.Message);
                 return new List<UserView>();
             }
         }

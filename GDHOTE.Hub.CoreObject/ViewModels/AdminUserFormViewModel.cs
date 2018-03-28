@@ -10,14 +10,13 @@ using GDHOTE.Hub.CoreObject.Models;
 
 namespace GDHOTE.Hub.CoreObject.ViewModels
 {
-    public class UserFormViewModel //: CreateAdminUserRequest
+    public class AdminUserFormViewModel //: CreateAdminUserRequest
     {
-        public IEnumerable<Role> Role { get; set; }
-        public IEnumerable<UserStatus> UserStatus { get; set; }
+        public IEnumerable<Role> Roles { get; set; }
+        public IEnumerable<UserStatus> UserStatuses { get; set; }
         public User User { get; set; }
         [DisplayName("Confirm Password")]
         [DataType(DataType.Password)]
-        //[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
 }

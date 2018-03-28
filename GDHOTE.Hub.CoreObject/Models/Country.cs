@@ -10,16 +10,11 @@ namespace GDHOTE.Hub.CoreObject.Models
 {
     [TableName("HUB_Countries")]
     [PrimaryKey("CountryId")]
-    public class Country
+    public class Country : BaseModel
     {
         public int CountryId { get; set; }
-        [Required]
-        [Display(Name = "Country Code")]
         public string CountryCode { get; set; }
-        [Required]
-        [Display(Name = "Country Name")]
-        public string CountryName { get; set; }
-        public string Status { get; set; }
-        public DateTime RecordDate { get; set; }
+        public string Name { get; set; }
+        public int StatusId { get; set; }
     }
 }

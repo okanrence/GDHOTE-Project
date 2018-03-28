@@ -19,7 +19,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult New()
         {
-            var statuses = StatusService.GetStatus().ToList();
+            var statuses = StatusService.GetStatuses().ToList();
             var viewModel = new MainMenuViewModel
             {
                 Status = statuses,
@@ -31,7 +31,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             var mainMenu = MainMenuService.GetMainMenu(id);
             if (mainMenu == null) return HttpNotFound();
-            var statuses = StatusService.GetStatus().ToList();
+            var statuses = StatusService.GetStatuses().ToList();
             var viewModel = new MainMenuViewModel
             {
                 Status = statuses,
@@ -45,7 +45,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var statuses = StatusService.GetStatus().ToList();
+                var statuses = StatusService.GetStatuses().ToList();
                 var viewModel = new MainMenuViewModel
                 {
                     Status = statuses,

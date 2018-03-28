@@ -5,36 +5,158 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
+using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
 {
     [RoutePrefix(ConstantManager.ApiDefaultNamespace + "country")]
     public class CountryController : ApiController
     {
-        [Route("get-countries")]
-        public IHttpActionResult GetCountries()
+        [HttpGet]
+        [Route("get-all-countries")]
+        public HttpResponseMessage GetAllCountries()
         {
-            var countries = CountryService.GetCountries().ToList();
-            if (countries.Count == 0) return NotFound();
-            return Ok(countries);
-        }
-        [Route("get-country")]
-        public IHttpActionResult GetCountry(int id)
-        {
-            var country = CountryService.GetCountry(id);
-            if (country == null) return NotFound();
-            return Ok(country);
+            try
+            {
+                var response = CountryService.GetAllCountries().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
         }
 
-        [HttpDelete]
-        [Route("delete-country")]
-        public IHttpActionResult DeleteCountry(int id)
+
+        [HttpGet]
+        [Route("get-countries")]
+        public HttpResponseMessage GetCountries()
         {
-            var countryInDb = CountryService.GetCountry(id);
-            if (countryInDb == null) return NotFound();
-            var result = CountryService.Delete(id);
-            return Ok(result);
+            try
+            {
+                var response = CountryService.GetCountries().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+        [HttpGet]
+        [Route("get-country")]
+        public HttpResponseMessage GetCountry(string id)
+        {
+            try
+            {
+                var response = CountryService.GetCountry(Convert.ToInt16(id));
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+        [HttpPost]
+        [Route("create-country")]
+        public HttpResponseMessage CreateActivityType(CreateCountryRequest createRequest)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+
+                string username = User.Identity.Name;
+                var response = CountryService.CreateCountry(createRequest, username);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpPost]
+        [Route("delete-country")]
+        public HttpResponseMessage DeleteCountry(string id)
+        {
+            try
+            {
+                string username = User.Identity.Name;
+                var response = CountryService.Delete(Convert.ToInt16(id), username);
+                return Request.CreateResponse(HttpStatusCode.OK, response);
+
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
         }
     }
 }

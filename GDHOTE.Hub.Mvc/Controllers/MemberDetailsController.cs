@@ -20,7 +20,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         public ActionResult New()
         {
             var states = StateService.GetStates().ToList();
-            var countries = CountryService.GetCountries().ToList();
+            var countries = CountryService.GetAllCountries().ToList();
             var yearGroups = YearGroupService.GetActiveYearGroups().ToList();
             var viewModel = new MemberDetailsFormModel
             {
@@ -39,7 +39,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             //Revist this line.
             if (memberDetails == null) memberDetails = new MemberDetails { MemberKey = id };
             var states = StateService.GetStates().ToList();
-            var countries = CountryService.GetCountries().ToList();
+            var countries = CountryService.GetAllCountries().ToList();
             var yearGroups = YearGroupService.GetActiveYearGroups().ToList();
             var viewModel = new MemberDetailsFormModel
             {
@@ -55,7 +55,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             if (!ModelState.IsValid)
             {
                 var states = StateService.GetStates().ToList();
-                var countries = CountryService.GetCountries().ToList();
+                var countries = CountryService.GetAllCountries().ToList();
                 var yearGroups = YearGroupService.GetActiveYearGroups().ToList();
                 var viewModel = new MemberDetailsFormModel
                 {

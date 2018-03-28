@@ -1,4 +1,4 @@
-﻿@model  GDHOTE.Hub.CoreObject.Models.Country
+﻿@model  GDHOTE.Hub.CoreObject.DataTransferObjects.CreateCountryRequest
 @{
     ViewBag.Title = "CountryForm";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -16,19 +16,17 @@
 @using (Html.BeginForm("Save", "Country"))
 {
     <div>
-        @*@Html.ValidationSummary(true, "Please fix the below errors.")*@
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+
         <div class="form-group">
             @Html.LabelFor(c => c.CountryCode)
             @Html.TextBoxFor(c => c.CountryCode, new { @class = "form-control gdhote-text-uppercase" })
             @Html.ValidationMessageFor(c => c.CountryCode)
         </div>
         <div class="form-group">
-            @Html.LabelFor(c => c.CountryName)
-            @Html.TextBoxFor(c => c.CountryName, new { @class = "form-control gdhote-text-capitalize" })
-            @Html.ValidationMessageFor(c => c.CountryName)
-        </div>
-        <div class="form-group">
-            <div>@Html.HiddenFor(c => c.CountryId)</div>
+            @Html.LabelFor(c => c.Name)
+            @Html.TextBoxFor(c => c.Name, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(c => c.Name)
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Save</button>

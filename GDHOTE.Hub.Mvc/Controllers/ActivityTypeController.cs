@@ -6,7 +6,10 @@ using System.Web.Mvc;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
+using NPoco.fastJSON;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -15,65 +18,76 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: ActivityType
         public ActionResult Index()
         {
-            var activiteTypes = ActivityTypeService.GetActivityTypes().ToList();
-            return View(activiteTypes);
+            var activiteTypes = PortalActivityTypeService.GetAllActivityTypes().ToList();
+            return View("ActivityTypeIndex", activiteTypes);
         }
         public ActionResult New()
         {
-            var statuses = StatusService.GetStatus().ToList();
-            var activityTypes = ActivityTypeService.GetActivityTypes().ToList();
-            var viewModel = new ActivityTypeFormViewModel
-            {
-                Status = statuses,
-                DependencyTypes = activityTypes,
-                ActivityType = new ActivityType()
-            };
+            var viewModel = ReturnViewModel();
             return View("ActivityTypeForm", viewModel);
         }
         public ActionResult Edit(int id)
         {
-            var activityTypeInDb = ActivityTypeService.GetActivityType(id);
-            if (activityTypeInDb == null) return HttpNotFound();
-            var statuses = StatusService.GetStatus().ToList();
-            var activityTypes = ActivityTypeService.GetActivityTypes().ToList();
-            var viewModel = new ActivityTypeFormViewModel
-            {
-                Status = statuses,
-                DependencyTypes = activityTypes,
-                ActivityType = activityTypeInDb
-            };
+            //var activityTypeInDb = ActivityTypeService.GetActivityType(id);
+            //if (activityTypeInDb == null) return HttpNotFound();
+            //var statuses = StatusService.GetStatus().ToList();
+            //var activityTypes = ActivityTypeService.GetActivityTypes().ToList();
+            //var viewModel = new ActivityTypeFormViewModel
+            //{
+            //    Status = statuses,
+            //    DependencyTypes = activityTypes,
+            //    ActivityType = activityTypeInDb
+            //};
+            var viewModel = ReturnViewModel();
             return View("ActivityTypeForm", viewModel);
         }
-        public ActionResult Save(ActivityType activityType)
+        public ActionResult Save(CreateActivityTypeRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
-                var statuses = StatusService.GetStatus().ToList();
-                var activityTypes = ActivityTypeService.GetActivityTypes().ToList();
-                var viewModel = new ActivityTypeFormViewModel
-                {
-                    Status = statuses,
-                    DependencyTypes = activityTypes,
-                    ActivityType = activityType
-                };
+                var viewModel = ReturnViewModel();
                 return View("ActivityTypeForm", viewModel);
             }
-            activityType.RecordDate = DateTime.Now;
-            activityType.Description = StringCaseManager.TitleCase(activityType.Description);
-            if (activityType.ActivityTypeId == 0)
+            var result = PortalActivityTypeService.CreateActivityType(createRequest);
+            if (result != null)
             {
-                var result = ActivityTypeService.Save(activityType);
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+
             }
             else
             {
-                var activityTypeInDb = ActivityTypeService.GetActivityType(activityType.ActivityTypeId);
-                if (activityTypeInDb == null) return HttpNotFound();
-                activityTypeInDb.Description = activityType.Description;
-                activityTypeInDb.Status = activityType.Status;
-                activityTypeInDb.DependencyTypeId = activityType.DependencyTypeId;
-                var result = ActivityTypeService.Update(activityTypeInDb);
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            return RedirectToAction("Index");
+            // If we got this far, something failed, redisplay form
+            return View("ActivityTypeForm", ReturnViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteActivityType(string id)
+        {
+            var result = PortalActivityTypeService.DeleteActivityType(id);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private static ActivityTypeFormViewModel ReturnViewModel()
+        {
+            var statuses = PortalStatusService.GetStatuses().ToList();
+            var activityTypes = PortalActivityTypeService.GetActivityTypes().ToList();
+            var viewModel = new ActivityTypeFormViewModel
+            {
+                Statuses = statuses,
+                DependencyTypes = activityTypes
+            };
+            return viewModel;
         }
     }
 }

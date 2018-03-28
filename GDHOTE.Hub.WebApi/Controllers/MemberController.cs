@@ -20,6 +20,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
             var members = MemberService.GetMembers().ToList();
             return Ok(members);
         }
+
         [Route("get-member")]
         public IHttpActionResult GetMember(int id)
         {
@@ -37,6 +38,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
             var result = MemberService.Delete(id);
             return Ok(result);
         }
+
         [HttpPost]
         [Route("create-member")]
         public IHttpActionResult CreateNewMember(CreateMemberRequest memberRequest)
@@ -91,6 +93,23 @@ namespace GDHOTE.Hub.WebApi.Controllers
             {
                 return InternalServerError(ex);
             }
+        }
+
+
+        [HttpGet]
+        [Route("get-members-by-seach-query")]
+        public IHttpActionResult GetMembers(string seachQuery)
+        {
+            var members = MemberService.GetMembersBySearchQuery(seachQuery).ToList();
+            return Ok(members);
+        }
+
+        [HttpGet]
+        [Route("get-members-by-birthday")]
+        public IHttpActionResult GetMembersByBirthday(string dateOfBirth)
+        {
+            var members = MemberService.GetMembersByBirthday(dateOfBirth).ToList();
+            return Ok(members);
         }
     }
 }

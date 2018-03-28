@@ -9,12 +9,12 @@ namespace GDHOTE.Hub.BusinessCore.Services
 {
     public class StatusService
     {
-        public static IEnumerable<Status> GetStatus()
+        public static List<Status> GetStatuses()
         {
             var statuses = new List<Status>
             {
-                new Status { Code = "A", Description = "Active"},
-                new Status { Code = "D", Description = "De-activated"}
+                new Status { Id = 1, Name = "Active"},
+                new Status { Id = 2, Name = "De-activated"}
             };
             return statuses;
         }

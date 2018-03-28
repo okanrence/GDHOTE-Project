@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.PortalCore.Models;
 using Microsoft.AspNet.Identity;
 
 namespace GDHOTE.Hub.Mvc.Controllers
@@ -25,18 +26,30 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 return;
             }
 
+            //var currentUser = HttpContext.GetOwinContext().Authentication.User;
+            //IEnumerable<Claim> claims = currentUser.Claims;
+            ////var roles = claims.ToList().Where(c => c.Type == ClaimTypes.Role).ToList();
+            //var userClaims = claims.Where(c => c.Type == ClaimTypes.Role).Select(c => new { c.Value }).ToArray();
+            //string roleId = claims.SingleOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
             var currentUser = HttpContext.GetOwinContext().Authentication.User;
             IEnumerable<Claim> claims = currentUser.Claims;
             //var roles = claims.ToList().Where(c => c.Type == ClaimTypes.Role).ToList();
             var userClaims = claims.Where(c => c.Type == ClaimTypes.Role).Select(c => new { c.Value }).ToArray();
-            string roleId = "", userId = "";
+            string roleId = "";
             if (userClaims != null)
             {
-                roleId = userClaims[0].Value;
-                userId = userClaims[1].Value;
-                //string roleId = claims.SingleOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                roleId = claims.SingleOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
             }
-        
+
+            //string roleId = "", userId = "";
+            //if (userClaims != null)
+            //{
+            //    roleId = userClaims[0].Value;
+            //    //userId = userClaims[1].Value;
+            //    //string roleId = claims.SingleOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            //}
+
 
             //Get UserMenu
             var mainMenus = MainMenuService.GetMainMenus().ToList();
@@ -49,5 +62,19 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         }
 
+        public Token SetToken()
+        {
+            string refreshToken = "";
+            string authToken = "";
+            if (Session["RefreshToken"] != null) refreshToken = Session["RefreshToken"].ToString();
+            if (Session["AccessToken"] != null) authToken = Session["AccessToken"].ToString();
+
+            var token = new Token
+            {
+                AuthToken = authToken,
+                RefreshToken = refreshToken
+            };
+            return token;
+        }
     }
 }
