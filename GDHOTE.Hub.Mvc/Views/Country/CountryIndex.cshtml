@@ -29,6 +29,7 @@ else
                         <th>Code</th>
                         <th>Country</th>
                         <th>Status</th>
+                        <th>Date</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -39,6 +40,7 @@ else
                             <td>@Html.ActionLink(country.CountryCode, "Edit", "Country", new { id = country.CountryId }, null)</td>
                             <td>@country.Name</td>
                             <td>@country.Status</td>
+                            <td>@country.DateCreated.ToString("dd-MMM-yyyy")</td>
                             <td><button data-country-id="@country.CountryId" class="btn btn-link js-delete">Delete</button></td>
                         </tr>
                     }

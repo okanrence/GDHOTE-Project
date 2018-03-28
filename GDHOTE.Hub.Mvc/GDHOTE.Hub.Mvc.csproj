@@ -276,8 +276,6 @@
     <Compile Include="ApiControllers\MemberDetailsController.cs" />
     <Compile Include="ApiControllers\MembershipStatusController.cs" />
     <Compile Include="ApiControllers\PaymentController.cs" />
-    <Compile Include="ApiControllers\PaymentModeController.cs" />
-    <Compile Include="ApiControllers\PaymentTypeController.cs" />
     <Compile Include="ApiControllers\RoleController.cs" />
     <Compile Include="ApiControllers\StateController.cs" />
     <Compile Include="ApiControllers\SubMenuController.cs" />

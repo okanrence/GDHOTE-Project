@@ -6,9 +6,9 @@ namespace GDHOTE.Hub.CoreObject.Models
 {
     public class BaseModel
     {
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
-        public string DeletedBy { get; set; }
+        public string CreatedById { get; set; }
+        public string UpdatedById { get; set; }
+        public string DeletedById { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateUpdated { get; set; }
         public DateTime? DateDeleted { get; set; }

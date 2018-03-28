@@ -18,14 +18,15 @@
 @using (Html.BeginForm("Save", "Currency"))
 {
     <div>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
         <div class="form-group">
             @Html.LabelFor(c => c.CurrencyCode)
-            @Html.TextBoxFor(c => c.CurrencyCode, new { @class = "form-control gdhote-text-uppercase" })
+            @Html.TextBoxFor(c => c.CurrencyCode, new {@class = "form-control gdhote-text-uppercase"})
             @Html.ValidationMessageFor(c => c.CurrencyCode)
         </div>
         <div class="form-group">
             @Html.LabelFor(c => c.Name)
-            @Html.TextBoxFor(c => c.Name, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.TextBoxFor(c => c.Name, new {@class = "form-control gdhote-text-capitalize"})
             @Html.ValidationMessageFor(c => c.Name)
         </div>
         <div class="form-group">

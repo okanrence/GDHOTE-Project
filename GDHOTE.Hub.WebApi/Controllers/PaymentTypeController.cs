@@ -12,16 +12,16 @@ using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
 {
-    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "activity")]
-    public class ActivityTypeController : ApiController
+    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "payment")]
+    public class PaymentTypeController : ApiController
     {
         [HttpGet]
-        [Route("get-all-activity-types")]
-        public HttpResponseMessage GetAllActivityTypes()
+        [Route("get-all-payment-types")]
+        public HttpResponseMessage GetAllPaymentTypes()
         {
             try
             {
-                var response = ActivityTypeService.GetAllActivityTypes().ToList();
+                var response = PaymentTypeService.GetAllPaymentTypes().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -46,12 +46,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("get-activity-types")]
-        public HttpResponseMessage GetActivityTypes()
+        [Route("get-active-payment-types")]
+        public HttpResponseMessage GetActivePaymentTypes()
         {
             try
             {
-                var response = ActivityTypeService.GetActivityTypes().ToList();
+                var response = PaymentTypeService.GetActivePaymentTypes().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -74,12 +74,14 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
-        [Route("get-activity-type")]
-        public HttpResponseMessage GetActivityType(int id)
+
+        [HttpGet]
+        [Route("get-payment-type")]
+        public HttpResponseMessage GetPaymentType(int id)
         {
             try
             {
-                var response = ActivityTypeService.GetActivityType(id);
+                var response = PaymentTypeService.GetPaymentType(Convert.ToInt16(id));
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -100,11 +102,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
+
         }
 
         [HttpPost]
-        [Route("create-activity-type")]
-        public HttpResponseMessage CreateActivityType(CreateActivityTypeRequest createRequest)
+        [Route("create-payment-type")]
+        public HttpResponseMessage CreatePaymentType(CreatePaymentTypeRequest createRequest)
         {
             try
             {
@@ -114,7 +117,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 }
 
                 string username = User.Identity.Name;
-                var response = ActivityTypeService.CreateActivityType(createRequest, username);
+                var response = PaymentTypeService.CreatePaymentType(createRequest, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -138,16 +141,16 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
+
         [HttpPost]
-        [Route("delete-activity-type")]
-        public HttpResponseMessage DeleteActivityType(string id)
+        [Route("delete-payment-type")]
+        public HttpResponseMessage DeletePaymentType(int id)
         {
             try
             {
                 string username = User.Identity.Name;
-                var response = ActivityTypeService.Delete(Convert.ToInt16(id), username);
+                var response = PaymentTypeService.Delete(Convert.ToInt16(id), username);
                 return Request.CreateResponse(HttpStatusCode.OK, response);
-
             }
             catch (UnableToCompleteException ex)
             {

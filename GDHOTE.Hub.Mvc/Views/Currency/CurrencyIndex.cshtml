@@ -29,6 +29,7 @@ else
                         <th>Code</th>
                         <th>Name</th>
                         <th>Status</th>
+                        <th>Date</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -39,6 +40,7 @@ else
                             <td>@Html.ActionLink(currency.CurrencyCode, "Edit", "Currency", new { id = currency.CurrencyId }, null)</td>
                             <td>@currency.Name</td>
                             <td>@currency.Status</td>
+                            <td>@currency.DateCreated.ToString("dd-MMM-yyyy")</td>
                             <td><button data-currency-id="@currency.CurrencyId" class="btn btn-link js-delete">Delete</button></td>
                         </tr>
                     }
@@ -74,15 +76,13 @@ else
                                 success: function (data) {
                                     if (data !== null) {
                                         if (data.ErrorCode === "00") {
-                                            window.location.reload(true);
-                                            alert('am here');
-                                            swal({
+                                           swal({
                                                 title: "Success",
                                                 text: "success",
                                                 type: "success"
                                             });
 
-
+                                            window.location.reload(true);
                                         }
                                         else {
                                             alert(data.ErrorMessage);

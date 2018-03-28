@@ -29,6 +29,7 @@ else
                         <th>Name</th>
                         <th>Status</th>
                         <th>Dependency</th>
+                        <th>Date</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -39,6 +40,7 @@ else
                             <td>@Html.ActionLink(activityType.Name, "Edit", "ActivityType", new { id = activityType.ActivityTypeId }, null)</td>
                             <td>@activityType.Status</td>
                             <td>@activityType.Dependency</td>
+                            <td>@activityType.DateCreated.ToString("dd-MMM-yyyy")</td>
                             <td><button data-activitytype-id="@activityType.ActivityTypeId" class="btn btn-link js-delete">Delete</button></td>
                         </tr>
                     }

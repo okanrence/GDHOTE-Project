@@ -277,6 +277,7 @@
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\PaymentModeController.cs" />
+    <Compile Include="Controllers\PaymentTypeController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\StateController.cs" />
     <Compile Include="Controllers\StatusController.cs" />

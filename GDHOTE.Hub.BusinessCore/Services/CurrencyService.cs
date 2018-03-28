@@ -116,7 +116,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete Currency
                     currency.StatusId = (int)CoreObject.Enumerables.Status.DeActivated;
-                    currency.DeletedBy = user.UserId;
+                    currency.DeletedById = user.UserId;
                     currency.DateDeleted = DateTime.Now;
                     db.Update(currency);
                     var result = "Operation Successful";
@@ -172,7 +172,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         CurrencyCode = currencyCode,
                         Name = currencyName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
-                        CreatedBy = user.UserId,
+                        CreatedById = user.UserId,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };

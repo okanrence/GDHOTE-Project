@@ -10,11 +10,11 @@ using RestSharp;
 
 namespace GDHOTE.Hub.PortalCore.Services
 {
-    public class PortalActivityTypeService
+    public class PortalPaymentModeService
     {
-        public static List<ActivityTypeViewModel> GetAllActivityTypes()
+        public static List<PaymentModeViewModel> GetAllPaymentModes()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/get-all-activity-types";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/payment/get-all-payment-modes";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -22,7 +22,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<ActivityTypeViewModel>();
+            var result = new List<PaymentModeViewModel>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -31,7 +31,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<ActivityTypeViewModel>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<PaymentModeViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -40,9 +40,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<ActivityType> GetActivityTypes()
+        public static List<PaymentMode> GetActivePaymentModes()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/get-activity-types";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/payment/get-payment-modes";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -50,7 +50,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<ActivityType>();
+            var result = new List<PaymentMode>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -59,7 +59,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<ActivityType>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<PaymentMode>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -67,10 +67,39 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-        public static Response CreateActivityType(CreateActivityTypeRequest createRequest)
+
+        public static PaymentMode GetPaymentMode(string id)
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/payment/get-payment-mode";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("id", id);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new PaymentMode();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<PaymentMode>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+            }
+            return result;
+        }
+        public static Response CreatePaymentMode(CreatePaymentModeRequest createRequest)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/create-activity-type";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/payment/create-payment-mode";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
@@ -97,10 +126,10 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response DeleteActivityType(string id)
+        public static Response DeletePaymentMode(string id)
         {
 
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/delete-activity-type";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/payment/delete-payment-mode";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");

@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.CoreObject.Enumerables;
 using GDHOTE.Hub.CoreObject.ViewModels;
 
 namespace GDHOTE.Hub.BusinessCore.Services
@@ -111,7 +107,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var country = db.Fetch<Country>().SingleOrDefault(c => c.CountryId == id);
                     if (country == null)
                     {
-                        return "Country does not exist";
+                        return "Record does not exist";
                     }
 
                     //Get User Initiating Creation Request
@@ -119,7 +115,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete Country
                     country.StatusId = (int)CoreObject.Enumerables.Status.DeActivated;
-                    country.DeletedBy = user.UserId;
+                    country.DeletedById = user.UserId;
                     country.DateDeleted = DateTime.Now;
                     db.Update(country);
                     var result = "Operation Successful";
@@ -173,7 +169,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         CountryCode = countryCode,
                         Name = countryName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
-                        CreatedBy = user.UserId,
+                        CreatedById = user.UserId,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };

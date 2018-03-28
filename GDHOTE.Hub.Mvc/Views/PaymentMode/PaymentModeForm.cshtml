@@ -8,7 +8,7 @@
     var pagename = "";
     if (Model != null)
     {
-        pagename = Model.PaymentMode.PaymentModeId == 0 ? "New Payment Mode" : "Edit Payment Mode";
+        pagename = Model.Name == null ? "New Payment Mode" : "Edit Payment Mode";
     }
 
 }
@@ -17,18 +17,12 @@
 @using (Html.BeginForm("Save", "PaymentMode"))
 {
     <div>
-        @Html.ValidationSummary(true, "Please fix the below errors.")
+        <span class="text-danger">@ViewBag.ErrorBag</span>
         <div class="form-group">
-            @Html.LabelFor(p => p.PaymentMode.Description)
-            @Html.TextBoxFor(p => p.PaymentMode.Description, new { @class = "form-control gdhote-text-capitalize" })
-            @Html.ValidationMessageFor(p => p.PaymentMode.Description)
+            @Html.LabelFor(p => p.Name)
+            @Html.TextBoxFor(p => p.Name, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(p => p.Name)
         </div>
-        <div class="form-group">
-            @Html.LabelFor(p => p.PaymentMode.Status)
-            @Html.DropDownListFor(p => p.PaymentMode.Status, new SelectList(Model.Status, "Code", "Description"), "Select Status", new { @class = "form-control" })
-            @Html.ValidationMessageFor(p => p.PaymentMode.Status)
-        </div>
-        <div>@Html.HiddenFor(p => p.PaymentMode.PaymentModeId)</div>
         <div>
             <button type="submit" class="btn btn-primary">Save</button>
         </div>

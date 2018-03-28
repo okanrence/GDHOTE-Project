@@ -1,4 +1,4 @@
-﻿@model List<GDHOTE.Hub.CoreObject.Models.PaymentType>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.PaymentTypeViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -24,17 +24,19 @@ else
                 <tr>
                     <th>Name</th>
                     <th>Status</th>
+                    <th>Date</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var paymentType in Model)
                 {
-                    <tr>
-                        <td>@Html.ActionLink(paymentType.Description, "Edit", "PaymentType", new { id = paymentType.PaymentTypeId }, null)</td>
-                        <td>@paymentType.Status</td>
-                        <td><button data-paymenttype-id="@paymentType.PaymentTypeId" class="btn btn-link js-delete">Delete</button></td>
-                    </tr>
+                <tr>
+                    <td>@Html.ActionLink(paymentType.Name, "Edit", "PaymentType", new { id = paymentType.Id }, null)</td>
+                    <td>@paymentType.Status</td>
+                    <td>@paymentType.DateCreated.ToString("dd-MMM-yyyy")</td>
+                    <td><button data-paymenttype-id="@paymentType.Id" class="btn btn-link js-delete">Delete</button></td>
+                </tr>
                 }
             </tbody>
         </table>

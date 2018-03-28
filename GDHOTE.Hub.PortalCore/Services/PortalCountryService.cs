@@ -128,7 +128,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 else
                 {
                     responseMessage = response.Content;
-                    responseCode = responseMessage.Contains("successfully") ? "00" : "01";
+                    responseCode = responseMessage.ToLower().Contains("successful") ? "00" : "01";
                 }
 
                 result.ErrorCode = responseCode;
