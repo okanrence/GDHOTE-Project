@@ -14,7 +14,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
             var statuses = new List<Status>
             {
                 new Status { Id = 1, Name = "Active"},
-                new Status { Id = 2, Name = "De-activated"}
+                new Status { Id = 2, Name = "De-activated"},
+                new Status { Id = 3, Name = "Deleted"}
             };
             return statuses;
         }

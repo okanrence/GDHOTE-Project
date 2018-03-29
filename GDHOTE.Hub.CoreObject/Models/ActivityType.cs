@@ -9,16 +9,11 @@ using NPoco;
 namespace GDHOTE.Hub.CoreObject.Models
 {
     [TableName("HUB_ActivityTypes")]
-    [PrimaryKey("ActivityTypeId")]
     public class ActivityType : BaseModel
     {
-        public int ActivityTypeId { get; set; }
-        [Required]
+        public int Id { get; set; }
         public string Name { get; set; }
-        [Required]
         public int StatusId { get; set; }
-        [Display(Name = "Dependency Type")]
-        [Required(AllowEmptyStrings = true)]
         public int DependencyTypeId { get; set; }
     }
 }

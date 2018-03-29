@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.Enumerables;
+using GDHOTE.Hub.CoreObject.ViewModels;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -30,13 +31,13 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return "Error occured while trying to insert payment types";
             }
         }
-        public static List<PaymentType> GetAllPaymentTypes()
+        public static List<PaymentTypeViewModel> GetAllPaymentTypes()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var paymentTypes = db.Fetch<PaymentType>()
+                    var paymentTypes = db.Fetch<PaymentTypeViewModel>()
                         .OrderBy(p => p.Name).ToList();
                     return paymentTypes;
                 }
@@ -44,7 +45,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             catch (Exception ex)
             {
                 LogService.Log(ex.Message);
-                return new List<PaymentType>();
+                return new List<PaymentTypeViewModel>();
             }
         }
         public static List<PaymentType> GetActivePaymentTypes()
@@ -116,7 +117,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
 
                     //Delete Payment Type
-                    paymentType.StatusId = (int)CoreObject.Enumerables.Status.DeActivated;
+                    paymentType.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
                     paymentType.DeletedById = user.UserId;
                     paymentType.DateDeleted = DateTime.Now;
                     db.Update(paymentType);

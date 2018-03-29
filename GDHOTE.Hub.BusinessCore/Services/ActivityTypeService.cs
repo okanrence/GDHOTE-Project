@@ -71,7 +71,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var activityType = db.Fetch<ActivityType>().SingleOrDefault(c => c.ActivityTypeId == id);
+                    var activityType = db.Fetch<ActivityType>().SingleOrDefault(c => c.Id == id);
                     return activityType;
                 }
             }
@@ -104,7 +104,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 using (var db = GdhoteConnection())
                 {
 
-                    var activityType = db.Fetch<ActivityType>().SingleOrDefault(c => c.ActivityTypeId == id);
+                    var activityType = db.Fetch<ActivityType>().SingleOrDefault(c => c.Id == id);
                     if (activityType == null)
                     {
                         return "Record does not exist";
@@ -114,7 +114,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var user = UserService.GetUserByUserName(currentUser);
 
                     //Delete Bank
-                    activityType.StatusId = (int)CoreObject.Enumerables.Status.DeActivated;
+                    activityType.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
                     activityType.DeletedById = user.UserId;
                     activityType.DateDeleted = DateTime.Now;
                     db.Update(activityType);

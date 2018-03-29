@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GDHOTE.Hub.BusinessCore.BusinessLogic;
-using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -15,64 +15,71 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: YearGroup
         public ActionResult Index()
         {
-            var yearGroup = YearGroupService.GetYearGroups().ToList();
+            var yearGroup = PortalYearGroupService.GetAllYearGroups().ToList();
             return View("YearGroupIndex", yearGroup);
         }
         public ActionResult New()
         {
-            var statuses = StatusService.GetStatuses().ToList();
-            var viewModel = new YearGroupFormViewModel
-            {
-                Status = statuses,
-                YearGroup = new YearGroup()
-            };
-
-            return View("YearGroupForm", viewModel);
+            return View("YearGroupForm", ReturnViewModel());
         }
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            var yearGroup = YearGroupService.GetYearGroup(id);
-            if (yearGroup == null) return HttpNotFound();
-            var statuses = StatusService.GetStatuses().ToList();
-            var viewModel = new YearGroupFormViewModel
-            {
-                Status = statuses,
-                YearGroup = yearGroup
-            };
+            var yearGroup = PortalYearGroupService.GetYearGroup(id);
+            var viewModel = ReturnViewModel();
+            var item = JsonConvert.SerializeObject(yearGroup);
+            viewModel = JsonConvert.DeserializeObject<YearGroupFormViewModel>(item);
             return View("YearGroupForm", viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(YearGroup yearGroup)
+        public ActionResult Save(CreateYearGroupRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
-                var statuses = StatusService.GetStatuses().ToList();
-                var viewModel = new YearGroupFormViewModel
-                {
-                    Status = statuses,
-                    YearGroup = yearGroup
-                };
+                var viewModel = ReturnViewModel();
+                var item = JsonConvert.SerializeObject(createRequest);
+                viewModel = JsonConvert.DeserializeObject<YearGroupFormViewModel>(item);
                 return View("YearGroupForm", viewModel);
             }
-            yearGroup.RecordDate = DateTime.Now;
-            yearGroup.YearGroupCode = yearGroup.YearGroupCode.ToUpper();
-            yearGroup.Description = StringCaseManager.TitleCase(yearGroup.Description);
-            if (yearGroup.Id == 0)
+            var result = PortalYearGroupService.CreateYearGroup(createRequest);
+            if (result != null)
             {
-                var result = YearGroupService.Save(yearGroup);
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+
             }
             else
             {
-                var yearGroupInDb = YearGroupService.GetYearGroup(yearGroup.Id);
-                if (yearGroupInDb == null) return HttpNotFound();
-                yearGroupInDb.YearGroupCode = yearGroup.YearGroupCode;
-                yearGroupInDb.Description = yearGroup.Description;
-                yearGroupInDb.Status = yearGroup.Status;
-                var result = YearGroupService.Update(yearGroupInDb);
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            return RedirectToAction("Index", "YearGroup");
+            // If we got this far, something failed, redisplay form
+            return View("YearGroupForm");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteYearGroup(string id)
+        {
+            var result = PortalYearGroupService.DeleteYearGroup(id);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private static YearGroupFormViewModel ReturnViewModel()
+        {
+            var statuses = PortalStatusService.GetStatuses().ToList();
+            var viewModel = new YearGroupFormViewModel
+            {
+                Statuses = statuses
+            };
+            return viewModel;
         }
     }
 }

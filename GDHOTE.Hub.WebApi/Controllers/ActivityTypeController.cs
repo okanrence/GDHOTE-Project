@@ -46,7 +46,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("get-activity-types")]
+        [Route("get-active-activity-types")]
         public HttpResponseMessage GetActivityTypes()
         {
             try

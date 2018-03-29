@@ -116,7 +116,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var user = UserService.GetUserByUserName(currentUser);
 
                     //Delete Payment Mode
-                    paymentMode.StatusId = (int)CoreObject.Enumerables.Status.DeActivated;
+                    paymentMode.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
                     paymentMode.DeletedById = user.UserId;
                     paymentMode.DateDeleted = DateTime.Now;
                     db.Update(paymentMode);

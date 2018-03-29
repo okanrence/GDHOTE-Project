@@ -273,7 +273,7 @@
     <Compile Include="Controllers\MainMenuController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\MemberDetailsController.cs" />
-    <Compile Include="Controllers\MembershipStatusController.cs" />
+    <Compile Include="Controllers\MemberStatusController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\PaymentModeController.cs" />

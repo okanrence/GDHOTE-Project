@@ -37,11 +37,11 @@ else
                     @foreach (var activityType in Model)
                     {
                         <tr>
-                            <td>@Html.ActionLink(activityType.Name, "Edit", "ActivityType", new { id = activityType.ActivityTypeId }, null)</td>
+                            <td>@Html.ActionLink(activityType.Name, "Edit", "ActivityType", new { id = activityType.Id }, null)</td>
                             <td>@activityType.Status</td>
                             <td>@activityType.Dependency</td>
                             <td>@activityType.DateCreated.ToString("dd-MMM-yyyy")</td>
-                            <td><button data-activitytype-id="@activityType.ActivityTypeId" class="btn btn-link js-delete">Delete</button></td>
+                            <td><button data-activitytype-id="@activityType.Id" class="btn btn-link js-delete">Delete</button></td>
                         </tr>
                     }
                 </tbody>

@@ -7,6 +7,7 @@ namespace GDHOTE.Hub.CoreObject.Enumerables
     public enum Status
     {
         Active = 1,
-        DeActivated = 2
+        DeActivated = 2,
+        Deleted = 3
     }
 }

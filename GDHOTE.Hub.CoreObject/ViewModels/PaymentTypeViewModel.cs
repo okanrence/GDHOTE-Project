@@ -6,7 +6,7 @@ using NPoco;
 
 namespace GDHOTE.Hub.CoreObject.ViewModels
 {
-    [TableName("")]
+    [TableName("vx_HUB_PaymentTypes")]
     public class PaymentTypeViewModel : PaymentType
     {
         public string Status   { get; set; }

@@ -274,12 +274,9 @@
     <Compile Include="ApiControllers\MainMenuController.cs" />
     <Compile Include="ApiControllers\MemberController.cs" />
     <Compile Include="ApiControllers\MemberDetailsController.cs" />
-    <Compile Include="ApiControllers\MembershipStatusController.cs" />
     <Compile Include="ApiControllers\PaymentController.cs" />
     <Compile Include="ApiControllers\RoleController.cs" />
-    <Compile Include="ApiControllers\StateController.cs" />
     <Compile Include="ApiControllers\SubMenuController.cs" />
-    <Compile Include="ApiControllers\YearGroupController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -296,7 +293,7 @@
     <Compile Include="Controllers\MainMenuController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\MemberDetailsController.cs" />
-    <Compile Include="Controllers\MembershipStatusController.cs" />
+    <Compile Include="Controllers\MemberStatusController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\PaymentModeController.cs" />
     <Compile Include="Controllers\PaymentTypeController.cs" />
@@ -674,8 +671,8 @@
     <Content Include="Views\MemberDetails\MemberDetailsForm.cshtml" />
     <Content Include="Views\YearGroup\YearGroupIndex.cshtml" />
     <Content Include="Views\YearGroup\YearGroupForm.cshtml" />
-    <Content Include="Views\MembershipStatus\Index.cshtml" />
-    <Content Include="Views\MembershipStatus\MembershipStatusForm.cshtml" />
+    <Content Include="Views\MemberStatus\MemberStatusIndex.cshtml" />
+    <Content Include="Views\MemberStatus\MemberStatusForm.cshtml" />
     <Content Include="Views\Shared\_NavMenu.cshtml" />
     <Content Include="Views\PaymentMode\PaymentModeIndex.cshtml" />
     <Content Include="Views\PaymentMode\PaymentModeForm.cshtml" />

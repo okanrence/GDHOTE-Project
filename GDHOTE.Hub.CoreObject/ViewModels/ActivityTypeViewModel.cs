@@ -11,5 +11,6 @@ namespace GDHOTE.Hub.CoreObject.ViewModels
     {
         public string Status { get; set; }
         public string Dependency { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

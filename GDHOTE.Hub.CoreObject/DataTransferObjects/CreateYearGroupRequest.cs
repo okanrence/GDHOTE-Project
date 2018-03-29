@@ -5,10 +5,10 @@ using System.Text;
 
 namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
-    public class CreatePaymentModeRequest
+    public class CreateYearGroupRequest
     {
-        [Required(ErrorMessage = "Please specify Mode of Payment")]
-        [Display(Name = "Mode of Payment")]
+        [Required]
+        [Display(Name = "Year Group")]
         public string Name { get; set; }
     }
 }

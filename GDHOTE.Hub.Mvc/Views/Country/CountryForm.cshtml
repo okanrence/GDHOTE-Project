@@ -8,7 +8,7 @@
     var pagename = "";
     if (Model != null)
     {
-        pagename = Model == null ? "New Country" : "Edit Country";
+        pagename = Model.Name == null ? "New Country" : "Edit Country";
     }
 
 }
@@ -17,11 +17,6 @@
 {
     <div>
         <span class="text-danger">@ViewBag.ErrorBag</span>
-        <div class="form-group">
-            @Html.LabelFor(c => c.CountryCode)
-            @Html.TextBoxFor(c => c.CountryCode, new { @class = "form-control gdhote-text-uppercase" })
-            @Html.ValidationMessageFor(c => c.CountryCode)
-        </div>
         <div class="form-group">
             @Html.LabelFor(c => c.Name)
             @Html.TextBoxFor(c => c.Name, new { @class = "form-control gdhote-text-capitalize" })

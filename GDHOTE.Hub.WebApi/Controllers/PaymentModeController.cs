@@ -46,7 +46,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("get-payment-modes")]
+        [Route("get-active-payment-modes")]
         public HttpResponseMessage GetActivePaymentModes()
         {
             try

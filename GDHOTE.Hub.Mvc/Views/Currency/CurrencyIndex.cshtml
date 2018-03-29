@@ -37,11 +37,11 @@ else
                     @foreach (var currency in Model)
                     {
                         <tr>
-                            <td>@Html.ActionLink(currency.CurrencyCode, "Edit", "Currency", new { id = currency.CurrencyId }, null)</td>
+                            <td>@Html.ActionLink(currency.CurrencyCode, "Edit", "Currency", new { id = currency.Id }, null)</td>
                             <td>@currency.Name</td>
                             <td>@currency.Status</td>
                             <td>@currency.DateCreated.ToString("dd-MMM-yyyy")</td>
-                            <td><button data-currency-id="@currency.CurrencyId" class="btn btn-link js-delete">Delete</button></td>
+                            <td><button data-currency-id="@currency.Id" class="btn btn-link js-delete">Delete</button></td>
                         </tr>
                     }
                 </tbody>

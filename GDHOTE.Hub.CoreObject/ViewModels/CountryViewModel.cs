@@ -10,5 +10,6 @@ namespace GDHOTE.Hub.CoreObject.ViewModels
     public class CountryViewModel : Country
     {
         public string Status { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

@@ -47,12 +47,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpGet]
-        [Route("get-countries")]
-        public HttpResponseMessage GetCountries()
+        [Route("get-active-countries")]
+        public HttpResponseMessage GetActiveCountries()
         {
             try
             {
-                var response = CountryService.GetCountries().ToList();
+                var response = CountryService.GetActiveCountries().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)

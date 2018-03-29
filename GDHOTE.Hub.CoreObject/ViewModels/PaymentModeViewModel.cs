@@ -10,5 +10,6 @@ namespace GDHOTE.Hub.CoreObject.ViewModels
     public class PaymentModeViewModel : PaymentMode
     {
         public string Status { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

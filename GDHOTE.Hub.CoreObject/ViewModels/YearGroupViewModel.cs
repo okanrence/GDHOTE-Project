@@ -6,8 +6,8 @@ using NPoco;
 
 namespace GDHOTE.Hub.CoreObject.ViewModels
 {
-    [TableName("vx_HUB_Currencies")]
-    public class CurrencyViewModel : Currency
+    [TableName("vx_HUB_YearGroups")]
+    public class YearGroupViewModel : YearGroup
     {
         public string Status { get; set; }
         public string CreatedBy { get; set; }

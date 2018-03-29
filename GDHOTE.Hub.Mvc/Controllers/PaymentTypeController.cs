@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GDHOTE.Hub.BusinessCore.BusinessLogic;
-using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
 using GDHOTE.Hub.PortalCore.Services;
@@ -55,6 +52,15 @@ namespace GDHOTE.Hub.Mvc.Controllers
             // If we got this far, something failed, redisplay form
             return View("PaymentTypeForm");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeletePaymentType(string id)
+        {
+            var result = PortalPaymentTypeService.DeletePaymentType(id);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult Edit(string id)
         {
             var paymentType = PortalPaymentTypeService.GetPaymentType(id);

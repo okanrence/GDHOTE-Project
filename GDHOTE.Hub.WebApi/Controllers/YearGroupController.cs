@@ -5,36 +5,158 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
+using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
 {
-    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "yeargroup")]
+    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "year-group")]
     public class YearGroupController : ApiController
     {
-        [Route("get-year-groups")]
-        public IHttpActionResult GetYearGroups()
+        [HttpGet]
+        [Route("get-all-year-groups")]
+        public HttpResponseMessage GetAllYearGroups()
         {
-            var yearGroups = YearGroupService.GetActiveYearGroups().ToList();
-            if (yearGroups.Count == 0) return NotFound();
-            return Ok(yearGroups);
-        }
-        [Route("get-year-group")]
-        public IHttpActionResult GetYearGroup(int id)
-        {
-            var yearGroup = YearGroupService.GetYearGroup(id);
-            if (yearGroup == null) return NotFound();
-            return Ok(yearGroup);
+            try
+            {
+                var response = YearGroupService.GetAllYearGroups().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+
         }
 
-        [HttpDelete]
-        [Route("delete-year-group")]
-        public IHttpActionResult DeleteYearGroup(int id)
+        [HttpGet]
+        [Route("get-active-year-groups")]
+        public HttpResponseMessage GetActiveYearGroups()
         {
-            var yearGroupInDb = YearGroupService.GetYearGroup(id);
-            if (yearGroupInDb == null) return NotFound();
-            var result = YearGroupService.Delete(id);
-            return Ok(result);
+            try
+            {
+                var response = YearGroupService.GetActiveYearGroups().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+
+        }
+
+        [HttpGet]
+        [Route("get-year-group")]
+        public HttpResponseMessage GetYearGroup(int id)
+        {
+            try
+            {
+                var response = YearGroupService.GetYearGroup(Convert.ToInt16(id));
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpPost]
+        [Route("create-year-group")]
+        public HttpResponseMessage CreateYearGroup(CreateYearGroupRequest createRequest)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+
+                string username = User.Identity.Name;
+                var response = YearGroupService.CreateYearGroup(createRequest, username);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+        [HttpPost]
+        [Route("delete-year-group")]
+        public HttpResponseMessage DeleteYearGroup(int id)
+        {
+            try
+            {
+                string username = User.Identity.Name;
+                var response = YearGroupService.Delete(Convert.ToInt16(id), username);
+                return Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
         }
     }
 }

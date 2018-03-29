@@ -40,9 +40,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<Country> GetCountries()
+        public static List<Country> GetActiveCountries()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/country/get-countries";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/country/get-active-countries";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -68,6 +68,34 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
+        public static Country GetCountry(string id)
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/country/get-country";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("id", id);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new Country();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<Country>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+            }
+            return result;
+        }
         public static Response CreateCountry(CreateCountryRequest createRequest)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);

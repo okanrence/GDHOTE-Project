@@ -9,29 +9,36 @@ using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class CountryController : BaseController
+    public class MemberStatusController : BaseController
     {
-        // GET: Country
+        // GET: MembershipStatus
         public ActionResult Index()
         {
-            var countries = PortalCountryService.GetAllCountries().ToList();
-            return View("CountryIndex", countries);
+            var memberStatuses = PortalMemberStatusService.GetAllMemberStatuses().ToList();
+            return View("MemberStatusIndex",memberStatuses);
         }
         public ActionResult New()
         {
-            var viewModel = new CreateCountryRequest();
-            return View("CountryForm", viewModel);
+            var viewModel = new CreateMemberStatusRequest();
+            return View("MemberStatusForm", viewModel);
         }
-
+        public ActionResult Edit(string id)
+        {
+            var membershipStatus = PortalMemberStatusService.GetMemberStatus(id);
+            var viewModel = new CreateMemberStatusRequest();
+            var item = JsonConvert.SerializeObject(membershipStatus);
+            viewModel = JsonConvert.DeserializeObject<CreateMemberStatusRequest>(item);
+            return View("MemberStatusForm", viewModel);
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(CreateCountryRequest createRequest)
+        public ActionResult Save(CreateMemberStatusRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
-                return View("CountryForm");
+                return View("MemberStatusForm");
             }
-            var result = PortalCountryService.CreateCountry(createRequest);
+            var result = PortalMemberStatusService.CreateMemberStatus(createRequest);
             if (result != null)
             {
                 //Successful
@@ -50,24 +57,14 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
             // If we got this far, something failed, redisplay form
-            return View("CountryForm");
-        }
-
-        public ActionResult Edit(string id)
-        {
-            var country = PortalCountryService.GetCountry(id);
-            var viewModel = new CreateCountryRequest();
-            var item = JsonConvert.SerializeObject(country);
-            viewModel = JsonConvert.DeserializeObject<CreateCountryRequest>(item);
-            return View("CountryForm", viewModel);
-
+            return View("MemberStatusForm");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult DeleteCountry(string id)
+        public JsonResult DeleteMemberStatus(string id)
         {
-            var result = PortalCountryService.DeleteCountry(id);
+            var result = PortalMemberStatusService.DeleteMemberStatus(id);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

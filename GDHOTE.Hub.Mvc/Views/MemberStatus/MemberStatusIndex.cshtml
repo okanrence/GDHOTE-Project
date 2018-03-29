@@ -1,14 +1,14 @@
-﻿@model List<GDHOTE.Hub.CoreObject.Models.MembershipStatus>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.MemberStatusViewModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Member Status Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
-<h2>Membership Status</h2>
+<h2>Member Status</h2>
 <p>
-    @Html.ActionLink("New Status", "New", "MembershipStatus", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("New Status", "New", "MemberStatus", null, new { @class = "btn btn-primary" })
 </p>
 
 
@@ -19,22 +19,24 @@
 else
 {
     <div>
-        <table id="membershipStatuses" class="table table-bordered table-hover">
+        <table id="memberstatuses" class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>Description</th>
-                    <th>Code</th>
+                    <th>Member Status</th>
+                    <th>Status</th>
+                    <th>Date</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var membershipStatus in Model)
+                @foreach (var memberStatus in Model)
                 {
-                    <tr>
-                        <td>@Html.ActionLink(membershipStatus.StatusDescription, "Edit", "MembershipStatus", new { id = membershipStatus.Id }, null)</td>
-                        <td>@membershipStatus.StatusCode</td>
-                        <td><button data-membershipstatus-id="@membershipStatus.Id" class="btn btn-link js-delete">Delete</button></td>
-                    </tr>
+                <tr>
+                    <td>@Html.ActionLink(memberStatus.Name, "Edit", "MemberStatus", new { id = memberStatus.Id }, null)</td>
+                    <td>@memberStatus.Status</td>
+                    <td>@memberStatus.DateCreated.ToString("dd-MMM-yyyy")</td>
+                    <td><button data-membershipstatus-id="@memberStatus.Id" class="btn btn-link js-delete">Delete</button></td>
+                </tr>
                 }
             </tbody>
         </table>

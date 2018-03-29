@@ -9,11 +9,9 @@ using NPoco;
 namespace GDHOTE.Hub.CoreObject.Models
 {
     [TableName("HUB_Countries")]
-    [PrimaryKey("CountryId")]
     public class Country : BaseModel
     {
-        public int CountryId { get; set; }
-        public string CountryCode { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public int StatusId { get; set; }
     }

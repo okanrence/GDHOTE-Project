@@ -29,14 +29,14 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
         }
 
-        public static IEnumerable<UserStatus> GetUserStatuses()
+        public static List<UserStatus> GetUserStatuses()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var userStatuss = db.Fetch<UserStatus>();
-                    return userStatuss;
+                    var userStatuses = db.Fetch<UserStatus>();
+                    return userStatuses;
                 }
             }
             catch (Exception ex)
@@ -51,7 +51,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var userStatus = db.Fetch<UserStatus>().SingleOrDefault(s => s.UserStatusId == id);
+                    var userStatus = db.Fetch<UserStatus>().SingleOrDefault(s => s.Id == id);
                     return userStatus;
                 }
             }

@@ -7,10 +7,10 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
     public class CreateCurrencyRequest
     {
-        [Required]
-        [Display(Name = "Code")]
+        [Required(ErrorMessage = "Please specify Currency Code")]
+        [Display(Name = "Currency Code")]
         public string CurrencyCode { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please specify Currency")]
         [Display(Name = "Currency")]
         public string Name { get; set; }
     }

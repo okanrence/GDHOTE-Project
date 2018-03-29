@@ -45,7 +45,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<CountryViewModel>();
             }
         }
-        public static List<Country> GetCountries()
+        public static List<Country> GetActiveCountries()
         {
             try
             {
@@ -70,7 +70,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var country = db.Fetch<Country>().SingleOrDefault(c => c.CountryId == id);
+                    var country = db.Fetch<Country>().SingleOrDefault(c => c.Id == id);
                     return country;
                 }
             }
@@ -104,7 +104,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 {
 
 
-                    var country = db.Fetch<Country>().SingleOrDefault(c => c.CountryId == id);
+                    var country = db.Fetch<Country>().SingleOrDefault(c => c.Id == id);
                     if (country == null)
                     {
                         return "Record does not exist";
@@ -114,7 +114,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var user = UserService.GetUserByUserName(currentUser);
 
                     //Delete Country
-                    country.StatusId = (int)CoreObject.Enumerables.Status.DeActivated;
+                    country.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
                     country.DeletedById = user.UserId;
                     country.DateDeleted = DateTime.Now;
                     db.Update(country);
@@ -151,7 +151,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Check if name already exist
                     var countryExist = db.Fetch<Country>()
-                        .SingleOrDefault(c => c.Name.ToLower().Equals(request.Name.ToLower()) && c.CountryCode.ToLower().Equals(request.CountryCode.ToLower()));
+                        .SingleOrDefault(c => c.Name.ToLower().Equals(request.Name.ToLower()));
                     if (countryExist != null)
                     {
                         return new Response
@@ -161,12 +161,10 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
-                    string countryCode = request.CountryCode.ToUpper();
                     string countryName = StringCaseManager.TitleCase(request.Name);
 
                     var country = new Country
                     {
-                        CountryCode = countryCode,
                         Name = countryName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
                         CreatedById = user.UserId,

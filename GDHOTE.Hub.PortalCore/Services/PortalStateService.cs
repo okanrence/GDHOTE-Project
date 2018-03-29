@@ -10,11 +10,11 @@ using RestSharp;
 
 namespace GDHOTE.Hub.PortalCore.Services
 {
-    public class PortalActivityTypeService
+    public class PortalStateService
     {
-        public static List<ActivityTypeViewModel> GetAllActivityTypes()
+        public static List<StateViewModel> GetAllStates()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/get-all-activity-types";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/state/get-all-states";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -22,7 +22,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<ActivityTypeViewModel>();
+            var result = new List<StateViewModel>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -31,7 +31,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<ActivityTypeViewModel>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<StateViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -40,9 +40,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<ActivityType> GetActivityTypes()
+        public static List<State> GetActiveStates()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/get-active-activity-types";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/state/get-active-states";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -50,7 +50,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<ActivityType>();
+            var result = new List<State>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -59,7 +59,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<ActivityType>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<State>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -67,10 +67,68 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-        public static Response CreateActivityType(CreateActivityTypeRequest createRequest)
+
+
+        public static List<State> GetStatesByCountryId(string countryId)
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/state/get-states-by-country";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("id", countryId);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new List<State>();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<List<State>>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+            }
+            return result;
+        }
+        public static State GetState(string id)
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/state/get-state";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("id", id);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new State();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<State>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+            }
+            return result;
+        }
+        public static Response CreateState(CreateStateRequest createRequest)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/create-activity-type";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/state/create-state";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
@@ -97,10 +155,10 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response DeleteActivityType(string id)
+        public static Response DeleteState(string id)
         {
 
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/delete-activity-type";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/state/delete-state";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");

@@ -10,7 +10,7 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         [Required]
         public string Name { get; set; }
         [Display(Name = "Dependency Type")]
-        [Required(AllowEmptyStrings = true)]
+        //[Required(AllowEmptyStrings = true)]
         public int DependencyTypeId { get; set; }
     }
 }

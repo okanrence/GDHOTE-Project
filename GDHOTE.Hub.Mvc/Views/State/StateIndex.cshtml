@@ -1,4 +1,4 @@
-﻿@*@model List<GDHOTE.Hub.CoreObject.Models.State>*@
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.StateViewModel>
 
 @{
     ViewBag.Title = "States";
@@ -10,96 +10,86 @@
     @Html.ActionLink("New State", "New", "State", null, new { @class = "result-list-button" })
 </p>
 
+@if (Model == null || Model.Count == 0)
+{
+    <p>No record(s) found</p>
+}
+else
+{
+    <div id="responsive">
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
 
-@*@if (Model == null)
-    {
-        <p>No record(s) found</p>
-    }
-    else
-    {
-
-    }*@
-<div>
-    <table id="states" class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Code</th>
-                <th>Country Code</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @*@foreach (var state in Model)
+        <div>
+            <table id="states" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var state in Model)
                 {
                     <tr>
-                        <td>@Html.ActionLink(state.StateName, "Edit", "State", new { id = state.Id }, null)</td>
-                        <td>@state.StateCode</td>
-                        <td>@state.CountryCode</td>
+                        <td>@Html.ActionLink(state.Name, "Edit", "State", new { id = state.Id }, null)</td>
                         <td>@state.Status</td>
+                        <td>@state.DateCreated.ToString("dd-MMM-yyyy")</td>
                         <td><button data-state-id="@state.Id" class="btn btn-link js-delete">Delete</button></td>
                     </tr>
-                }*@
-        </tbody>
-    </table>
-</div>
+                }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+}
 @section scripts
 {
-    <script>
+<script>
         $(document).ready(function () {
-            var table = $("#states").DataTable({
-                ajax: {
-                    url: "/api/v1/state/get-states/",
-                    dataSrc: ""
-                },
-                columns: [
-                    {
-                        data: "stateName",
-                        render: function (data, type, state) {
-                            return "<a href='/state/edit/" + state.stateId + "'>" + state.stateName + "</a>";
-                        }
-                    },
-                    {
-                        data: "stateCode"
-                    },
-                    {
-                        data: "stateName"
-                    },
-                    {
-                        data: "status"
-                    },
-                    {
-                        data: "stateId",
-                        render: function (data) {
-                            return "<button class='btn btn-link js-delete' data-state-id=" + data + ">Delete</button>";
-                        }
-                    }
-                ]
-            });
-
+            
             $("#states").on("click", ".js-delete", function () {
                 var button = $(this);
+                var id = button.attr("data-state-id");
+
+                var form = $('#responsive');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+                //Submit request
+                var request = { __RequestVerificationToken: token };
+
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: "../api/v1/state/delete-state?id=" + button.attr("data-state-id"),
-                            method: "DELETE",
-                            success: function () {
-                                swal({
-                                    title: "Success",
-                                    text: "success",
-                                    type: "success"
-                                });
+                            url: '@Url.Action("DeleteState", "State")/' + id,
+                            method: "POST",
+                            data: request,
+                            success: function (data) {
+                                if (data !== null) {
+                                    if (data.ErrorCode === "00") {
+                                        swal({
+                                            title: "Success",
+                                            text: "success",
+                                            type: "success"
+                                        });
 
-                                table.row(button.parents("tr")).remove().draw();
-                                //button.parents("tr").remove();
+                                        window.location.reload(true);
+                                    }
+                                    else {
+                                        alert(data.ErrorMessage);
+                                    }
+                                };
+
                             }
                         });
                     }
                 });
-
             });
         });
-    </script>
+</script>
 }

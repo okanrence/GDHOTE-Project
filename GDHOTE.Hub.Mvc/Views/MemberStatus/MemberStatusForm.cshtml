@@ -1,0 +1,29 @@
+﻿@model GDHOTE.Hub.CoreObject.DataTransferObjects.CreateMemberStatusRequest
+@{
+    ViewBag.Title = "Member Status Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model.Name == null ? "New Member Status" : "Edit Member Status";
+    }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "MemberStatus"))
+{
+    <div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Name)
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(m => m.Name)
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div>@Html.AntiForgeryToken()</div>
+    </div>
+}

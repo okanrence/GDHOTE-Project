@@ -8,22 +8,20 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
-using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
 {
-    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "currency")]
-    public class CurrencyController : ApiController
+    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "member")]
+    public class MemberStatusController : ApiController
     {
-
         [HttpGet]
-        [Route("get-all-currencies")]
-        public HttpResponseMessage GetAllCurrencies()
+        [Route("get-all-member-statuses")]
+        public HttpResponseMessage GetAllMemberStatus()
         {
             try
             {
-                var response = CurrencyService.GetAllCurrencies().ToList();
+                var response = MemberStatusService.GetAllMemberStatuses().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -45,17 +43,16 @@ namespace GDHOTE.Hub.WebApi.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
-
         }
 
+
         [HttpGet]
-        [Route("get-currencies")]
-        [UnAuthorized(Roles = "Adminstrator, Approver")]
-        public HttpResponseMessage GetCurrencies()
+        [Route("get-active-member-statuses")]
+        public HttpResponseMessage GetActiveMemberStatuses()
         {
             try
             {
-                var response = CurrencyService.GetActiveCurrencies().ToList();
+                var response = MemberStatusService.GetActiveMemberStatuses().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -77,16 +74,14 @@ namespace GDHOTE.Hub.WebApi.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
-
         }
 
-        [HttpGet]
-        [Route("get-currency")]
-        public HttpResponseMessage GetCurrency(string id)
+        [Route("get-member-status")]
+        public HttpResponseMessage GetMemberStatus(string id)
         {
             try
             {
-                var response = CurrencyService.GetCurrency(Convert.ToInt16(id));
+                var response = MemberStatusService.GetMemberStatus(Convert.ToInt16(id));
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -107,12 +102,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
-
         }
 
+
         [HttpPost]
-        [Route("create-currency")]
-        public HttpResponseMessage CreateCurrency(CreateCurrencyRequest createRequest)
+        [Route("create-member-status")]
+        public HttpResponseMessage CreateMemberStatus(CreateMemberStatusRequest createRequest)
         {
             try
             {
@@ -122,7 +117,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 }
 
                 string username = User.Identity.Name;
-                var response = CurrencyService.CreateCurrency(createRequest, username);
+                var response = MemberStatusService.CreateMemberStatus(createRequest, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -147,14 +142,15 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("delete-currency")]
-        public HttpResponseMessage DeleteCurrency(int id)
+        [Route("delete-member-status")]
+        public HttpResponseMessage DeleteMemberStatus(int id)
         {
             try
             {
                 string username = User.Identity.Name;
-                var response = CurrencyService.Delete(Convert.ToInt16(id), username);
+                var response = MemberStatusService.Delete(Convert.ToInt16(id), username);
                 return Request.CreateResponse(HttpStatusCode.OK, response);
+
             }
             catch (UnableToCompleteException ex)
             {

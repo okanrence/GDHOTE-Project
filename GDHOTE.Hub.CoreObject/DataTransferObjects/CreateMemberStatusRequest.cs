@@ -5,10 +5,10 @@ using System.Text;
 
 namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
-    public class CreatePaymentModeRequest
+    public class CreateMemberStatusRequest
     {
-        [Required(ErrorMessage = "Please specify Mode of Payment")]
-        [Display(Name = "Mode of Payment")]
+        [Required]
+        [Display(Name = "Member Status")]
         public string Name { get; set; }
     }
 }

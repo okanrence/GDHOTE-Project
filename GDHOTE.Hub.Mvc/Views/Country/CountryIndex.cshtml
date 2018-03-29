@@ -26,7 +26,6 @@ else
             <table id="countries" class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>Code</th>
                         <th>Country</th>
                         <th>Status</th>
                         <th>Date</th>
@@ -37,11 +36,10 @@ else
                     @foreach (var country in Model)
                     {
                         <tr>
-                            <td>@Html.ActionLink(country.CountryCode, "Edit", "Country", new { id = country.CountryId }, null)</td>
-                            <td>@country.Name</td>
+                            <td>@Html.ActionLink(country.Name, "Edit", "Country", new { id = country.Id }, null)</td>
                             <td>@country.Status</td>
                             <td>@country.DateCreated.ToString("dd-MMM-yyyy")</td>
-                            <td><button data-country-id="@country.CountryId" class="btn btn-link js-delete">Delete</button></td>
+                            <td><button data-country-id="@country.Id" class="btn btn-link js-delete">Delete</button></td>
                         </tr>
                     }
                 </tbody>

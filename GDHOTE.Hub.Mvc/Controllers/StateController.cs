@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GDHOTE.Hub.BusinessCore.BusinessLogic;
-using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -15,69 +15,73 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: State
         public ActionResult Index()
         {
-            //var states = StateService.GetStates().ToList();
-            //return View(states);
-            return View("StateIndex");
+           var states = PortalStateService.GetAllStates().ToList();
+            return View("StateIndex", states);
         }
         public ActionResult New()
         {
-            var countries = CountryService.GetAllCountries().ToList();
-            var statuses = StatusService.GetStatuses().ToList();
-            var viewModel = new StateFormViewModel
-            {
-                Status = statuses,
-                Countries = countries,
-                State = new State()
-            };
-
-            return View("StateForm", viewModel);
+            return View("StateForm", ReturnViewModel());
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(State state)
+        public ActionResult Save(CreateStateRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
-                var countries = CountryService.GetAllCountries().ToList();
-                var statuses = StatusService.GetStatuses().ToList();
-                var viewModel = new StateFormViewModel
-                {
-                    Status = statuses,
-                    Countries = countries,
-                    State = state
-                };
+                var viewModel = ReturnViewModel();
+                var item = JsonConvert.SerializeObject(createRequest);
+                viewModel = JsonConvert.DeserializeObject<StateFormViewModel>(item);
                 return View("StateForm", viewModel);
             }
-            state.StateCode = state.StateCode.ToUpper();
-            state.StateName = StringCaseManager.TitleCase(state.StateName);
-            if (state.StateCode == null)
+            var result = PortalStateService.CreateState(createRequest);
+            if (result != null)
             {
-                state.RecordDate = DateTime.Now;
-                var result = StateService.Save(state);
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+
             }
             else
             {
-                var stateInDb = StateService.GetState(state.StateId);
-                if (stateInDb == null) return HttpNotFound();
-                stateInDb.Status = state.Status;
-                stateInDb.StateName = state.StateName;
-                var result = StateService.Update(stateInDb);
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            return RedirectToAction("Index", "State");
+            // If we got this far, something failed, redisplay form
+            return View("StateForm");
         }
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            var state = StateService.GetState(id);
-            if (state == null) return HttpNotFound();
-            var countries = CountryService.GetAllCountries().ToList();
-            var statuses = StatusService.GetStatuses().ToList();
+            var state = PortalStateService.GetState(id);
+            var viewModel = ReturnViewModel();
+            var item = JsonConvert.SerializeObject(state);
+            viewModel = JsonConvert.DeserializeObject<StateFormViewModel>(item);
+            return View("StateForm", viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteState(string id)
+        {
+            var result = PortalStateService.DeleteState(id);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private static StateFormViewModel ReturnViewModel()
+        {
+            var statuses = PortalStatusService.GetStatuses().ToList();
+            var countries = PortalCountryService.GetActiveCountries().ToList();
             var viewModel = new StateFormViewModel
             {
-                Status = statuses,
-                Countries = countries,
-                State = state
+                Statuses = statuses,
+                Countries = countries
+
             };
-            return View("StateForm", viewModel);
+            return viewModel;
         }
     }
 }

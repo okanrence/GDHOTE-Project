@@ -12,15 +12,15 @@ using GDHOTE.Hub.CoreObject.ViewModels;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
-    public class CurrencyService : BaseService
+    public class MemberStatusService : BaseService
     {
-        public static string Save(Currency currency)
+        public static string Save(MemberStatus memberStatus)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Insert(currency);
+                    var result = db.Insert(memberStatus);
                     return result.ToString();
                 }
             }
@@ -28,74 +28,77 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 LogService.Log(ex.Message);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
-                return "Error occured while trying to insert Currency";
+                return "Error occured while trying to insert record";
             }
         }
-        public static List<CurrencyViewModel> GetAllCurrencies()
+        public static List<MemberStatusViewModel> GetAllMemberStatuses()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Fetch<CurrencyViewModel>()
-                        .OrderBy(c => c.Name).ToList();
-                    return countries;
+                    var memberStatuses = db.Fetch<MemberStatusViewModel>()
+                       .OrderBy(c => c.Name)
+                        .ToList();
+                    return memberStatuses;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(ex.Message);
-                return new List<CurrencyViewModel>();
+                return new List<MemberStatusViewModel>();
             }
         }
-        public static List<Currency> GetActiveCurrencies()
+        public static List<MemberStatus> GetActiveMemberStatuses()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Fetch<Currency>()
-                        .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active && c.DateDeleted == null)
-                        .OrderBy(c => c.Name).ToList();
-                    return countries;
+                    var memberStatuses = db.Fetch<MemberStatus>()
+                        .Where(m => m.StatusId == (int)CoreObject.Enumerables.Status.Active && m.DateDeleted == null)
+                        .OrderBy(m => m.Name)
+                        .ToList();
+                    return memberStatuses;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(ex.Message);
-                return new List<Currency>();
+                return new List<MemberStatus>();
             }
         }
-        public static Currency GetCurrency(int id)
+        public static MemberStatus GetMemberStatus(int id)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var currency = db.Fetch<Currency>().SingleOrDefault(c => c.Id == id);
-                    return currency;
+                    var memberStatus = db.Fetch<MemberStatus>()
+                        .SingleOrDefault(c => c.Id == id);
+                    return memberStatus;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(ex.Message);
-                return new Currency();
+                return new MemberStatus();
             }
         }
-        public static string Update(Currency currency)
+        public static string Update(MemberStatus memberStatus)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Update(currency);
+                    var result = db.Update(memberStatus);
                     return result.ToString();
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(ex.Message);
-                return "Error occured while trying to update Currency";
+                return "Error occured while trying to update MemberStatus";
             }
         }
         public static string Delete(int id, string currentUser)
@@ -104,24 +107,23 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var currency = db.Fetch<Currency>().SingleOrDefault(c => c.Id == id);
-                    if (currency == null)
+                    var memberStatus = db.Fetch<MemberStatus>().SingleOrDefault(c => c.Id == id);
+                    if (memberStatus == null)
                     {
                         return "Record does not exist";
                     }
 
                     //Get User Initiating Creation Request
                     var user = UserService.GetUserByUserName(currentUser);
-                    
 
-                    //Delete Currency
-                    currency.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
-                    currency.DeletedById = user.UserId;
-                    currency.DateDeleted = DateTime.Now;
-                    db.Update(currency);
+
+                    //Delete Member Status
+                    memberStatus.StatusId = (int) CoreObject.Enumerables.Status.Deleted;
+                    memberStatus.DeletedById = user.UserId;
+                    memberStatus.DateDeleted = DateTime.Now;
+                    db.Update(memberStatus);
                     var result = "Operation Successful";
                     return result;
-
                 }
             }
             catch (Exception ex)
@@ -131,7 +133,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
         }
 
-        public static Response CreateCurrency(CreateCurrencyRequest request, string currentUser)
+        public static Response CreateMemberStatus(CreateMemberStatusRequest request, string currentUser)
         {
             try
             {
@@ -152,9 +154,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
                     //Check if name already exist
-                    var currencyExist = db.Fetch<Currency>()
-                        .SingleOrDefault(c => c.Name.ToLower().Equals(request.Name.ToLower()) && c.CurrencyCode.ToLower().Equals(request.CurrencyCode.ToLower()));
-                    if (currencyExist != null)
+                    var memberStatusExist = db.Fetch<MemberStatus>().SingleOrDefault(c => c.Name.ToLower().Equals(request.Name.ToLower()));
+                    if (memberStatusExist != null)
                     {
                         return new Response
                         {
@@ -163,21 +164,20 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
-                    string currencyCode = request.CurrencyCode.ToUpper();
-                    string currencyName = StringCaseManager.TitleCase(request.Name);
+
+                    string typeName = StringCaseManager.TitleCase(request.Name);
 
 
-                    var activityType = new Currency
+                    var memberStatus = new MemberStatus
                     {
-                        CurrencyCode = currencyCode,
-                        Name = currencyName,
+                        Name = typeName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
                         CreatedById = user.UserId,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };
 
-                    db.Insert(activityType);
+                    db.Insert(memberStatus);
                     response = new Response
                     {
                         ErrorCode = "00",
