@@ -17,7 +17,7 @@
 @using (Html.BeginForm("Save", "PaymentType"))
 {
     <div>
-        @Html.ValidationSummary(true, "Please fix the below errors.")
+        <span class="text-danger">@ViewBag.ErrorBag</span>
         <div class="form-group">
             @Html.LabelFor(p => p.Name)
             @Html.TextBoxFor(p => p.Name, new { @class = "form-control gdhote-text-capitalize" })

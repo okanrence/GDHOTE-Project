@@ -10,12 +10,11 @@ using RestSharp;
 
 namespace GDHOTE.Hub.PortalCore.Services
 {
-    public class PortalMemberStatusService
+    public class PortalMemberService
     {
-
-        public static List<MemberStatusViewModel> GetAllMemberStatuses()
+        public static List<MemberViewModel> GetAllMembers()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-all-member-statuses";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-all-members";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -23,7 +22,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<MemberStatusViewModel>();
+            var result = new List<MemberViewModel>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -32,7 +31,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<MemberStatusViewModel>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<MemberViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -41,9 +40,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<MemberStatus> GetMemberStatuses()
+        public static List<MemberViewModel> GetPendingApproval()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-active-member-statuses";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-pending-approval";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -51,7 +50,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<MemberStatus>();
+            var result = new List<MemberViewModel>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -60,7 +59,34 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<MemberStatus>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<MemberViewModel>>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+            }
+            return result;
+        }
+        public static List<Member> GetActiveMembers()
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-active-members";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new List<Member>();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<List<Member>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -69,9 +95,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static MemberStatus GetMemberStatus(string id)
+        public static Member GetMember(string id)
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-member-status";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-member";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -80,7 +106,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             request.AddParameter("id", id);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new MemberStatus();
+            var result = new Member();
             IRestResponse response = new RestResponse();
             try
             {
@@ -89,7 +115,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<MemberStatus>(response.Content);
+                result = JsonConvert.DeserializeObject<Member>(response.Content);
             }
             catch (Exception ex)
             {
@@ -97,10 +123,41 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-        public static Response CreateMemberStatus(CreateMemberStatusRequest createRequest)
+        public static Response CreateMember(CreateMemberRequest createRequest)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/create-member-status";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/create-member";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("channel", "1");
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("application/json", requestData, ParameterType.RequestBody);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new Response();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<Response>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+            }
+            return result;
+        }
+
+        public static Response ApproveMember(ApproveMemberRequest approveRequest)
+        {
+            var requestData = JsonConvert.SerializeObject(approveRequest);
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/approve-member";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
@@ -126,11 +183,10 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-
-        public static Response DeleteMemberStatus(string id)
+        public static Response DeleteMember(string id)
         {
 
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/delete-member-status";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/delete-member";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");

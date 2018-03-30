@@ -8,108 +8,273 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
 {
     [RoutePrefix(ConstantManager.ApiDefaultNamespace + "member")]
     public class MemberController : ApiController
     {
-        [Route("get-members")]
-        public IHttpActionResult GetMembers()
+        [HttpGet]
+        [Route("get-all-members")]
+        public HttpResponseMessage GetAllMembers()
         {
-            var members = MemberService.GetMembers().ToList();
-            return Ok(members);
+            try
+            {
+                var response = MemberService.GetAllMembers().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
         }
 
+
+        [HttpGet]
+        [Route("get-pending-approval")]
+        public HttpResponseMessage GetMembersPendingApproval()
+        {
+            try
+            {
+                var response = MemberService.GetMembersPendingApproval().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+        [HttpGet]
+        [Route("get-active-members")]
+        public HttpResponseMessage GetActiveMembers()
+        {
+            try
+            {
+                var response = MemberService.GetActiveMembers().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+        [HttpGet]
         [Route("get-member")]
-        public IHttpActionResult GetMember(int id)
+        public HttpResponseMessage GetMember(int id)
         {
-            var member = MemberService.GetMember(id);
-            if (member == null) return NotFound();
-            return Ok(member);
+            try
+            {
+                var response = MemberService.GetMember(Convert.ToInt16(id));
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("delete-member")]
-        public IHttpActionResult DeleteMember(int id)
+        public HttpResponseMessage DeleteMember(int id)
         {
-            var memberInDb = MemberService.GetMember(id);
-            if (memberInDb == null) return NotFound();
-            var result = MemberService.Delete(id);
-            return Ok(result);
+            try
+            {
+                string username = User.Identity.Name;
+                var response = MemberService.Delete(Convert.ToInt16(id), username);
+                return Request.CreateResponse(HttpStatusCode.OK, response);
+
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
         }
 
         [HttpPost]
         [Route("create-member")]
-        public IHttpActionResult CreateNewMember(CreateMemberRequest memberRequest)
+        public HttpResponseMessage CreateNewMember(CreateMemberRequest createRequest)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+
                 string headerKey = "channel";
                 var headers = Request.Headers.GetValues(headerKey);
                 var headerValue = headers.FirstOrDefault();
+                if (!int.TryParse(headerValue, out var channelCode))
+                    channelCode = (int)CoreObject.Enumerables.Channel.Kiosk;
 
-                if (!ModelState.IsValid)
+
+                string username = User.Identity.Name;
+                var response = MemberService.CreateMember(createRequest, username, channelCode);
+                if (response != null)
                 {
-                    return BadRequest(ModelState);
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
                 }
-                string currentUser = "";
-                if (!int.TryParse(headerValue, out var channelCode)) channelCode = 3;
 
-                var result = MemberManager.CreateMember(memberRequest, currentUser, channelCode);
-                if (result == null) return BadRequest();
-                return Ok(result);
-            }
-            catch (InvalidRequestException ex)
-            {
-                return BadRequest(ex.Message);
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
             }
             catch (UnableToCompleteException ex)
             {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
 
         [HttpPost]
         [Route("approve-member")]
-        public IHttpActionResult ApproveMember(UpdateMemberRequest updateRequest)
+        public HttpResponseMessage ApproveMember(ApproveMemberRequest approveRequest)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
                 }
-                var result = MemberManager.ApproveMember(updateRequest);
-                if (string.IsNullOrEmpty(result)) return BadRequest();
-                if (string.IsNullOrEmpty(result)) return InternalServerError();
-                return Ok(result);
+                string username = User.Identity.Name;
+                var response = MemberService.ApproveMember(approveRequest, username);
+                return Request.CreateResponse(HttpStatusCode.OK, response);
+
             }
-            catch (Exception ex)
+            catch (UnableToCompleteException ex)
             {
-                return InternalServerError(ex);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
 
-
-        [HttpGet]
+        [HttpPost]
         [Route("get-members-by-seach-query")]
-        public IHttpActionResult GetMembers(string seachQuery)
+        public HttpResponseMessage GetMembers(string seachQuery)
         {
-            var members = MemberService.GetMembersBySearchQuery(seachQuery).ToList();
-            return Ok(members);
+            try
+            {
+                var response = MemberService.GetMembersBySearchQuery(seachQuery).ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("get-members-by-birthday")]
-        public IHttpActionResult GetMembersByBirthday(string dateOfBirth)
+        public HttpResponseMessage GetMembersByBirthday(string dateOfBirth)
         {
-            var members = MemberService.GetMembersByBirthday(dateOfBirth).ToList();
-            return Ok(members);
+            try
+            {
+                var response = MemberService.GetMembersByBirthday(dateOfBirth).ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
         }
     }
 }

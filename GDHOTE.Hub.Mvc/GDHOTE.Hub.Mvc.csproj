@@ -272,10 +272,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiControllers\MainMenuController.cs" />
-    <Compile Include="ApiControllers\MemberController.cs" />
     <Compile Include="ApiControllers\MemberDetailsController.cs" />
     <Compile Include="ApiControllers\PaymentController.cs" />
-    <Compile Include="ApiControllers\RoleController.cs" />
     <Compile Include="ApiControllers\SubMenuController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />

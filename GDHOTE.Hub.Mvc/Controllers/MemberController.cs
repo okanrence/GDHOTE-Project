@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -15,30 +16,25 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: Member
         public ActionResult Index()
         {
-            var members = MemberService.GetMembers().ToList();
+            var members = PortalMemberService.GetAllMembers().ToList();
             return View(members);
         }
         public ActionResult List()
         {
-            var members = MemberService.GetMembers().ToList();
+            var members = PortalMemberService.GetAllMembers().ToList();
             return View("ReadOnlyList", members);
         }
         public ActionResult New()
         {
-            var viewModel = ReturnMemberFormViewModel();
-            return View("MemberForm", ReturnMemberFormViewModel());
+            var viewModel = ReturnViewModel();
+            return View("MemberForm", ReturnViewModel());
         }
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            var member = MemberService.GetMember(id);
-            var genders = GenderService.GetGenders();
-            var maritalStatuses = MaritalStatusService.GetMaritalStatuses();
-            var viewModel = new MemberFormViewModel
-            {
-                Genders = genders,
-                MaritalStatuses = maritalStatuses,
-                //Member = member
-            };
+            var member = PortalMemberService.GetMember(id);
+            var viewModel = ReturnViewModel();
+            var item = JsonConvert.SerializeObject(member);
+            viewModel = JsonConvert.DeserializeObject<MemberFormViewModel>(item);
             return View("UpdateMemberForm", viewModel);
         }
         [HttpPost]
@@ -47,29 +43,28 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("MemberForm", ReturnMemberFormViewModel());
+                return View("MemberForm", ReturnViewModel());
             }
-            string currentUser = User.Identity.Name;
-            int channelCode = (int)CoreObject.Enumerables.Channel.Web;
-            var result = MemberManager.CreateMember(createRequest, currentUser, channelCode);
+            var result = PortalMemberService.CreateMember(createRequest);
             if (result != null)
             {
-
+                //Successful
                 if (result.ErrorCode == "00")
                 {
-                    return RedirectToAction("Index", "Member");
+                    return RedirectToAction("Index");
                 }
                 else
                 {
-                    ViewBag.LoginError = result.ErrorMessage;
+                    ViewBag.ErrorBag = result.ErrorMessage;
                 }
+
             }
             else
             {
-                //Display Error
-                ViewBag.LoginError = "Unable to complete request";
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            return View("MemberForm", ReturnMemberFormViewModel());
+            // If we got this far, something failed, redisplay form
+            return View("MemberForm", ReturnViewModel());
         }
 
         [HttpPost]
@@ -78,51 +73,42 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("MemberForm", ReturnMemberFormViewModel());
+                return View("MemberForm", ReturnViewModel());
             }
-            string currentUser = User.Identity.Name;
-
-            return View();
-            //if (member.MemberKey == 0)
-            //{
-            //    //Validate DOB
-            //    var dob = member.DateOfBirth;
-            //    //if (DateTime.TryParse(member.DateOfBirth, out temp))
-            //    //{
-
-            //    //}
-            //    member.CreatedBy = User.Identity.Name;
-            //    member.StatusCode = "A";
-            //    member.DeleteFlag = "N";
-            //    member.ApprovedFlag = "N";
-            //    member.RecordDate = DateTime.Now;
-            //    member.PostedDate = DateTime.Now;
-            //    member.OfficerId = (int)EnumsService.OfficerType.NormalMember;
-            //    member.OfficerDate = DateTime.Now;
-            //    var result = MemberService.Save(member);
-            //}
-            //else
-            //{
-            //    var memberInDb = MemberService.GetMember(member.MemberKey);
-            //    if (memberInDb == null) return HttpNotFound();
-            //    memberInDb.FirstName = member.FirstName;
-            //    memberInDb.Surname = member.Surname;
-            //    memberInDb.MiddleName = member.MiddleName;
-            //    memberInDb.DateOfBirth = member.DateOfBirth;
-            //    memberInDb.ApprovedBy = User.Identity.Name;
-            //    memberInDb.LastUpdatedDate = DateTime.Now;
-            //    var result = MemberService.Update(memberInDb);
-            //}
-
+            return View("MemberForm");
         }
 
 
         public ActionResult ApproveMember()
         {
-            var members = MemberService.GetMembersPendingApproval().ToList();
+            var members = PortalMemberService.GetPendingApproval().ToList();
             return View(members);
         }
-        private static MemberFormViewModel ReturnMemberFormViewModel()
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult ApproveMember(ApproveMemberRequest approveRequest)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return Json(ModelState);
+            }
+
+            var result = PortalMemberService.ApproveMember(approveRequest);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteMember(string id)
+        {
+            var result = PortalMemberService.DeleteMember(id);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private static MemberFormViewModel ReturnViewModel()
         {
             var genders = GenderService.GetGenders();
             var maritalStatuses = MaritalStatusService.GetMaritalStatuses();

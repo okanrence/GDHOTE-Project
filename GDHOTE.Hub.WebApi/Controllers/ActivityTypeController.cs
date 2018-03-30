@@ -74,12 +74,14 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
+
+        [HttpGet]
         [Route("get-activity-type")]
-        public HttpResponseMessage GetActivityType(int id)
+        public HttpResponseMessage GetActivityType(string id)
         {
             try
             {
-                var response = ActivityTypeService.GetActivityType(id);
+                var response = ActivityTypeService.GetActivityType(Convert.ToInt16(id));
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)

@@ -1,41 +1,34 @@
-﻿@model GDHOTE.Hub.CoreObject.ViewModels.RoleFormViewModel  
-    @{
-        ViewBag.Title = "RoleForm";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-    }
+﻿@model GDHOTE.Hub.CoreObject.ViewModels.RoleFormViewModel
+@{
+    ViewBag.Title = "RoleForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 
-    @{
-        var pagename = "";
-        if (Model != null)
-        {
-            pagename = Model.Role.RoleId == null ? "New Role" : "Edit Role";
-        }
-
-    }
-    <h2>@pagename</h2>
-    @using (Html.BeginForm("Save", "Role"))
+@{
+    var pagename = "";
+    if (Model != null)
     {
-        <div>
-            <div class="form-group">
-                @Html.LabelFor(r => r.Role.Name)
-                @Html.TextBoxFor(r => r.Role.Name, new { @class = "form-control gdhote-text-capitalize" })
-                @Html.ValidationMessageFor(r => r.Role.Name)
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(r => r.Role.Status)
-                @Html.DropDownListFor(r => r.Role.Status, new SelectList(Model.Statuses, "Code", "Description"), "Select Status", new {@class = "form-control"})
-                @Html.ValidationMessageFor(r => r.Role.Status)
-            </div>
-            <div class="form-group">
-                <div>@Html.HiddenFor(r => r.Role.RoleId)</div>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-            <div class="form-group">
-                @Html.AntiForgeryToken()
-            </div>
-        </div>
-
+        pagename = Model.RoleName == null ? "New Role" : "Edit Role";
     }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "Role"))
+{
+    <div>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+        <div class="form-group">
+            @Html.LabelFor(r => r.RoleName)
+            @Html.TextBoxFor(r => r.RoleName, new {@class = "form-control gdhote-text-capitalize"})
+            @Html.ValidationMessageFor(r => r.RoleName)
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+    </div>
+
+}

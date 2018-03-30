@@ -11,68 +11,68 @@
 <h2>@pagename</h2>
 @using (Html.BeginForm("Save", "Member"))
 {
-    @*@Html.ValidationSummary(true, "Please fix the below errors.")*@
-
-    <span class="text-danger">@ViewBag.LoginError</span>
-    <div class="form-group">
-        @Html.LabelFor(m => m.FirstName)
-        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.FirstName)
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.MiddleName)
-        @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MiddleName)
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Surname)
-        @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Surname)
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.MobileNumber)
-        @Html.TextBoxFor(m => m.MobileNumber, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MobileNumber)
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.EmailAddress)
-        @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.EmailAddress)
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.DateOfBirth)
-        @Html.TextBoxFor(m => m.DateOfBirth, "{0:d MMM yyyy}", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.DateOfBirth)
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Gender)
-        @Html.DropDownListFor(m => m.Gender, new SelectList(Model.Genders, "Code", "Description"), "Select Sex", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Gender)
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.MaritalStatus)
-        @Html.DropDownListFor(m => m.MaritalStatus, new SelectList(Model.MaritalStatuses, "Code", "Description"), "Select Status", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MaritalStatus)
-    </div>
-    <div class="checkbox">
-        <label>
-            @Html.CheckBoxFor(m => m.InitiationFlag) Initiation?
-        </label>
-    </div>
-    <div class="checkbox">
-        <label>
-            @Html.CheckBoxFor(m => m.MagusFlag) Is Magus?
-        </label>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.MagusDate)
-        @Html.TextBoxFor(m => m.MagusDate, "{0:d MMM yyyy}", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MagusDate)
-    </div>
     <div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+        <div class="form-group">
+            @Html.LabelFor(m => m.FirstName)
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.FirstName)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.MiddleName)
+            @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.MiddleName)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Surname)
+            @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Surname)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.MobileNumber)
+            @Html.TextBoxFor(m => m.MobileNumber, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.MobileNumber)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.EmailAddress)
+            @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.EmailAddress)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.DateOfBirth)
+            @Html.TextBoxFor(m => m.DateOfBirth, "{0:d MMM yyyy}", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.DateOfBirth)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Gender)
+            @Html.DropDownListFor(m => m.Gender, new SelectList(Model.Genders, "Code", "Description"), "Select Sex", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Gender)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.MaritalStatus)
+            @Html.DropDownListFor(m => m.MaritalStatus, new SelectList(Model.MaritalStatuses, "Code", "Description"), "Select Status", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.MaritalStatus)
+        </div>
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(m => m.InitiationFlag) Initiation?
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(m => m.MagusFlag) Is Magus?
+            </label>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.MagusDate)
+            @Html.TextBoxFor(m => m.MagusDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.MagusDate)
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div>@Html.AntiForgeryToken()</div>
     </div>
-    <div>@Html.AntiForgeryToken()</div>
 }
 
 @section scripts

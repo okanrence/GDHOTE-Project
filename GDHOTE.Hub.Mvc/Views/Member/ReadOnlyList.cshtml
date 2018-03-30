@@ -1,4 +1,4 @@
-﻿@model List<GDHOTE.Hub.CoreObject.Models.Member>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.MemberViewModel>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -25,7 +25,7 @@ else
                     <th>Date Of Birth</th>
                     <th>Magus</th>
                     <th>Magus Date</th>
-                    <th>Record Date</th>
+                    <th>Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,11 +37,11 @@ else
                         <td>@member.FirstName, @member.MiddleName </td>
                         <td>@member.Gender</td>
                         <td>@member.MaritalStatus</td>
-                        <td>@member.StatusCode</td>
+                        <td>@member.MemberStatus</td>
                         <td>@member.DateOfBirth.ToString("dd-MMM-yyyy")</td>
                         <td>@member.MagusFlag</td>
                         <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy") ?? "") </td>
-                        <td>@member.RecordDate.ToString("dd-MMM-yyyy")</td>
+                        <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>
                     </tr>
                 }
             </tbody>

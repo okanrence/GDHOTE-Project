@@ -1,4 +1,4 @@
-﻿@model List<GDHOTE.Hub.CoreObject.Models.Role>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.RoleViewModel>
 @{
     ViewBag.Title = "RoleIndex";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -17,27 +17,37 @@
 }
 else
 {
-    <div>
-        <table id="roles" class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var role in Model)
-                {
+    <div id="responsive">
+
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+
+        <div>
+            <table id="roles" class="table table-bordered table-hover">
+                <thead>
                     <tr>
-                        <td>@Html.ActionLink(role.Name, "Edit", "Role", new { id = role.RoleId }, null)</td>
-                        <td>@role.Status</td>
-                        <td><button data-role-id="@role.RoleId" class="btn btn-link js-delete">Delete</button></td>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var role in Model)
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(role.RoleName, "Edit", "Role", new { id = role.RoleId }, null)</td>
+                            <td>@role.Status</td>
+                            <td>@role.DateCreated.ToString("dd-MMM-yyyy")</td>
+                            <td><button data-role-id="@role.RoleId" class="btn btn-link js-delete">Delete</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
+
 }
 @section scripts
 {
@@ -47,13 +57,36 @@ else
 
             $("#roles").on("click", ".js-delete", function () {
                 var button = $(this);
+                var id = button.attr("data-role-id");
+
+                var form = $('#responsive');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+                //Submit request
+                var request = { __RequestVerificationToken: token };
+
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: "../api/v1/role/delete-role?id=" + button.attr("data-role-id"),
-                            method: "DELETE",
-                            success: function () {
-                                button.parents("tr").remove();
+                            url: '@Url.Action("DeleteRole", "Role")/' + id,
+                            method: "POST",
+                            data: request,
+                            success: function (data) {
+                                if (data !== null) {
+                                    if (data.ErrorCode === "00") {
+                                        swal({
+                                            title: "Success",
+                                            text: "success",
+                                            type: "success"
+                                        });
+
+                                        window.location.reload(true);
+                                    }
+                                    else {
+                                        alert(data.ErrorMessage);
+                                    }
+                                };
+
                             }
                         });
                     }
