@@ -107,7 +107,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("create-country")]
-        public HttpResponseMessage CreateActivityType(CreateCountryRequest createRequest)
+        public HttpResponseMessage CreateCountry(CreateCountryRequest createRequest)
         {
             try
             {

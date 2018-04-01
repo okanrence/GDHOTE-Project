@@ -47,6 +47,37 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpGet]
+        [Route("get-active-members")]
+        public HttpResponseMessage GetActiveMembers()
+        {
+            try
+            {
+                var response = MemberService.GetActiveMembers().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpGet]
         [Route("get-pending-approval")]
         public HttpResponseMessage GetMembersPendingApproval()
         {
@@ -76,35 +107,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("get-active-members")]
-        public HttpResponseMessage GetActiveMembers()
-        {
-            try
-            {
-                var response = MemberService.GetActiveMembers().ToList();
-                if (response.Count > 0)
-                {
-                    return new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        RequestMessage = Request,
-                        Content = new StringContent(
-                            JsonConvert.SerializeObject(response, Formatting.Indented))
-                    };
-                }
-
-                return new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    RequestMessage = Request,
-                    Content = new StringContent(
-                        JsonConvert.SerializeObject(response, Formatting.Indented))
-                };
-            }
-            catch (UnableToCompleteException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
-            }
-        }
+       
 
         [HttpGet]
         [Route("get-member")]
@@ -144,8 +147,22 @@ namespace GDHOTE.Hub.WebApi.Controllers
             {
                 string username = User.Identity.Name;
                 var response = MemberService.Delete(Convert.ToInt16(id), username);
-                return Request.CreateResponse(HttpStatusCode.OK, response);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
 
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
             }
             catch (UnableToCompleteException ex)
             {
@@ -218,12 +235,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("get-members-by-seach-query")]
-        public HttpResponseMessage GetMembers(string seachQuery)
+        [Route("get-members-by-search-query")]
+        public HttpResponseMessage GetMembersBySearchQuery(string seachQuery)
         {
             try
             {
-                var response = MemberService.GetMembersBySearchQuery(seachQuery).ToList();
+                var response = MemberInfoService.GetMembersByName(seachQuery).ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -247,13 +264,45 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
+
+        [HttpPost]
+        [Route("get-members-by-mobile-number")]
+        public HttpResponseMessage GetMembersByMobileNumber(string seachQuery)
+        {
+            try
+            {
+                var response = MemberInfoService.GetMembersByMobileNumber(seachQuery).ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
         [HttpPost]
         [Route("get-members-by-birthday")]
         public HttpResponseMessage GetMembersByBirthday(string dateOfBirth)
         {
             try
             {
-                var response = MemberService.GetMembersByBirthday(dateOfBirth).ToList();
+                var response = MemberInfoService.GetMembersByBirthday(dateOfBirth).ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)

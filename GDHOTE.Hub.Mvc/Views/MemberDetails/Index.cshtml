@@ -1,15 +1,11 @@
-﻿@model List<GDHOTE.Hub.CoreObject.Models.MemberDetails>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.MemberDetailsViewModel>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Contact Details</h2>
-@*<p>
-        @Html.ActionLink("New Contact", "New", "MemberDetails", null, new { @class = "btn btn-primary" })
-    </p>*@
-
-
+ 
 @if (Model == null || Model.Count == 0)
 {
     <p>No record(s) found</p>
@@ -38,12 +34,12 @@ else
                         <td>@Html.ActionLink(!string.IsNullOrEmpty(member.MobileNumber) ? member.MobileNumber : "NA", "Edit", "MemberDetails", new { id = member.MemberDetailsId }, null)</td>
                         <td>@member.MobileNumber</td>
                         <td>@member.EmailAddress</td>
-                        <td>@member.StateOfOriginCode</td>
-                        <td>@member.CountryOfOriginCode</td>
-                        <td>@member.ResidenceCountryCode</td>
-                        <td>@member.YearGroupCode</td>
+                        <td>@member.StateOfOriginId</td>
+                        <td>@member.CountryOfOriginId</td>
+                        <td>@member.ResidenceCountryId</td>
+                        <td>@member.YearGroupId</td>
                         <td>@member.RecordDate.ToString("dd-MMM-yyyy")</td>
-                        <td><button data-member-id="@member.MemberDetailsId" class="btn btn-link js-delete">Delete</button></td>
+                        <td><button data-member-id="@member.Id" class="btn btn-link js-delete">Delete</button></td>
                     </tr>
                 }
             </tbody>

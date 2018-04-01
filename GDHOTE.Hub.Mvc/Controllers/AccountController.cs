@@ -10,10 +10,11 @@ using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.PortalCore.Integrations;
 using GDHOTE.Hub.CoreObject.Models;
+using GDHOTE.Hub.PortalCore.Services;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class AccountController : Controller
     {
         //
@@ -66,32 +67,45 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 ViewBag.LoginError = "Login details are wrong.";
             }
             return View();
-
-            //var result = AdministratorAuthenticationService.AuthenticateUser(loginRequest);
-            //if (result != null)
-            //{
-            //    if (!string.IsNullOrEmpty(result.User.UserName))
-            //    {
-            //        FormsAuthentication.SetAuthCookie(result.User.UserName, false);
-            //        string roles = result.User.RoleId + "," + result.User.UserId;
-            //        var authTicket = new FormsAuthenticationTicket(1, result.User.UserName, DateTime.Now, DateTime.Now.AddMinutes(5), false, roles);
-            //        string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
-            //        var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-            //        HttpContext.Response.Cookies.Add(authCookie);
-            //        return RedirectToAction("Index", "Home");
-            //    }
-            //    else
-            //    {
-            //        ViewBag.LoginError = "Invalid username or password";
-            //    }
-            //}
-            //else
-            //{
-            //    ViewBag.LoginError = "Login details are wrong.";
-            //}
-            //return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult ForgotPassword(PasswordResetRequest resetRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            resetRequest.ChannelId = (int)CoreObject.Enumerables.Channel.Web;
+            var result = PortalUserService.StartPasswordReset(resetRequest);
+            if (result != null)
+            {
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    //return RedirectToAction("Login");
+                    ViewBag.ErrorBag = "Email has been sent to your box";
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+            }
+            else
+            {
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
+            }
+            // If we got this far, something failed, redisplay form
+            return View();
+        }
 
 
         //
@@ -102,14 +116,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return View();
         }
 
-        //
-        // GET: /Account/ResetPassword
-        [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
-        {
-            return code == null ? View("Error") : View();
-        }
-
+       
         //
         // POST: /Account/LogOff
         [HttpPost]

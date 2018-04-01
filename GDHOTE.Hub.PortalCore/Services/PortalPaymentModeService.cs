@@ -42,7 +42,7 @@ namespace GDHOTE.Hub.PortalCore.Services
 
         public static List<PaymentMode> GetActivePaymentModes()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/payment/get-payment-modes";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/payment/get-active-payment-modes";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");

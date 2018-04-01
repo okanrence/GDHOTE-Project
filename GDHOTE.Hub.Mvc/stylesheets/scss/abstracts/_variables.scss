@@ -1,0 +1,52 @@
+// Color Variables
+
+$soft-blue: #576ae6;
+$tree-green: #257516;
+$macaroni-and-cheese: #ef9c39;
+$pale-grey: #f7f8fc;
+$light-grey-green: #bbe5b3;
+$warm-blue: #3d4fd9;
+$white: #ffffff;
+
+
+
+$brand-color: $soft-blue;
+$primary-color:#5b6cde;
+$secondary-color: #0f1747;
+$accent-color: $macaroni-and-cheese;
+$muted-text:#8a8894;
+$text-black:#222c36;
+$text-darker:#333748;
+$link-in-text:#5c6ac4;
+$text-accent:#dd7a32;
+$body-text:rgba(74, 82, 106, 0.99);
+$grey: #a8a6af;
+$highlight: #32425e;
+$light-grey: #e2e2e2;
+$very-light-grey: #cacaca;
+
+
+
+$links: $brand-color;
+$button: $brand-color;
+$border-color: #a4aab3;
+$muted-color: $very-light-grey;
+$hover-color: darken($brand-color, 20%);
+
+//* Media Query Breakpoints
+//* =========================
+
+$breakpoint-xxs-min: 320px;  // Small phones
+$breakpoint-xs-min: 480px;   // Phones
+$breakpoint-sm-min: 600px;   // Small tablets and phablets
+$breakpoint-md-min: 768px;   // Tablets
+$breakpoint-lg-min: 1000px;  // Small desktop
+$breakpoint-xl-min: 1300px;  // Desktop
+$breakpoint-xxl-min: 1600px; // Large desktop
+
+$breakpoint-xxs-max: ($breakpoint-xs-min - 1);
+$breakpoint-xs-max: ($breakpoint-sm-min - 1);
+$breakpoint-sm-max: ($breakpoint-md-min - 1);
+$breakpoint-md-max: ($breakpoint-lg-min - 1);
+$breakpoint-lg-max: ($breakpoint-xl-min - 1);
+$breakpoint-xl-max: ($breakpoint-xxl-min - 1);

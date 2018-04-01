@@ -8,7 +8,7 @@
     var pagename = "";
     if (Model != null)
     {
-        pagename = Model.Payment.PaymentId == 0 ? "New Payment" : "Edit Payment";
+        pagename = Model.MemberKey == 0 ? "New Payment" : "Edit Payment";
     }
 
 }
@@ -18,38 +18,33 @@
 @using (Html.BeginForm("Save", "Payment"))
 {
     <div>
-        @Html.ValidationSummary(true, "Please fix the below errors.")
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+
         <div class="form-group">
-            @Html.LabelFor(p => p.Payment.MemberKey)
-            @Html.TextBoxFor(p => p.Payment.MemberKey, new { @class = "form-control" })
-            @Html.ValidationMessageFor(p => p.Payment.MemberKey)
-        </div>
-      <div class="form-group">
-            @Html.LabelFor(p => p.Payment.Amount)
-            @Html.TextBoxFor(p => p.Payment.Amount, new { @class = "form-control" })
-            @Html.ValidationMessageFor(p => p.Payment.Amount)
+            @Html.LabelFor(p => p.PaymentTypeId)
+            @Html.DropDownListFor(p => p.PaymentTypeId, new SelectList(Model.PaymentTypes, "Id", "Name"), "Select Payment Type", new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.PaymentTypeId)
         </div>
         <div class="form-group">
-            @Html.LabelFor(p => p.Payment.PaymentTypeId)
-            @Html.DropDownListFor(p => p.Payment.PaymentTypeId, new SelectList(Model.PaymentTypes, "PaymentTypeId", "Description"), "Select Payment Type", new { @class = "form-control" })
-            @Html.ValidationMessageFor(p => p.Payment.PaymentTypeId)
+            @Html.LabelFor(p => p.PaymentModeId)
+            @Html.DropDownListFor(p => p.PaymentModeId, new SelectList(Model.ModeOfPayments, "Id", "Name"), "Select Mode Of Payment", new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.PaymentModeId)
         </div>
         <div class="form-group">
-            @Html.LabelFor(p => p.Payment.PaymentModeId)
-            @Html.DropDownListFor(p => p.Payment.PaymentModeId, new SelectList(Model.ModeOfPayments, "PaymentModeId", "Description"), "Select Mode Of Payment", new { @class = "form-control" })
-            @Html.ValidationMessageFor(p => p.Payment.PaymentModeId)
+            @Html.LabelFor(p => p.CurrencyId)
+            @Html.DropDownListFor(p => p.CurrencyId, new SelectList(Model.Currencies, "Id", "Name"), "Select Currency", new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.CurrencyId)
         </div>
         <div class="form-group">
-            @Html.LabelFor(p => p.Payment.CurrencyId)
-            @Html.DropDownListFor(p => p.Payment.CurrencyId, new SelectList(Model.Currencies, "CurrencyId", "Description"), "Select Currency", new { @class = "form-control" })
-            @Html.ValidationMessageFor(p => p.Payment.CurrencyId)
+            @Html.LabelFor(p => p.Amount)
+            @Html.TextBoxFor(p => p.Amount, new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.Amount)
         </div>
         <div class="form-group">
-            @Html.LabelFor(p => p.Payment.Narration)
-            @Html.TextBoxFor(p => p.Payment.Narration, new { @class = "form-control" })
-            @Html.ValidationMessageFor(p => p.Payment.Narration)
+            @Html.LabelFor(p => p.Narration)
+            @Html.TextBoxFor(p => p.Narration, new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.Narration)
         </div>
-        <div>@Html.HiddenFor(p => p.Payment.PaymentId)</div>
         <div>
             <button type="submit" class="btn btn-primary">Save</button>
         </div>

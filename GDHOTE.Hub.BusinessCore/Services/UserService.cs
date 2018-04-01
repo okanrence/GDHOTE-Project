@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +10,7 @@ using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using Newtonsoft.Json;
 using GDHOTE.Hub.CoreObject.Enumerables;
+using NPoco;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -26,7 +28,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.Log(ex.Message);
+                LogService.Log(ex.Message);
                 return ex.Message.Contains("The duplicate key") ? "Cannot Insert duplicate record" : "Error occured while trying to insert User";
             }
         }
@@ -43,7 +45,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.Log(ex.Message);
+                LogService.Log(ex.Message);
                 return new User();
             }
         }
@@ -62,7 +64,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.Log(ex.Message);
+                LogService.Log(ex.Message);
                 return new User();
             }
         }
@@ -81,7 +83,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.Log(ex.Message);
+                LogService.Log(ex.Message);
                 return new User();
             }
         }
@@ -98,7 +100,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.Log(ex.Message);
+                LogService.Log(ex.Message);
                 return "Error occured while trying to update User";
             }
         }
@@ -114,9 +116,121 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.Log(ex.Message);
+                LogService.Log(ex.Message);
                 return "Error occured while trying to delete record";
             }
+        }
+        public static Response RequestResetPassword(PasswordResetRequest request)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+
+                    string username = request.Username.ToLower();
+
+                    //Get user by username 
+                    var userExist = db.Fetch<User>().SingleOrDefault(c => c.UserName.ToLower().Equals(username));
+                    if (userExist == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "User not registered"
+                        };
+                    }
+
+                    //string code = CommonServices.RandomString(5);
+                    //var pwdReset = new PasswordReset();
+                    //pwdReset.UserId = userExist.UserId;
+                    //pwdReset.Status = "D";
+                    //db.Update<PasswordReset>("where UserId =" + userExist.UserId);
+
+
+                    ////Insert new Password Reset
+                    //var pwd = new PasswordReset();
+                    //code = CommonServices.RandomString(5);
+                    //pwd.ResetCode = CommonServices.HashSha512(code);
+                    //pwd.ChannelId = request.ChannelId;
+                    //pwd.DateCreated = DateTime.Now;
+                    //pwd.DateExpiry = DateTime.Now.AddDays(1);
+                    //pwd.UserId = userExist.UserId;
+                    //pwd.EmailAddress = userExist.EmailAddress;
+                    //db.Insert(pwd);
+
+                    //check password reset
+                    var pwdReset = db.Query<PasswordReset>()
+                            .SingleOrDefault(p => p.UserId == userExist.UserId && p.DateUpdated == null);
+
+                    string code;
+                    bool resend = false;
+                    if (pwdReset == null)
+                    {
+                        var pwd = new PasswordReset();
+                        code = CommonServices.RandomString(5);
+                        pwd.ResetCode = CommonServices.HashSha512(code);
+                        pwd.ChannelId = request.ChannelId;
+                        pwd.DateCreated = DateTime.Now;
+                        pwd.DateExpiry = DateTime.Now.AddDays(1);
+                        pwd.UserId = userExist.UserId;
+                        pwd.EmailAddress = userExist.EmailAddress;
+                        db.Insert(pwd);
+                    }
+                    else
+                    {
+
+                        //code has expired, regenerate
+                        code = CommonServices.RandomString(5);
+                        resend = true;
+                        pwdReset.ResetCode = CommonServices.HashSha512(code);
+                        pwdReset.DateCreated = DateTime.Now;
+                        pwdReset.DateExpiry = DateTime.Now.AddDays(1);
+                        pwdReset.ChannelId = request.ChannelId;
+                        db.Update(pwdReset);
+
+                    }
+
+
+                    new Task(() =>
+                    {
+                        var req = new EmailRequest
+                        {
+                            Type = EmailType.PasswordReset,
+                            RecipientEmailAddress = userExist.EmailAddress,
+                            UserId = userExist.UserId,
+                            Data = new Hashtable
+                            {
+                                ["Subject"] = "Gdhote Password Reset",
+                                ["Code"] = code,
+                                ["Resend"] = resend
+                            }
+                        };
+                        EmailNotificationService.SendForEmailConfirmation(req);
+                    }).Start();
+
+
+
+                    var response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+
+                    return response;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //LogService.Log(ex.Message);
+                var response = new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to insert record"
+                };
+                return response;
+            }
+
         }
     }
 }

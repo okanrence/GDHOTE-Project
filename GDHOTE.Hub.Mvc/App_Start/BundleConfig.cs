@@ -17,7 +17,8 @@ namespace GDHOTE.Hub.Mvc
                         "~/Scripts/datatables/datatables.bootstrap.js",
                         "~/Scripts/moment.js",
                        "~/Scripts/bootstrap-datepicker.js",
-                       "~/Scripts/sweetalert.min.js"
+                       "~/Scripts/sweetalert.min.js",
+                       "~/Scripts/jquery.unobtrusive-ajax.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(

@@ -16,7 +16,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
         {
             try
             {
-              
+
                 LogService.Log("Testing");
 
 

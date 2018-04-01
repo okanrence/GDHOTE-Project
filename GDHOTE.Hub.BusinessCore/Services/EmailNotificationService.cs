@@ -12,7 +12,7 @@ using Postal;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
-    public class EmailManager : BaseService
+    public class EmailNotificationService : BaseService
     {
         public static void SendForEmailConfirmation(EmailRequest emailRequest)
         {

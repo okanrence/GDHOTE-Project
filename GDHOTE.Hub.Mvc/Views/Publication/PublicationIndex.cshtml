@@ -1,0 +1,99 @@
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.PublicationViewModel>
+
+@{
+    ViewBag.Title = "Publications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Publications</h2>
+<p>
+    @Html.ActionLink("New Publication", "New", "Publication", null, new { @class = "btn btn-primary" })
+</p>
+
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No record(s) found</p>
+}
+else
+{
+    <div id="responsive">
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+
+        <div>
+            <table id="countries" class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Publication</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var publication in Model)
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(publication.Name, "Edit", "Country", new { id = publication.Id }, null)</td>
+                            <td>@publication.Status</td>
+                            <td>@publication.DateCreated.ToString("dd-MMM-yyyy")</td>
+                            <td><button data-country-id="@publication.Id" class="btn btn-link js-delete">Delete</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+}
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#countries").DataTable();
+
+            $("#countries").on("click", ".js-delete", function () {
+                var button = $(this);
+                var id = button.attr("data-country-id");
+
+                var form = $('#responsive');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+                //Submit request
+                var request = { __RequestVerificationToken: token };
+
+                bootbox.confirm("Are you sure you want to proceed?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '@Url.Action("DeleteCountry", "Country")/' + id,
+                            method: "POST",
+                            data: request,
+                            success: function (data) {
+                                if (data !== null) {
+                                    if (data.ErrorCode === "00") {
+                                        swal({
+                                            title: "Success",
+                                            text: "success",
+                                            type: "success"
+                                        });
+
+                                        window.location.reload(true);
+                                    }
+                                    else {
+                                        alert(data.ErrorMessage);
+                                    }
+                                };
+
+                            }
+                        });
+                    }
+                });
+
+            });
+        });
+    </script>
+}
+

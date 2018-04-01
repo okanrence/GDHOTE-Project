@@ -272,8 +272,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiControllers\MainMenuController.cs" />
-    <Compile Include="ApiControllers\MemberDetailsController.cs" />
-    <Compile Include="ApiControllers\PaymentController.cs" />
     <Compile Include="ApiControllers\SubMenuController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -295,6 +293,7 @@
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\PaymentModeController.cs" />
     <Compile Include="Controllers\PaymentTypeController.cs" />
+    <Compile Include="Controllers\PublicationController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\RoleMenuController.cs" />
     <Compile Include="Controllers\StateController.cs" />
@@ -432,11 +431,14 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
+    <Content Include="images\download.gif" />
+    <Content Include="images\download.png" />
     <Content Include="Content\sweetalert.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\logo.png" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
@@ -535,6 +537,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -615,6 +619,8 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="stylesheets\css\app.css" />
+    <Content Include="stylesheets\vendors\bootstrap.min.css" />
     <Content Include="Views\Member\ApproveMember.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -640,10 +646,6 @@
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
-    <Content Include="Views\Account\VerifyCode.cshtml" />
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Manage\ChangePassword.cshtml" />
     <Content Include="Views\Manage\Index.cshtml" />
@@ -674,8 +676,6 @@
     <Content Include="Views\Shared\_NavMenu.cshtml" />
     <Content Include="Views\PaymentMode\PaymentModeIndex.cshtml" />
     <Content Include="Views\PaymentMode\PaymentModeForm.cshtml" />
-    <Content Include="Views\Payment\ReadOnlyList.cshtml" />
-    <Content Include="Views\Payment\ReadOnlyList2.cshtml" />
     <Content Include="Views\Payment\ManagePayment.cshtml" />
     <Content Include="Views\Currency\CurrencyIndex.cshtml" />
     <Content Include="Views\Currency\CurrencyForm.cshtml" />
@@ -693,6 +693,26 @@
     <Content Include="Views\Member\UpdateMemberForm.cshtml" />
     <Content Include="Views\Emails\_ViewStart.cshtml" />
     <Content Include="Views\Emails\Web.config" />
+    <Content Include="Views\Payment\_PaymentReport.cshtml" />
+    <Content Include="Views\Shared\_LoginLayout.cshtml" />
+    <Content Include="stylesheets\css\app.css.map" />
+    <Content Include="stylesheets\scss\abstracts\_mixins.scss" />
+    <Content Include="stylesheets\scss\abstracts\_variables.scss" />
+    <Content Include="stylesheets\scss\app.scss" />
+    <Content Include="stylesheets\scss\base\_base.scss" />
+    <Content Include="stylesheets\scss\base\_fonts.scss" />
+    <Content Include="stylesheets\scss\base\_helpers.scss" />
+    <Content Include="stylesheets\scss\layout\_footer.scss" />
+    <Content Include="stylesheets\scss\layout\_header.scss" />
+    <Content Include="stylesheets\scss\layout\_hero.scss" />
+    <Content Include="stylesheets\scss\pages\_index.scss" />
+    <Content Include="stylesheets\scss\pages\_login.scss" />
+    <Content Include="Views\Account\Login - Copy.cshtml" />
+    <Content Include="Views\Shared\_HomeLayout.cshtml" />
+    <Content Include="Views\_ViewStart - Copy.cshtml" />
+    <Content Include="Views\Account\ForgotPassword - Copy.cshtml" />
+    <Content Include="Views\Publication\PublicationIndex.cshtml" />
+    <Content Include="Views\Publication\PublicationForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

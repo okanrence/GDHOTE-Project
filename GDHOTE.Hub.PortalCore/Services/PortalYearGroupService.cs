@@ -40,7 +40,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<YearGroup> GetYearGroups()
+        public static List<YearGroup> GetActiveYearGroups()
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/year-group/get-active-year-groups";
             var client = new RestClient(fullUrl);

@@ -5,35 +5,179 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
+using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
 {
     [RoutePrefix(ConstantManager.ApiDefaultNamespace + "member")]
     public class MemberDetailsController : ApiController
     {
+        [HttpGet]
         [Route("get-members-details")]
-        public IHttpActionResult GetMembersDetails()
+        public HttpResponseMessage GetMembersDetails()
         {
-            var memberDetails = MemberDetailsService.GetMembersDetails().ToList();
-            return Ok(memberDetails);
-        }
-        [Route("get-member-details")]
-        public IHttpActionResult GetMemberDetails(int id)
-        {
-            var memberDetails = MemberDetailsService.GetMemberDetails(id);
-            if (memberDetails == null) return NotFound();
-            return Ok(memberDetails);
+            try
+            {
+                var response = MemberDetailsService.GetMembersDetails().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
         }
 
-        [HttpDelete]
-        [Route("delete-member-details")]
-        public IHttpActionResult DeleteMemberDetails(int id)
+        [HttpGet]
+        [Route("get-member-details")]
+        public HttpResponseMessage GetMemberDetails(string id)
         {
-            var memberDetailsInDb = MemberDetailsService.GetMemberDetails(id);
-            if (memberDetailsInDb == null) return NotFound();
-            var result = MemberDetailsService.Delete(id);
-            return Ok(result);
+            try
+            {
+                var response = MemberDetailsService.GetMemberDetails(Convert.ToInt16(id));
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+        
+
+        [HttpPost]
+        [Route("create-member-details")]
+        public HttpResponseMessage CreateMemberDetails(CreateMemberDetailsRequest createRequest)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+
+                string username = User.Identity.Name;
+                var response = MemberDetailsService.CreateMemberDetails(createRequest, username);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+        [HttpPost]
+        [Route("delete-member-details")]
+        public HttpResponseMessage DeleteMemberDetails(string id)
+        {
+            try
+            {
+                string username = User.Identity.Name;
+                var response = MemberDetailsService.Delete(Convert.ToInt16(id), username);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpPost]
+        [Route("update-member-details")]
+        public HttpResponseMessage UpdateMemberDetails(UpdateMemberDetailsRequest updateRequest)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+
+                string username = User.Identity.Name;
+                var response = MemberDetailsService.UpdateMemberDetails(updateRequest, username);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
         }
     }
 }

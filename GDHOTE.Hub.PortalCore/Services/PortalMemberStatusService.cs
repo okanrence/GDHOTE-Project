@@ -41,7 +41,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<MemberStatus> GetMemberStatuses()
+        public static List<MemberStatus> GetActiveMemberStatuses()
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-active-member-statuses";
             var client = new RestClient(fullUrl);

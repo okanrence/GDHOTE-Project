@@ -49,9 +49,9 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("get-currencies")]
-        [UnAuthorized(Roles = "Adminstrator, Approver")]
-        public HttpResponseMessage GetCurrencies()
+        [Route("get-active-currencies")]
+        //[UnAuthorized(Roles = "Adminstrator")]
+        public HttpResponseMessage GetActiveCurrencies()
         {
             try
             {

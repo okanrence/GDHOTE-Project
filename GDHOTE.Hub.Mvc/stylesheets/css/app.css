@@ -1,0 +1,26 @@
+@font-face{font-family:'Avenir';font-style:normal;font-weight:300;src:url("../css/fonts/avenir/AvenirLTStd-Light.otf") format("opentype")}@font-face{font-family:'Avenir';font-style:normal;font-weight:500;src:url("../css/fonts/avenir/AvenirLTStd-Book.otf") format("opentype")}@font-face{font-family:'Avenir';font-style:normal;font-weight:600;src:url("../css/fonts/avenir/AvenirLTStd-Roman.otf") format("opentype")}@font-face{font-family:'Avenir';font-style:normal;font-weight:900;src:url("../css/fonts/avenir/AvenirLTStd-Black.otf") format("opentype")}body{font-size:16px;font-family:"Avenir" !important;font-weight:400;color:#222c36;background-color:#ECEEF1;overflow-x:hidden}*{padding:0;margin:0}a{text-decoration:none}a:hover{text-decoration:none}html,html a{-webkit-font-smoothing:antialiased;text-shadow:1px 1px 1px rgba(0,0,0,0.004)}[class^="icon-"],[class*=" icon-"]{height:32px;width:32px;display:inline-block;fill:currentColor}[class^="icon-"].icon-md,[class*=" icon-"].icon-md{height:25px;width:25px}[class^="icon-"].icon-sm,[class*=" icon-"].icon-sm{height:20px;width:20px}[class^="icon-"].icon-xs,[class*=" icon-"].icon-xs{height:15px;width:15px}[class^="icon-"].icon-ss,[class*=" icon-"].icon-ss{height:18px;width:18px}ul{padding-left:0}hr{border-color:#ececec;border-width:0.5px}.btn-primary{background-color:#417505 !important}.header{width:100%;height:auto}.header .hero{width:100%;height:450px;background:url(../../images/man.png);background-size:contain;text-align:left}.header .hero h1{font-size:48px;margin:50px auto;text-transform:none;font-weight:bold;color:#000000}.header .hero h2{font-size:14px;font-weight:400;color:#000000}.header .hero .search{width:65%}.header .hero .search input{width:100%;padding:15px;outline:none;border:1px solid #979797;border-radius:4px;color:#333333;font-size:14px}.navigation{width:100%;padding:15px;background-color:#ffffff}.navigation .logo{width:150px;height:auto;float:left}.navigation .logo img{height:40px}.navigation .nav-search{width:50%;float:left}.navigation .nav-search input{width:100%;padding:10px;outline:none;border:1px solid #979797;color:#333333;font-size:14px}.navigation .nav-items{text-align:right;text-transform:uppercase}.navigation .nav-items button{color:#ffffff;background:#417505;font-weight:600;font-size:14px;text-transform:uppercase;margin-left:20px}.navigation .nav-items a{margin-left:20px;color:#4A4A4A;font-weight:600}*{font-family:"Avenir" !important}a{text-decoration:none !important}body{background:#ECEEF1 !important}.content{margin:50px 0 100px}.card{background:#ffffff;padding:15px;margin-top:50px}.card .title{width:100%;border-bottom:1px solid #f5f5f5}.card .title h1{font-size:16px;font-weight:500;color:#000000}.card .title p{font-size:14px;color:#4a4a4a}.job-description{background:#ffffff;padding:30px !important;margin-top:50px}.job-description .title{width:100%;border-bottom:1px solid #f5f5f5}.job-description .title h1{font-size:24px;font-weight:500;color:#000000;margin:0}.job-description .title p{font-size:14px;color:#4a4a4a;margin-top:10px}.job-description .body{font-size:16px;margin-top:20px}.job-description .body .btn{margin-top:20px}.share{width:100%;height:100px;background:#ffffff;margin-top:50px}.login-wrapper{width:100%}.login-wrapper .card{width:30%;height:auto;margin:100px auto;padding:30px}.login-wrapper .card input,.login-wrapper .card select{width:100%;border:1px solid #f5f5f5;border-radius:3px;padding:15px;margin-bottom:20px;outline:none}.login-wrapper .card select{-webkit-appearance:none;-moz-appearance:none;appearance:none}.login-wrapper .card .forgot-password{float:right}
+
+
+
+.field-validation-error,
+label.error {
+    color: red;
+}
+
+.input-validation-error,
+input.error {
+    border: 2px solid red;
+}
+
+.validation-summary-errors {
+    color: red;
+}
+
+.jobify-text-uppercase {
+    text-transform: uppercase;
+}
+
+.jobify-text-capitalize {
+    text-transform: capitalize;
+}
+/*# sourceMappingURL=app.css.map */

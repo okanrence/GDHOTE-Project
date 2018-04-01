@@ -10,7 +10,24 @@ namespace GDHOTE.Hub.BusinessCore.Services
 {
     public class CommonServices
     {
-
+        public static string HashSha512(string randomString)
+        {
+            SHA512Managed crypt = new SHA512Managed();
+            string hash = String.Empty;
+            byte[] crypto = crypt.ComputeHash(Encoding.ASCII.GetBytes(randomString), 0, Encoding.ASCII.GetByteCount(randomString));
+            foreach (byte theByte in crypto)
+            {
+                hash += theByte.ToString("x2");
+            }
+            return hash;
+        }
+        private static Random random = new Random();
+        public static string RandomString(int length)
+        {
+            const string chars = "0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
         public static string CreateHash(string input, HashTypes hashType, HashEncoding hashEncoding)
         {
             HashAlgorithm hashAlgorithm = null;

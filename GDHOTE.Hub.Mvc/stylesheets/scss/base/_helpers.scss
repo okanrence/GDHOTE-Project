@@ -1,0 +1,226 @@
+/*.container {
+    padding-left: 15px;
+    padding-right: 15px;
+
+    @include media(576px) {
+        width: 540px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    @include media(768px) {
+        width: 750px;
+    }
+
+    @include media(992px) {
+        width: 970px;
+    }
+
+    @include media(1200px) {
+        width: 1040px;
+    }
+
+    @include media(1600px) {
+        width: 1300px;
+    }
+}
+
+.outer-container {
+    @include media(540px) {
+        @include outer-container(100%);
+    }
+}
+
+.outer-container--full {
+    @include outer-container(100%);
+}
+
+.hide {
+    display: none;
+}
+
+.block {
+    display: block;
+}
+
+.hidden--xxs {
+    @include media(max-width 576px) {
+        display: none;
+    }
+}
+
+.hidden--xs {
+    @include media(max-width 767px) {
+        display: none;
+    }
+}
+.visible--xs,
+.visible--sm,
+.visible--md,
+.visible--lg {
+    display: none !important;
+}
+.visible--xs-inline,
+.visible--xs-flex,
+.visible--md-inline,
+.visible--md-flex,
+.visible--lg-inline,
+.visible--lg-flex{
+    display: none !important;
+}
+.visible--xs{
+    @include for-phone-only(){
+        display:block !important;
+    }
+    @include for-phone-landscape-only{
+        display:block !important;
+    }
+}
+.visible--xs-flex{
+    @include for-phone-only(){
+        display:flex !important;
+    }
+    @include for-phone-landscape-only(){
+        display:flex !important;
+    }
+}
+.visible--sm{
+    @include for-tablet-portait-only(){
+        display: block !important;
+    }
+}
+.visible--sm-flex{
+    @include for-tablet-portait-only(){
+        display:flex !important;
+    }
+}
+.visible--md{
+    @include for-tablet-landscape-up(){
+        display:block !important;
+    }
+}
+.visible--md-flex{
+    @include for-tablet-landscape-up(){
+        display:flex !important;
+    }
+}
+.visible--lg{
+    @include for-desktop-up(){
+        display:block !important;
+    }
+}
+.visible--lg-flex{
+    @include for-desktop-up(){
+        display:flex !important;
+    }
+}
+.visible--lg-inline{
+    @include for-desktop-up(){
+        display:flex !important;
+    }
+}
+.hidden--xs{
+    @include for-phone-only(){
+        display:none !important;
+    }
+    @include for-phone-landscape-only(){
+        display:none !important;
+    }
+}
+.hidden--sm{
+    @include for-tablet-portait-only(){
+        display: none !important;
+    }
+}
+.hidden--md{
+    @include for-tablet-landscape-only(){
+        display: none !important;
+    }
+}
+.hidden--lg{
+    @include for-desktop-up(){
+        display: none !important;
+    }
+}
+.text-center {
+    text-align: center;
+}
+
+.img-circle {
+    border-radius: 50%;
+}
+
+.img-responsive {
+    max-width: 100%;
+}
+
+.inline-block {
+    display: inline-block;
+    vertical-align: middle;
+}
+.display-inline{
+    display:inline;
+}
+.margin-left-5{
+    margin-left:5px;
+}
+.position-reset{
+    position:inherit !important;
+}
+
+.line-cutter, .line-cutter-two{
+    background: white;
+    margin-bottom: 4px;
+    z-index: 4;
+    height: 35px;
+    top: 0;
+    right: 0;
+    display:none;
+    @include media(768px){
+        display:block;
+    }
+}
+.line-cutter{
+    position: absolute;
+    left: 0;
+    margin-top: -1px;
+    transform: skewY(-3deg);
+}
+.line-cutter-two{
+    position: absolute;
+    left: 50%;
+    right: 0;
+    transform: skewY(-2deg);
+    background: white;
+}
+
+.gradient-overlay{
+    position: absolute;
+    background-image: linear-gradient(to bottom, rgba(245, 245, 245, 0.0), #ffffff);
+    height: 153px;
+    bottom: -20px;
+    left: 40%;
+    right: 0;
+    display:none;
+    &.active{
+        @include media(768px){
+            display:block;
+        }
+    }
+}
+
+.gradient-overlay-two{
+    position:absolute;
+    bottom:0;
+    height:153px;
+    left:0;
+    right:0;
+    z-index:23;
+    background-image: linear-gradient(to bottom, rgba(245, 245, 245, 0.0), #f4f6f8);
+    &.top{
+        bottom:auto;
+        top: -91px;
+        background-image: linear-gradient(to bottom, rgba(245, 245, 245, 0.0), #f9fafb);
+    }
+
+}*/

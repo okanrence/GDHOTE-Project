@@ -26,12 +26,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 return;
             }
 
-            //var currentUser = HttpContext.GetOwinContext().Authentication.User;
-            //IEnumerable<Claim> claims = currentUser.Claims;
-            ////var roles = claims.ToList().Where(c => c.Type == ClaimTypes.Role).ToList();
-            //var userClaims = claims.Where(c => c.Type == ClaimTypes.Role).Select(c => new { c.Value }).ToArray();
-            //string roleId = claims.SingleOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-
+            
             var currentUser = HttpContext.GetOwinContext().Authentication.User;
             IEnumerable<Claim> claims = currentUser.Claims;
             //var roles = claims.ToList().Where(c => c.Type == ClaimTypes.Role).ToList();
@@ -42,20 +37,11 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 roleId = claims.SingleOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
             }
 
-            //string roleId = "", userId = "";
-            //if (userClaims != null)
-            //{
-            //    roleId = userClaims[0].Value;
-            //    //userId = userClaims[1].Value;
-            //    //string roleId = claims.SingleOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-            //}
-
-
+           
             //Get UserMenu
             var mainMenus = MainMenuService.GetMainMenus().ToList();
             var subMenus = RoleSubMenuViewService.GetRoleMenuByRole(roleId).ToList();
-            //var subMenus = RoleSubMenuViewService.GetRoleMenu().ToList();
-
+          
             ViewBag.MainMenu = mainMenus;
             ViewBag.SubMenu = subMenus;
             ViewBag.DeployedAppName = UtilityManager.DeployedAppName();

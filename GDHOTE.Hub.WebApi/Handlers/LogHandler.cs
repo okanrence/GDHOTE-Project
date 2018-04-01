@@ -89,7 +89,7 @@ namespace GDHOTE.Hub.WebApi.Handlers
                     try
                     {
                         var client = new RestClient(ConfigurationManager.AppSettings["settings.base.url"]);
-                        var req = new RestRequest(ConfigurationManager.AppSettings["settings.refeesh.token.url"], Method.POST);
+                        var req = new RestRequest(ConfigurationManager.AppSettings["settings.refresh.token.url"], Method.POST);
                         req.AddHeader("Content-Type", "application/x-www-form-urlencoded");
                         req.AddParameter("grant_type", "refresh_token");
                         req.AddParameter("refresh_token", refreshToken);

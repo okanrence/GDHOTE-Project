@@ -10,5 +10,6 @@ namespace GDHOTE.Hub.CoreObject.Enumerables
     {
         RegistrationConfirmation = 1,
         PaymentConfirmation = 2,
+        PasswordReset = 3
     }
 }

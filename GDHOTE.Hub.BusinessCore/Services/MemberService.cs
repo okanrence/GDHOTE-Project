@@ -81,7 +81,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                //LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.Log(ex.Message);
                 throw new UnableToCompleteException(ex.Message, MethodBase.GetCurrentMethod().Name);
             }
         }
@@ -117,35 +117,56 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return "Error occured while trying to update member";
             }
         }
-        public static string Delete(int id, string currentUser)
+        public static Response Delete(int id, string currentUser)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
+                    var response = new Response();
 
                     var member = db.Fetch<Member>().SingleOrDefault(c => c.MemberKey == id);
                     if (member == null)
                     {
-                        return "Record does not exist";
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "User does not exist"
+                        };
                     }
 
                     //Get User Initiating Creation Request
                     var user = UserService.GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "User does not exist"
+                        };
+                    }
 
                     //Delete Bank
                     member.MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Deleted;
                     member.DeletedById = user.UserId;
                     member.DateDeleted = DateTime.Now;
                     db.Update(member);
-                    var result = "Operation Successful";
-                    return result;
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(ex.Message);
-                return "Error occured while trying to delete record";
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to delete record"
+                };
             }
         }
         public static List<MemberViewModel> GetMembersPendingApproval()
@@ -228,12 +249,11 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 MemberKey = memberKey,
                                 MobileNumber = createRequest.MobileNumber,
                                 EmailAddress = createRequest.EmailAddress,
-                                CreatedBy = user.UserId,
-                                RecordDate = DateTime.Now,
-                                PostedDate = DateTime.Now,
+                                CreatedById = user.UserId,
+                                RecordDate = DateTime.Now
                             };
 
-                            var detailsResult = MemberDetailsService.Save(memberDetails);
+                            db.Save(memberDetails);
                             response = new Response
                             {
                                 ErrorCode = "00",
@@ -257,7 +277,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                     }
                                 };
 
-                                EmailManager.SendForEmailConfirmation(req);
+                                EmailNotificationService.SendForEmailConfirmation(req);
 
                             }).Start();
                         }
@@ -355,44 +375,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return response;
             }
         }
-
-        public static List<Member> GetMembersBySearchQuery(string searchQuery)
-        {
-            try
-            {
-                using (var db = GdhoteConnection())
-                {
-                    var members = db.Fetch<Member>()
-                        .Where(m => m.FirstName == searchQuery || m.Surname == searchQuery)
-                        .OrderBy(m => m.FirstName).ToList();
-                    return members;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Log(ex.Message);
-                return new List<Member>();
-            }
-        }
-
-        public static List<Member> GetMembersByBirthday(string dateOfBirth)
-        {
-            try
-            {
-                DateTime.TryParse(dateOfBirth, out var castDateOfBirth);
-                using (var db = GdhoteConnection())
-                {
-                    var members = db.Fetch<Member>()
-                        .Where(m => m.DateOfBirth.Date == castDateOfBirth.Date)
-                        .OrderBy(m => m.FirstName).ToList();
-                    return members;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Log(ex.Message);
-                return new List<Member>();
-            }
-        }
+        
+      
     }
 }

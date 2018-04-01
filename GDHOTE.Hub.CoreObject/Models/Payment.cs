@@ -9,29 +9,17 @@ using NPoco;
 namespace GDHOTE.Hub.CoreObject.Models
 {
     [TableName("HUB_Payments")]
-    [PrimaryKey("PaymentId")]
-
-    public class Payment
+    public class Payment : BaseModel
     {
-        public int PaymentId { get; set; }
+        public int Id { get; set; }
         public int MemberKey { get; set; }
-        [Required]
         public decimal Amount { get; set; }
-        [Required]
-        [Display(Name = "Payment Type")]
         public int PaymentTypeId { get; set; }
-        [Required]
-        [Display(Name = "Mode of Payment")]
         public int PaymentModeId { get; set; }
-        [Required]
-        [Display(Name = "Currency")]
         public int CurrencyId { get; set; }
-        [Required]
         public string Narration { get; set; }
-        public string ApprovedFlag { get; set; }
-        public string CreatedBy { get; set; }
-        public string ApprovedBy { get; set; }
-        public DateTime RecordDate { get; set; }
-        public DateTime PostedDate { get; set; }
+        public int PaymentStatusId { get; set; }
+        public string Remarks { get; set; }
+        public DateTime? DateApproved { get; set; }
     }
 }
