@@ -1,13 +1,13 @@
-﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.PublicationViewModel>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.PublicationAccessRightViewModel>
 
 @{
-    ViewBag.Title = "Publications";
+    ViewBag.Title = "Access Rights";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Publications</h2>
+<h2>Publication Access Rights</h2>
 <p>
-    @Html.ActionLink("New Publication", "New", "Publication", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("New Access Right", "New", "PublicationAccessRight", null, new { @class = "btn btn-primary" })
 </p>
 
 
@@ -23,28 +23,24 @@ else
         </div>
 
         <div>
-            <table id="publications" class="table table-bordered table-hover">
+            <table id="accessrights" class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>AccessRight</th>
+                        <th>Publication</th>
                         <th>Status</th>
                         <th>Date</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var publication in Model)
+                    @foreach (var accessRight in Model)
                     {
-                    <tr>
-                        <td>@Html.ActionLink(publication.Title, "Edit", "Publication", new { id = publication.Id }, null)</td>
-                        <td>@publication.Category</td>
-                        <td>@publication.AccessRight</td>
-                        <td>@publication.Status</td>
-                        <td>@publication.DateCreated.ToString("dd-MMM-yyyy")</td>
-                        <td><button data-publication-id="@publication.Id" class="btn btn-link js-delete">Delete</button></td>
-                    </tr>
+                        <tr>
+                            <td>@Html.ActionLink(accessRight.Name, "Edit", "PublicationAccessRight", new { id = accessRight.Id }, null)</td>
+                            <td>@accessRight.Status</td>
+                            <td>@accessRight.DateCreated.ToString("dd-MMM-yyyy")</td>
+                            <td><button data-access-right-id="@accessRight.Id" class="btn btn-link js-delete">Delete</button></td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -57,11 +53,11 @@ else
 {
     <script>
         $(document).ready(function () {
-            $("#publications").DataTable();
+            $("#accessrights").DataTable();
 
-            $("#publications").on("click", ".js-delete", function () {
+            $("#accessrights").on("click", ".js-delete", function () {
                 var button = $(this);
-                var id = button.attr("data-publication-id");
+                var id = button.attr("data-access-right-id");
 
                 var form = $('#responsive');
                 var token = $('input[name="__RequestVerificationToken"]', form).val();
@@ -72,7 +68,7 @@ else
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: '@Url.Action("DeletePublication", "Publication")/' + id,
+                            url: '@Url.Action("DeletePublicationAccessRight", "PublicationAccessRight")/' + id,
                             method: "POST",
                             data: request,
                             success: function (data) {

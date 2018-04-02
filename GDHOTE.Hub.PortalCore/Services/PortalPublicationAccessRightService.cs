@@ -10,11 +10,12 @@ using RestSharp;
 
 namespace GDHOTE.Hub.PortalCore.Services
 {
-    public class PortalPublicationService
+    public class PortalPublicationAccessRightService
     {
-        public static List<PublicationViewModel> GetAllPublications()
+
+        public static List<PublicationAccessRightViewModel> GetAllPublicationAccessRights()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-all-publications";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-all-access-rights";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -22,7 +23,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<PublicationViewModel>();
+            var result = new List<PublicationAccessRightViewModel>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -31,7 +32,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<PublicationViewModel>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<PublicationAccessRightViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -40,9 +41,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<Publication> GetActivePublications()
+        public static List<PublicationAccessRight> GetActivePublicationAccessRights()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-active-publications";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-active-access-rights";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -50,7 +51,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<Publication>();
+            var result = new List<PublicationAccessRight>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -59,7 +60,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<Publication>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<PublicationAccessRight>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -68,38 +69,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<Publication> GetPublicationsByCategoryId(string id)
+        public static PublicationAccessRight GetPublicationAccessRight(string id)
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-publications-by-category";
-            var client = new RestClient(fullUrl);
-            var request = new RestRequest(Method.GET);
-            request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
-            request.AddParameter("id", id);
-            request.RequestFormat = DataFormat.Json;
-
-            var result = new List<Publication>();
-            IRestResponse response = new RestResponse();
-            try
-            {
-                response = client.Execute(request);
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
-                }
-                result = JsonConvert.DeserializeObject<List<Publication>>(response.Content);
-            }
-            catch (Exception ex)
-            {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
-            }
-            return result;
-        }
-
-        public static Publication GetPublication(string id)
-        {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-publication";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-access-right";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -108,7 +80,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             request.AddParameter("id", id);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new Publication();
+            var result = new PublicationAccessRight();
             IRestResponse response = new RestResponse();
             try
             {
@@ -117,7 +89,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<Publication>(response.Content);
+                result = JsonConvert.DeserializeObject<PublicationAccessRight>(response.Content);
             }
             catch (Exception ex)
             {
@@ -125,11 +97,10 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-
-        public static Response CreatePublication(CreatePublicationRequest createRequest)
+        public static Response CreatePublicationAccessRight(CreatePublicationAccessRightRequest createRequest)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/create-publication";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/create-access-right";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
@@ -156,10 +127,10 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response DeletePublication(string id)
+        public static Response DeletePublicationAccessRight(string id)
         {
 
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/delete-publication";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/delete-access-right";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");

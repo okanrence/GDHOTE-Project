@@ -25,7 +25,7 @@ namespace GDHOTE.Hub.WebApi
             ConfigureOAuth(app);
             WebApiConfig.Register(config);
 
-            app.UseCors(CorsOptions.AllowAll);
+            app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
             app.UseWebApi(config);
         }
 

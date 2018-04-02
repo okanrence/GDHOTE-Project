@@ -94,9 +94,6 @@
     <Reference Include="RestSharp, Version=106.2.1.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.106.2.1\lib\net452\RestSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
@@ -278,7 +275,6 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActivityTypeController.cs" />
@@ -293,7 +289,9 @@
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\PaymentModeController.cs" />
     <Compile Include="Controllers\PaymentTypeController.cs" />
+    <Compile Include="Controllers\PublicationCategoryController.cs" />
     <Compile Include="Controllers\PublicationController.cs" />
+    <Compile Include="Controllers\PublicationAccessRightController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\RoleMenuController.cs" />
     <Compile Include="Controllers\StateController.cs" />
@@ -713,6 +711,10 @@
     <Content Include="Views\Account\ForgotPassword - Copy.cshtml" />
     <Content Include="Views\Publication\PublicationIndex.cshtml" />
     <Content Include="Views\Publication\PublicationForm.cshtml" />
+    <Content Include="Views\PublicationCategory\PublicationCategoryIndex.cshtml" />
+    <Content Include="Views\PublicationCategory\PublicationCategoryForm.cshtml" />
+    <Content Include="Views\PublicationAccessRight\AccessRightIndex.cshtml" />
+    <Content Include="Views\PublicationAccessRight\AccessRightForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

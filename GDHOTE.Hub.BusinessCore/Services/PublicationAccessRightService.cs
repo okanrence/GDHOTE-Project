@@ -9,15 +9,16 @@ using GDHOTE.Hub.CoreObject.ViewModels;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
-    public class PublicationService : BaseService
+    public class PublicationAccessRightService : BaseService
+
     {
-        public static string Save(Publication publication)
+        public static string Save(PublicationAccessRight publicationAccessRight)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Insert(publication);
+                    var result = db.Insert(publicationAccessRight);
                     return result.ToString();
                 }
             }
@@ -25,132 +26,138 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 LogService.Log(ex.Message);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
-                return "Error occured while trying to insert Publication";
-            }
-        }
-        public static List<PublicationViewModel> GetAllPublications()
-        {
-            try
-            {
-                using (var db = GdhoteConnection())
-                {
-                    var publications = db.Fetch<PublicationViewModel>()
-                        .OrderBy(c => c.Title)
-                        .ToList();
-                    return publications;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Log(ex.Message);
-                return new List<PublicationViewModel>();
-            }
-        }
-        public static List<Publication> GetActivePublications()
-        {
-            try
-            {
-                using (var db = GdhoteConnection())
-                {
-                    var publications = db.Fetch<Publication>()
-                        .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active && c.DateDeleted == null)
-                        .OrderBy(c => c.Title)
-                        .ToList();
-                    return publications;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Log(ex.Message);
-                return new List<Publication>();
-            }
-        }
-        public static Publication GetPublication(int id)
-        {
-            try
-            {
-                using (var db = GdhoteConnection())
-                {
-                    var publication = db.Fetch<Publication>().SingleOrDefault(c => c.Id == id);
-                    return publication;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Log(ex.Message);
-                return new Publication();
+                return "Error occured while trying to insert record";
             }
         }
 
-        public static List<Publication> GetPublicationsByCategoryId(int categoryId)
+        public static List<PublicationAccessRightViewModel> GetAllPublicationAccessRights()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var publications = db.Fetch<Publication>()
-                        .Where(c => c.CategoryId == categoryId && c.StatusId == (int)CoreObject.Enumerables.Status.Active)
-                        .OrderBy(c => c.Title)
+                    var publicationAccessRights = db.Fetch<PublicationAccessRightViewModel>()
+                        .OrderBy(c => c.Name)
                         .ToList();
-                    return publications;
+                    return publicationAccessRights;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(ex.Message);
-                return new List<Publication>();
+                return new List<PublicationAccessRightViewModel>();
             }
         }
-        public static string Update(Publication publication)
+
+        public static List<PublicationAccessRight> GetActivePublicationAccessRights()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Update(publication);
+                    var publicationAccessRights = db.Fetch<PublicationAccessRight>()
+                        .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active && c.DateDeleted == null)
+                        .OrderBy(c => c.Name)
+                        .ToList();
+                    return publicationAccessRights;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(ex.Message);
+                return new List<PublicationAccessRight>();
+            }
+        }
+
+        public static PublicationAccessRight GetPublicationAccessRight(int id)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var publicationAccessRight = db.Fetch<PublicationAccessRight>().SingleOrDefault(c => c.Id == id);
+                    return publicationAccessRight;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Log(ex.Message);
+                return new PublicationAccessRight();
+            }
+        }
+
+        public static string Update(PublicationAccessRight publicationAccessRight)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var result = db.Update(publicationAccessRight);
                     return result.ToString();
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(ex.Message);
-                return "Error occured while trying to update Publication";
+                return "Error occured while trying to update record";
             }
         }
-        public static string Delete(int id, string currentUser)
+
+        public static Response Delete(int id, string currentUser)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
+                    var response = new Response();
 
-
-                    var publication = db.Fetch<Publication>().SingleOrDefault(c => c.Id == id);
-                    if (publication == null)
+                    var publicationAccessRight = db.Fetch<PublicationAccessRight>().SingleOrDefault(c => c.Id == id);
+                    if (publicationAccessRight == null)
                     {
-                        return "Record does not exist";
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
                     }
 
                     //Get User Initiating Creation Request
                     var user = UserService.GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
+                    }
 
-                    //Delete Publication
-                    publication.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
-                    publication.DeletedById = user.UserId;
-                    publication.DateDeleted = DateTime.Now;
-                    db.Update(publication);
-                    var result = "Operation Successful";
-                    return result;
+
+                    //Delete PublicationAccessRight
+                    publicationAccessRight.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
+                    publicationAccessRight.DeletedById = user.UserId;
+                    publicationAccessRight.DateDeleted = DateTime.Now;
+                    db.Update(publicationAccessRight);
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(ex.Message);
-                return "Error occured while trying to delete record";
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to delete record"
+                };
             }
         }
 
-        public static Response CreatePublication(CreatePublicationRequest request, string currentUser)
+        public static Response CreatePublicationAccessRight(CreatePublicationAccessRightRequest request, string currentUser)
         {
             try
             {
@@ -171,9 +178,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
                     //Check if name already exist
-                    var publicationExist = db.Fetch<Publication>()
-                        .SingleOrDefault(c => c.Title.ToLower().Equals(request.Title.ToLower()));
-                    if (publicationExist != null)
+                    var publicationAccessRightExist = db.Fetch<PublicationAccessRight>()
+                        .SingleOrDefault(c => c.Name.ToLower().Equals(request.Name.ToLower()));
+                    if (publicationAccessRightExist != null)
                     {
                         return new Response
                         {
@@ -182,21 +189,18 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
-                    string publicationName = StringCaseManager.TitleCase(request.Title);
+                    string accessRightName = StringCaseManager.TitleCase(request.Name);
 
-                    var publication = new Publication
+                    var publicationAccessRight = new PublicationAccessRight
                     {
-                        Title = publicationName,
-                        Description = request.Description,
+                        Name = accessRightName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
-                        CategoryId = request.CategoryId,
-                        AccessRightId = request.AccessRightId,
                         CreatedById = user.UserId,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };
 
-                    db.Insert(publication);
+                    db.Insert(publicationAccessRight);
                     response = new Response
                     {
                         ErrorCode = "00",

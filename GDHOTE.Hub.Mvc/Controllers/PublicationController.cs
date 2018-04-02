@@ -4,12 +4,13 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.CoreObject.ViewModels;
 using GDHOTE.Hub.PortalCore.Services;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class PublicationController : Controller
+    public class PublicationController : BaseController
     {
         // GET: Publication
         public ActionResult Index()
@@ -19,8 +20,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult New()
         {
-            var viewModel = new CreatePublicationRequest(); 
-            return View("PublicationForm", viewModel);
+            return View("PublicationForm", ReturnViewModel());
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -28,7 +28,11 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("PublicationForm");
+
+                var viewModel = ReturnViewModel();
+                var item = JsonConvert.SerializeObject(createRequest);
+                viewModel = JsonConvert.DeserializeObject<PublicationFormViewModel>(item);
+                return View("PublicationForm", viewModel);
             }
             var result = PortalPublicationService.CreatePublication(createRequest);
             if (result != null)
@@ -54,10 +58,10 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         public ActionResult Edit(string id)
         {
-            var Publication = PortalPublicationService.GetPublication(id);
-            var viewModel = new CreatePublicationRequest();
-            var item = JsonConvert.SerializeObject(Publication);
-            viewModel = JsonConvert.DeserializeObject<CreatePublicationRequest>(item);
+            var publication = PortalPublicationService.GetPublication(id);
+            var viewModel = new PublicationFormViewModel();
+            var item = JsonConvert.SerializeObject(publication);
+            viewModel = JsonConvert.DeserializeObject<PublicationFormViewModel>(item);
             return View("PublicationForm", viewModel);
 
         }
@@ -68,6 +72,26 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             var result = PortalPublicationService.DeletePublication(id);
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult GetPublicationsByCategoryId(string id)
+        {
+            var result = PortalPublicationService.GetPublicationsByCategoryId(id);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        private static PublicationFormViewModel ReturnViewModel()
+        {
+
+            var categories = PortalPublicationCategoryService.GetActivePublicationCategories().ToList();
+            var accessrights = PortalPublicationAccessRightService.GetActivePublicationAccessRights().ToList();
+            var viewModel = new PublicationFormViewModel
+            {
+                PublicationCategories = categories,
+                PublicationAccessRights = accessrights
+            };
+            return viewModel;
         }
     }
 }

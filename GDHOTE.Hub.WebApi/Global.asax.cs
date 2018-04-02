@@ -35,6 +35,10 @@ namespace GDHOTE.Hub.WebApi
 
         protected void Application_Error(object sender, EventArgs e)
         {
+            //    Exception exception = Server.GetLastError();
+            //    string s = exception.Message;
+            //    Server.ClearError();
+            //Log Error
 
         }
 

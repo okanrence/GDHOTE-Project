@@ -13,15 +13,17 @@ using Newtonsoft.Json;
 namespace GDHOTE.Hub.WebApi.Controllers
 {
     [RoutePrefix(ConstantManager.ApiDefaultNamespace + "publication")]
-    public class PublicationController : ApiController
+
+    public class PublicationAccessRightController : ApiController
     {
+
         [HttpGet]
-        [Route("get-all-publications")]
-        public HttpResponseMessage GetAllPublications()
+        [Route("get-all-access-rights")]
+        public HttpResponseMessage GetAllPublicationAccessRights()
         {
             try
             {
-                var response = PublicationService.GetAllPublications().ToList();
+                var response = PublicationAccessRightService.GetAllPublicationAccessRights().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -47,12 +49,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpGet]
-        [Route("get-active-publications")]
-        public HttpResponseMessage GetActivePublications()
+        [Route("get-active-access-rights")]
+        public HttpResponseMessage GetActivePublicationAccessRights()
         {
             try
             {
-                var response = PublicationService.GetActivePublications().ToList();
+                var response = PublicationAccessRightService.GetActivePublicationAccessRights().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -77,12 +79,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("get-publication")]
-        public HttpResponseMessage GetPublication(string id)
+        [Route("get-access-right")]
+        public HttpResponseMessage GetPublicationAccessRight(string id)
         {
             try
             {
-                var response = PublicationService.GetPublication(Convert.ToInt16(id));
+                var response = PublicationAccessRightService.GetPublicationAccessRight(Convert.ToInt16(id));
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -105,37 +107,9 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("get-publications-by-category")]
-        public HttpResponseMessage GetPublicationsByCategoryId(string id)
-        {
-            try
-            {
-                var response = PublicationService.GetPublicationsByCategoryId(Convert.ToInt16(id));
-                if (response != null)
-                {
-                    return new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        RequestMessage = Request,
-                        Content = new StringContent(
-                            JsonConvert.SerializeObject(response, Formatting.Indented))
-                    };
-                }
-                return new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    RequestMessage = Request,
-                    Content = new StringContent(
-                        JsonConvert.SerializeObject(response, Formatting.Indented))
-                };
-            }
-            catch (UnableToCompleteException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
-            }
-        }
         [HttpPost]
-        [Route("create-publication")]
-        public HttpResponseMessage CreatePublication(CreatePublicationRequest createRequest)
+        [Route("create-access-right")]
+        public HttpResponseMessage CreatePublicationAccessRight(CreatePublicationAccessRightRequest createRequest)
         {
             try
             {
@@ -145,7 +119,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 }
 
                 string username = User.Identity.Name;
-                var response = PublicationService.CreatePublication(createRequest, username);
+                var response = PublicationAccessRightService.CreatePublicationAccessRight(createRequest, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -171,13 +145,13 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpPost]
-        [Route("delete-publication")]
-        public HttpResponseMessage DeletePublication(string id)
+        [Route("delete-access-right")]
+        public HttpResponseMessage DeletePublicationAccessRight(string id)
         {
             try
             {
                 string username = User.Identity.Name;
-                var response = PublicationService.Delete(Convert.ToInt16(id), username);
+                var response = PublicationAccessRightService.Delete(Convert.ToInt16(id), username);
                 return Request.CreateResponse(HttpStatusCode.OK, response);
 
             }

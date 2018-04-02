@@ -9,15 +9,15 @@ using GDHOTE.Hub.CoreObject.ViewModels;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
-    public class PublicationService : BaseService
+    public class PublicationCategoryService : BaseService
     {
-        public static string Save(Publication publication)
+        public static string Save(PublicationCategory publicationCategory)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Insert(publication);
+                    var result = db.Insert(publicationCategory);
                     return result.ToString();
                 }
             }
@@ -25,96 +25,77 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 LogService.Log(ex.Message);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
-                return "Error occured while trying to insert Publication";
+                return "Error occured while trying to insert PublicationCategory";
             }
         }
-        public static List<PublicationViewModel> GetAllPublications()
+        public static List<PublicationCategoryViewModel> GetAllPublicationCategories()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var publications = db.Fetch<PublicationViewModel>()
-                        .OrderBy(c => c.Title)
+                    var publicationCategories = db.Fetch<PublicationCategoryViewModel>()
+                        .OrderBy(c => c.Name)
                         .ToList();
-                    return publications;
+                    return publicationCategories;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(ex.Message);
-                return new List<PublicationViewModel>();
+                return new List<PublicationCategoryViewModel>();
             }
         }
-        public static List<Publication> GetActivePublications()
+        public static List<PublicationCategory> GetActivePublicationCategories()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var publications = db.Fetch<Publication>()
+                    var publicationCategories = db.Fetch<PublicationCategory>()
                         .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active && c.DateDeleted == null)
-                        .OrderBy(c => c.Title)
+                        .OrderBy(c => c.Name)
                         .ToList();
-                    return publications;
+                    return publicationCategories;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(ex.Message);
-                return new List<Publication>();
+                return new List<PublicationCategory>();
             }
         }
-        public static Publication GetPublication(int id)
+        public static PublicationCategory GetPublicationCategory(int id)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var publication = db.Fetch<Publication>().SingleOrDefault(c => c.Id == id);
-                    return publication;
+                    var publicationCategory = db.Fetch<PublicationCategory>()
+                        .SingleOrDefault(c => c.Id == id);
+                    return publicationCategory;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(ex.Message);
-                return new Publication();
+                return new PublicationCategory();
             }
         }
-
-        public static List<Publication> GetPublicationsByCategoryId(int categoryId)
+        public static string Update(PublicationCategory publicationCategory)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var publications = db.Fetch<Publication>()
-                        .Where(c => c.CategoryId == categoryId && c.StatusId == (int)CoreObject.Enumerables.Status.Active)
-                        .OrderBy(c => c.Title)
-                        .ToList();
-                    return publications;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Log(ex.Message);
-                return new List<Publication>();
-            }
-        }
-        public static string Update(Publication publication)
-        {
-            try
-            {
-                using (var db = GdhoteConnection())
-                {
-                    var result = db.Update(publication);
+                    var result = db.Update(publicationCategory);
                     return result.ToString();
                 }
             }
             catch (Exception ex)
             {
                 LogService.Log(ex.Message);
-                return "Error occured while trying to update Publication";
+                return "Error occured while trying to update Publication Category";
             }
         }
         public static string Delete(int id, string currentUser)
@@ -125,8 +106,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 {
 
 
-                    var publication = db.Fetch<Publication>().SingleOrDefault(c => c.Id == id);
-                    if (publication == null)
+                    var publicationCategory = db.Fetch<PublicationCategory>().SingleOrDefault(c => c.Id == id);
+                    if (publicationCategory == null)
                     {
                         return "Record does not exist";
                     }
@@ -134,11 +115,11 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     //Get User Initiating Creation Request
                     var user = UserService.GetUserByUserName(currentUser);
 
-                    //Delete Publication
-                    publication.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
-                    publication.DeletedById = user.UserId;
-                    publication.DateDeleted = DateTime.Now;
-                    db.Update(publication);
+                    //Delete Publication Category
+                    publicationCategory.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
+                    publicationCategory.DeletedById = user.UserId;
+                    publicationCategory.DateDeleted = DateTime.Now;
+                    db.Update(publicationCategory);
                     var result = "Operation Successful";
                     return result;
                 }
@@ -150,7 +131,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
         }
 
-        public static Response CreatePublication(CreatePublicationRequest request, string currentUser)
+        public static Response CreatePublicationCategory(CreatePublicationCategoryRequest request, string currentUser)
         {
             try
             {
@@ -171,9 +152,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
                     //Check if name already exist
-                    var publicationExist = db.Fetch<Publication>()
-                        .SingleOrDefault(c => c.Title.ToLower().Equals(request.Title.ToLower()));
-                    if (publicationExist != null)
+                    var publicationCategoryExist = db.Fetch<PublicationCategory>()
+                        .SingleOrDefault(c => c.Name.ToLower().Equals(request.Name.ToLower()));
+                    if (publicationCategoryExist != null)
                     {
                         return new Response
                         {
@@ -182,21 +163,18 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
-                    string publicationName = StringCaseManager.TitleCase(request.Title);
+                    string categoryName = StringCaseManager.TitleCase(request.Name);
 
-                    var publication = new Publication
+                    var publicationCategory = new PublicationCategory
                     {
-                        Title = publicationName,
-                        Description = request.Description,
+                        Name = categoryName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
-                        CategoryId = request.CategoryId,
-                        AccessRightId = request.AccessRightId,
                         CreatedById = user.UserId,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };
 
-                    db.Insert(publication);
+                    db.Insert(publicationCategory);
                     response = new Response
                     {
                         ErrorCode = "00",

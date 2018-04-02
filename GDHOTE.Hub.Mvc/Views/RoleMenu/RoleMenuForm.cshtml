@@ -33,12 +33,12 @@
         </div>
         <div class="form-group">
             @Html.LabelFor(r => r.RoleMenu.RoleId)
-            @Html.DropDownListFor(r => r.RoleMenu.RoleId, new SelectList(Model.Roles, "RoleId", "Name"), "Select Role", new {@class = "form-control"})
+            @Html.DropDownListFor(r => r.RoleMenu.RoleId, new SelectList(Model.Roles, "RoleId", "RoleName"), "Select Role", new {@class = "form-control"})
             @Html.ValidationMessageFor(r => r.RoleMenu.RoleId)
         </div>
         <div class="form-group">
             @Html.LabelFor(r => r.RoleMenu.Status)
-            @Html.DropDownListFor(r => r.RoleMenu.Status, new SelectList(Model.Statuses, "Code", "Description"), "Select Status", new {@class = "form-control"})
+            @Html.DropDownListFor(r => r.RoleMenu.Status, new SelectList(Model.Statuses, "Id", "Name"), "Select Status", new {@class = "form-control"})
             @Html.ValidationMessageFor(r => r.RoleMenu.Status)
         </div>
         <div class="form-group">

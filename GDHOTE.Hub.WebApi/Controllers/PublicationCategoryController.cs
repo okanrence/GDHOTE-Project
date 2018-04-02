@@ -13,15 +13,16 @@ using Newtonsoft.Json;
 namespace GDHOTE.Hub.WebApi.Controllers
 {
     [RoutePrefix(ConstantManager.ApiDefaultNamespace + "publication")]
-    public class PublicationController : ApiController
+    public class PublicationCategoryController : ApiController
     {
+
         [HttpGet]
-        [Route("get-all-publications")]
-        public HttpResponseMessage GetAllPublications()
+        [Route("get-all-publication-categories")]
+        public HttpResponseMessage GetAllPublicationCategories()
         {
             try
             {
-                var response = PublicationService.GetAllPublications().ToList();
+                var response = PublicationCategoryService.GetAllPublicationCategories().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -47,12 +48,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpGet]
-        [Route("get-active-publications")]
-        public HttpResponseMessage GetActivePublications()
+        [Route("get-active-publication-categories")]
+        public HttpResponseMessage GetActivePublicationCategories()
         {
             try
             {
-                var response = PublicationService.GetActivePublications().ToList();
+                var response = PublicationCategoryService.GetActivePublicationCategories().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -77,12 +78,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("get-publication")]
-        public HttpResponseMessage GetPublication(string id)
+        [Route("get-publication-category")]
+        public HttpResponseMessage GetPublicationCategory(string id)
         {
             try
             {
-                var response = PublicationService.GetPublication(Convert.ToInt16(id));
+                var response = PublicationCategoryService.GetPublicationCategory(Convert.ToInt16(id));
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -105,37 +106,9 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("get-publications-by-category")]
-        public HttpResponseMessage GetPublicationsByCategoryId(string id)
-        {
-            try
-            {
-                var response = PublicationService.GetPublicationsByCategoryId(Convert.ToInt16(id));
-                if (response != null)
-                {
-                    return new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        RequestMessage = Request,
-                        Content = new StringContent(
-                            JsonConvert.SerializeObject(response, Formatting.Indented))
-                    };
-                }
-                return new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    RequestMessage = Request,
-                    Content = new StringContent(
-                        JsonConvert.SerializeObject(response, Formatting.Indented))
-                };
-            }
-            catch (UnableToCompleteException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
-            }
-        }
         [HttpPost]
-        [Route("create-publication")]
-        public HttpResponseMessage CreatePublication(CreatePublicationRequest createRequest)
+        [Route("create-publication-category")]
+        public HttpResponseMessage CreatePublicationCategory(CreatePublicationCategoryRequest createRequest)
         {
             try
             {
@@ -145,7 +118,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 }
 
                 string username = User.Identity.Name;
-                var response = PublicationService.CreatePublication(createRequest, username);
+                var response = PublicationCategoryService.CreatePublicationCategory(createRequest, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -171,13 +144,13 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpPost]
-        [Route("delete-publication")]
-        public HttpResponseMessage DeletePublication(string id)
+        [Route("delete-publication-category")]
+        public HttpResponseMessage DeletePublicationCategory(string id)
         {
             try
             {
                 string username = User.Identity.Name;
-                var response = PublicationService.Delete(Convert.ToInt16(id), username);
+                var response = PublicationCategoryService.Delete(Convert.ToInt16(id), username);
                 return Request.CreateResponse(HttpStatusCode.OK, response);
 
             }

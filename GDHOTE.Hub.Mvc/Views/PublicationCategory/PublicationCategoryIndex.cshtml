@@ -1,13 +1,13 @@
-﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.PublicationViewModel>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.PublicationCategoryViewModel>
 
 @{
-    ViewBag.Title = "Publications";
+    ViewBag.Title = "Publication Category";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Publications</h2>
 <p>
-    @Html.ActionLink("New Publication", "New", "Publication", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("New Category", "New", "PublicationCategory", null, new { @class = "btn btn-primary" })
 </p>
 
 
@@ -23,12 +23,10 @@ else
         </div>
 
         <div>
-            <table id="publications" class="table table-bordered table-hover">
+            <table id="publicationcategories" class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>Title</th>
                         <th>Category</th>
-                        <th>AccessRight</th>
                         <th>Status</th>
                         <th>Date</th>
                         <th></th>
@@ -37,14 +35,12 @@ else
                 <tbody>
                     @foreach (var publication in Model)
                     {
-                    <tr>
-                        <td>@Html.ActionLink(publication.Title, "Edit", "Publication", new { id = publication.Id }, null)</td>
-                        <td>@publication.Category</td>
-                        <td>@publication.AccessRight</td>
-                        <td>@publication.Status</td>
-                        <td>@publication.DateCreated.ToString("dd-MMM-yyyy")</td>
-                        <td><button data-publication-id="@publication.Id" class="btn btn-link js-delete">Delete</button></td>
-                    </tr>
+                        <tr>
+                            <td>@Html.ActionLink(publication.Name, "Edit", "PublicationCategory", new { id = publication.Id }, null)</td>
+                            <td>@publication.Status</td>
+                            <td>@publication.DateCreated.ToString("dd-MMM-yyyy")</td>
+                            <td><button data-publication-category-id="@publication.Id" class="btn btn-link js-delete">Delete</button></td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -57,11 +53,11 @@ else
 {
     <script>
         $(document).ready(function () {
-            $("#publications").DataTable();
+            $("#publicationcategories").DataTable();
 
-            $("#publications").on("click", ".js-delete", function () {
+            $("#publicationcategories").on("click", ".js-delete", function () {
                 var button = $(this);
-                var id = button.attr("data-publication-id");
+                var id = button.attr("data-publication-category-id");
 
                 var form = $('#responsive');
                 var token = $('input[name="__RequestVerificationToken"]', form).val();
@@ -72,7 +68,7 @@ else
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: '@Url.Action("DeletePublication", "Publication")/' + id,
+                            url: '@Url.Action("DeletePublicationCategory", "PublicationCategory")/' + id,
                             method: "POST",
                             data: request,
                             success: function (data) {
@@ -100,4 +96,5 @@ else
         });
     </script>
 }
+
 

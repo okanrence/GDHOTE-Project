@@ -282,7 +282,9 @@
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\PaymentModeController.cs" />
     <Compile Include="Controllers\PaymentTypeController.cs" />
+    <Compile Include="Controllers\PublicationCategoryController.cs" />
     <Compile Include="Controllers\PublicationController.cs" />
+    <Compile Include="Controllers\PublicationAccessRightController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\StateController.cs" />
     <Compile Include="Controllers\StatusController.cs" />

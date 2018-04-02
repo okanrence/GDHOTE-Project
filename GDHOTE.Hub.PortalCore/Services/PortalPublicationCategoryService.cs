@@ -10,11 +10,11 @@ using RestSharp;
 
 namespace GDHOTE.Hub.PortalCore.Services
 {
-    public class PortalPublicationService
+ public   class PortalPublicationCategoryService
     {
-        public static List<PublicationViewModel> GetAllPublications()
+        public static List<PublicationCategoryViewModel> GetAllPublicationCategories()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-all-publications";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-all-publication-categories";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -22,7 +22,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<PublicationViewModel>();
+            var result = new List<PublicationCategoryViewModel>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -31,7 +31,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<PublicationViewModel>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<PublicationCategoryViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -40,9 +40,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<Publication> GetActivePublications()
+        public static List<PublicationCategory> GetActivePublicationCategories()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-active-publications";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-active-publication-categories";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -50,7 +50,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<Publication>();
+            var result = new List<PublicationCategory>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -59,7 +59,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<Publication>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<PublicationCategory>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -68,38 +68,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<Publication> GetPublicationsByCategoryId(string id)
+        public static PublicationCategory GetPublicationCategory(string id)
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-publications-by-category";
-            var client = new RestClient(fullUrl);
-            var request = new RestRequest(Method.GET);
-            request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
-            request.AddParameter("id", id);
-            request.RequestFormat = DataFormat.Json;
-
-            var result = new List<Publication>();
-            IRestResponse response = new RestResponse();
-            try
-            {
-                response = client.Execute(request);
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
-                }
-                result = JsonConvert.DeserializeObject<List<Publication>>(response.Content);
-            }
-            catch (Exception ex)
-            {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
-            }
-            return result;
-        }
-
-        public static Publication GetPublication(string id)
-        {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-publication";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-publication-category";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -108,7 +79,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             request.AddParameter("id", id);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new Publication();
+            var result = new PublicationCategory();
             IRestResponse response = new RestResponse();
             try
             {
@@ -117,7 +88,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<Publication>(response.Content);
+                result = JsonConvert.DeserializeObject<PublicationCategory>(response.Content);
             }
             catch (Exception ex)
             {
@@ -125,11 +96,10 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-
-        public static Response CreatePublication(CreatePublicationRequest createRequest)
+        public static Response CreatePublicationCategory(CreatePublicationCategoryRequest createRequest)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/create-publication";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/create-publication-category";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
@@ -156,10 +126,10 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response DeletePublication(string id)
+        public static Response DeletePublicationCategory(string id)
         {
 
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/delete-publication";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/delete-publication-category";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
