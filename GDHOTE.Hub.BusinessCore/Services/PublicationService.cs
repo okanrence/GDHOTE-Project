@@ -35,7 +35,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 using (var db = GdhoteConnection())
                 {
                     var publications = db.Fetch<PublicationViewModel>()
-                        .OrderBy(c => c.Title)
+                        .OrderBy(c => c.DateCreated).ThenBy(c => c.Title)
                         .ToList();
                     return publications;
                 }
@@ -54,7 +54,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 {
                     var publications = db.Fetch<Publication>()
                         .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active && c.DateDeleted == null)
-                        .OrderBy(c => c.Title)
+                        .OrderBy(c => c.DateCreated).ThenBy(c => c.Title)
                         .ToList();
                     return publications;
                 }
@@ -172,25 +172,27 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Check if name already exist
                     var publicationExist = db.Fetch<Publication>()
-                        .SingleOrDefault(c => c.Title.ToLower().Equals(request.Title.ToLower()));
+                        .SingleOrDefault(c => c.Title.ToLower().Equals(request.Title.ToLower()) && c.CategoryId == request.CategoryId);
                     if (publicationExist != null)
                     {
                         return new Response
                         {
                             ErrorCode = "01",
-                            ErrorMessage = "Record already exist"
+                            ErrorMessage = "Record already exist for this Category"
                         };
                     }
 
-                    string publicationName = StringCaseManager.TitleCase(request.Title);
+                    string publicationTitle = StringCaseManager.TitleCase(request.Title);
 
                     var publication = new Publication
                     {
-                        Title = publicationName,
+                        Title = publicationTitle,
                         Description = request.Description,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
                         CategoryId = request.CategoryId,
                         AccessRightId = request.AccessRightId,
+                        UploadFile = request.UploadFile,
+                        CoverPageImage = request.CoverPageImage,
                         CreatedById = user.UserId,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now

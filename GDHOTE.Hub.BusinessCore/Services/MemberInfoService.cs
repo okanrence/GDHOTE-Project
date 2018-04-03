@@ -17,7 +17,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 using (var db = GdhoteConnection())
                 {
                     var members = db.Fetch<Member>()
-                        .Where(m => m.DateOfBirth.Date == castDateOfBirth.Date)
+                        .Where(m => m.DateOfBirth.Date.Month == castDateOfBirth.Date.Month && m.DateOfBirth.Date.Day == castDateOfBirth.Date.Day)
                         .OrderBy(m => m.FirstName).ToList();
                     return members;
                 }
@@ -36,7 +36,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 {
                     searchQuery = !string.IsNullOrEmpty(searchQuery) ? searchQuery.ToLower() : searchQuery;
                     var members = db.Fetch<MemberDetailsViewModel>()
-                        .Where(m => m.FirstName.ToLower().Contains(searchQuery) && m.Surname.ToLower().Contains(searchQuery))
+                        .Where(m => m.FirstName.ToLower().Contains(searchQuery) || m.Surname.ToLower().Contains(searchQuery))
                         .OrderBy(m => m.FirstName).ToList();
                     return members;
                 }
@@ -75,7 +75,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 using (var db = GdhoteConnection())
                 {
                     var members = db.Fetch<MemberDetailsViewModel>()
-                        .Where(m => m.DateWedded == castWeddingDate.Date)
+                        .Where(m =>m.DateWedded !=null 
+                                   && m.DateWedded.Value.Date.Month == castWeddingDate.Date.Month 
+                                   && m.DateWedded.Value.Date.Day == castWeddingDate.Date.Day)
                         .OrderBy(m => m.FirstName).ToList();
                     return members;
                 }

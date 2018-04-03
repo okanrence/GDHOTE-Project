@@ -277,7 +277,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                     }
                                 };
 
-                                EmailNotificationService.SendForEmailConfirmation(req);
+                                EmailNotificationService.SendEmailConfirmation(req);
 
                             }).Start();
                         }

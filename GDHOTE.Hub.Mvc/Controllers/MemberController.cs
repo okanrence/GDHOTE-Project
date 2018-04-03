@@ -108,6 +108,13 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        public JsonResult GetMember(string query)
+        {
+            var result = PortalMemberService.GetMembersByName(query);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         private static MemberFormViewModel ReturnViewModel()
         {
             var genders = GenderService.GetGenders();

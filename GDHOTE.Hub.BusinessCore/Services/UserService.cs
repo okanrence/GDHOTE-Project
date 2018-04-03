@@ -197,7 +197,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         {
                             Type = EmailType.PasswordReset,
                             RecipientEmailAddress = userExist.EmailAddress,
-                            UserId = userExist.UserId,
+                            //UserId = userExist.UserId,
                             Data = new Hashtable
                             {
                                 ["Subject"] = "Gdhote Password Reset",
@@ -205,7 +205,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 ["Resend"] = resend
                             }
                         };
-                        EmailNotificationService.SendForEmailConfirmation(req);
+                        EmailNotificationService.SendEmailConfirmation(req);
                     }).Start();
 
 

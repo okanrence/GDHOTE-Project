@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.CoreObject.ViewModels;
 using GDHOTE.Hub.PortalCore.Services;
 using Newtonsoft.Json;
 
@@ -28,7 +29,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("AccessRightForm");
+                return View("AccessRightForm", createRequest);
             }
             var result = PortalPublicationAccessRightService.CreatePublicationAccessRight(createRequest);
             if (result != null)
@@ -42,14 +43,13 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 {
                     ViewBag.ErrorBag = result.ErrorMessage;
                 }
-
             }
             else
             {
                 ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
             // If we got this far, something failed, redisplay form
-            return View("AccessRightForm");
+            return View("AccessRightForm", createRequest);
         }
 
         public ActionResult Edit(string id)
@@ -69,5 +69,6 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var result = PortalPublicationAccessRightService.DeletePublicationAccessRight(id);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
     }
 }

@@ -19,7 +19,12 @@
 {
     <div>
         <span class="text-danger">@ViewBag.ErrorBag</span>
-
+        <div class="form-group">
+            <label>Name</label>
+            <div class="tt-container">
+                <input id="member" name="member" required="" type="text" value="" class="form-control" />
+            </div>
+        </div>
         <div class="form-group">
             @Html.LabelFor(p => p.PaymentTypeId)
             @Html.DropDownListFor(p => p.PaymentTypeId, new SelectList(Model.PaymentTypes, "Id", "Name"), "Select Payment Type", new { @class = "form-control" })
@@ -52,5 +57,42 @@
     </div>
 
 }
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var viewModel = {
+                movieIds: []
+            };
+
+            var check = '@Url.Action("GetMember", "Member")?query=%QUERY';
+            console.log(check);
+            var members = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('firstname'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+
+                    url: '@Url.Action("GetMember", "Member")?query=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('#member').typeahead({
+                minLength: 3,
+                highlight: true
+            }, {
+                    name: 'members',
+                    display: 'firstname',
+                    source: members
+                }).on("typeahead:select", function (e, member) {
+                viewModel.memberkey = member.memberKey;
+            });
+        });
+    </script>
+}
+
+
 
 

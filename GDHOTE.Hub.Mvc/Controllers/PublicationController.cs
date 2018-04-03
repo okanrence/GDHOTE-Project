@@ -24,16 +24,35 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(CreatePublicationRequest createRequest)
+        public ActionResult Save(CreatePublicationRequest createRequest, HttpPostedFileBase uploadFile, HttpPostedFileBase coverPageImage)
         {
             if (!ModelState.IsValid)
             {
 
-                var viewModel = ReturnViewModel();
+                var viewModelTemp = ReturnViewModel();
                 var item = JsonConvert.SerializeObject(createRequest);
-                viewModel = JsonConvert.DeserializeObject<PublicationFormViewModel>(item);
+                var viewModel = JsonConvert.DeserializeObject<PublicationFormViewModel>(item);
+                viewModel.PublicationAccessRights = viewModelTemp.PublicationAccessRights;
+                viewModel.PublicationCategories = viewModelTemp.PublicationCategories;
                 return View("PublicationForm", viewModel);
             }
+
+            if (uploadFile != null)
+            {
+                createRequest.UploadFile = uploadFile.FileName;
+                var cont = uploadFile.ContentType;
+                using (var reader = new System.IO.BinaryReader(uploadFile.InputStream))
+                {
+                    createRequest.UploadFileContent = reader.ReadBytes(uploadFile.ContentLength);
+                }
+            }
+
+            if (coverPageImage != null)
+            {
+                createRequest.CoverPageImage = coverPageImage.FileName;
+            }
+
+
             var result = PortalPublicationService.CreatePublication(createRequest);
             if (result != null)
             {
@@ -53,15 +72,17 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
             // If we got this far, something failed, redisplay form
-            return View("PublicationForm");
+            return View("PublicationForm", ReturnViewModel());
         }
 
         public ActionResult Edit(string id)
         {
             var publication = PortalPublicationService.GetPublication(id);
-            var viewModel = new PublicationFormViewModel();
+            var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(publication);
-            viewModel = JsonConvert.DeserializeObject<PublicationFormViewModel>(item);
+            var viewModel = JsonConvert.DeserializeObject<PublicationFormViewModel>(item);
+            viewModel.PublicationAccessRights = viewModelTemp.PublicationAccessRights;
+            viewModel.PublicationCategories = viewModelTemp.PublicationCategories;
             return View("PublicationForm", viewModel);
 
         }

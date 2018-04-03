@@ -29,7 +29,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("CountryForm");
+                return View("CountryForm", createRequest);
             }
             var result = PortalCountryService.CreateCountry(createRequest);
             if (result != null)
@@ -43,14 +43,13 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 {
                     ViewBag.ErrorBag = result.ErrorMessage;
                 }
-
             }
             else
             {
                 ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
             // If we got this far, something failed, redisplay form
-            return View("CountryForm");
+            return View("CountryForm", createRequest);
         }
 
         public ActionResult Edit(string id)

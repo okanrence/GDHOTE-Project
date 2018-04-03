@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
-
+using System.Web;
 namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
     public class CreatePublicationRequest
@@ -20,7 +19,11 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         [Required(ErrorMessage = "Please specify Access Right")]
         [Display(Name = "Access Right")]
         public int AccessRightId { get; set; }
+        [Required(ErrorMessage = "Please specify Upload File")]
         [Display(Name = "Upload File")]
         public string UploadFile { get; set; }
+        [Display(Name = "Cover Page Image")]
+        public string CoverPageImage { get; set; }
+        public byte[] UploadFileContent { get; set; }
     }
 }
