@@ -9,7 +9,7 @@ namespace GDHOTE.Hub.CoreObject.Models
     public class Notification : BaseModel
     {
         public long Id { get; set; }
-        public long MemberId { get; set; }
+        public string Recipient { get; set; }
         public int NotificationTypeId { get; set; }
         public string ContentBody { get; set; }
         public char Status { get; set; }

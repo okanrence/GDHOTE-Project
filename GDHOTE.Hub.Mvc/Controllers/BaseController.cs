@@ -26,7 +26,6 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 return;
             }
 
-            
             var currentUser = HttpContext.GetOwinContext().Authentication.User;
             IEnumerable<Claim> claims = currentUser.Claims;
             //var roles = claims.ToList().Where(c => c.Type == ClaimTypes.Role).ToList();
@@ -37,11 +36,11 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 roleId = claims.SingleOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
             }
 
-           
+
             //Get UserMenu
             var mainMenus = MainMenuService.GetMainMenus().ToList();
             var subMenus = RoleSubMenuViewService.GetRoleMenuByRole(roleId).ToList();
-          
+
             ViewBag.MainMenu = mainMenus;
             ViewBag.SubMenu = subMenus;
             ViewBag.DeployedAppName = UtilityManager.DeployedAppName();

@@ -29,7 +29,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
                 return "Error occured while trying to insert record";
             }
@@ -48,7 +48,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return new List<RoleViewModel>();
             }
         }
@@ -66,7 +66,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return new List<Role>();
             }
         }
@@ -82,7 +82,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return new Role();
             }
         }
@@ -99,7 +99,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return "Error occured while trying to update Role";
             }
         }
@@ -129,7 +129,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return "Error occured while trying to delete record";
             }
         }
@@ -189,7 +189,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 var response = new Response
                 {
                     ErrorCode = "01",

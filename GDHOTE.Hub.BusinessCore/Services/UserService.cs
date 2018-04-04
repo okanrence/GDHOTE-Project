@@ -28,7 +28,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return ex.Message.Contains("The duplicate key") ? "Cannot Insert duplicate record" : "Error occured while trying to insert User";
             }
         }
@@ -45,7 +45,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return new User();
             }
         }
@@ -64,7 +64,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return new User();
             }
         }
@@ -83,7 +83,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return new User();
             }
         }
@@ -100,7 +100,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return "Error occured while trying to update User";
             }
         }
@@ -116,7 +116,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return "Error occured while trying to delete record";
             }
         }
@@ -196,16 +196,16 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         var req = new EmailRequest
                         {
                             Type = EmailType.PasswordReset,
+                            Subject = Get("settings.organisation.name") + "Password Reset",
                             RecipientEmailAddress = userExist.EmailAddress,
-                            //UserId = userExist.UserId,
                             Data = new Hashtable
                             {
-                                ["Subject"] = "Gdhote Password Reset",
+                                //["Subject"] = "Gdhote Password Reset",
                                 ["Code"] = code,
                                 ["Resend"] = resend
                             }
                         };
-                        EmailNotificationService.SendEmailConfirmation(req);
+                        EmailNotificationService.SendPasswordResetEmail(req, username);
                     }).Start();
 
 
@@ -222,7 +222,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                //LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 var response = new Response
                 {
                     ErrorCode = "01",

@@ -23,7 +23,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.Log(ex.Message);
+               LogService.myLog(ex.Message);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
                 return "Error occured while trying to insert SubMenu";
             }
@@ -40,7 +40,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.Log(ex.Message);
+               LogService.myLog(ex.Message);
                 return new List<SubMenu>();
             }
         }
@@ -56,7 +56,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.Log(ex.Message);
+               LogService.myLog(ex.Message);
                 return new List<SubMenu>();
             }
         }
@@ -72,7 +72,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.Log(ex.Message);
+               LogService.myLog(ex.Message);
                 return new SubMenu();
             }
         }
@@ -88,7 +88,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.Log(ex.Message);
+               LogService.myLog(ex.Message);
                 return "Error occured while trying to update SubMenu";
             }
         }
@@ -104,7 +104,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.Log(ex.Message);
+               LogService.myLog(ex.Message);
                 return "Error occured while trying to delete record";
             }
         }

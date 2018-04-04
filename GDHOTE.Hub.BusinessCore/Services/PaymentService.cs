@@ -25,7 +25,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
                 return "Error occured while trying to insert record";
             }
@@ -46,7 +46,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return new List<PaymentViewModel>();
             }
         }
@@ -66,7 +66,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return new List<PaymentViewModel>();
             }
         }
@@ -86,7 +86,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return new List<PaymentViewModel>();
             }
         }
@@ -102,7 +102,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return new Payment();
             }
         }
@@ -119,7 +119,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return "Error occured while trying to update payment";
             }
         }
@@ -170,7 +170,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return new Response
                 {
                     ErrorCode = "01",
@@ -228,7 +228,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return new Response
                 {
                     ErrorCode = "01",
@@ -291,7 +291,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
                 return new Response
                 {
                     ErrorCode = "01",

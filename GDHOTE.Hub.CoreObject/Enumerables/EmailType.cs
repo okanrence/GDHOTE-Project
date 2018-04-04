@@ -12,6 +12,7 @@ namespace GDHOTE.Hub.CoreObject.Enumerables
         PaymentConfirmation = 2,
         PasswordReset = 3,
         BirthdayNotification = 4,
-        WeddingAnniversaryNotification = 5
+        WeddingAnniversaryNotification = 5,
+        GenericEmail = 6
     }
 }

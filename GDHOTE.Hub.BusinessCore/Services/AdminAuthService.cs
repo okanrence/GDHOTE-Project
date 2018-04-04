@@ -17,7 +17,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             try
             {
 
-                LogService.Log("Testing");
+                LogService.myLog("Testing");
 
 
                 var userView = UserViewService.GetUser(loginRequest.UserName, loginRequest.Password);
@@ -46,7 +46,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(ex.Message);
+                LogService.myLog(ex.Message);
 
                 if (ex is InvalidRequestException) throw;
                 throw new UnableToCompleteException(ex.Message, MethodBase.GetCurrentMethod().Name);

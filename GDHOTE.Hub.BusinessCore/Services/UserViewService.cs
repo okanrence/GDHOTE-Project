@@ -26,7 +26,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.Log(ex.Message);
+               LogService.myLog(ex.Message);
                 return new UserView();
             }
         }
@@ -42,7 +42,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.Log(ex.Message);
+               LogService.myLog(ex.Message);
                 return new List<UserView>();
             }
         }
