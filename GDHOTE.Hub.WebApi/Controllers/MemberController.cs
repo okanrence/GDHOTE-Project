@@ -233,7 +233,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("get-members-by-search-query")]
         public HttpResponseMessage GetMembersBySearchQuery(string seachQuery)
         {
@@ -264,7 +264,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         [Route("get-members-by-mobile-number")]
         public HttpResponseMessage GetMembersByMobileNumber(string seachQuery)
         {
@@ -295,7 +295,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         [Route("get-members-by-birthday")]
         public HttpResponseMessage GetMembersByBirthday(string dateOfBirth)
         {
@@ -325,7 +325,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("get-members-by-wedding-anniversary")]
         public HttpResponseMessage GetMembersByWeddingAnniversary(string weddingDate)
         {

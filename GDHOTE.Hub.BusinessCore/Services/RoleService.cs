@@ -29,7 +29,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
                 return "Error occured while trying to insert record";
             }
@@ -48,7 +48,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new List<RoleViewModel>();
             }
         }
@@ -66,7 +66,26 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
+                return new List<Role>();
+            }
+        }
+
+        public static List<Role> GetRolesByRoleType(int id)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var roles = db.Fetch<Role>()
+                        .Where(r => r.RoleTypeId == id && r.StatusId == (int)CoreObject.Enumerables.Status.Active)
+                        .ToList();
+                    return roles;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
                 return new List<Role>();
             }
         }
@@ -82,7 +101,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new Role();
             }
         }
@@ -99,7 +118,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return "Error occured while trying to update Role";
             }
         }
@@ -129,7 +148,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return "Error occured while trying to delete record";
             }
         }
@@ -171,7 +190,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var role = new Role
                     {
                         RoleId = Guid.NewGuid().ToString(),
-                        RoleName  = roleName,
+                        RoleName = roleName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
                         CreatedById = user.UserId,
                         DateCreated = DateTime.Now,
@@ -189,7 +208,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 var response = new Response
                 {
                     ErrorCode = "01",

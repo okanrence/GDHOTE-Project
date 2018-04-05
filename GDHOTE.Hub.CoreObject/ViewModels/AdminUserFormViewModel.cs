@@ -10,13 +10,10 @@ using GDHOTE.Hub.CoreObject.Models;
 
 namespace GDHOTE.Hub.CoreObject.ViewModels
 {
-    public class AdminUserFormViewModel //: CreateAdminUserRequest
+    public class AdminUserFormViewModel : CreateAdminUserRequest
     {
-        public IEnumerable<Role> Roles { get; set; }
-        public IEnumerable<UserStatus> UserStatuses { get; set; }
-        public User User { get; set; }
-        [DisplayName("Confirm Password")]
-        [DataType(DataType.Password)]
-        public string ConfirmPassword { get; set; }
+        public List<RoleType> RoleTypes { get; set; }
+        public List<Role> Roles { get; set; }
+        public List<UserStatus> UserStatuses { get; set; }
     }
 }

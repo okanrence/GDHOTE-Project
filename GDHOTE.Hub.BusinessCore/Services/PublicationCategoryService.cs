@@ -23,7 +23,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
                 return "Error occured while trying to insert PublicationCategory";
             }
@@ -42,7 +42,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new List<PublicationCategoryViewModel>();
             }
         }
@@ -61,7 +61,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new List<PublicationCategory>();
             }
         }
@@ -78,7 +78,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new PublicationCategory();
             }
         }
@@ -94,7 +94,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return "Error occured while trying to update Publication Category";
             }
         }
@@ -126,7 +126,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return "Error occured while trying to delete record";
             }
         }
@@ -185,7 +185,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 var response = new Response
                 {
                     ErrorCode = "01",

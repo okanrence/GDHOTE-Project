@@ -7,6 +7,6 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
     public class AdminLoginResponse : Response
     {
-        public AdminUserViewModel User { get; set; }
+        public UserViewModel User { get; set; }
     }
 }

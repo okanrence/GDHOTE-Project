@@ -23,7 +23,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
                 return "Error occured while trying to insert Publication";
             }
@@ -42,7 +42,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new List<PublicationViewModel>();
             }
         }
@@ -61,7 +61,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new List<Publication>();
             }
         }
@@ -77,7 +77,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new Publication();
             }
         }
@@ -97,7 +97,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new List<Publication>();
             }
         }
@@ -113,7 +113,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return "Error occured while trying to update Publication";
             }
         }
@@ -145,7 +145,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return "Error occured while trying to delete record";
             }
         }
@@ -209,7 +209,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 var response = new Response
                 {
                     ErrorCode = "01",

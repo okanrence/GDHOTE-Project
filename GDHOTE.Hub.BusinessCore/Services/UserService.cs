@@ -10,6 +10,7 @@ using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using Newtonsoft.Json;
 using GDHOTE.Hub.CoreObject.Enumerables;
+using GDHOTE.Hub.CoreObject.ViewModels;
 using NPoco;
 
 namespace GDHOTE.Hub.BusinessCore.Services
@@ -28,11 +29,29 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return ex.Message.Contains("The duplicate key") ? "Cannot Insert duplicate record" : "Error occured while trying to insert User";
             }
         }
 
+        public static List<UserViewModel> GetAllUsers()
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var user = db.Fetch<UserViewModel>()
+                        .OrderBy(u => u.DateCreated)
+                        .ToList();
+                    return user;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new List<UserViewModel>();
+            }
+        }
         public static User GetUser(string id)
         {
             try
@@ -45,45 +64,46 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new User();
             }
         }
 
-        public static User GetUser(string userName, string password)
+        public static UserViewModel GetUser(string emailAddress, string password)
         {
             try
             {
                 var passwordHash = PasswordManager.ReturnHashPassword(password);
                 using (var db = GdhoteConnection())
                 {
-                    var user = db.Fetch<User>().SingleOrDefault(u => u.UserName.ToLower().Equals(userName.ToLower())
-                         && u.Password.Equals(passwordHash));
+                    var user = db.Fetch<UserViewModel>().
+                        SingleOrDefault(u => u.EmailAddress.ToLower().Equals(emailAddress.ToLower())
+                                             && u.Password.Equals(passwordHash));
                     return user;
                 }
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
-                return new User();
+                LogService.LogError(ex.Message);
+                return new UserViewModel();
             }
         }
-        public static User GetUserByUserName(string userName)
+        public static User GetUserByUserName(string emailaddress)
         {
             try
             {
-                userName = string.IsNullOrEmpty(userName) ? "olufunso" : userName;
+                emailaddress = string.IsNullOrEmpty(emailaddress) ? "abrabfun@yahoo.com" : emailaddress;
 
                 using (var db = GdhoteConnection())
                 {
                     var user = db.Fetch<User>()
-                        .SingleOrDefault(u => u.UserName.ToLower().Equals(userName.ToLower()));
+                        .SingleOrDefault(u => u.EmailAddress.ToLower().Equals(emailaddress.ToLower()));
                     return user;
                 }
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new User();
             }
         }
@@ -100,24 +120,61 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return "Error occured while trying to update User";
             }
         }
-        public static string Delete(int id)
+        public static Response Delete(string userId, string currentUser)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Delete<User>(id);
-                    return result.ToString();
+                    var response = new Response();
+
+                    var userExist = db.Fetch<User>().SingleOrDefault(u => u.UserId == userId);
+                    if (userExist == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
+
+                    }
+
+                    //Get User Initiating Creation Request
+                    var user = GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
+                    }
+                    
+                    //Delete User
+                    userExist.UserStatusId = (int)UserStatusEnum.Deleted;
+                    userExist.DeletedById = user.UserId;
+                    userExist.DateDeleted = DateTime.Now;
+                    db.Update(userExist);
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
                 }
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
-                return "Error occured while trying to delete record";
+                LogService.LogError(ex.Message);
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to delete record"
+                };
             }
         }
         public static Response RequestResetPassword(PasswordResetRequest request)
@@ -127,10 +184,10 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 using (var db = GdhoteConnection())
                 {
 
-                    string username = request.Username.ToLower();
+                    string emailAddress = request.EmailAddress.ToLower();
 
                     //Get user by username 
-                    var userExist = db.Fetch<User>().SingleOrDefault(c => c.UserName.ToLower().Equals(username));
+                    var userExist = db.Fetch<User>().SingleOrDefault(c => c.EmailAddress.ToLower().Equals(emailAddress));
                     if (userExist == null)
                     {
                         return new Response
@@ -205,7 +262,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 ["Resend"] = resend
                             }
                         };
-                        EmailNotificationService.SendPasswordResetEmail(req, username);
+                        EmailNotificationService.SendPasswordResetEmail(req, emailAddress);
                     }).Start();
 
 
@@ -222,7 +279,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 var response = new Response
                 {
                     ErrorCode = "01",
@@ -231,6 +288,99 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return response;
             }
 
+        }
+
+
+        public static Response CreateUser(CreateAdminUserRequest createRequest, string currentUser, int channelCode)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var response = new Response();
+
+                    //Check email exist
+                    var adminUserExist = db.Fetch<User>()
+                        .SingleOrDefault(m => m.EmailAddress.ToLower().Equals(createRequest.EmailAddress.ToLower()));
+
+                    if (adminUserExist != null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Email Address already exist"
+                        };
+                    }
+
+
+                    //Get User Initiating Creation Request
+                    var user = GetUserByUserName(currentUser);
+
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
+
+
+                    var item = JsonConvert.SerializeObject(createRequest);
+                    var adminUser = JsonConvert.DeserializeObject<User>(item);
+
+                    
+                    adminUser.UserId = Guid.NewGuid().ToString();
+                    adminUser.Password = PasswordManager.ReturnHashPassword(createRequest.Password);
+                    adminUser.CreatedById = user.UserId;
+                    adminUser.ChannelId = channelCode;
+                    adminUser.UserStatusId = (int)UserStatusEnum.Active;
+                    adminUser.PasswordChange = true;
+                    adminUser.DateCreated = DateTime.Now;
+                    adminUser.RecordDate = DateTime.Now;
+
+                    db.Insert(adminUser);
+
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+
+
+                    //Notify Admin User
+                    new Task(() =>
+                    {
+                        var req = new EmailRequest
+                        {
+                            Type = EmailType.NewAdminUser,
+                            Subject = "Welcome to " + Get("settings.organisation.name"),
+                            RecipientEmailAddress = createRequest.EmailAddress,
+                            Data = new Hashtable
+                            {
+                                ["FirstName"] = createRequest.FirstName,
+                                ["LastName"] = createRequest.LastName,
+                            }
+                        };
+
+                        EmailNotificationService.SendNewUserEmail(req, currentUser);
+
+                    }).Start();
+
+                    return response;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                var response = new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to insert record"
+                };
+                return response;
+            }
         }
     }
 }

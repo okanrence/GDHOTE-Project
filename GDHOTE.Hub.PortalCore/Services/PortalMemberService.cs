@@ -125,12 +125,13 @@ namespace GDHOTE.Hub.PortalCore.Services
         }
         public static Response CreateMember(CreateMemberRequest createRequest)
         {
+            var channel = (int) CoreObject.Enumerables.Channel.Web;
             var requestData = JsonConvert.SerializeObject(createRequest);
             string fullUrl = ConfigService.ReturnBaseUrl() + "/member/create-member";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("channel", "1");
+            request.AddHeader("channel", channel.ToString());
             //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("application/json", requestData, ParameterType.RequestBody);

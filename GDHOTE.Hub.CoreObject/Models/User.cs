@@ -11,19 +11,15 @@ namespace GDHOTE.Hub.CoreObject.Models
 {
     [TableName("HUB_Users")]
     [PrimaryKey("UserId", AutoIncrement = false)]
-    public class User
+    public class User : BaseModel
     {
         public string UserId { get; set; }
-        [Required]
-        [DisplayName("User Name")]
-        public string UserName { get; set; }
-
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
         [DisplayName("Email Address")]
         [Required]
         [EmailAddress]
         public string EmailAddress { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
@@ -33,9 +29,9 @@ namespace GDHOTE.Hub.CoreObject.Models
         [Required]
         [DisplayName("Role")]
         public string RoleId { get; set; }
-        public string CreatedBy { get; set; }
-        public string LastUpdatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime? LastUpdatedTime { get; set; }
+        public int ChannelId { get; set; }
+        public DateTime? LastLoginTime { get; set; }
+        public bool PasswordChange { get; set; }
+        public DateTime? PasswordChangedDate { get; set; }
     }
 }

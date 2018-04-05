@@ -91,7 +91,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [Route("send-email")]
         public HttpResponseMessage SendEmailMessage(SendEmailRequest emailRequest)
         {

@@ -62,7 +62,7 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                     case "customer":
                         var loginRequest = new AdminLoginRequest
                         {
-                            UserName = context.UserName,
+                            EmailAddress = context.UserName,
                             Password = context.Password
                         };
                         var customerUser = AdminAuthService.AuthenticateUser(loginRequest);
@@ -90,7 +90,7 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                     case "administrator":
                         var adminloginRequest = new AdminLoginRequest
                         {
-                            UserName = context.UserName,
+                            EmailAddress = context.UserName,
                             Password = context.Password
                         };
                         var adminUser = AdminAuthService.AuthenticateUser(adminloginRequest);

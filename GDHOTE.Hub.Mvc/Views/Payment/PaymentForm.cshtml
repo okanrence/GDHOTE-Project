@@ -19,10 +19,17 @@
 {
     <div>
         <span class="text-danger">@ViewBag.ErrorBag</span>
+        @*<div class="form-group">
+                <label>Name</label>
+                <div class="tt-container">
+                    <input id="member" name="member" required="" type="text" value="" class="form-control" />
+                </div>
+            </div>*@
         <div class="form-group">
             <label>Name</label>
-            <div class="tt-container">
-                <input id="member" name="member" required="" type="text" value="" class="form-control" />
+            <div>
+                <input id="membername" name="membername" required="" type="text" value="" class="form-control" />
+                <input id="memberkey" name="memberkey" type="hidden" value="" class="form-control" />
             </div>
         </div>
         <div class="form-group">
@@ -62,33 +69,50 @@
 @section scripts
 {
     <script>
-        $(document).ready(function () {
-            var viewModel = {
+        $(document).ready(function() {
+            @*var viewModel = {
                 movieIds: []
             };
 
-            var check = '@Url.Action("GetMember", "Member")?query=%QUERY';
-            console.log(check);
-            var members = new Bloodhound({
+          var members = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('firstname'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-
                     url: '@Url.Action("GetMember", "Member")?query=%QUERY',
                     wildcard: '%QUERY'
                 }
             });
 
             $('#member').typeahead({
-                minLength: 3,
-                highlight: true
-            }, {
+                    minLength: 3,
+                    highlight: true
+                },
+                {
                     name: 'members',
                     display: 'firstname',
                     source: members
-                }).on("typeahead:select", function (e, member) {
-                viewModel.memberkey = member.memberKey;
+                }).on("typeahead:select",
+                function(e, member) {
+                    viewModel.memberkey = member.memberKey;
+                });*@
+
+
+
+            $("#membername").autocomplete({
+                source: '@Url.Action("GetMember", "Member")',
+                minLength: 5,
+                select: function (event, ui) {
+                    $(this).val(ui.item.value);
+                    $(this).val(ui.item.label);
+                    $("#memberkey").val(ui.item.value);
+                    return false;
+                },
+                focus: function (event, ui) {
+                    return false;
+                }
             });
+
+
         });
     </script>
 }

@@ -44,7 +44,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new List<MemberViewModel>();
             }
         }
@@ -63,7 +63,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new List<Member>();
             }
         }
@@ -81,7 +81,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 throw new UnableToCompleteException(ex.Message, MethodBase.GetCurrentMethod().Name);
             }
         }
@@ -97,7 +97,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new Member();
             }
         }
@@ -113,7 +113,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return "Error occured while trying to update member";
             }
         }
@@ -161,7 +161,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new Response
                 {
                     ErrorCode = "01",
@@ -184,7 +184,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 return new List<MemberViewModel>();
             }
         }
@@ -271,7 +271,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                     RecipientEmailAddress = createRequest.EmailAddress,
                                     Data = new Hashtable
                                     {
-                                        ["Subject"] = "Welcome to " + Get("settings.organisation.name"),
+                                        //["Subject"] = "Welcome to " + Get("settings.organisation.name"),
                                         ["FirstName"] = createRequest.FirstName,
                                         ["LastName"] = createRequest.Surname,
                                     }
@@ -288,7 +288,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 var response = new Response
                 {
                     ErrorCode = "01",
@@ -366,7 +366,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 var response = new Response
                 {
                     ErrorCode = "01",

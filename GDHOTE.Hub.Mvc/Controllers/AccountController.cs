@@ -37,19 +37,19 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 return View(loginRequest);
             }
 
-            var integration = new LoginIntegration(loginRequest.UserName, loginRequest.Password);
+            var integration = new LoginIntegration(loginRequest.EmailAddress, loginRequest.Password);
             TokenResponse result = integration.Invoke();
             if (result != null)
             {
                 if (!string.IsNullOrEmpty(result.AccessToken))
                 {
 
-                    FormsAuthentication.SetAuthCookie(loginRequest.UserName, false);
+                    FormsAuthentication.SetAuthCookie(loginRequest.EmailAddress, false);
                     string roles = result.RoleId;
                     Session["RefreshToken"] = result.RefreshToken;
                     Session["AccessToken"] = result.AccessToken;
 
-                    var authTicket = new FormsAuthenticationTicket(1, loginRequest.UserName, DateTime.Now,
+                    var authTicket = new FormsAuthenticationTicket(1, loginRequest.EmailAddress, DateTime.Now,
                         DateTime.Now.AddMinutes(5), false, roles);
                     string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
                     var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);

@@ -11,11 +11,11 @@ using log4net.Repository.Hierarchy;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
-    public class LogService
+    public class LogService : BaseService
     {
+        //private static ILog myLogger { get; set; }
         private static ILog myLogger { get; set; }
-
-        static void Logger()
+        static LogService()
         {
             myLogger = LogManager.GetLogger(typeof(Logger));
         }
@@ -39,9 +39,11 @@ namespace GDHOTE.Hub.BusinessCore.Services
         {
             myLogger.Info(msg);
         }
-        public static void myLog(object msg)
+        public static void LogError(object msg)
         {
             myLogger.Info(msg);
+            var log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+            log.Info(msg);
         }
         //public string Message { get; set; }
         //protected ILog Logger;

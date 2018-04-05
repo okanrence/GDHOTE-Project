@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using GDHOTE.Hub.WebApi.OwinProvider;
+//using log4net;
+//using log4net.Config;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security.OAuth;
@@ -25,8 +29,10 @@ namespace GDHOTE.Hub.WebApi
             ConfigureOAuth(app);
             WebApiConfig.Register(config);
 
-            app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
+            app.UseCors(CorsOptions.AllowAll);
             app.UseWebApi(config);
+
+            log4net.Config.XmlConfigurator.Configure(new FileInfo(@"C:\MyProjects\GDHOTE-Project\GDHOTE.Hub.WebApi\log4net.config"));
         }
 
 
@@ -41,7 +47,7 @@ namespace GDHOTE.Hub.WebApi
                 Provider = new CustomOwinProvider(),
                 RefreshTokenProvider = new RefreshTokenProvider()
             };
-           // Token Generation
+            // Token Generation
             app.UseOAuthAuthorizationServer(oAuthServerOptions);
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
 

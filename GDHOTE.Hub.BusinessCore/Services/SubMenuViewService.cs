@@ -23,7 +23,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.myLog(ex.Message);
+               LogService.LogError(ex.Message);
                 return new List<SubMenuView>();
             }
         }

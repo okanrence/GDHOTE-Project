@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.CoreObject.Enumerables;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -24,7 +23,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.myLog(ex.Message);
+               LogService.LogError(ex.Message);
                 return ex.Message.Contains("The duplicate key") ? "Cannot Insert duplicate record" : "Error occured while trying to insert UserStatus";
             }
         }
@@ -41,7 +40,24 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.myLog(ex.Message);
+               LogService.LogError(ex.Message);
+                return new List<UserStatus>();
+            }
+        }
+
+        public static List<UserStatus> GetActiveUserStatuses()
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var userStatuses = db.Fetch<UserStatus>();
+                    return userStatuses;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
                 return new List<UserStatus>();
             }
         }
@@ -57,7 +73,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.myLog(ex.Message);
+               LogService.LogError(ex.Message);
                 return new UserStatus();
             }
         }
@@ -74,7 +90,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.myLog(ex.Message);
+               LogService.LogError(ex.Message);
                 return "Error occured while trying to update UserStatus";
             }
         }
@@ -90,7 +106,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-               LogService.myLog(ex.Message);
+               LogService.LogError(ex.Message);
                 return "Error occured while trying to delete record";
             }
         }

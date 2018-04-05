@@ -37,6 +37,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             viewModel = JsonConvert.DeserializeObject<MemberFormViewModel>(item);
             return View("UpdateMemberForm", viewModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Save(CreateMemberRequest createRequest)
@@ -110,10 +111,11 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        public JsonResult GetMember(string query)
+        public JsonResult GetMember(string term)
         {
-            var result = PortalMemberService.GetMembersByName(query);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            var result = PortalMemberService.GetMembersByName(term);
+            var data = result.Select(r => new { value = r.MemberKey, label = r.FirstName + " " + r.Surname }).ToList();
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
         private static MemberFormViewModel ReturnViewModel()
         {

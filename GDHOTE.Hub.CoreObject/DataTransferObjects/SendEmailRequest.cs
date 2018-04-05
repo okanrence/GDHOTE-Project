@@ -7,7 +7,7 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
     public class SendEmailRequest
     {
-        //public long MemberId { get; set; }
+        public long MemberId { get; set; }
         [Required]
         public string Firstname { get; set; }
         //[Required]

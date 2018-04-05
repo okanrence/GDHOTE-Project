@@ -23,7 +23,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
     public class EmailNotificationService : BaseService
     {
         private static readonly string EmailTemplatePath = AppDomain.CurrentDomain.BaseDirectory + Get("settings.email.template.folder");
-        private static readonly string blindCopy = "olufunso@olunaike.com,sholze.eldorado@gmail.com";
+        private static readonly string BlindCopy = Get("settings.email.blind.copy");
+
         private static Response SendNotificationEmail(EmailRequest emailRequest, string currentUser)
         {
             try
@@ -49,7 +50,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 var service = new EmailService(engines);
                 dynamic email = new Email(emailRequest.Type.ToString());
                 email.To = emailRequest.RecipientEmailAddress;
-                email.Bcc = blindCopy;
+                email.Bcc = BlindCopy;
                 email.Subject = emailRequest.Subject;
                 email.FirstName = emailRequest.Data["FirstName"];
                 email.LastName = emailRequest.Data["LastName"];
@@ -86,7 +87,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 var response = new Response
                 {
                     ErrorCode = "01",
@@ -157,7 +158,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 var response = new Response
                 {
                     ErrorCode = "01",
@@ -167,6 +168,74 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
         }
 
+        public static Response SendNewUserEmail(EmailRequest emailRequest, string currentUser)
+        {
+            try
+            {
+                var response = new Response();
+
+
+                //Get User Initiating Creation Request
+                var user = UserService.GetUserByUserName(currentUser);
+
+                if (user == null)
+                {
+                    return new Response
+                    {
+                        ErrorCode = "01",
+                        ErrorMessage = "Unable to validate User"
+                    };
+                }
+
+
+                var viewsPath = Path.GetFullPath(EmailTemplatePath);
+                var engines = new ViewEngineCollection { new FileSystemRazorViewEngine(viewsPath) };
+                var service = new EmailService(engines);
+                dynamic email = new Email("NewAdminUser");
+                email.To = emailRequest.RecipientEmailAddress;
+                email.Subject = emailRequest.Subject;
+                email.FirstName = emailRequest.Data["FirstName"];
+                email.LastName = emailRequest.Data["LastName"];
+                service.Send(email);
+
+                //Log Notification
+                new Task(() =>
+                {
+                    using (var db = GdhoteConnection())
+                    {
+                        var notification = new Notification
+                        {
+                            Recipient = emailRequest.RecipientEmailAddress,
+                            NotificationTypeId = (int)NotificationType.Email,
+                            ContentBody = emailRequest.Type.ToString(),
+                            Status = 'S',
+                            CreatedById = user.UserId,
+                            DateCreated = DateTime.Now,
+                            RecordDate = DateTime.Now
+                        };
+                        db.Insert(notification);
+                    }
+
+                }).Start();
+
+                response = new Response
+                {
+                    ErrorCode = "00",
+                    ErrorMessage = "Successful"
+                };
+                return response;
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                var response = new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured Sending message"
+                };
+                return response;
+            }
+        }
         public static Response SendPasswordResetEmail(EmailRequest emailRequest, string currentUser)
         {
             try
@@ -225,7 +294,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 var response = new Response
                 {
                     ErrorCode = "01",
@@ -294,7 +363,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
                 var response = new Response
                 {
                     ErrorCode = "01",

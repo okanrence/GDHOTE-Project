@@ -75,6 +75,38 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
+
+        [HttpGet]
+        [Route("get-roles-by-role-type")]
+        public HttpResponseMessage GetRolesByRoleType(string id)
+        {
+            try
+            {
+                var response = RoleService.GetRolesByRoleType(Convert.ToInt16(id)).ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
         [HttpGet]
         [Route("get-role")]
         public HttpResponseMessage GetRole(string id)

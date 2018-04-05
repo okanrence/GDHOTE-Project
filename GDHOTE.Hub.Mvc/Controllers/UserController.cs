@@ -3,27 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
     public class UserController : BaseController
     {
-        private static IEnumerable<Role> _roles = null;
-        private static IEnumerable<UserStatus> _userStatuses = null;
-        public UserController()
-        {
-            _roles = RoleService.GetActiveRoles();
-            _userStatuses = UserStatusService.GetUserStatuses();
-        }
         // GET: User
         public ActionResult Index()
         {
-            //var users = UserService.GetUsers().ToList();
-            var users = UserViewService.GetUsers().ToList();
+            var users = PortalUserService.GetAllUsers().ToList();
             return View("UserIndex", users);
         }
 
@@ -36,105 +29,71 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: User/Create
         public ActionResult New()
         {
-            var viewModel = new AdminUserFormViewModel
-            {
-                Roles = _roles,
-                UserStatuses = _userStatuses,
-                User = new User(),
-            };
-            return View("UserForm", viewModel);
+            return View("UserForm", ReturnViewModel());
         }
         // GET: User/Edit/5
         public ActionResult Edit(string id)
         {
-            var user = UserService.GetUser(id);
+            var user = PortalUserService.GetUser(id);
             if (user == null) return HttpNotFound();
-            var viewModel = new AdminUserFormViewModel
-            {
-                Roles = _roles,
-                UserStatuses = _userStatuses,
-                User = user,
-            };
+            var viewModel = ReturnViewModel();
+            var item = JsonConvert.SerializeObject(user);
+            viewModel = JsonConvert.DeserializeObject<AdminUserFormViewModel>(item);
             return View("UserForm", viewModel);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(User user)
+        public ActionResult Save(CreateAdminUserRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
-                var viewModel = new AdminUserFormViewModel
-                {
-                    Roles = _roles,
-                    UserStatuses = _userStatuses,
-                    User = user,
-                };
+                var viewModel = ReturnViewModel();
                 return View("UserForm", viewModel);
             }
-            if (user.UserId == null)
+            var result = PortalUserService.CreateUser(createRequest);
+            if (result != null)
             {
-                user.UserId = Guid.NewGuid().ToString();
-                user.UserName  = user.UserName.ToLower();
-                user.CreatedDate = DateTime.Now;
-                user.Password = PasswordManager.ReturnHashPassword(user.Password);
-                user.CreatedBy = User.Identity.Name;
-                var result = UserService.Save(user);
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+
             }
             else
             {
-                var userInDb = UserService.GetUser(user.UserId);
-                if (userInDb == null) return HttpNotFound();
-                user.UserName = user.UserName.ToLower();
-                userInDb.UserStatusId = user.UserStatusId;
-                userInDb.RoleId = user.RoleId;
-                userInDb.EmailAddress = user.EmailAddress;
-                userInDb.LastUpdatedBy = User.Identity.Name;
-                userInDb.LastUpdatedTime = DateTime.Now;
-                var result = UserService.Update(userInDb);
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            return RedirectToAction("Index", "User");
+            // If we got this far, something failed, redisplay form
+            return View("UserForm", ReturnViewModel());
         }
 
-
-
-        // POST: User/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteRole(string id)
         {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View("UserIndex");
-            }
+            var result = PortalUserService.DeleteUser(id);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: User/Delete/5
-        public ActionResult Delete(int id)
+        private static AdminUserFormViewModel ReturnViewModel()
         {
-            return View("UserIndex");
-        }
-
-        // POST: User/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
+            var roleTypes = PortalRoleTypeService.GetRoleTypes().ToList();
+            var roles = new List<Role>(); // PortalRoleService.GetActiveRoles().ToList();
+            var userStatues = PortalUserStatusService.GetActiveUserStatuses().ToList();
+            var viewModel = new AdminUserFormViewModel
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View("UserIndex");
-            }
+                RoleTypes = roleTypes,
+                Roles = roles,
+                UserStatuses = userStatues
+            };
+            return viewModel;
         }
     }
 }

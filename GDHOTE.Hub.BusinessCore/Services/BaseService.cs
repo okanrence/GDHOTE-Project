@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
+using log4net.Repository.Hierarchy;
 using NPoco;
 
 namespace GDHOTE.Hub.BusinessCore.Services

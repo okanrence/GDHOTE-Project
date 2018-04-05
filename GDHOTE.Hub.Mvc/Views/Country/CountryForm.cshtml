@@ -19,7 +19,7 @@
         <span class="text-danger">@ViewBag.ErrorBag</span>
         <div class="form-group">
             @Html.LabelFor(c => c.Name)
-            @Html.TextBoxFor(c => c.Name, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.TextBoxFor(c => c.Name, new { @class = "form-control gdhote-text-capitalize", autocomplete = "off" })
             @Html.ValidationMessageFor(c => c.Name)
         </div>
         <div class="form-group">

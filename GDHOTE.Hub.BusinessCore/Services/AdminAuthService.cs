@@ -17,10 +17,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
             try
             {
 
-                LogService.myLog("Testing");
+                LogService.LogError("Testing");
 
-
-                var userView = UserViewService.GetUser(loginRequest.UserName, loginRequest.Password);
+                var userView = UserService.GetUser(loginRequest.EmailAddress, loginRequest.Password);
 
                 if (userView == null)
                     return new AdminLoginResponse
@@ -39,14 +38,14 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                 var adminUser = new AdminLoginResponse();
                 var item = JsonConvert.SerializeObject(userView);
-                adminUser.User = JsonConvert.DeserializeObject<AdminUserViewModel>(item);
+                adminUser.User = JsonConvert.DeserializeObject<UserViewModel>(item);
                 adminUser.ErrorCode = "00";
 
                 return adminUser;
             }
             catch (Exception ex)
             {
-                LogService.myLog(ex.Message);
+                LogService.LogError(ex.Message);
 
                 if (ex is InvalidRequestException) throw;
                 throw new UnableToCompleteException(ex.Message, MethodBase.GetCurrentMethod().Name);

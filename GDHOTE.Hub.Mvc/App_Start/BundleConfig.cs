@@ -19,9 +19,10 @@ namespace GDHOTE.Hub.Mvc
                        "~/Scripts/bootstrap-datepicker.js",
                        "~/Scripts/sweetalert.min.js",
                        "~/Scripts/jquery.unobtrusive-ajax.js",
-                       "~/Scripts/typeahead.bundle.js"
+                       "~/Scripts/typeahead.bundle.js",
+                        "~/Scripts/jquery-ui-{version}.js"
                         ));
- 
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                        "~/Scripts/jquery.validate*"));
 
@@ -38,7 +39,8 @@ namespace GDHOTE.Hub.Mvc
                       "~/Content/bootstrap-datepicker.css",
                       "~/Content/sweetalert.min.css",
                       "~/Content/typeahead.css",
-                      "~/Content/site.css"));
+                      "~/Content/jquery-ui/jquery-ui.min.css",
+                      "~/Content/site.css")); 
         }
     }
 }

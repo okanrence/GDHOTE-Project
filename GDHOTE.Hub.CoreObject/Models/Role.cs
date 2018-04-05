@@ -15,6 +15,6 @@ namespace GDHOTE.Hub.CoreObject.Models
         public string RoleId { get; set; }
         public string RoleName { get; set; }
         public int StatusId { get; set; }
-      
+        public int RoleTypeId { get; set; }
     }
 }

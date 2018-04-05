@@ -64,6 +64,16 @@ namespace GDHOTE.Hub.Mvc.Controllers
             // If we got this far, something failed, redisplay form
             return View("RoleForm");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult GetRolesByRoleTypeId(string id)
+        {
+            var result = PortalRoleService.GetRolesByRoleType(id);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult DeleteRole(string id)
