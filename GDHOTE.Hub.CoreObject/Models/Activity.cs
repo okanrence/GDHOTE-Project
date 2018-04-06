@@ -8,16 +8,13 @@ using NPoco;
 namespace GDHOTE.Hub.CoreObject.Models
 {
     [TableName("HUB_Activities")]
-    [PrimaryKey("ActivityId")]
-    public class Activity
+    public class Activity : BaseModel
     {
-        public int ActivityId { get; set; }
-        public int ActivityTypeId { get; set; }
-        public int MemberKey { get; set; }
+        public long Id { get; set; }
+        public long ActivityTypeId { get; set; }
+        public long MemberId { get; set; }
+        public int StatusId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public DateTime RecordDate { get; set; }
-        public DateTime PostedDate { get; set; }
-
     }
 }

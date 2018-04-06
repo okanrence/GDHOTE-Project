@@ -28,6 +28,7 @@ else
                 <thead>
                     <tr>
                         <th>Role</th>
+                        <th>Type</th>
                         <th>Status</th>
                         <th>Date</th>
                         <th></th>
@@ -36,12 +37,13 @@ else
                 <tbody>
                     @foreach (var role in Model)
                     {
-                        <tr>
-                            <td>@Html.ActionLink(role.RoleName, "Edit", "Role", new { id = role.RoleId }, null)</td>
-                            <td>@role.Status</td>
-                            <td>@role.DateCreated.ToString("dd-MMM-yyyy")</td>
-                            <td><button data-role-id="@role.RoleId" class="btn btn-link js-delete">Delete</button></td>
-                        </tr>
+                    <tr>
+                        <td>@Html.ActionLink(role.RoleName, "Edit", "Role", new { id = role.RoleId }, null)</td>
+                        <td>@role.RoleType</td>
+                        <td>@role.Status</td>
+                        <td>@role.DateCreated.ToString("dd-MMM-yyyy")</td>
+                        <td><button data-role-id="@role.RoleId" class="btn btn-link js-delete">Delete</button></td>
+                    </tr>
                     }
                 </tbody>
             </table>

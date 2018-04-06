@@ -8,7 +8,7 @@
     var pagename = "";
     if (Model != null)
     {
-        pagename = Model.MemberKey == 0 ? "New Payment" : "Edit Payment";
+        pagename = Model.MemberId == 0 ? "New Payment" : "Edit Payment";
     }
 
 }
@@ -29,7 +29,8 @@
             <label>Name</label>
             <div>
                 <input id="membername" name="membername" required="" type="text" value="" class="form-control" />
-                <input id="memberkey" name="memberkey" type="hidden" value="" class="form-control" />
+                <input id="MemberId" name="MemberId" type="hidden" value="" class="form-control" />
+                @Html.ValidationMessageFor(p => p.MemberId)
             </div>
         </div>
         <div class="form-group">
@@ -102,9 +103,10 @@
                 source: '@Url.Action("GetMember", "Member")',
                 minLength: 5,
                 select: function (event, ui) {
+                    console.log(ui);
                     $(this).val(ui.item.value);
                     $(this).val(ui.item.label);
-                    $("#memberkey").val(ui.item.value);
+                    $("#MemberId").val(ui.item.value);
                     return false;
                 },
                 focus: function (event, ui) {

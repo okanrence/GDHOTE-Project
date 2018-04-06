@@ -66,7 +66,12 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                             Password = context.Password
                         };
                         var customerUser = AdminAuthService.AuthenticateUser(loginRequest);
-
+                        if (customerUser.ErrorCode != "00")
+                        {
+                            context.SetError("invalid_grant", customerUser.ErrorMessage);
+                            return;
+                        }
+                       
                         //id = customer.Customer.Id;
                         //role = customer.CustomerUserViewModel.RoleName;
                         props = new AuthenticationProperties(new Dictionary<string, string>
@@ -94,6 +99,11 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                             Password = context.Password
                         };
                         var adminUser = AdminAuthService.AuthenticateUser(adminloginRequest);
+                        if (adminUser.ErrorCode != "00")
+                        {
+                            context.SetError("invalid_grant", adminUser.ErrorMessage);
+                            return;
+                        }
                         id = adminUser.User.UserId;
                         role = adminUser.User.UserRole;
                         props = new AuthenticationProperties(new Dictionary<string, string>

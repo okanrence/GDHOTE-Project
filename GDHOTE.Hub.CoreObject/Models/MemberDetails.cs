@@ -12,8 +12,8 @@ namespace GDHOTE.Hub.CoreObject.Models
     [TableName("HUB_MemberDetails")]
     public class MemberDetails : BaseModel
     {
-        public int Id { get; set; }
-        public int MemberKey { get; set; }
+        public long Id { get; set; }
+        public long MemberId { get; set; }
         public string MobileNumber { get; set; }
         public string AlternateNumber { get; set; }
         public string EmailAddress { get; set; }

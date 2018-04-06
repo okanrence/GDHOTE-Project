@@ -38,7 +38,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var members = db.Fetch<MemberViewModel>().OrderBy(m => m.MemberKey).ToList();
+                    var members = db.Fetch<MemberViewModel>().OrderBy(m => m.FirstName).ToList();
                     return members;
                 }
             }
@@ -56,7 +56,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 {
                     var members = db.Fetch<Member>()
                         .Where(m => m.MemberStatusId == (int)CoreObject.Enumerables.MemberStatus.Active && m.DateDeleted == null)
-                        .OrderBy(m => m.MemberKey)
+                        .OrderBy(m => m.FirstName)
                         .ToList();
                     return members;
                 }
@@ -91,7 +91,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var member = db.Fetch<Member>().SingleOrDefault(m => m.MemberKey == id);
+                    var member = db.Fetch<Member>().SingleOrDefault(m => m.Id == id);
                     return member;
                 }
             }
@@ -125,7 +125,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 {
                     var response = new Response();
 
-                    var member = db.Fetch<Member>().SingleOrDefault(c => c.MemberKey == id);
+                    var member = db.Fetch<Member>().SingleOrDefault(c => c.Id == id);
                     if (member == null)
                     {
                         return new Response
@@ -177,7 +177,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 {
                     var members = db.Fetch<MemberViewModel>()
                         .Where(m => m.ApprovedFlag == "N" && m.DateDeleted == null)
-                        .OrderBy(m => m.MemberKey)
+                        .OrderBy(m => m.DateCreated).ThenBy(m => m.FirstName)
                         .ToList();
                     return members;
                 }
@@ -245,7 +245,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         {
                             var memberDetails = new MemberDetails
                             {
-                                MemberKey = memberKey,
+                                MemberId = memberKey,
                                 MobileNumber = createRequest.MobileNumber,
                                 EmailAddress = createRequest.EmailAddress,
                                 CreatedById = user.UserId,
@@ -277,7 +277,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                     }
                                 };
 
-                                EmailNotificationService.SendRegistrationConfirmationEmail(req,currentUser);
+                                EmailNotificationService.SendRegistrationConfirmationEmail(req, currentUser);
 
                             }).Start();
                         }
@@ -310,7 +310,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Check member already profiled
                     var member = db.Fetch<Member>()
-                        .SingleOrDefault(m => m.MemberKey == approveRequest.MemberKey);
+                        .SingleOrDefault(m => m.Id == approveRequest.MemberId);
 
                     if (member == null)
                     {
@@ -375,7 +375,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return response;
             }
         }
-        
-      
+
+
     }
 }

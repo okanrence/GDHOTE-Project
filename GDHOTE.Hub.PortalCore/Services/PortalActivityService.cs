@@ -5,25 +5,26 @@ using System.Text;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
-using GDHOTE.Hub.PortalCore.Models;
 using Newtonsoft.Json;
 using RestSharp;
 
 namespace GDHOTE.Hub.PortalCore.Services
 {
-    public class PortalActivityTypeService
+   public class PortalActivityService
     {
-        public static List<ActivityTypeViewModel> GetAllActivityTypes()
+        public static List<ActivityViewModel> GetAllActivities(string startdate, string enddate)
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/get-all-activity-types";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/get-all-activities";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
             //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
             //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("startdate", startdate, ParameterType.QueryString);
+            request.AddParameter("enddate", enddate, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<ActivityTypeViewModel>();
+            var result = new List<ActivityViewModel>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -32,7 +33,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<ActivityTypeViewModel>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<ActivityViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -41,9 +42,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<ActivityType> GetActiveActivityTypes()
+        public static List<ActivityViewModel> GetMemberActivities()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/get-active-activity-types";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/get-member-activities";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -51,7 +52,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<ActivityType>();
+            var result = new List<ActivityViewModel>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -60,7 +61,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<ActivityType>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<ActivityViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -69,10 +70,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-
-        public static ActivityType GetActivityType(string id)
+        public static Activity GetActivity(string id)
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/get-activity-type";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/get-activity";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -81,7 +81,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             request.AddParameter("id", id);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new ActivityType();
+            var result = new Activity();
             IRestResponse response = new RestResponse();
             try
             {
@@ -90,7 +90,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<ActivityType>(response.Content);
+                result = JsonConvert.DeserializeObject<Activity>(response.Content);
             }
             catch (Exception ex)
             {
@@ -98,11 +98,10 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-
-        public static Response CreateActivityType(CreateActivityTypeRequest createRequest)
+        public static Response CreateActivity(CreateActivityRequest createRequest)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/create-activity-type";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/create-activity";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
@@ -129,10 +128,10 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response DeleteActivityType(string id)
+        public static Response DeleteActivity(string id)
         {
 
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/delete-activity-type";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/delete-activity";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");

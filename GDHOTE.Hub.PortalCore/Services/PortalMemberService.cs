@@ -214,7 +214,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<MemberViewModel> GetMembersByName(string query)
+        public static List<MemberDetailsViewModel> GetMembersByName(string query)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-members-by-search-query";
             var client = new RestClient(fullUrl);
@@ -225,7 +225,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             request.AddParameter("seachQuery", query);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<MemberViewModel>();
+            var result = new List<MemberDetailsViewModel>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -234,7 +234,36 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<MemberViewModel>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<MemberDetailsViewModel>>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+            }
+            return result;
+        }
+
+        public static List<MemberDetailsViewModel> GetMembersByMobileNumber(string query)
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-members-by-mobile-number";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("seachQuery", query);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new List<MemberDetailsViewModel>();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<List<MemberDetailsViewModel>>(response.Content);
             }
             catch (Exception ex)
             {

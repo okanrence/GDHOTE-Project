@@ -8,7 +8,7 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
     public class ApproveMemberRequest
     {
         [Required]
-        public int MemberKey { get; set; }
+        public long MemberId { get; set; }
         [Required]
         public string Action { get; set; }
         public string Sex { get; set; }

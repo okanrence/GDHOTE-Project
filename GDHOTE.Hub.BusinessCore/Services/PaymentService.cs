@@ -205,7 +205,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     var payment = new Payment
                     {
-                        MemberKey = request.MemberKey,
+                        MemberId = request.MemberId,
                         Amount = request.Amount,
                         PaymentTypeId = request.PaymentTypeId,
                         PaymentModeId = request.PaymentModeId,

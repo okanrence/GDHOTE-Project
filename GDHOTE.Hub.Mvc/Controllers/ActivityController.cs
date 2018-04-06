@@ -7,42 +7,41 @@ using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
 using GDHOTE.Hub.PortalCore.Services;
 using Newtonsoft.Json;
-using NPoco.fastJSON;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class ActivityTypeController : BaseController
+    public class ActivityController : Controller
     {
-        // GET: ActivityType
+        // GET: Activity
         public ActionResult Index()
         {
-            var activiteTypes = PortalActivityTypeService.GetAllActivityTypes().ToList();
-            return View("ActivityTypeIndex", activiteTypes);
+            string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
+            string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
+            var activiteTypes = PortalActivityService.GetAllActivities(startDate, endDate).ToList();
+            return View("ActivityIndex", activiteTypes);
         }
         public ActionResult New()
         {
             var viewModel = ReturnViewModel();
-            return View("ActivityTypeForm", viewModel);
+            return View("ActivityForm", viewModel);
         }
         public ActionResult Edit(string id)
         {
-            var activitype = PortalActivityTypeService.GetActivityType(id);
+            var activitype = PortalActivityService.GetActivity(id);
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(activitype);
-            var viewModel = JsonConvert.DeserializeObject<ActivityTypeFormViewModel>(item);
-            viewModel.Statuses = viewModelTemp.Statuses;
-            viewModel.DependencyTypes = viewModelTemp.DependencyTypes;
-
-            return View("ActivityTypeForm", viewModel);
+            var viewModel = JsonConvert.DeserializeObject<ActivityFormViewModel>(item);
+            viewModel.ActivityTypes = viewModelTemp.ActivityTypes;
+            return View("ActivityForm", viewModel);
         }
-        public ActionResult Save(CreateActivityTypeRequest createRequest)
+        public ActionResult Save(CreateActivityRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
                 var viewModel = ReturnViewModel();
-                return View("ActivityTypeForm", viewModel);
+                return View("ActivityForm", viewModel);
             }
-            var result = PortalActivityTypeService.CreateActivityType(createRequest);
+            var result = PortalActivityService.CreateActivity(createRequest);
             if (result != null)
             {
                 //Successful
@@ -61,25 +60,23 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
             // If we got this far, something failed, redisplay form
-            return View("ActivityTypeForm", ReturnViewModel());
+            return View("ActivityForm", ReturnViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult DeleteActivityType(string id)
+        public JsonResult DeleteActivity(string id)
         {
-            var result = PortalActivityTypeService.DeleteActivityType(id);
+            var result = PortalActivityService.DeleteActivity(id);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private static ActivityTypeFormViewModel ReturnViewModel()
+        private static ActivityFormViewModel ReturnViewModel()
         {
-            var statuses = PortalStatusService.GetStatuses().ToList();
             var activityTypes = PortalActivityTypeService.GetActiveActivityTypes().ToList();
-            var viewModel = new ActivityTypeFormViewModel
+            var viewModel = new ActivityFormViewModel
             {
-                Statuses = statuses,
-                DependencyTypes = activityTypes
+                ActivityTypes = activityTypes
             };
             return viewModel;
         }

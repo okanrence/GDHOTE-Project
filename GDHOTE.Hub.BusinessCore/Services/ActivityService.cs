@@ -4,8 +4,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using GDHOTE.Hub.BusinessCore.BusinessLogic;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.Enumerables;
+using GDHOTE.Hub.CoreObject.ViewModels;
+
 namespace GDHOTE.Hub.BusinessCore.Services
 {
     public class ActivityService : BaseService
@@ -27,36 +31,43 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return "Error occured while trying to insert Activity";
             }
         }
-        public static IEnumerable<Activity> GetActivities()
+        public static List<ActivityViewModel> GetAllActivities(string startdate, string enddate)
         {
             try
             {
+                DateTime.TryParse(startdate, out var castStartDate);
+                DateTime.TryParse(enddate, out var castEndDate);
                 using (var db = GdhoteConnection())
                 {
-                    var activities = db.Fetch<Activity>().OrderBy(a => a.RecordDate);
+                    var activities = db.Fetch<ActivityViewModel>()
+                        .Where(a => a.DateCreated >= castStartDate && a.DateCreated < castEndDate.AddDays(1))
+                        .OrderBy(a => a.FirstName).ToList();
                     return activities;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<Activity>();
+                return new List<ActivityViewModel>();
             }
         }
-        public static IEnumerable<Activity> GetMemberActivities(int memberKey)
+        public static List<ActivityViewModel> GetMemberActivities(int memberId)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var activities = db.Fetch<Activity>().Where(a => a.MemberKey == memberKey).OrderBy(a => a.StartDate);
+                    var activities = db.Fetch<ActivityViewModel>()
+                        .Where(a => a.MemberId == memberId)
+                        .OrderBy(a => a.StartDate)
+                        .ToList();
                     return activities;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<Activity>();
+                return new List<ActivityViewModel>();
             }
         }
         public static Activity GetActivity(int id)
@@ -65,7 +76,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var activity = db.Fetch<Activity>().SingleOrDefault(c => c.ActivityId == id);
+                    var activity = db.Fetch<Activity>()
+                        .SingleOrDefault(c => c.Id == id);
                     return activity;
                 }
             }
@@ -91,20 +103,114 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return "Error occured while trying to update Activity";
             }
         }
-        public static string Delete(int id)
+
+
+        public static Response CreateActivity(CreateActivityRequest request, string currentUser)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Delete<Activity>(id);
-                    return result.ToString();
+                    var response = new Response();
+
+                    //Get User Initiating Creation Request
+                    var user = UserService.GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
+
+
+                    var activity = new Activity
+                    {
+                        ActivityTypeId = request.ActivityTypeId,
+                        MemberId = request.MemberId,
+                        StartDate = request.StartDate,
+                        EndDate = request.EndDate,
+                        StatusId = (int)CoreObject.Enumerables.Status.Active,
+                        CreatedById = user.UserId,
+                        DateCreated = DateTime.Now,
+                        RecordDate = DateTime.Now
+                    };
+
+                    db.Insert(activity);
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return "Error occured while trying to delete record";
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to insert record"
+                };
+            }
+
+        }
+
+        public static Response Delete(long id, string currentUser)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+
+                    var response = new Response();
+
+                    var activity = db.Fetch<Activity>().SingleOrDefault(c => c.Id == id);
+                    if (activity == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "User does not exist"
+                        };
+                    }
+
+
+                    //Get User Initiating Creation Request
+                    var user = UserService.GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "User does not exist"
+                        };
+                    }
+
+
+                    //Delete Bank
+                    activity.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
+                    activity.DeletedById = user.UserId;
+                    activity.DateDeleted = DateTime.Now;
+                    db.Update(activity);
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to delete record"
+                };
             }
         }
     }

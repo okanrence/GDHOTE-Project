@@ -1,12 +1,14 @@
-﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.MemberViewModel>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.ActivityViewModel>
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Activity Types";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Members</h2>
+<h2>Activity Types</h2>
+
 <p>
-    @Html.ActionLink("New Member", "New", "Member", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("New Activity Type", "New", "Activity", null, new { @class = "btn btn-primary" })
 </p>
 
 
@@ -20,59 +22,44 @@ else
         <div class="form-group">
             @Html.AntiForgeryToken()
         </div>
-
         <div>
-            <table id="members" class="table table-bordered table-hover">
+            <table id="Activitys" class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>Member Code</th>
-                        <th>Surname</th>
-                        <th>Other Name(s)</th>
-                        <th>Gender</th>
-                        <th>Martial Status</th>
+                        <th>Name</th>
                         <th>Status</th>
-                        <th>Date Of Birth</th>
-                        <th>Magus</th>
-                        <th>Magus Date</th>
+                        @*<th>Dependency</th>*@
                         <th>Date</th>
-                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var member in Model)
+                    @foreach (var activity in Model)
                     {
                         <tr>
-                            <td>@Html.ActionLink(!string.IsNullOrEmpty(member.MemberCode) ? member.MemberCode : "NA", "Edit", "Member", new { id = member.Id }, null)</td>
-                            <td>@member.Surname</td>
-                            <td>@member.FirstName,  @member.MiddleName </td>
-                            <td>@member.Gender</td>
-                            <td>@member.MaritalStatus</td>
-                            <td>@member.MemberStatus</td>
-                            <td>@member.DateOfBirth.ToString("dd-MMM-yyyy")</td>
-                            <td>@member.MagusFlag</td>
-                            <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy") ) </td>
-                            <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>
-                            <td>@Html.ActionLink("Contact Details", "Edit", "MemberDetails", new { id = member.Id }, null)</td>
-                            <td><button data-member-id="@member.Id" class="btn btn-link js-delete">Delete</button></td>
+                            <td>@Html.ActionLink(activity.ActivityType, "Edit", "Activity", new { id = activity.Id }, null)</td>
+                            <td>@activity.Status</td>
+                            <td>@*@activity.Dependency*@</td>
+                            <td>@activity.DateCreated.ToString("dd-MMM-yyyy")</td>
+                            <td><button data-Activity-id="@activity.Id" class="btn btn-link js-delete">Delete</button></td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
-    </div>
-}
 
+    </div>
+
+}
 @section scripts
 {
     <script>
         $(document).ready(function () {
-            $("#members").DataTable();
+            $("#Activitys").DataTable();
 
-            $("#members").on("click", ".js-delete", function () {
+            $("#Activitys").on("click", ".js-delete", function () {
                 var button = $(this);
-
-                var id = button.attr("data-member-id");
+                var id = button.attr("data-Activity-id");
 
                 var form = $('#responsive');
                 var token = $('input[name="__RequestVerificationToken"]', form).val();
@@ -83,7 +70,7 @@ else
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: '@Url.Action("DeleteMember", "Member")/' + id,
+                            url: '@Url.Action("DeleteActivity", "Activity")/' + id,
                             method: "POST",
                             data: request,
                             success: function (data) {
@@ -111,3 +98,4 @@ else
         });
     </script>
 }
+

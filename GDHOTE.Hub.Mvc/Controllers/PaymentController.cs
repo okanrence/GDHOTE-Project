@@ -29,18 +29,24 @@ namespace GDHOTE.Hub.Mvc.Controllers
         public ActionResult Edit(string id)
         {
             var payment = PortalPaymentService.GetPayment(id);
-            var viewModel = ReturnViewModel();
+            var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(payment);
-            viewModel = JsonConvert.DeserializeObject<PaymentFormViewModel>(item);
+            var viewModel = JsonConvert.DeserializeObject<PaymentFormViewModel>(item);
+            viewModel.Currencies = viewModelTemp.Currencies;
+            viewModel.PaymentTypes = viewModelTemp.PaymentTypes;
+            viewModel.ModeOfPayments = viewModelTemp.ModeOfPayments;
             return View("PaymentForm", viewModel);
         }
         public ActionResult Save(CreatePaymentRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
-                var viewModel = ReturnViewModel();
+                var viewModelTemp = ReturnViewModel();
                 var item = JsonConvert.SerializeObject(createRequest);
-                viewModel = JsonConvert.DeserializeObject<PaymentFormViewModel>(item);
+                var viewModel = JsonConvert.DeserializeObject<PaymentFormViewModel>(item);
+                viewModel.Currencies = viewModelTemp.Currencies;
+                viewModel.PaymentTypes = viewModelTemp.PaymentTypes;
+                viewModel.ModeOfPayments = viewModelTemp.ModeOfPayments;
                 return View("PaymentForm", viewModel);
             }
             var result = PortalPaymentService.CreatePayment(createRequest);
@@ -72,7 +78,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var payments = PortalPaymentService.GetPayments(startDate, endDate).ToList();
             return View("ManagePayment", payments);
         }
-       
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

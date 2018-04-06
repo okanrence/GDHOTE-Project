@@ -16,9 +16,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
         {
             try
             {
-
-                LogService.LogError("Testing");
-
                 var userView = UserService.GetUser(loginRequest.EmailAddress, loginRequest.Password);
 
                 if (userView == null)

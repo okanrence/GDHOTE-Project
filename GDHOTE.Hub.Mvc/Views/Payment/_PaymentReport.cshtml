@@ -24,7 +24,7 @@ else
                 @foreach (var payment in Model)
                 {
                     <tr>
-                        <td>@payment.Surname, @payment.FirstName</td>
+                        <td>@payment.FirstName, @payment.Surname</td>
                         <td>@payment.Narration</td>
                         <td>@($"{payment.Amount:#,##0.00}") </td>
                         <td>@payment.PaymentMode</td>

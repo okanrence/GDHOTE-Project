@@ -24,23 +24,25 @@ else
         <div>
             <table id="states" class="table table-bordered table-hover">
                 <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th></th>
-                </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Country</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th></th>
+                    </tr>
                 </thead>
                 <tbody>
-                @foreach (var state in Model)
-                {
-                    <tr>
-                        <td>@Html.ActionLink(state.Name, "Edit", "State", new { id = state.Id }, null)</td>
-                        <td>@state.Status</td>
-                        <td>@state.DateCreated.ToString("dd-MMM-yyyy")</td>
-                        <td><button data-state-id="@state.Id" class="btn btn-link js-delete">Delete</button></td>
-                    </tr>
-                }
+                    @foreach (var state in Model)
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(state.Name, "Edit", "State", new { id = state.Id }, null)</td>
+                            <td>@state.Country</td>
+                            <td>@state.Status</td>
+                            <td>@state.DateCreated.ToString("dd-MMM-yyyy")</td>
+                            <td><button data-state-id="@state.Id" class="btn btn-link js-delete">Delete</button></td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
@@ -50,9 +52,9 @@ else
 }
 @section scripts
 {
-<script>
+    <script>
         $(document).ready(function () {
-            
+
             $("#states").on("click", ".js-delete", function () {
                 var button = $(this);
                 var id = button.attr("data-state-id");
@@ -91,5 +93,5 @@ else
                 });
             });
         });
-</script>
+    </script>
 }

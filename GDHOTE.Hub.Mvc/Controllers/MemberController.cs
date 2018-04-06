@@ -27,14 +27,16 @@ namespace GDHOTE.Hub.Mvc.Controllers
         public ActionResult New()
         {
             var viewModel = ReturnViewModel();
-            return View("MemberForm", ReturnViewModel());
+            return View("MemberForm", viewModel);
         }
         public ActionResult Edit(string id)
         {
             var member = PortalMemberService.GetMember(id);
-            var viewModel = ReturnViewModel();
+            var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(member);
-            viewModel = JsonConvert.DeserializeObject<MemberFormViewModel>(item);
+            var viewModel = JsonConvert.DeserializeObject<MemberFormViewModel>(item);
+            viewModel.Genders = viewModelTemp.Genders;
+            viewModel.MaritalStatuses = viewModelTemp.MaritalStatuses;
             return View("UpdateMemberForm", viewModel);
         }
 
@@ -114,7 +116,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         public JsonResult GetMember(string term)
         {
             var result = PortalMemberService.GetMembersByName(term);
-            var data = result.Select(r => new { value = r.MemberKey, label = r.FirstName + " " + r.Surname }).ToList();
+            var data = result.Select(r => new { value = r.MemberId, label = r.FirstName  + " " + r.Surname }).ToList();
             return Json(data, JsonRequestBehavior.AllowGet);
         }
         private static MemberFormViewModel ReturnViewModel()

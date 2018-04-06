@@ -7,7 +7,7 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
     public class CreateMemberDetailsRequest
     {
-        public int MemberKey { get; set; }
+        public long MemberId { get; set; }
         [Display(Name = "Mobile Number")]
         public string MobileNumber { get; set; }
         [Display(Name = "Alternative Number")]

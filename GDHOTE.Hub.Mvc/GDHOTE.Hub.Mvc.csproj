@@ -278,6 +278,7 @@
     <Compile Include="App_Start\TypeaheadBundleConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\ActivityTypeController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
@@ -480,6 +481,7 @@
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="Content\typeahead - Copy.css" />
     <Content Include="Content\typeahead.css" />
+    <Content Include="images\3.gif" />
     <Content Include="images\download.gif" />
     <Content Include="images\download.png" />
     <Content Include="Content\sweetalert.min.css" />
@@ -775,6 +777,8 @@
     <Content Include="Views\PublicationCategory\PublicationCategoryForm.cshtml" />
     <Content Include="Views\PublicationAccessRight\AccessRightIndex.cshtml" />
     <Content Include="Views\PublicationAccessRight\AccessRightForm.cshtml" />
+    <Content Include="Views\Activity\ActivityIndex.cshtml" />
+    <Content Include="Views\Activity\ActivityForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

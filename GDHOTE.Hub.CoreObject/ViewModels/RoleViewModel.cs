@@ -9,6 +9,7 @@ namespace GDHOTE.Hub.CoreObject.ViewModels
     [TableName("vx_HUB_Roles")]
     public class RoleViewModel : Role
     {
+        public string RoleType { get; set; }
         public string Status { get; set; }
         public string CreatedBy { get; set; }
     }

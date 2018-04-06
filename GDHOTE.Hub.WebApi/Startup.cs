@@ -32,7 +32,8 @@ namespace GDHOTE.Hub.WebApi
             app.UseCors(CorsOptions.AllowAll);
             app.UseWebApi(config);
 
-            log4net.Config.XmlConfigurator.Configure(new FileInfo(@"C:\MyProjects\GDHOTE-Project\GDHOTE.Hub.WebApi\log4net.config"));
+            //var logPath = AppDomain.CurrentDomain.BaseDirectory + @"\log4net.config";
+            //log4net.Config.XmlConfigurator.Configure(new FileInfo(logPath));
         }
 
 

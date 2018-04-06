@@ -11,8 +11,8 @@ namespace GDHOTE.Hub.CoreObject.Models
     [TableName("HUB_Payments")]
     public class Payment : BaseModel
     {
-        public int Id { get; set; }
-        public int MemberKey { get; set; }
+        public long Id { get; set; }
+        public long MemberId { get; set; }
         public decimal Amount { get; set; }
         public int PaymentTypeId { get; set; }
         public int PaymentModeId { get; set; }

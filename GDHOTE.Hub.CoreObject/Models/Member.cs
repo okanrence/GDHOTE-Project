@@ -9,10 +9,9 @@ using NPoco;
 namespace GDHOTE.Hub.CoreObject.Models
 {
     [TableName("HUB_Members")]
-    [PrimaryKey("MemberKey")]
     public class Member : BaseModel
     {
-        public int MemberKey { get; set; }
+        public long Id { get; set; }
         public string MemberCode { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }

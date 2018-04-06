@@ -44,3 +44,11 @@ input.error {
 .gdhote-text-capitalize {
     text-transform: capitalize;
 }
+
+.ui-autocomplete-loading {
+    background-color: #ffffff;
+    background-image: url("../images/3.gif") !important;
+    background-size: 25px 25px;
+    background-position: right center !important;
+    background-repeat: no-repeat !important;
+}

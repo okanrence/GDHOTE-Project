@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -31,12 +32,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             var mainMenu = MainMenuService.GetMainMenu(id);
             if (mainMenu == null) return HttpNotFound();
-            var statuses = StatusService.GetStatuses().ToList();
-            var viewModel = new MainMenuViewModel
-            {
-                Status = statuses,
-                MainMenu = mainMenu
-            };
+            var viewModel = ReturnViewModel();
             return View("MainMenuForm", viewModel);
         }
         [HttpPost]
@@ -45,12 +41,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var statuses = StatusService.GetStatuses().ToList();
-                var viewModel = new MainMenuViewModel
-                {
-                    Status = statuses,
-                    MainMenu = new MainMenu()
-                };
+                var viewModel = ReturnViewModel();
                 return View("MainMenuForm", viewModel);
             }
             if (mainMenu.MenuId == null)
@@ -70,6 +61,16 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 var result = MainMenuService.Update(mainMenuInDb);
             }
             return RedirectToAction("Index", "MainMenu");
+        }
+
+        private static MainMenuViewModel ReturnViewModel()
+        {
+            var statuses = PortalStatusService.GetStatuses();
+            var viewModel = new MainMenuViewModel
+            {
+                Status = statuses
+            };
+            return viewModel;
         }
     }
 }

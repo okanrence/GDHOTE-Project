@@ -40,7 +40,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 using (var db = GdhoteConnection())
                 {
                     var membersdetails = db.Fetch<MemberDetailsViewModel>()
-                        .OrderBy(m => m.MemberKey)
+                        .OrderBy(m => m.MemberId)
                         .ToList();
                     return membersdetails;
                 }
@@ -75,7 +75,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 using (var db = GdhoteConnection())
                 {
                     var memberDetails = db.Fetch<MemberDetails>()
-                        .SingleOrDefault(m => m.MemberKey == memberKey);
+                        .SingleOrDefault(m => m.MemberId == memberKey);
                     return memberDetails;
                 }
             }
@@ -94,7 +94,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 {
                     var response = new Response();
 
-                    var memberDetails = db.Fetch<MemberDetails>().SingleOrDefault(c => c.MemberKey == id);
+                    var memberDetails = db.Fetch<MemberDetails>().SingleOrDefault(c => c.MemberId == id);
                     if (memberDetails == null)
                     {
                         return new Response
@@ -148,7 +148,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var response = new Response();
 
                     //check member exist
-                    var memberExist = db.Fetch<Member>().SingleOrDefault(m => m.MemberKey == createRequest.MemberKey);
+                    var memberExist = db.Fetch<Member>().SingleOrDefault(m => m.Id == createRequest.MemberId);
                     if (memberExist == null)
                     {
                         return new Response
@@ -214,7 +214,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
 
                     //check member details exist
-                    var memberDetailsExist = db.Fetch<MemberDetails>().SingleOrDefault(m => m.MemberKey == updateRequest.MemberKey);
+                    var memberDetailsExist = db.Fetch<MemberDetails>()
+                        .SingleOrDefault(m => m.Id == updateRequest.Id);
                     if (memberDetailsExist == null)
                     {
                         return new Response

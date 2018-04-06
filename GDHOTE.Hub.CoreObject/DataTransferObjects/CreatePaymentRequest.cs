@@ -7,7 +7,7 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
     public class CreatePaymentRequest
     {
-        public int MemberKey { get; set; }
+        public long MemberId { get; set; }
         [Required]
         [Range(1, double.MaxValue, ErrorMessage = "Please enter valid Amount")]
         public decimal Amount { get; set; }
