@@ -119,6 +119,14 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var data = result.Select(r => new { value = r.MemberId, label = r.FirstName  + " " + r.Surname }).ToList();
             return Json(data, JsonRequestBehavior.AllowGet);
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult GetMemberInfo(string id)
+        {
+            var result = PortalMemberService.GetMemberInformation(id);
+            return PartialView("_MemberInfo", result);
+        }
         private static MemberFormViewModel ReturnViewModel()
         {
             var genders = GenderService.GetGenders();

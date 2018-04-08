@@ -779,6 +779,7 @@
     <Content Include="Views\PublicationAccessRight\AccessRightForm.cshtml" />
     <Content Include="Views\Activity\ActivityIndex.cshtml" />
     <Content Include="Views\Activity\ActivityForm.cshtml" />
+    <Content Include="Views\Member\_MemberInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

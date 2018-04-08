@@ -12,9 +12,9 @@ namespace GDHOTE.Hub.PortalCore.Services
 {
     public class PortalMemberDetailsService
     {
-        public static List<MemberDetailsViewModel> GetMemberDetails()
+        public static List<MemberDetailsViewModel> GetMembersDetails()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-member-details";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-members-details";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");

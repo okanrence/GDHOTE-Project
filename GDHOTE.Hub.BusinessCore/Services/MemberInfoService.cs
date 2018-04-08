@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
 
@@ -91,6 +92,36 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 LogService.LogError(ex.Message);
                 return new List<MemberDetailsViewModel>();
             }
+        }
+
+
+        public static MemberInfoResponse GetMemberInformation(long id)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var member = db.Fetch<MemberViewModel>().SingleOrDefault(m => m.Id == id);
+                    var memberDetails = db.Fetch<MemberDetailsViewModel>().SingleOrDefault(m => m.MemberId == id);
+                    var activities = db.Fetch<ActivityViewModel>()
+                        .Where(m => m.MemberId == id).OrderBy(m => m.StartDate).ToList();
+
+                    var memberInfoResponse = new MemberInfoResponse
+                    {
+                        Member = member,
+                        MemberDetails = memberDetails,
+                        Activities = activities
+                    };
+
+                    return memberInfoResponse;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new MemberInfoResponse();
+            }
+
         }
     }
 }

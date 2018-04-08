@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class ActivityController : Controller
+    public class ActivityController : BaseController
     {
         // GET: Activity
         public ActionResult Index()

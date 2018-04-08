@@ -18,7 +18,6 @@
 @using (Html.BeginForm("Save", "ActivityType"))
 {
     <div>
-        @*@Html.ValidationSummary(true, "Please fix the below errors.")*@
         <span class="text-danger">@ViewBag.ErrorBag</span>
         <div class="form-group">
             @Html.LabelFor(a => a.Name)

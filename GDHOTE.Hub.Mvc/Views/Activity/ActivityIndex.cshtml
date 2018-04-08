@@ -1,14 +1,14 @@
 ﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.ActivityViewModel>
 
 @{
-    ViewBag.Title = "Activity Types";
+    ViewBag.Title = "Activity";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Activity Types</h2>
+<h2>Activities</h2>
 
 <p>
-    @Html.ActionLink("New Activity Type", "New", "Activity", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("New Activity", "New", "Activity", null, new { @class = "btn btn-primary" })
 </p>
 
 
@@ -27,8 +27,10 @@ else
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Activity</th>
+                      <th>StartDate</th>
+                        <th>EndDate</th>
                         <th>Status</th>
-                        @*<th>Dependency</th>*@
                         <th>Date</th>
                         <th></th>
                     </tr>
@@ -36,13 +38,15 @@ else
                 <tbody>
                     @foreach (var activity in Model)
                     {
-                        <tr>
-                            <td>@Html.ActionLink(activity.ActivityType, "Edit", "Activity", new { id = activity.Id }, null)</td>
-                            <td>@activity.Status</td>
-                            <td>@*@activity.Dependency*@</td>
-                            <td>@activity.DateCreated.ToString("dd-MMM-yyyy")</td>
-                            <td><button data-Activity-id="@activity.Id" class="btn btn-link js-delete">Delete</button></td>
-                        </tr>
+                    <tr>
+                        <td>@Html.ActionLink($"{ activity.FirstName}, {activity.Surname}", "Edit", "Activity", new { id = activity.Id }, null)</td>
+                        <td>@activity.ActivityType</td>
+                        <td>@activity.StartDate.ToString("dd-MMM-yyyy")</td>
+                        <td>@(activity.EndDate?.Date.ToString("dd-MMM-yyyy"))</td>
+                        <td>@activity.Status</td>
+                        <td>@activity.DateCreated.ToString("dd-MMM-yyyy")</td>
+                        <td><button data-Activity-id="@activity.Id" class="btn btn-link js-delete">Delete</button></td>
+                    </tr>
                     }
                 </tbody>
             </table>

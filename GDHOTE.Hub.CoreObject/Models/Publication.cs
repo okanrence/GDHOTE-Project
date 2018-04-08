@@ -16,5 +16,6 @@ namespace GDHOTE.Hub.CoreObject.Models
         public int CategoryId { get; set; }
         public string UploadFile { get; set; }
         public string CoverPageImage { get; set; }
+        public DateTime DatePublished { get; set; }
     }
 }

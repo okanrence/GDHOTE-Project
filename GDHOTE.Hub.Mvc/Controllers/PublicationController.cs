@@ -110,7 +110,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var viewModel = new PublicationFormViewModel
             {
                 PublicationCategories = categories,
-                PublicationAccessRights = accessrights
+                PublicationAccessRights = accessrights,
+                DatePublished = DateTime.Now
             };
             return viewModel;
         }

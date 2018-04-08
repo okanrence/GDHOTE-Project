@@ -33,6 +33,11 @@
             @Html.ValidationMessageFor(p => p.CategoryId)
         </div>
         <div class="form-group">
+            @Html.LabelFor(m => m.DatePublished)
+            @Html.TextBoxFor(m => m.DatePublished, "{0:d MMM yyyy}", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.DatePublished)
+        </div>
+        <div class="form-group">
             @Html.LabelFor(p => p.AccessRightId)
             @Html.DropDownListFor(p => p.AccessRightId, new SelectList(Model.PublicationAccessRights, "Id", "Name"), "Select Access Right", new { @class = "form-control" })
             @Html.ValidationMessageFor(p => p.AccessRightId)
@@ -59,4 +64,22 @@
 
 
 
+@section scripts
+{
+    <script>
+
+        $(document).ready(function () {
+            
+            $(function() {
+                $('#DatePublished').datepicker({
+                    format: 'dd M yyyy',
+                    autoclose: 1,
+                    todayHighlight: 1
+                });
+            });
+
+        });
+        
+    </script>
+}
 

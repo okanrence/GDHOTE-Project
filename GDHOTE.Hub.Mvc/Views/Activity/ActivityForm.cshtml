@@ -2,7 +2,7 @@
 
 
 @{
-    ViewBag.Title = "ActivityForm";
+    ViewBag.Title = "Activity Form";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,7 +10,7 @@
     var pagename = "";
     if (Model != null)
     {
-        pagename = Model.MemberId == 0 ? "New Activity Type" : "Edit Activity Type";
+        pagename = Model.MemberId == 0 ? "New Activity" : "Edit Activity";
     }
 
 }
@@ -21,7 +21,7 @@
         <span class="text-danger">@ViewBag.ErrorBag</span>
         <div class="form-group">
             @Html.LabelFor(a => a.ActivityTypeId)
-            @Html.DropDownListFor(a => a.ActivityTypeId, new SelectList(Model.ActivityTypes, "ActivityId", "Name"), "Select Activity", new { @class = "form-control" })
+            @Html.DropDownListFor(a => a.ActivityTypeId, new SelectList(Model.ActivityTypes, "Id", "Name"), "Select Activity", new { @class = "form-control" })
             @Html.ValidationMessageFor(a => a.ActivityTypeId)
         </div>
         <div class="form-group">

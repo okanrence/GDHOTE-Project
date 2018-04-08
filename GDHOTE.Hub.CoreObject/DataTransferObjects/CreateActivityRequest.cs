@@ -16,6 +16,6 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         [Required(ErrorMessage = "Please specify start date")]
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 }

@@ -6,8 +6,6 @@ using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using GDHOTE.Hub.WebApi.OwinProvider;
-//using log4net;
-//using log4net.Config;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security.OAuth;
@@ -32,8 +30,8 @@ namespace GDHOTE.Hub.WebApi
             app.UseCors(CorsOptions.AllowAll);
             app.UseWebApi(config);
 
-            //var logPath = AppDomain.CurrentDomain.BaseDirectory + @"\log4net.config";
-            //log4net.Config.XmlConfigurator.Configure(new FileInfo(logPath));
+            var logPath = AppDomain.CurrentDomain.BaseDirectory + @"\log4net.config";
+            log4net.Config.XmlConfigurator.Configure(new FileInfo(logPath));
         }
 
 

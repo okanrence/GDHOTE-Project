@@ -17,7 +17,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: MemberDetails
         public ActionResult Index()
         {
-            var memberDetails = PortalMemberDetailsService.GetMemberDetails().ToList();
+            var memberDetails = PortalMemberDetailsService.GetMembersDetails().ToList();
             return View(memberDetails);
         }
         public ActionResult New()
@@ -28,9 +28,9 @@ namespace GDHOTE.Hub.Mvc.Controllers
         public ActionResult Edit(string id)
         {
             var memberDetails = PortalMemberDetailsService.GetMemberDetails(id);
-            var viewModel = ReturnViewModel();
+            var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(memberDetails);
-            viewModel = JsonConvert.DeserializeObject<MemberDetailsFormModel>(item);
+            var viewModel = JsonConvert.DeserializeObject<MemberDetailsFormModel>(item);
             return View("MemberDetailsForm", viewModel);
         }
 

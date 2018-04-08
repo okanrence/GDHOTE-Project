@@ -26,8 +26,7 @@ else
                 <thead>
                     <tr>
                         <th>Member Code</th>
-                        <th>Surname</th>
-                        <th>Other Name(s)</th>
+                        <th>Name</th>
                         <th>Gender</th>
                         <th>Martial Status</th>
                         <th>Status</th>
@@ -43,15 +42,16 @@ else
                     @foreach (var member in Model)
                     {
                         <tr>
-                            <td>@Html.ActionLink(!string.IsNullOrEmpty(member.MemberCode) ? member.MemberCode : "NA", "Edit", "Member", new { id = member.Id }, null)</td>
-                            <td>@member.Surname</td>
-                            <td>@member.FirstName,  @member.MiddleName </td>
+                            <td><button id="btn-member-info" data-notification-id="@member.Id" class="btn btn-link js-action">Details</button></td>
+
+                            @*<td>@Html.ActionLink(!string.IsNullOrEmpty(member.MemberCode) ? member.MemberCode : "NA", "Edit", "Member", new { id = member.Id }, null)</td>*@
+                            <td>@member.FirstName, @member.Surname</td>
                             <td>@member.Gender</td>
                             <td>@member.MaritalStatus</td>
                             <td>@member.MemberStatus</td>
                             <td>@member.DateOfBirth.ToString("dd-MMM-yyyy")</td>
                             <td>@member.MagusFlag</td>
-                            <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy") ) </td>
+                            <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy")) </td>
                             <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>
                             <td>@Html.ActionLink("Contact Details", "Edit", "MemberDetails", new { id = member.Id }, null)</td>
                             <td><button data-member-id="@member.Id" class="btn btn-link js-delete">Delete</button></td>
@@ -60,6 +60,16 @@ else
                 </tbody>
             </table>
         </div>
+
+
+        <div id='gameModal' class='modal hide fade in' data-url='@Url.Action("GetMemberInfo", "Member")/'>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div id='gameContainer'>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 }
 
@@ -67,47 +77,69 @@ else
 {
     <script>
         $(document).ready(function () {
+
             $("#members").DataTable();
 
-            $("#members").on("click", ".js-delete", function () {
+           $("#members").on("click", ".js-action", function () {
+
                 var button = $(this);
+                var id = button.attr("data-notification-id");
+                var url = $('#gameModal').data('url') + id;
 
-                var id = button.attr("data-member-id");
+               $.get(url, function(data) {
+                   $('#gameContainer').html(data);
 
-                var form = $('#responsive');
-                var token = $('input[name="__RequestVerificationToken"]', form).val();
+                   $('#gameModal').modal('show');
+               });
 
-                //Submit request
-                var request = { __RequestVerificationToken: token };
+                //alert(url);
+            });
 
-                bootbox.confirm("Are you sure you want to proceed?", function (result) {
-                    if (result) {
-                        $.ajax({
-                            url: '@Url.Action("DeleteMember", "Member")/' + id,
-                            method: "POST",
-                            data: request,
-                            success: function (data) {
-                                if (data !== null) {
-                                    if (data.ErrorCode === "00") {
-                                        swal({
-                                            title: "Success",
-                                            text: "success",
-                                            type: "success"
-                                        });
+            $("#members").on("click", ".js-delete", function() {
+                    var button = $(this);
 
-                                        window.location.reload(true);
+                    var id = button.attr("data-member-id");
+
+                    var form = $('#responsive');
+                    var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+                    //Submit request
+                    var request = { __RequestVerificationToken: token };
+
+                    bootbox.confirm("Are you sure you want to proceed?",
+                        function(result) {
+                            if (result) {
+                                $.ajax({
+                                    url: '@Url.Action("DeleteMember", "Member")/' + id,
+                                    method: "POST",
+                                    data: request,
+                                    success: function(data) {
+                                        if (data !== null) {
+                                            if (data.ErrorCode === "00") {
+                                                swal({
+                                                    title: "Success",
+                                                    text: "success",
+                                                    type: "success"
+                                                });
+
+                                                window.location.reload(true);
+                                            } else {
+                                                alert(data.ErrorMessage);
+                                            }
+                                        };
+
                                     }
-                                    else {
-                                        alert(data.ErrorMessage);
-                                    }
-                                };
-
+                                });
                             }
                         });
-                    }
-                });
+
+
+
 
             });
+
+
+
         });
     </script>
 }

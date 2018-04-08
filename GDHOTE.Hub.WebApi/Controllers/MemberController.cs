@@ -106,7 +106,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
-        
+
 
         [HttpGet]
         [Route("get-member")]
@@ -333,6 +333,37 @@ namespace GDHOTE.Hub.WebApi.Controllers
             {
                 var response = MemberInfoService.GetMembersByWeddingAnniversary(weddingDate).ToList();
                 if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpGet]
+        [Route("get-member-information")]
+        public HttpResponseMessage GetMemberInformation(string id)
+        {
+            try
+            {
+                var response = MemberInfoService.GetMemberInformation(Convert.ToInt32(id));
+                if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
                     {

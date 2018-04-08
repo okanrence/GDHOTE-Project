@@ -354,6 +354,9 @@
     <Content Include="EmailTemplates\BirthdayNotification.cshtml" />
     <Content Include="EmailTemplates\GenericEmail.cshtml" />
     <Content Include="EmailTemplates\PasswordReset.cshtml" />
+    <Content Include="log4net1.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\Shared\Error.cshtml" />
