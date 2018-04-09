@@ -236,8 +236,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     member.OfficerId = (int)OfficerType.NormalMember;
                     member.OfficerDate = DateTime.Now;
 
-
                     var result = db.Insert(member);
+
                     //Insert member details
                     if (result != null)
                     {
@@ -249,10 +249,11 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 MobileNumber = createRequest.MobileNumber,
                                 EmailAddress = createRequest.EmailAddress,
                                 CreatedById = user.UserId,
+                                DateCreated = DateTime.Now,
                                 RecordDate = DateTime.Now
                             };
 
-                            db.Save(memberDetails);
+                            db.Insert(memberDetails);
                             response = new Response
                             {
                                 ErrorCode = "00",

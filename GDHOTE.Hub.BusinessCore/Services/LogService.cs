@@ -14,11 +14,12 @@ namespace GDHOTE.Hub.BusinessCore.Services
     public class LogService : BaseService
     {
         //private static ILog myLogger { get; set; }
-        private static ILog myLogger { get; set; }
-        static LogService()
-        {
-            myLogger = LogManager.GetLogger(typeof(Logger));
-        }
+        //private static ILog myLogger { get; set; }
+        private static readonly ILog myLogger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        //static LogService()
+        //{
+        //    myLogger = LogManager.GetLogger(typeof(Logger));
+        //}
 
         public static void Error(object msg)
         {

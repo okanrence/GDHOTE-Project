@@ -219,5 +219,62 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
 
         }
+
+
+        public static Response MailPublication(MailPublicationRequest request, string currentUser)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var response = new Response();
+
+                    //Get User Initiating Creation Request
+                    var user = UserService.GetUserByUserName(currentUser);
+
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
+
+                    //Confirm publication exist  
+                    var publicationExist = db.Fetch<Publication>().SingleOrDefault(c => c.Id == request.PublicationId);
+                    if (publicationExist == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
+                    }
+
+                    //Confirm Member access right
+
+
+                    //Mail Publication
+                   
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                var response = new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to perform operation"
+                };
+                return response;
+            }
+        }
     }
 }

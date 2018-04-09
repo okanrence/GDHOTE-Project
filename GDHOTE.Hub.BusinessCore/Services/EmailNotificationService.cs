@@ -124,6 +124,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 var service = new EmailService(engines);
                 dynamic email = new Email("RegistrationConfirmation");
                 email.To = emailRequest.RecipientEmailAddress;
+                email.Bcc = BlindCopy;
                 email.Subject = emailRequest.Subject;
                 email.FirstName = emailRequest.Data["FirstName"];
                 email.LastName = emailRequest.Data["LastName"];

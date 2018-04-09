@@ -8,7 +8,7 @@ namespace GDHOTE.Hub.CoreObject.Models
     [TableName("HUB_Publications")]
     public class Publication : BaseModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public int AccessRightId { get; set; }

@@ -25,6 +25,7 @@ namespace GDHOTE.Hub.CoreObject.Models
         public string ResidenceAddress { get; set; }
         public DateTime? DateWedded { get; set; }
         public int YearGroupId { get; set; }
+        public string GuardianAngel { get; set; }
 
     }
 }

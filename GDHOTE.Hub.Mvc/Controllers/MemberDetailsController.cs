@@ -31,6 +31,9 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(memberDetails);
             var viewModel = JsonConvert.DeserializeObject<MemberDetailsFormModel>(item);
+            viewModel.Countries = viewModelTemp.Countries;
+            viewModel.States = viewModelTemp.States;
+            viewModel.YearGroups = viewModelTemp.YearGroups;
             return View("MemberDetailsForm", viewModel);
         }
 

@@ -120,8 +120,13 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
+        public ActionResult GetMemberInfo( )
+        {
+            return PartialView("_MemberInfo");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult GetMemberInfo(string id)
         {
             var result = PortalMemberService.GetMemberInformation(id);
