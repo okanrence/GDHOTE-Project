@@ -8,15 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.Enumerables;
-
 using Postal;
-using System.Net.Http;
-using System.Web.Helpers;
-using System.Web.WebPages;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -237,6 +232,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return response;
             }
         }
+
+
         public static Response SendPasswordResetEmail(EmailRequest emailRequest, string currentUser)
         {
             try
@@ -262,7 +259,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 dynamic email = new Email("PasswordReset");
                 email.To = emailRequest.RecipientEmailAddress;
                 email.Subject = emailRequest.Subject;
-                email.FirstName = emailRequest.Data["FirstName"];
+                email.Code = emailRequest.Data["Code"];
                 email.LastName = emailRequest.Data["LastName"];
                 service.Send(email);
 

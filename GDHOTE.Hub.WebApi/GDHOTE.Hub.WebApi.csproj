@@ -281,6 +281,7 @@
     <Compile Include="Controllers\PublicationController.cs" />
     <Compile Include="Controllers\PublicationAccessRightController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\RoleMenuController.cs" />
     <Compile Include="Controllers\RoleTypeController.cs" />
     <Compile Include="Controllers\StateController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
@@ -342,6 +343,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="log4net.config">

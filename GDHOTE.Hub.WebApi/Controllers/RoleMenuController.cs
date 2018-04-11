@@ -14,15 +14,15 @@ using Newtonsoft.Json;
 namespace GDHOTE.Hub.WebApi.Controllers
 {
     [RoutePrefix(ConstantManager.ApiDefaultNamespace + "menu")]
-    public class SubMenuController : ApiController
+    public class RoleMenuController : ApiController
     {
         [HttpGet]
-        [Route("get-all-sub-menus")]
-        public HttpResponseMessage GetAllSubMenus()
+        [Route("get-all-role-menus")]
+        public HttpResponseMessage GetAllRoleMenus()
         {
             try
             {
-                var response = SubMenuService.GetAllSubMenus().ToList();
+                var response = RoleMenuService.GetAllRoleMenus().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -48,12 +48,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpGet]
-        [Route("get-active-sub-menus")]
-        public HttpResponseMessage GetActiveSubMenus()
+        [Route("get-active-role-menus")]
+        public HttpResponseMessage GetActiveRoleMenus()
         {
             try
             {
-                var response = SubMenuService.GetActiveSubMenus().ToList();
+                var response = RoleMenuService.GetActiveRoleMenus().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -78,12 +78,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("get-sub-menu")]
-        public HttpResponseMessage GetSubMenu(string id)
+        [Route("get-role-menu")]
+        public HttpResponseMessage GetRoleMenu(string id)
         {
             try
             {
-                var response = SubMenuService.GetSubMenu(id);
+                var response = RoleMenuService.GetRoleMenu(id);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -108,8 +108,8 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpPost]
-        [Route("create-sub-menu")]
-        public HttpResponseMessage CreateSubMenu(CreateSubMenuRequest request)
+        [Route("create-role-menu")]
+        public HttpResponseMessage CreateRoleMenu(CreateRoleMenuRequest request)
         {
             try
             {
@@ -118,7 +118,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
                 }
                 string username = User.Identity.Name;
-                var response = SubMenuService.CreateSubMenu(request, username);
+                var response = RoleMenuService.CreateRoleMenu(request, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -144,8 +144,8 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpPost]
-        [Route("delete-sub-menu")]
-        public HttpResponseMessage DeleteSubMenu(string id)
+        [Route("delete-role-menu")]
+        public HttpResponseMessage DeleteRoleMenu(string id)
         {
             try
             {
@@ -154,7 +154,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
                 }
                 string username = User.Identity.Name;
-                var response = SubMenuService.Delete(id, username);
+                var response = RoleMenuService.Delete(id, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)

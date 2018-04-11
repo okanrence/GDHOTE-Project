@@ -124,6 +124,100 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return "Error occured while trying to update User";
             }
         }
+      
+        public static Response CreateUser(CreateAdminUserRequest createRequest, string currentUser, int channelCode)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var response = new Response();
+
+                    //Check email exist
+                    var adminUserExist = db.Fetch<User>()
+                        .SingleOrDefault(m => m.EmailAddress.ToLower().Equals(createRequest.EmailAddress.ToLower()));
+
+                    if (adminUserExist != null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Email Address already exist"
+                        };
+                    }
+
+
+                    //Get User Initiating Creation Request
+                    var user = GetUserByUserName(currentUser);
+
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
+
+
+                    var item = JsonConvert.SerializeObject(createRequest);
+                    var adminUser = JsonConvert.DeserializeObject<User>(item);
+
+                    
+                    adminUser.UserId = Guid.NewGuid().ToString();
+                    adminUser.Password = PasswordManager.ReturnHashPassword(createRequest.Password);
+                    adminUser.CreatedById = user.UserId;
+                    adminUser.ChannelId = channelCode;
+                    adminUser.UserStatusId = (int)UserStatusEnum.Active;
+                    adminUser.PasswordChange = true;
+                    adminUser.DateCreated = DateTime.Now;
+                    adminUser.RecordDate = DateTime.Now;
+
+                    db.Insert(adminUser);
+
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+
+
+                    //Notify Admin User
+                    new Task(() =>
+                    {
+                        var req = new EmailRequest
+                        {
+                            Type = EmailType.NewAdminUser,
+                            Subject = "Welcome to " + Get("settings.organisation.name"),
+                            RecipientEmailAddress = createRequest.EmailAddress,
+                            Data = new Hashtable
+                            {
+                                ["FirstName"] = createRequest.FirstName,
+                                ["LastName"] = createRequest.LastName,
+                            }
+                        };
+
+                        EmailNotificationService.SendNewUserEmail(req, currentUser);
+
+                    }).Start();
+
+                    return response;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                var response = new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to insert record"
+                };
+                return response;
+            }
+        }
+
+
         public static Response Delete(string userId, string currentUser)
         {
             try
@@ -153,7 +247,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             ErrorMessage = "Record does not exist"
                         };
                     }
-                    
+
                     //Delete User
                     userExist.UserStatusId = (int)UserStatusEnum.Deleted;
                     userExist.DeletedById = user.UserId;
@@ -253,7 +347,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         var req = new EmailRequest
                         {
                             Type = EmailType.PasswordReset,
-                            Subject = Get("settings.organisation.name") + "Password Reset",
+                            Subject = Get("settings.organisation.name") + " Password Reset",
                             RecipientEmailAddress = userExist.EmailAddress,
                             Data = new Hashtable
                             {
@@ -290,97 +384,5 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
         }
 
-
-        public static Response CreateUser(CreateAdminUserRequest createRequest, string currentUser, int channelCode)
-        {
-            try
-            {
-                using (var db = GdhoteConnection())
-                {
-                    var response = new Response();
-
-                    //Check email exist
-                    var adminUserExist = db.Fetch<User>()
-                        .SingleOrDefault(m => m.EmailAddress.ToLower().Equals(createRequest.EmailAddress.ToLower()));
-
-                    if (adminUserExist != null)
-                    {
-                        return new Response
-                        {
-                            ErrorCode = "01",
-                            ErrorMessage = "Email Address already exist"
-                        };
-                    }
-
-
-                    //Get User Initiating Creation Request
-                    var user = GetUserByUserName(currentUser);
-
-                    if (user == null)
-                    {
-                        return new Response
-                        {
-                            ErrorCode = "01",
-                            ErrorMessage = "Unable to validate User"
-                        };
-                    }
-
-
-                    var item = JsonConvert.SerializeObject(createRequest);
-                    var adminUser = JsonConvert.DeserializeObject<User>(item);
-
-                    
-                    adminUser.UserId = Guid.NewGuid().ToString();
-                    adminUser.Password = PasswordManager.ReturnHashPassword(createRequest.Password);
-                    adminUser.CreatedById = user.UserId;
-                    adminUser.ChannelId = channelCode;
-                    adminUser.UserStatusId = (int)UserStatusEnum.Active;
-                    adminUser.PasswordChange = true;
-                    adminUser.DateCreated = DateTime.Now;
-                    adminUser.RecordDate = DateTime.Now;
-
-                    db.Insert(adminUser);
-
-                    response = new Response
-                    {
-                        ErrorCode = "00",
-                        ErrorMessage = "Successful"
-                    };
-
-
-                    //Notify Admin User
-                    new Task(() =>
-                    {
-                        var req = new EmailRequest
-                        {
-                            Type = EmailType.NewAdminUser,
-                            Subject = "Welcome to " + Get("settings.organisation.name"),
-                            RecipientEmailAddress = createRequest.EmailAddress,
-                            Data = new Hashtable
-                            {
-                                ["FirstName"] = createRequest.FirstName,
-                                ["LastName"] = createRequest.LastName,
-                            }
-                        };
-
-                        EmailNotificationService.SendNewUserEmail(req, currentUser);
-
-                    }).Start();
-
-                    return response;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                LogService.LogError(ex.Message);
-                var response = new Response
-                {
-                    ErrorCode = "01",
-                    ErrorMessage = "Error occured while trying to insert record"
-                };
-                return response;
-            }
-        }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model List<GDHOTE.Hub.CoreObject.Models.MainMenu>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.MainMenuViewModel>
 
 @{
     ViewBag.Title = "MainMenuIndex";
@@ -31,10 +31,10 @@ else
                 @foreach (var mainMenu in Model)
                 {
                     <tr>
-                        <td>@Html.ActionLink(mainMenu.Name, "Edit", "MainMenu", new { id = mainMenu.MenuId }, null)</td>
+                        <td>@Html.ActionLink(mainMenu.Name, "Edit", "MainMenu", new { id = mainMenu.Id }, null)</td>
                         <td>@mainMenu.Status</td>
                         <td>@mainMenu.DisplaySequence</td>
-                        <td><button data-mainmenu-id="@mainMenu.MenuId" class="btn btn-link js-delete">Delete</button></td>
+                        <td><button data-main-menu-id="@mainMenu.Id" class="btn btn-link js-delete">Delete</button></td>
                     </tr>
                 }
             </tbody>

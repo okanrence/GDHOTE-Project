@@ -145,7 +145,6 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
                 }
-
                 string username = User.Identity.Name;
                 var response = PublicationService.CreatePublication(createRequest, username);
                 if (response != null)

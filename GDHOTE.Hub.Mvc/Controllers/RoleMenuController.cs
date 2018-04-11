@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -14,106 +16,76 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: RoleMenu
         public ActionResult Index()
         {
-            //var roleMenus = RoleMenuService.GetRoleMenus().ToList();
             var roleMenus = RoleSubMenuViewService.GetRoleMenu().ToList();
             return View("RoleMenuIndex", roleMenus);
         }
         public ActionResult New()
         {
-            var statuses = StatusService.GetStatuses().ToList();
-            var subMenus = SubMenuService.GetSubMenus().ToList();
-            var mainMenus = MainMenuService.GetMainMenus().ToList();
-            var roles = RoleService.GetActiveRoles().ToList();
-            var viewModel = new RoleMenuFormViewModel
-            {
-                Statuses = statuses,
-                MainMenus = mainMenus,
-                SubMenus = subMenus,
-                Roles = roles,
-                RoleMenu = new RoleMenu()
-
-            };
+            var viewModel = ReturnViewModel();
             return View("RoleMenuForm", viewModel);
         }
         public ActionResult Edit(string id)
         {
             var roleMenu = RoleMenuService.GetRoleMenu(id);
             if (roleMenu == null) return HttpNotFound();
-            var statuses = StatusService.GetStatuses().ToList();
-            var subMenus = SubMenuService.GetSubMenus().ToList();
-            var mainMenus = MainMenuService.GetMainMenus().ToList();
-            var roles = RoleService.GetActiveRoles().ToList();
-            var viewModel = new RoleMenuFormViewModel
-            {
-                Statuses = statuses,
-                MainMenus = mainMenus,
-                SubMenus = subMenus,
-                Roles = roles,
-                RoleMenu = roleMenu
-
-            };
+            var viewModelTemp = ReturnViewModel();
+            var item = JsonConvert.SerializeObject(roleMenu);
+            var viewModel = JsonConvert.DeserializeObject<RoleMenuFormViewModel>(item);
+            viewModel.Statuses = viewModelTemp.Statuses;
+            viewModel.MainMenus = viewModelTemp.MainMenus;
+            viewModel.Roles = viewModelTemp.Roles;
             return View("RoleMenuForm", viewModel);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(RoleMenu roleMenu)
+        public ActionResult Save(CreateSubMenuRequest createRequest)
         {
-            var viewModel = new RoleMenuFormViewModel();
+
             if (!ModelState.IsValid)
             {
-                var statuses = StatusService.GetStatuses().ToList();
-                var subMenus = SubMenuService.GetSubMenus().ToList();
-                var mainMenus = MainMenuService.GetMainMenus().ToList();
-                var roles = RoleService.GetActiveRoles().ToList();
-                viewModel = new RoleMenuFormViewModel
-                {
-                    Statuses = statuses,
-                    MainMenus = mainMenus,
-                    SubMenus = subMenus,
-                    Roles = roles,
-                    RoleMenu = roleMenu
-
-                };
+                var viewModelTemp = ReturnViewModel();
+                var item = JsonConvert.SerializeObject(createRequest);
+                var viewModel = JsonConvert.DeserializeObject<RoleMenuFormViewModel>(item);
+                viewModel.Statuses = viewModelTemp.Statuses;
+                viewModel.MainMenus = viewModelTemp.MainMenus;
+                viewModel.Roles = viewModelTemp.Roles;
                 return View("RoleMenuForm", viewModel);
             }
-            if (roleMenu.RoleMenuId == null)
-            {
-                roleMenu.RoleMenuId = Guid.NewGuid().ToString();
-                roleMenu.CreatedBy = User.Identity.Name; 
-                roleMenu.CreatedDate = DateTime.Now;
-                var result = RoleMenuService.Save(roleMenu);
-                //Review this verbose code
-                if (result != roleMenu.RoleMenuId)
-                {
-                    ViewBag.Error = result;
-                    var statuses = StatusService.GetStatuses().ToList();
-                    var subMenus = SubMenuService.GetSubMenus().ToList();
-                    var mainMenus = MainMenuService.GetMainMenus().ToList();
-                    var roles = RoleService.GetActiveRoles().ToList();
-                    viewModel = new RoleMenuFormViewModel
-                    {
-                        Statuses = statuses,
-                        MainMenus = mainMenus,
-                        SubMenus = subMenus,
-                        Roles = roles,
-                        RoleMenu = roleMenu
 
-                    };
-                    return View("RoleMenuForm", viewModel);
+            var result = PortalSubMenuService.CreateSubMenu(createRequest);
+            if (result != null)
+            {
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
                 }
             }
             else
             {
-                var roleMenuInDb = RoleMenuService.GetRoleMenu(roleMenu.RoleMenuId);
-                if (roleMenuInDb == null) return HttpNotFound();
-                roleMenuInDb.RoleId = roleMenu.RoleId;
-                roleMenuInDb.SubMenuId = roleMenu.SubMenuId;
-                roleMenuInDb.Status = roleMenu.Status;
-                roleMenuInDb.LastUpdatedBy = User.Identity.Name;
-                roleMenu.LastUpdatedDate = DateTime.Now;
-                var result = RoleMenuService.Update(roleMenuInDb);
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            return RedirectToAction("Index");
+            // If we got this far, something failed, redisplay form
+            return View("RoleMenuForm", ReturnViewModel());
+        }
+
+        private static RoleMenuFormViewModel ReturnViewModel()
+        {
+            var statuses = PortalStatusService.GetStatuses();
+            var mainMenus = PortalMainMenuService.GetActiveMainMenus().ToList();
+            var roles = PortalRoleService.GetActiveRoles().ToList();
+            var viewModel = new RoleMenuFormViewModel
+            {
+                Statuses = statuses,
+                SubMenus = new List<SubMenu>(),
+                MainMenus = mainMenus,
+                Roles = roles
+            };
+            return viewModel;
         }
     }
 }

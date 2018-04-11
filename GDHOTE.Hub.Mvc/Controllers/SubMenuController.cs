@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -14,73 +16,70 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: SubMenu
         public ActionResult Index()
         {
-            //var subMenus = SubMenuService.GetSubMenus().ToList();
-            var subMenus = SubMenuViewService.GetSubMenusView().ToList();
+
+            var subMenus = PortalSubMenuService.GetSubMenus().ToList();
             return View("SubMenuIndex", subMenus);
         }
         public ActionResult New()
         {
-            var statuses = StatusService.GetStatuses().ToList();
-            var mainMenus = MainMenuService.GetMainMenus().ToList();
-            var viewModel = new SubMenuFormViewModel
-            {
-                Status = statuses,
-                MainMenu = mainMenus,
-                SubMenu = new SubMenu()
-            };
+            var viewModel = ReturnViewModel();
             return View("SubMenuForm", viewModel);
         }
         public ActionResult Edit(string id)
         {
             var subMenu = SubMenuService.GetSubMenu(id);
             if (subMenu == null) return HttpNotFound();
-            var statuses = StatusService.GetStatuses().ToList();
-            var mainMenus = MainMenuService.GetMainMenus().ToList();
-            var viewModel = new SubMenuFormViewModel
-            {
-                Status = statuses,
-                MainMenu = mainMenus,
-                SubMenu = subMenu
-            };
+            var viewModelTemp = ReturnViewModel();
+            var item = JsonConvert.SerializeObject(subMenu);
+            var viewModel = JsonConvert.DeserializeObject<SubMenuFormViewModel>(item);
+            viewModel.Statuses = viewModelTemp.Statuses;
+            viewModel.MainMenus = viewModelTemp.MainMenus;
             return View("SubMenuForm", viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(SubMenu subMenu)
+        public ActionResult Save(CreateSubMenuRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
-                var statuses = StatusService.GetStatuses().ToList();
-                var mainMenus = MainMenuService.GetMainMenus().ToList();
-                var viewModel = new SubMenuFormViewModel
-                {
-                    Status = statuses,
-                    MainMenu = mainMenus,
-                    SubMenu = subMenu
-                };
+                var viewModelTemp = ReturnViewModel();
+                var item = JsonConvert.SerializeObject(createRequest);
+                var viewModel = JsonConvert.DeserializeObject<SubMenuFormViewModel>(item);
+                viewModel.Statuses = viewModelTemp.Statuses;
+                viewModel.MainMenus = viewModelTemp.MainMenus;
                 return View("SubMenuForm", viewModel);
             }
-            if (subMenu.SubMenuId == null)
+            var result = PortalSubMenuService.CreateSubMenu(createRequest);
+            if (result != null)
             {
-                subMenu.SubMenuId = Guid.NewGuid().ToString();
-                subMenu.CreatedDate = DateTime.Now;
-                subMenu.CreatedBy = 0;
-                var result = SubMenuService.Save(subMenu);
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
             }
             else
             {
-                var subMenuInDb = SubMenuService.GetSubMenu(subMenu.SubMenuId);
-                if (subMenuInDb == null) return HttpNotFound();
-                subMenuInDb.Name = subMenu.Name;
-                subMenuInDb.Url = subMenu.Url;
-                subMenuInDb.Name = subMenu.Name;
-                subMenuInDb.MenuId = subMenu.MenuId;
-                subMenuInDb.DisplaySequence = subMenu.DisplaySequence;
-                var result = SubMenuService.Update(subMenuInDb);
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-
-            return RedirectToAction("Index");
+            // If we got this far, something failed, redisplay form
+            return View("SubMenuForm", ReturnViewModel());
+        }
+        private static SubMenuFormViewModel ReturnViewModel()
+        {
+            var mainMenus = PortalMainMenuService.GetActiveMainMenus().ToList();
+            var statuses = PortalStatusService.GetStatuses();
+            var viewModel = new SubMenuFormViewModel
+            {
+                Statuses = statuses,
+                MainMenus = mainMenus
+            };
+            return viewModel;
         }
     }
 }

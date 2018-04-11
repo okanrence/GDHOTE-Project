@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
@@ -182,8 +185,23 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
-                    string publicationTitle = StringCaseManager.TitleCase(request.Title);
+                    //Save File to Disk
+                    string uploadPath = AppDomain.CurrentDomain.BaseDirectory + Get("settings.file.upload.folder");
+                    if (request.UploadFileContent != null)
+                    {
+                        new Task(() =>
+                        {
+                            string outpath = uploadPath + "\\" + request.UploadFile;
+                            File.WriteAllBytes(outpath, request.UploadFileContent);
+                            //Process.Start(outpath);
+                        }).Start();
+                        //string outpath = uploadPath + "\\" + request.UploadFile;
+                        //File.WriteAllBytes(outpath, request.UploadFileContent);
+                        //Process.Start(outpath);
+                    }
 
+                    //Save File Property to Db
+                    string publicationTitle = StringCaseManager.TitleCase(request.Title);
                     var publication = new Publication
                     {
                         Title = publicationTitle,
@@ -194,6 +212,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         UploadFile = request.UploadFile,
                         CoverPageImage = request.CoverPageImage,
                         CreatedById = user.UserId,
+                        DatePublished = request.DatePublished,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };
@@ -256,7 +275,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
 
                     //Mail Publication
-                   
+
                     response = new Response
                     {
                         ErrorCode = "00",

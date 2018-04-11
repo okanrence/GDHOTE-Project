@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
 using GDHOTE.Hub.PortalCore.Services;
 
@@ -15,17 +16,12 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: MainMenu
         public ActionResult Index()
         {
-            var mainMenus = MainMenuService.GetMainMenus().ToList();
+            var mainMenus = MainMenuService.GetAllMainMenus().ToList();
             return View("MainMenuIndex", mainMenus);
         }
         public ActionResult New()
         {
-            var statuses = StatusService.GetStatuses().ToList();
-            var viewModel = new MainMenuViewModel
-            {
-                Status = statuses,
-                MainMenu = new MainMenu()
-            };
+            var viewModel = ReturnViewModel();
             return View("MainMenuForm", viewModel);
         }
         public ActionResult Edit(string id)
@@ -35,40 +31,43 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var viewModel = ReturnViewModel();
             return View("MainMenuForm", viewModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(MainMenu mainMenu)
+        public ActionResult Save(CreateMainMenuRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
                 var viewModel = ReturnViewModel();
                 return View("MainMenuForm", viewModel);
             }
-            if (mainMenu.MenuId == null)
+            var result = PortalMainMenuService.CreateMainMenu(createRequest);
+            if (result != null)
             {
-                mainMenu.MenuId = Guid.NewGuid().ToString();
-                mainMenu.CreatedDate = DateTime.Now;
-                mainMenu.CreatedBy = User.Identity.Name;
-                var result = MainMenuService.Save(mainMenu);
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
             }
             else
             {
-                var mainMenuInDb = MainMenuService.GetMainMenu(mainMenu.MenuId);
-                if (mainMenuInDb == null) return HttpNotFound();
-                mainMenuInDb.Name = mainMenu.Name;
-                mainMenuInDb.Status = mainMenu.Status;
-                mainMenuInDb.DisplaySequence = mainMenu.DisplaySequence;
-                var result = MainMenuService.Update(mainMenuInDb);
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            return RedirectToAction("Index", "MainMenu");
+            // If we got this far, something failed, redisplay form
+            return View("MainMenuForm", ReturnViewModel());
         }
 
-        private static MainMenuViewModel ReturnViewModel()
+        private static MainMenuFormViewModel ReturnViewModel()
         {
             var statuses = PortalStatusService.GetStatuses();
-            var viewModel = new MainMenuViewModel
+            var viewModel = new MainMenuFormViewModel
             {
-                Status = statuses
+                Statuses = statuses
             };
             return viewModel;
         }

@@ -26,5 +26,6 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         public string CoverPageImage { get; set; }
         public DateTime DatePublished { get; set; }
         public byte[] UploadFileContent { get; set; }
+        public byte[] CoverPageImageContent { get; set; }
     }
 }

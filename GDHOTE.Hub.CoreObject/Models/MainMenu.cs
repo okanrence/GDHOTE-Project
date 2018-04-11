@@ -9,16 +9,12 @@ using NPoco;
 namespace GDHOTE.Hub.CoreObject.Models
 {
     [TableName("HUB_MainMenus")]
-    [PrimaryKey("MenuId", AutoIncrement = false)]
-    public class MainMenu
+    [PrimaryKey("Id", AutoIncrement = false)]
+    public class MainMenu : BaseModel
     {
-        public string MenuId { get; set; }
-        [Required]
+        public string Id { get; set; }
         public string Name { get; set; }
-        [Required]
-        public string Status { get; set; }
-        public string CreatedBy { get; set; }
-        public string DisplaySequence { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public int StatusId { get; set; }
+        public int DisplaySequence { get; set; }
     }
 }

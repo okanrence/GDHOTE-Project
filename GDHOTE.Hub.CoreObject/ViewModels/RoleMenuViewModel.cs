@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using GDHOTE.Hub.CoreObject.Models;
 using NPoco;
 
 namespace GDHOTE.Hub.CoreObject.ViewModels
 {
-    [TableName("vx_HUB_MainMenus")]
-    public class MainMenuViewModel : MainMenu
+    [TableName("vx_HUB_RoleMenus")]
+    public class RoleMenuViewModel : RoleMenu
     {
+        public string SubMenu { get; set; }
+        public string SubMenuUrl { get; set; }
+        public int DisplaySequence { get; set; }
         public string Status { get; set; }
+        public string RoleName { get; set; }
         public string CreatedBy { get; set; }
     }
 }

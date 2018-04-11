@@ -18,13 +18,16 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var publications = PortalPublicationService.GetAllPublications().ToList();
             return View("PublicationIndex", publications);
         }
+
         public ActionResult New()
         {
             return View("PublicationForm", ReturnViewModel());
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(CreatePublicationRequest createRequest, HttpPostedFileBase uploadFile, HttpPostedFileBase coverPageImage)
+        public ActionResult Save(CreatePublicationRequest createRequest, HttpPostedFileBase uploadFile,
+            HttpPostedFileBase coverPageImage)
         {
             if (!ModelState.IsValid)
             {
@@ -40,19 +43,17 @@ namespace GDHOTE.Hub.Mvc.Controllers
             if (uploadFile != null)
             {
                 createRequest.UploadFile = uploadFile.FileName;
-                var cont = uploadFile.ContentType;
-                using (var reader = new System.IO.BinaryReader(uploadFile.InputStream))
-                {
-                    createRequest.UploadFileContent = reader.ReadBytes(uploadFile.ContentLength);
-                }
+                createRequest.UploadFileContent = new byte[uploadFile.ContentLength];
+                uploadFile.InputStream.Read(createRequest.UploadFileContent, 0, uploadFile.ContentLength);
+              
             }
-
             if (coverPageImage != null)
             {
                 createRequest.CoverPageImage = coverPageImage.FileName;
+                createRequest.CoverPageImageContent = new byte[coverPageImage.ContentLength];
+                coverPageImage.InputStream.Read(createRequest.CoverPageImageContent, 0, coverPageImage.ContentLength);
             }
-
-
+            
             var result = PortalPublicationService.CreatePublication(createRequest);
             if (result != null)
             {
@@ -71,6 +72,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
+
             // If we got this far, something failed, redisplay form
             return View("PublicationForm", ReturnViewModel());
         }
@@ -102,6 +104,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var result = PortalPublicationService.GetPublicationsByCategoryId(id);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
         private static PublicationFormViewModel ReturnViewModel()
         {
 
@@ -115,5 +118,11 @@ namespace GDHOTE.Hub.Mvc.Controllers
             };
             return viewModel;
         }
+
+        //public FileContentResult GetImageFile(int productId)
+        //{
+        //    //var myByte = new byte[];
+        //    //return File(new byte[], "");
+        //}
     }
 }
