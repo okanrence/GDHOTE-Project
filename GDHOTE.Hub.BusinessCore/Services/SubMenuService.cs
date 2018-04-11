@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.CoreObject.Enumerables;
 using GDHOTE.Hub.CoreObject.ViewModels;
 
 namespace GDHOTE.Hub.BusinessCore.Services
@@ -31,13 +30,32 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return "Error occured while trying to insert SubMenu";
             }
         }
-        public static List<SubMenu> GetAllSubMenus()
+        public static List<SubMenuViewModel> GetAllSubMenus()
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var subMenus = db.Fetch<SubMenuViewModel>()
+                        .OrderBy(c => c.DisplaySequence)
+                        .ToList();
+                    return subMenus;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new List<SubMenuViewModel>();
+            }
+        }
+        public static List<SubMenu> GetActiveSubMenus()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
                     var subMenus = db.Fetch<SubMenu>()
+                        .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active)
                         .OrderBy(c => c.DisplaySequence)
                         .ToList();
                     return subMenus;
@@ -49,14 +67,15 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<SubMenu>();
             }
         }
-        public static List<SubMenu> GetActiveSubMenus()
+
+        public static List<SubMenu> GetSubMenusByMainMenu(string id)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
                     var subMenus = db.Fetch<SubMenu>()
-                        .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active)
+                        .Where(c => c.MenuId == id && c.StatusId == (int)CoreObject.Enumerables.Status.Active)
                         .OrderBy(c => c.DisplaySequence)
                         .ToList();
                     return subMenus;
@@ -108,9 +127,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 {
 
                     var response = new Response();
-                     
+
                     var subMenu = db.Fetch<SubMenu>().SingleOrDefault(c => c.Id == id);
-                    if (subMenu == null) 
+                    if (subMenu == null)
                     {
                         return new Response
                         {

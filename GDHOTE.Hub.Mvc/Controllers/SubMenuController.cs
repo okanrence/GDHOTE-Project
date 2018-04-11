@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
 using GDHOTE.Hub.PortalCore.Services;
 using Newtonsoft.Json;
@@ -17,7 +18,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         public ActionResult Index()
         {
 
-            var subMenus = PortalSubMenuService.GetSubMenus().ToList();
+            var subMenus = PortalSubMenuService.GetAllSubMenus().ToList();
             return View("SubMenuIndex", subMenus);
         }
         public ActionResult New()
@@ -69,6 +70,23 @@ namespace GDHOTE.Hub.Mvc.Controllers
             }
             // If we got this far, something failed, redisplay form
             return View("SubMenuForm", ReturnViewModel());
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult GetSubMenusByMainMenu(string id)
+        {
+            var result = PortalSubMenuService.GetSubMenusByMainMenu(id);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteSubMenu(string id)
+        {
+            var result = PortalSubMenuService.DeleteSubMenu(id);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
         private static SubMenuFormViewModel ReturnViewModel()
         {

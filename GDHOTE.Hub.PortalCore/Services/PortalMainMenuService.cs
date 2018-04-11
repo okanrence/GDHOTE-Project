@@ -12,7 +12,7 @@ namespace GDHOTE.Hub.PortalCore.Services
 {
     public class PortalMainMenuService
     {
-        public static List<MainMenuViewModel> GetMainMenus()
+        public static List<MainMenuViewModel> GetAllMainMenus()
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-all-main-menus";
             var client = new RestClient(fullUrl);

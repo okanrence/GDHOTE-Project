@@ -101,6 +101,25 @@ namespace GDHOTE.Hub.BusinessCore.Services
         }
 
 
+        public static List<RoleMenuViewModel> GetRoleMenuByRole(string roleId)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var roleMenus = db.Fetch<RoleMenuViewModel>()
+                        .Where(r => r.RoleId == roleId)
+                        .ToList();
+                    return roleMenus;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new List<RoleMenuViewModel>();
+            }
+        }
+
         public static Response CreateRoleMenu(CreateRoleMenuRequest request, string currentUser)
         {
             try

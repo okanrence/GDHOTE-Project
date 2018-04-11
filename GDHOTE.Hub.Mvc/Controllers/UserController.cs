@@ -76,7 +76,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult DeleteRole(string id)
+        public JsonResult DeleteUser(string id)
         {
             var result = PortalUserService.DeleteUser(id);
             return Json(result, JsonRequestBehavior.AllowGet);

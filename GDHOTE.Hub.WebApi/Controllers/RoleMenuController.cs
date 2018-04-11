@@ -107,6 +107,36 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
 
+        [HttpGet]
+        [Route("get-role-menus-by-role")]
+        public HttpResponseMessage GetRoleMenuByRole(string id)
+        {
+            try
+            {
+                var response = RoleMenuService.GetRoleMenuByRole(id).ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
         [HttpPost]
         [Route("create-role-menu")]
         public HttpResponseMessage CreateRoleMenu(CreateRoleMenuRequest request)

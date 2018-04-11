@@ -62,6 +62,14 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return View("MainMenuForm", ReturnViewModel());
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteMainMenu(string id)
+        {
+            var result = PortalMainMenuService.DeleteMainMenu(id);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         private static MainMenuFormViewModel ReturnViewModel()
         {
             var statuses = PortalStatusService.GetStatuses();

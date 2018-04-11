@@ -97,6 +97,36 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
+
+        public static List<RoleMenuViewModel> GetRoleMenuByRole(string id)
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-role-menus-by-role";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("id", id);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new List<RoleMenuViewModel>();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<List<RoleMenuViewModel>>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoRoleMenu", ex);
+            }
+            return result;
+        }
+
         public static Response CreateRoleMenu(CreateRoleMenuRequest createRequest)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);

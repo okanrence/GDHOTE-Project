@@ -17,29 +17,37 @@
 }
 else
 {
-    <div>
-        <table id="mainmenus" class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var mainMenu in Model)
-                {
+    <div id="responsive">
+
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+        <div>
+            <table id="mainmenus" class="table table-bordered table-hover">
+                <thead>
                     <tr>
-                        <td>@Html.ActionLink(mainMenu.Name, "Edit", "MainMenu", new { id = mainMenu.Id }, null)</td>
-                        <td>@mainMenu.Status</td>
-                        <td>@mainMenu.DisplaySequence</td>
-                        <td><button data-main-menu-id="@mainMenu.Id" class="btn btn-link js-delete">Delete</button></td>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var mainMenu in Model)
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(mainMenu.Name, "Edit", "MainMenu", new { id = mainMenu.Id }, null)</td>
+                            <td>@mainMenu.Status</td>
+                            <td>@mainMenu.DisplaySequence</td>
+                            <td><button data-main-menu-id="@mainMenu.Id" class="btn btn-link js-delete">Delete</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
     </div>
+
 }
 @section scripts
 {
@@ -49,13 +57,37 @@ else
 
             $("#mainmenus").on("click", ".js-delete", function () {
                 var button = $(this);
+
+                var id = button.attr("data-main-menu-id");
+
+                var form = $('#responsive');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+                //Submit request
+                var request = { __RequestVerificationToken: token };
+
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: "../api/v1/menu/delete-main-menu?id=" + button.attr("data-mainmenu-id"),
-                            method: "DELETE",
-                            success: function () {
-                                button.parents("tr").remove();
+                            url: '@Url.Action("DeleteMainMenu", "MainMenu")/' + id,
+                            method: "POST",
+                            data: request,
+                            success: function (data) {
+                                if (data !== null) {
+                                    if (data.ErrorCode === "00") {
+                                        swal({
+                                            title: "Success",
+                                            text: "success",
+                                            type: "success"
+                                        });
+
+                                        window.location.reload(true);
+                                    }
+                                    else {
+                                        alert(data.ErrorMessage);
+                                    }
+                                };
+
                             }
                         });
                     }

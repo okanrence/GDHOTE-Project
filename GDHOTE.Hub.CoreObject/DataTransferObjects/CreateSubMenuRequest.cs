@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
-namespace GDHOTE.Hub.CoreObject.ViewModels
+namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
     public class CreateSubMenuRequest
     {

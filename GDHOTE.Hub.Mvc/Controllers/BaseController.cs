@@ -9,6 +9,7 @@ using System.Web.Security;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.PortalCore.Models;
+using GDHOTE.Hub.PortalCore.Services;
 using Microsoft.AspNet.Identity;
 
 namespace GDHOTE.Hub.Mvc.Controllers
@@ -38,8 +39,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
 
             //Get UserMenu
-            var mainMenus = MainMenuService.GetAllMainMenus().ToList();
-            var subMenus = RoleSubMenuViewService.GetRoleMenuByRole(roleId).ToList();
+            var mainMenus = PortalMainMenuService.GetAllMainMenus().ToList();
+            var subMenus = PortalRoleMenuService.GetRoleMenuByRole(roleId).ToList();
 
             ViewBag.MainMenu = mainMenus;
             ViewBag.SubMenu = subMenus;

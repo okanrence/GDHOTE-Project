@@ -12,7 +12,7 @@ namespace GDHOTE.Hub.PortalCore.Services
 {
   public  class PortalSubMenuService
     {
-        public static List<SubMenuViewModel> GetSubMenus()
+        public static List<SubMenuViewModel> GetAllSubMenus()
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-all-sub-menus";
             var client = new RestClient(fullUrl);
@@ -68,6 +68,37 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
+
+
+        public static List<SubMenu> GetSubMenusByMainMenu(string id)
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-sub-menus-by-menu";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("id", id, ParameterType.QueryString);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new List<SubMenu>();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<List<SubMenu>>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoSubMenu", ex);
+            }
+            return result;
+        }
+
 
         public static SubMenu GetSubMenu(string id)
         {

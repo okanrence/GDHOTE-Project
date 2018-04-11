@@ -10,39 +10,30 @@
     var pagename = "";
     if (Model != null)
     {
-        pagename = Model.RoleMenu.RoleMenuId == null ? "New Role Menu" : "Edit Role Menu";
+        pagename = Model.SubMenuId == null ? "New Role Menu" : "Edit Role Menu";
     }
 
 }
 <h2>@pagename</h2>
 @using (Html.BeginForm("Save", "RoleMenu"))
 {
-    <div>
+    <div id="responsive">
         <div>
             <span class="text-danger">@ViewBag.Error</span>
         </div>
         <div class="form-group">
-            @Html.LabelFor(r => r.RoleMenu.MenuId)
-            @Html.DropDownListFor(r => r.RoleMenu.MenuId, new SelectList(Model.MainMenus, "MenuId", "Name"), "Select Main Menu", new {@class = "form-control"})
-            @Html.ValidationMessageFor(r => r.RoleMenu.MenuId)
+            <label for="MainMenus" id="MainMenus">Main Menu</label>
+            @Html.DropDownList("drpMainMenu", new SelectList(Model.MainMenus, "Id", "Name"), "Select Type", new { @class = "form-control" })
         </div>
         <div class="form-group">
-            @Html.LabelFor(r => r.RoleMenu.SubMenuId)
-            @Html.DropDownListFor(r => r.RoleMenu.SubMenuId, new SelectList(Model.SubMenus, "SubMenuId", "Name"), "Select Sub Menu", new {@class = "form-control"})
-            @Html.ValidationMessageFor(r => r.RoleMenu.SubMenuId)
+            @Html.LabelFor(r => r.SubMenuId)
+            @Html.DropDownListFor(r => r.SubMenuId, new SelectList(Model.SubMenus, "Id", "Name"), "Select Sub Menu", new { @class = "form-control" })
+            @Html.ValidationMessageFor(r => r.SubMenuId)
         </div>
         <div class="form-group">
-            @Html.LabelFor(r => r.RoleMenu.RoleId)
-            @Html.DropDownListFor(r => r.RoleMenu.RoleId, new SelectList(Model.Roles, "RoleId", "RoleName"), "Select Role", new {@class = "form-control"})
-            @Html.ValidationMessageFor(r => r.RoleMenu.RoleId)
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(r => r.RoleMenu.Status)
-            @Html.DropDownListFor(r => r.RoleMenu.Status, new SelectList(Model.Statuses, "Id", "Name"), "Select Status", new {@class = "form-control"})
-            @Html.ValidationMessageFor(r => r.RoleMenu.Status)
-        </div>
-        <div class="form-group">
-            @Html.HiddenFor(r => r.RoleMenu.RoleMenuId)
+            @Html.LabelFor(r => r.RoleId)
+            @Html.DropDownListFor(r => r.RoleId, new SelectList(Model.Roles, "RoleId", "RoleName"), "Select Role", new { @class = "form-control" })
+            @Html.ValidationMessageFor(r => r.RoleId)
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Save</button>
@@ -55,5 +46,45 @@
 }
 
 
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#drpMainMenu").change(function () {
+                var id = $(this).val();
+                if (id === '' || id === 'Select Menu') {
+                    alert('Please select a valid menu');
+                    return;
+                }
 
+                var form = $('#responsive');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+                //Submit request
+                var request = { __RequestVerificationToken: token };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetSubMenusByMainMenu", "SubMenu")/' + id,
+                    data: request,
+                    success: function (data) {
+                        var slctSubcat = $('#SubMenuId'), option = "";
+                        slctSubcat.empty();
+                        for (var i = 0; i < data.length; i++) {
+                            option = option + "<option value='" + data[i].Id + "'>" + data[i].Name + "</option>";
+                        }
+                        slctSubcat.append(option);
+                        $("<option>", { value: '', selected: true, text: 'Select Sub Menu' }).prependTo(slctSubcat);
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+
+                });
+            });
+
+
+        });
+    </script>
+}
 

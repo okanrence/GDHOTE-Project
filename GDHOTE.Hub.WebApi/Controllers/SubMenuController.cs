@@ -77,6 +77,36 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
+
+        [HttpGet]
+        [Route("get-sub-menus-by-main-menu")]
+        public HttpResponseMessage GetSubMenusByMainMenu(string id)
+        {
+            try
+            {
+                var response = SubMenuService.GetSubMenusByMainMenu(id).ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
         [HttpGet]
         [Route("get-sub-menu")]
         public HttpResponseMessage GetSubMenu(string id)

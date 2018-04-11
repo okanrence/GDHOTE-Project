@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
 using GDHOTE.Hub.PortalCore.Services;
 using Newtonsoft.Json;
@@ -16,7 +17,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: RoleMenu
         public ActionResult Index()
         {
-            var roleMenus = RoleSubMenuViewService.GetRoleMenu().ToList();
+            var roleMenus = PortalRoleMenuService.GetRoleMenus().ToList();
             return View("RoleMenuIndex", roleMenus);
         }
         public ActionResult New()
@@ -26,7 +27,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var roleMenu = RoleMenuService.GetRoleMenu(id);
+            var roleMenu = PortalRoleMenuService.GetRoleMenu(id);
             if (roleMenu == null) return HttpNotFound();
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(roleMenu);
@@ -38,7 +39,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(CreateSubMenuRequest createRequest)
+        public ActionResult Save(CreateRoleMenuRequest createRequest)
         {
 
             if (!ModelState.IsValid)
@@ -52,7 +53,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 return View("RoleMenuForm", viewModel);
             }
 
-            var result = PortalSubMenuService.CreateSubMenu(createRequest);
+            var result = PortalRoleMenuService.CreateRoleMenu(createRequest);
             if (result != null)
             {
                 //Successful
