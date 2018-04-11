@@ -9,6 +9,7 @@ namespace GDHOTE.Hub.CoreObject.ViewModels
     [TableName("vx_HUB_RoleMenus")]
     public class RoleMenuViewModel : RoleMenu
     {
+        public string MenuId { get; set; }
         public string SubMenu { get; set; }
         public string SubMenuUrl { get; set; }
         public int DisplaySequence { get; set; }

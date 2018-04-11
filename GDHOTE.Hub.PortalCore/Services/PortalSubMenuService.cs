@@ -72,7 +72,7 @@ namespace GDHOTE.Hub.PortalCore.Services
 
         public static List<SubMenu> GetSubMenusByMainMenu(string id)
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-sub-menus-by-menu";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-sub-menus-by-main-menu";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
