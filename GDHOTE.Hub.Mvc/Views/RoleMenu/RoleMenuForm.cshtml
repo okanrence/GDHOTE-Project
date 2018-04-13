@@ -18,9 +18,7 @@
 @using (Html.BeginForm("Save", "RoleMenu"))
 {
     <div id="responsive">
-        <div>
-            <span class="text-danger">@ViewBag.Error</span>
-        </div>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
         <div class="form-group">
             <label for="MainMenus" id="MainMenus">Main Menu</label>
             @Html.DropDownList("drpMainMenu", new SelectList(Model.MainMenus, "Id", "Name"), "Select Type", new { @class = "form-control" })

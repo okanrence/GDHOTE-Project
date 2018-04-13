@@ -17,9 +17,9 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         public string Surname { get; set; }
         [Required(ErrorMessage = "Please specify Gender")]
         public string Gender { get; set; }
-        public bool MagusFlag { get; set; }
+        public bool MagusStatus { get; set; }
         [Display(Name = "Initiation")]
-        public bool InitiationFlag { get; set; }
+        public bool InitiationStatus { get; set; }
         [Required(ErrorMessage = "Please specify Martial Status")]
         [Display(Name = "Martial Status")]
         public string MaritalStatus { get; set; }
@@ -32,6 +32,9 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         [Display(Name = "Date Of Birth")]
         public DateTime DateOfBirth { get; set; }
+        [Display(Name = "Date Initiated")]
+        public DateTime? InitiationDate { get; set; }
+        [Display(Name = "Magus Date")]
         public DateTime? MagusDate { get; set; }
 
     }

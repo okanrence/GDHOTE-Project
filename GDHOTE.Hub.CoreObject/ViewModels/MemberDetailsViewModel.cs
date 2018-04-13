@@ -18,7 +18,7 @@ namespace GDHOTE.Hub.CoreObject.ViewModels
         public string Gender { get; set; }
         public DateTime? MagusDate { get; set; }
         public string MaritalStatus { get; set; }
-        public string MagusFlag { get; set; }
-        public string InitiationFlag { get; set; }
+        public string MagusStatus { get; set; }
+        public string InitiationStatus { get; set; }
     }
 }

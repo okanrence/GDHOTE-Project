@@ -111,16 +111,42 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult UploadMember(UploadMemberRequest uploadRequest, HttpPostedFileBase uploadFile)
+        {
+            if (uploadFile == null)
+            {
+                ViewBag.ErrorBag = "Please specify a valid file";
+            }
+            else
+            {
+                uploadRequest.UploadFile = uploadFile.FileName;
+                uploadRequest.UploadFileContent = new byte[uploadFile.ContentLength];
+                uploadFile.InputStream.Read(uploadRequest.UploadFileContent, 0, uploadFile.ContentLength);
+                uploadRequest.ChannelCode = (int)CoreObject.Enumerables.Channel.Web;
+                var result = PortalMemberService.UploadMembers(uploadRequest);
+                if (result != null)
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+                else
+                {
+                    ViewBag.ErrorBag = "Unable to complete your request at the moment";
+                }
+            }
+            // If we got this far, something failed, redisplay form
+            return View();
+        }
+
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         public JsonResult GetMember(string term)
         {
             var result = PortalMemberService.GetMembersByName(term);
-            var data = result.Select(r => new { value = r.MemberId, label = r.FirstName  + " " + r.Surname }).ToList();
+            var data = result.Select(r => new { value = r.MemberId, label = r.FirstName + " " + r.Surname }).ToList();
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetMemberInfo( )
+        public ActionResult GetMemberInfo()
         {
             return PartialView("_MemberInfo");
         }

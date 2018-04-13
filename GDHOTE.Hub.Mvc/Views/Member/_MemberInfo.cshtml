@@ -141,36 +141,40 @@
                     </div>
                     <div class="panel panel-default">
                         <div class="panel-heading">Activities</div>
-                        @if (Model.Activities.Count == 0)
+                        @if (Model.Activities == null)
                         {
                             <p>No record(s) found</p>
                         }
+                        else if (Model.Activities.Count == 0)
+                        {
+                        <p>No record(s) found</p>
+                        }
                         else
                         {
-                            <div>
-                                <table id="memberactivities" class="table table-bordered table-hover">
-                                    <thead>
+                        <div>
+                            <table id="memberactivities" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Activity</th>
+                                        <th>StartDate</th>
+                                        <th>EndDate</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var activity in Model.Activities)
+                                    {
                                         <tr>
-                                            <th>Activity</th>
-                                            <th>StartDate</th>
-                                            <th>EndDate</th>
-                                            <th>Date</th>
+                                            <td>@activity.ActivityType</td>
+                                            <td>@(activity.StartDate.ToString("dd-MMM-yyyy") ?? "")</td>
+                                            <td>@(activity.EndDate?.Date.ToString("dd-MMM-yyyy"))</td>
+                                            <td>@(activity.DateCreated.ToString("dd-MMM-yyyy") ?? "")</td>
+                                            @*<td><button id="btn-delete-bank-details" data-bank-details-id="@activity.Id" class="btn btn-link js-action">Delete</button></td>*@
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var activity in Model.Activities)
-                                        {
-                                            <tr>
-                                                <td>@activity.ActivityType</td>
-                                                <td>@(activity.StartDate.ToString("dd-MMM-yyyy") ?? "")</td>
-                                                <td>@(activity.EndDate?.Date.ToString("dd-MMM-yyyy"))</td>
-                                                <td>@(activity.DateCreated.ToString("dd-MMM-yyyy") ?? "")</td>
-                                                @*<td><button id="btn-delete-bank-details" data-bank-details-id="@activity.Id" class="btn btn-link js-action">Delete</button></td>*@
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                         }
                     </div>
 
@@ -186,7 +190,8 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="col-md-3">
-                                            @Html.LabelFor(m => m.Member.MagusDate)
+                                            @*@Html.LabelFor(m => m.Member.MagusDate)*@
+                                            <label for="" class="form__label">Magus Date</label>
                                         </div>
                                         <div class="col-md-9">
                                             @(Model.Member.MagusDate?.Date.ToString("dd-MMM-yyyy"))
@@ -194,7 +199,8 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="col-md-3">
-                                            @Html.LabelFor(m => m.MemberDetails.DateWedded)
+                                            @*@Html.LabelFor(m => m.MemberDetails.DateWedded)*@
+                                            <label for="" class="form__label">Date Wedded</label>
                                         </div>
                                         <div class="col-md-9">
                                             @(Model.MemberDetails.DateWedded?.Date.ToString("dd-MMM-yyyy"))
@@ -202,7 +208,8 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="col-md-3">
-                                            @Html.LabelFor(m => m.MemberDetails.YearGroupId)
+                                            @*@Html.LabelFor(m => m.MemberDetails.YearGroupId)*@
+                                            <label for="" class="form__label">Year Group</label>
                                         </div>
                                         <div class="col-md-9">
                                             @Html.DisplayFor(m => m.MemberDetails.YearGroupId)
@@ -210,7 +217,8 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="col-md-3">
-                                            @Html.LabelFor(m => m.MemberDetails.GuardianAngel)
+                                            @*@Html.LabelFor(m => m.MemberDetails.GuardianAngel)*@
+                                            <label for="" class="form__label">GA</label>
                                         </div>
                                         <div class="col-md-9">
                                             @Html.DisplayFor(m => m.MemberDetails.GuardianAngel)

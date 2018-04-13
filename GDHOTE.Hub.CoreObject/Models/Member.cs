@@ -20,8 +20,9 @@ namespace GDHOTE.Hub.CoreObject.Models
         public string MaritalStatus { get; set; }
         public DateTime DateOfBirth { get; set; }
         public int MemberStatusId { get; set; }
-        public bool InitiationFlag { get; set; }
-        public bool MagusFlag { get; set; }
+        public bool InitiationStatus { get; set; }
+        public bool MagusStatus { get; set; }
+        public DateTime? InitiationDate { get; set; }
         public DateTime? MagusDate { get; set; }
         public int ChannelId { get; set; }
         public string ApprovedFlag { get; set; }

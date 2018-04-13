@@ -222,10 +222,25 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
                 }
+
                 string username = User.Identity.Name;
                 var response = MemberService.ApproveMember(approveRequest, username);
-                return Request.CreateResponse(HttpStatusCode.OK, response);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
 
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
             }
             catch (UnableToCompleteException ex)
             {
@@ -363,6 +378,44 @@ namespace GDHOTE.Hub.WebApi.Controllers
             try
             {
                 var response = MemberInfoService.GetMemberInformation(Convert.ToInt32(id));
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+
+        [HttpPost]
+        [Route("upload-members")]
+        public HttpResponseMessage UploadMembers(UploadMemberRequest uploadRequest)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+ 
+                string username = User.Identity.Name;
+                var response = MemberService.UploadMembers(uploadRequest, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)

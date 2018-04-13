@@ -26,6 +26,8 @@ namespace GDHOTE.Hub.CoreObject.Models
         public DateTime? DateWedded { get; set; }
         public int YearGroupId { get; set; }
         public string GuardianAngel { get; set; }
+        public string HighestDegreeObtained { get; set; }
+        public string CurrentWorkPlace { get; set; }
 
     }
 }

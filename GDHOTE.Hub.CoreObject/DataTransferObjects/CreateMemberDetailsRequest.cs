@@ -33,5 +33,9 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         public DateTime? DateWedded { get; set; }
         [Display(Name = "Year Group")]
         public int YearGroupId { get; set; }
+        [Display(Name = "Highest Degree Obtained")]
+        public string HighestDegreeObtained { get; set; }
+        [Display(Name = "Current Place Of Work/School")]
+        public string CurrentWorkPlace { get; set; }
     }
 }
