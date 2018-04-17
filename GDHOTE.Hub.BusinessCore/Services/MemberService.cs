@@ -384,6 +384,69 @@ namespace GDHOTE.Hub.BusinessCore.Services
         }
 
 
+
+        public static Response UpdateMember(UpdateMemberRequest updateRequest, string currentUser)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+
+                    var response = new Response();
+
+                    //Check member exist
+                    var memberExist = db.Fetch<Member>()
+                        .SingleOrDefault(m => m.Id == updateRequest.MemberId);
+
+                    if (memberExist == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record not found"
+                        };
+                    }
+
+                    //Get User Initiating Creation Request
+                    var user = UserService.GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
+
+                    //Log audit trail
+
+                    var item = JsonConvert.SerializeObject(updateRequest);
+                    var member = JsonConvert.DeserializeObject<Member>(item);
+                    member.ApprovedFlag = "N";
+                    member.UpdatedById = user.UserId;
+                    member.DateUpdated = DateTime.Now;
+
+                    db.Update(member);
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                var response = new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to update record"
+                };
+                return response;
+            }
+        }
+
         public static Response UploadMembers(UploadMemberRequest uploadRequest, string currentUser)
         {
             try

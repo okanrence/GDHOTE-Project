@@ -186,18 +186,16 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
                     //Save File to Disk
+                    var fileExt = Path.GetExtension(request.UploadFile);
+                    var newUploadFileName = Guid.NewGuid() + fileExt;
                     string uploadPath = AppDomain.CurrentDomain.BaseDirectory + Get("settings.file.upload.folder");
                     if (request.UploadFileContent != null)
                     {
                         new Task(() =>
                         {
-                            string outpath = uploadPath + "\\" + request.UploadFile;
+                            string outpath = uploadPath + "\\" + newUploadFileName;
                             File.WriteAllBytes(outpath, request.UploadFileContent);
-                            //Process.Start(outpath);
                         }).Start();
-                        //string outpath = uploadPath + "\\" + request.UploadFile;
-                        //File.WriteAllBytes(outpath, request.UploadFileContent);
-                        //Process.Start(outpath);
                     }
 
                     //Save File Property to Db
@@ -209,7 +207,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
                         CategoryId = request.CategoryId,
                         AccessRightId = request.AccessRightId,
-                        UploadFile = request.UploadFile,
+                        UploadFile = newUploadFileName,
                         CoverPageImage = request.CoverPageImage,
                         CreatedById = user.UserId,
                         DatePublished = request.DatePublished,

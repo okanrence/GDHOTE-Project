@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -163,11 +166,27 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
-                    string categoryName = StringCaseManager.TitleCase(request.Name);
+                    //Save File to Disk
+                    var fileExt = Path.GetExtension(request.DisplayImageFile);
+                    var newFileName = Guid.NewGuid() + fileExt;
+                    string uploadPath = ReturnFileUploadPath();
+                    //string uploadPath =  AppDomain.CurrentDomain.BaseDirectory + Get("settings.file.upload.folder");
+                    LogService.LogError(uploadPath);
+                    if (request.DisplayImageFileContent != null)
+                    {
+                        new Task(() =>
+                        {
+                            string outpath = uploadPath + "\\" + newFileName;
+                            File.WriteAllBytes(outpath, request.DisplayImageFileContent);
+                        }).Start();
+                    }
 
+                    //Save File Property to Db
+                    string categoryName = StringCaseManager.TitleCase(request.Name);
                     var publicationCategory = new PublicationCategory
                     {
                         Name = categoryName,
+                        DisplayImageFile = newFileName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
                         CreatedById = user.UserId,
                         DateCreated = DateTime.Now,
@@ -194,6 +213,42 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return response;
             }
 
+        }
+
+        public static List<PublicationCategoryResponse> GetMyPublicationCategories()
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var publicationCategories = db.Fetch<PublicationCategoryViewModel>()
+                        .OrderBy(c => c.Name)
+                        .ToList();
+                    var response = new List<PublicationCategoryResponse>();
+                    if (publicationCategories != null)
+                    {
+                        var item = JsonConvert.SerializeObject(publicationCategories);
+                        var result = JsonConvert.DeserializeObject<List<PublicationCategoryResponse>>(item);
+                        string deployedPath = "";
+                        foreach (var pubCategory in publicationCategories)
+                        {
+                            var categoryResponse = new PublicationCategoryResponse
+                            {
+                                Id = pubCategory.Id,
+                                Name = pubCategory.Name,
+                                DisplayImageUrl = deployedPath + pubCategory.DisplayImageFile
+                            };
+                            response.Add(categoryResponse);
+                        }
+                    }
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new List<PublicationCategoryResponse>();
+            }
         }
     }
 }

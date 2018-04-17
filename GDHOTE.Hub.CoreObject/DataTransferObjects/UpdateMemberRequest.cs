@@ -9,9 +9,6 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
     public class UpdateMemberRequest : CreateMemberRequest
     {
-        public int MemberKey { get; set; }
-        public string MemberCode { get; set; }
-        public string DeleteFlag { get; set; }
-        public string ApprovedFlag { get; set; }
+        public long MemberId { get; set; }
     }
 }

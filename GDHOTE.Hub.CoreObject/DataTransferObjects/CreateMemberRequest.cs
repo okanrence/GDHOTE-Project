@@ -36,6 +36,5 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         public DateTime? InitiationDate { get; set; }
         [Display(Name = "Magus Date")]
         public DateTime? MagusDate { get; set; }
-
     }
 }

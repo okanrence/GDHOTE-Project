@@ -209,10 +209,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 {
                     var response = new Response();
 
-
-                    //check member exist
-
-
                     //check member details exist
                     var memberDetailsExist = db.Fetch<MemberDetails>()
                         .SingleOrDefault(m => m.Id == updateRequest.Id);
@@ -228,7 +224,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Get User Initiating Creation Request
                     var user = UserService.GetUserByUserName(currentUser);
-
                     if (user == null)
                     {
                         return new Response
@@ -237,14 +232,23 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             ErrorMessage = "Unable to validate User"
                         };
                     }
-
-
-                    var request = JsonConvert.SerializeObject(updateRequest);
-                    memberDetailsExist = JsonConvert.DeserializeObject<MemberDetails>(request);
-
+                    
+                    //Update member details
+                    memberDetailsExist.MobileNumber = updateRequest.MobileNumber;
+                    memberDetailsExist.AlternateNumber = updateRequest.AlternateNumber;
+                    memberDetailsExist.EmailAddress = updateRequest.EmailAddress;
+                    memberDetailsExist.StateOfOriginId = updateRequest.StateOfOriginId;
+                    memberDetailsExist.CountryOfOriginId = updateRequest.CountryOfOriginId;
+                    memberDetailsExist.ResidenceStateId = updateRequest.ResidenceStateId;
+                    memberDetailsExist.ResidenceCountryId = updateRequest.ResidenceCountryId;
+                    memberDetailsExist.ResidenceAddress = updateRequest.ResidenceAddress;
+                    memberDetailsExist.DateWedded = updateRequest.DateWedded;
+                    memberDetailsExist.HighestDegreeObtained = updateRequest.HighestDegreeObtained;
+                    memberDetailsExist.CurrentWorkPlace = updateRequest.CurrentWorkPlace;
                     memberDetailsExist.UpdatedById = user.UserId;
                     memberDetailsExist.DateUpdated = DateTime.Now;
                     db.Update(memberDetailsExist);
+
                     response = new Response
                     {
                         ErrorCode = "00",
@@ -260,13 +264,10 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 var response = new Response
                 {
                     ErrorCode = "01",
-                    ErrorMessage = "Error occured while trying to insert record"
+                    ErrorMessage = "Error occured while trying to update record"
                 };
                 return response;
             }
         }
-
-
-      
     }
 }

@@ -25,11 +25,18 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(CreatePublicationCategoryRequest createRequest)
+        public ActionResult Save(CreatePublicationCategoryRequest createRequest, HttpPostedFileBase displayImageFile)
         {
             if (!ModelState.IsValid)
             {
                 return View("PublicationCategoryForm");
+            }
+            if (displayImageFile != null)
+            {
+                createRequest.DisplayImageFile = displayImageFile.FileName;
+                createRequest.DisplayImageFileContent = new byte[displayImageFile.ContentLength];
+                displayImageFile.InputStream.Read(createRequest.DisplayImageFileContent, 0, displayImageFile.ContentLength);
+
             }
             var result = PortalPublicationCategoryService.CreatePublicationCategory(createRequest);
             if (result != null)

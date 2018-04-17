@@ -32,5 +32,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
         {
             return ConfigurationManager.AppSettings[key];
         }
+        public static string ReturnFileUploadPath()
+        {
+            return AppDomain.CurrentDomain.BaseDirectory + Get("settings.file.upload.folder");
+        }
     }
 }

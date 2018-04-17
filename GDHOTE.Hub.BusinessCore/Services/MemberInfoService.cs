@@ -10,15 +10,16 @@ namespace GDHOTE.Hub.BusinessCore.Services
 {
     public class MemberInfoService : BaseService
     {
-        public static List<Member> GetMembersByBirthday(string dateOfBirth)
+        public static List<MemberDetailsViewModel> GetMembersByBirthday(string dateOfBirth)
         {
             try
             {
                 DateTime.TryParse(dateOfBirth, out var castDateOfBirth);
                 using (var db = GdhoteConnection())
                 {
-                    var members = db.Fetch<Member>()
-                        .Where(m => m.DateOfBirth.Date.Month == castDateOfBirth.Date.Month && m.DateOfBirth.Date.Day == castDateOfBirth.Date.Day)
+                    var members = db.Fetch<MemberDetailsViewModel>()
+                        .Where(m => m.DateOfBirth.Date.Month == castDateOfBirth.Date.Month 
+                                    && m.DateOfBirth.Date.Day == castDateOfBirth.Date.Day)
                         .OrderBy(m => m.FirstName).ToList();
                     return members;
                 }
@@ -26,7 +27,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<Member>();
+                return new List<MemberDetailsViewModel>();
             }
         }
         public static List<MemberDetailsViewModel> GetMembersByName(string searchQuery)

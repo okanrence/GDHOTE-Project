@@ -10,5 +10,9 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         [Required(ErrorMessage = "Please specify Category")]
         [Display(Name = "Category")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "Please specify Display Image")]
+        [Display(Name = "Display Image")]
+        public string DisplayImageFile { get; set; }
+        public byte[] DisplayImageFileContent { get; set; }
     }
 }
