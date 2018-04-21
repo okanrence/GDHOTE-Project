@@ -36,5 +36,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
         {
             return AppDomain.CurrentDomain.BaseDirectory + Get("settings.file.upload.folder");
         }
+        public static string ReturnBaseUrl()
+        {
+            return Get("settings.base.url");
+        }
     }
 }

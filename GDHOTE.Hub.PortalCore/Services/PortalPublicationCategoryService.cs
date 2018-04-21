@@ -40,7 +40,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<PublicationCategory> GetActivePublicationCategories()
+        public static List<PublicationCategoryResponse> GetActivePublicationCategories()
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-active-publication-categories";
             var client = new RestClient(fullUrl);
@@ -50,7 +50,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<PublicationCategory>();
+            var result = new List<PublicationCategoryResponse>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -59,7 +59,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<PublicationCategory>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<PublicationCategoryResponse>>(response.Content);
             }
             catch (Exception ex)
             {

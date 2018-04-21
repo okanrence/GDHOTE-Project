@@ -822,7 +822,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>19497</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/GdhoteWeb</IISUrl>
+          <IISUrl>http://localhost/Gdhote</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -49,7 +49,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<PublicationViewModel>();
             }
         }
-        public static List<Publication> GetActivePublications()
+
+        public static List<PublicationResponse> GetActivePublications()
         {
             try
             {
@@ -59,13 +60,33 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active && c.DateDeleted == null)
                         .OrderBy(c => c.DateCreated).ThenBy(c => c.Title)
                         .ToList();
-                    return publications;
+                    var response = new List<PublicationResponse>();
+                    if (publications != null)
+                    {
+                        string urlPath = ReturnBaseUrl() + "/" + Get("settings.file.upload.folder");
+                        foreach (var pub in publications)
+                        {
+                            var publicationResponse = new PublicationResponse
+                            {
+                                Id = pub.Id,
+                                Title = pub.Title,
+                                Description = pub.Description,
+                                CategoryId = pub.CategoryId,
+                                Author = pub.Author,
+                                DatePublished = pub.DatePublished.ToString("dd-MMM-yyyy"),
+                                UploadFileUrl = urlPath + "/" + pub.UploadFile,
+                                DisplayImageUrl = urlPath + "/" + pub.DisplayImageFile
+                            };
+                            response.Add(publicationResponse);
+                        }
+                    }
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<Publication>();
+                return new List<PublicationResponse>();
             }
         }
         public static Publication GetPublication(int id)
@@ -197,7 +218,26 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             File.WriteAllBytes(outpath, request.UploadFileContent);
                         }).Start();
                     }
+                    else
+                    {
+                        newUploadFileName = "NA";
+                    }
 
+                    //Save Display Image to Disk
+                    var imageFileExt = Path.GetExtension(request.DisplayImageFile);
+                    var newImageFileName = Guid.NewGuid() + imageFileExt;
+                    if (request.DisplayImageFileContent != null)
+                    {
+                        new Task(() =>
+                        {
+                            string displayImagePath = uploadPath + "\\" + newImageFileName;
+                            File.WriteAllBytes(displayImagePath, request.DisplayImageFileContent);
+                        }).Start();
+                    }
+                    else
+                    {
+                        newImageFileName = "NA";
+                    }
                     //Save File Property to Db
                     string publicationTitle = StringCaseManager.TitleCase(request.Title);
                     var publication = new Publication
@@ -208,7 +248,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         CategoryId = request.CategoryId,
                         AccessRightId = request.AccessRightId,
                         UploadFile = newUploadFileName,
-                        CoverPageImage = request.CoverPageImage,
+                        DisplayImageFile = newImageFileName,
+                        Author = request.Author,
                         CreatedById = user.UserId,
                         DatePublished = request.DatePublished,
                         DateCreated = DateTime.Now,
@@ -234,7 +275,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 };
                 return response;
             }
-
         }
 
 

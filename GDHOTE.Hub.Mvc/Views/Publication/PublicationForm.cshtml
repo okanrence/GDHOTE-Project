@@ -38,6 +38,11 @@
             @Html.ValidationMessageFor(m => m.DatePublished)
         </div>
         <div class="form-group">
+            @Html.LabelFor(p => p.Author)
+            @Html.TextBoxFor(p => p.Author, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(p => p.Author)
+        </div>
+        <div class="form-group">
             @Html.LabelFor(p => p.AccessRightId)
             @Html.DropDownListFor(p => p.AccessRightId, new SelectList(Model.PublicationAccessRights, "Id", "Name"), "Select Access Right", new { @class = "form-control" })
             @Html.ValidationMessageFor(p => p.AccessRightId)
@@ -48,9 +53,9 @@
             @Html.ValidationMessageFor(p => p.UploadFile)
         </div>
         <div class="form-group">
-            @Html.LabelFor(p => p.CoverPageImage)
-            @Html.TextBoxFor(p => p.CoverPageImage, new { type = "file", accept = "image/*" })
-            @Html.ValidationMessageFor(p => p.CoverPageImage)
+            @Html.LabelFor(p => p.DisplayImageFile)
+            @Html.TextBoxFor(p => p.DisplayImageFile, new { type = "file", accept = "image/*" })
+            @Html.ValidationMessageFor(p => p.DisplayImageFile)
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Save</button>

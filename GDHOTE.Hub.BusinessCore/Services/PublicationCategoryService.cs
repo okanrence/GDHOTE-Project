@@ -49,25 +49,42 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<PublicationCategoryViewModel>();
             }
         }
-        public static List<PublicationCategory> GetActivePublicationCategories()
+
+        public static List<PublicationCategoryResponse> GetActivePublicationCategories()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var publicationCategories = db.Fetch<PublicationCategory>()
+                    var publicationCategories = db.Fetch<PublicationCategoryViewModel>()
                         .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active && c.DateDeleted == null)
                         .OrderBy(c => c.Name)
                         .ToList();
-                    return publicationCategories;
+                    var response = new List<PublicationCategoryResponse>();
+                    if (publicationCategories != null)
+                    {
+                        string imgageUrl = ReturnBaseUrl() + "/" + Get("settings.file.upload.folder");
+                        foreach (var pubCategory in publicationCategories)
+                        {
+                            var categoryResponse = new PublicationCategoryResponse
+                            {
+                                Id = pubCategory.Id,
+                                Name = pubCategory.Name,
+                                DisplayImageUrl = imgageUrl + "/" + pubCategory.DisplayImageFile
+                            };
+                            response.Add(categoryResponse);
+                        }
+                    }
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<PublicationCategory>();
+                return new List<PublicationCategoryResponse>();
             }
         }
+
         public static PublicationCategory GetPublicationCategory(int id)
         {
             try
@@ -213,42 +230,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return response;
             }
 
-        }
-
-        public static List<PublicationCategoryResponse> GetMyPublicationCategories()
-        {
-            try
-            {
-                using (var db = GdhoteConnection())
-                {
-                    var publicationCategories = db.Fetch<PublicationCategoryViewModel>()
-                        .OrderBy(c => c.Name)
-                        .ToList();
-                    var response = new List<PublicationCategoryResponse>();
-                    if (publicationCategories != null)
-                    {
-                        var item = JsonConvert.SerializeObject(publicationCategories);
-                        var result = JsonConvert.DeserializeObject<List<PublicationCategoryResponse>>(item);
-                        string deployedPath = "";
-                        foreach (var pubCategory in publicationCategories)
-                        {
-                            var categoryResponse = new PublicationCategoryResponse
-                            {
-                                Id = pubCategory.Id,
-                                Name = pubCategory.Name,
-                                DisplayImageUrl = deployedPath + pubCategory.DisplayImageFile
-                            };
-                            response.Add(categoryResponse);
-                        }
-                    }
-                    return response;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.LogError(ex.Message);
-                return new List<PublicationCategoryResponse>();
-            }
         }
     }
 }

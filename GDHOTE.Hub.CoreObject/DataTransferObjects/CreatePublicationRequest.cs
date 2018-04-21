@@ -22,10 +22,11 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         [Required(ErrorMessage = "Please specify Upload File")]
         [Display(Name = "Upload File")]
         public string UploadFile { get; set; }
-        [Display(Name = "Cover Page Image")]
-        public string CoverPageImage { get; set; }
+        [Display(Name = "Display Image")]
+        public string DisplayImageFile { get; set; }
         public DateTime DatePublished { get; set; }
+        public string Author { get; set; }
         public byte[] UploadFileContent { get; set; }
-        public byte[] CoverPageImageContent { get; set; }
+        public byte[] DisplayImageFileContent { get; set; }
     }
 }

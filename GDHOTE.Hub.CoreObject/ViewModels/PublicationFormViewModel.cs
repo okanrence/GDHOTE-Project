@@ -9,6 +9,6 @@ namespace GDHOTE.Hub.CoreObject.ViewModels
     public class PublicationFormViewModel : CreatePublicationRequest
     {
         public List<PublicationAccessRight> PublicationAccessRights { get; set; }
-        public List<PublicationCategory> PublicationCategories { get; set; }
+        public List<PublicationCategoryResponse> PublicationCategories { get; set; }
     }
 }

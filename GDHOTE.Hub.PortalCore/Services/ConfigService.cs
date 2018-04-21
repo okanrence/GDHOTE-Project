@@ -9,7 +9,7 @@ namespace GDHOTE.Hub.PortalCore.Services
     {
         public static string ReturnBaseUrl()
         {
-            return ConfigurationManager.AppSettings["settings.api.baseurl"];
+            return ConfigurationManager.AppSettings["settings.api.baseurl"] + "/api/v1";
         }
     }
 }

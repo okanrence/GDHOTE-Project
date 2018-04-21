@@ -27,7 +27,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Save(CreatePublicationRequest createRequest, HttpPostedFileBase uploadFile,
-            HttpPostedFileBase coverPageImage)
+            HttpPostedFileBase displayImageFile)
         {
             if (!ModelState.IsValid)
             {
@@ -45,15 +45,15 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 createRequest.UploadFile = uploadFile.FileName;
                 createRequest.UploadFileContent = new byte[uploadFile.ContentLength];
                 uploadFile.InputStream.Read(createRequest.UploadFileContent, 0, uploadFile.ContentLength);
-              
+                
             }
-            if (coverPageImage != null)
+            if (displayImageFile != null)
             {
-                createRequest.CoverPageImage = coverPageImage.FileName;
-                createRequest.CoverPageImageContent = new byte[coverPageImage.ContentLength];
-                coverPageImage.InputStream.Read(createRequest.CoverPageImageContent, 0, coverPageImage.ContentLength);
+                createRequest.DisplayImageFile = displayImageFile.FileName;
+                createRequest.DisplayImageFileContent = new byte[displayImageFile.ContentLength];
+                displayImageFile.InputStream.Read(createRequest.DisplayImageFileContent, 0, displayImageFile.ContentLength);
             }
-            
+
             var result = PortalPublicationService.CreatePublication(createRequest);
             if (result != null)
             {

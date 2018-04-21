@@ -77,6 +77,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
+
         [HttpGet]
         [Route("get-publication-category")]
         public HttpResponseMessage GetPublicationCategory(string id)
@@ -153,37 +154,6 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 var response = PublicationCategoryService.Delete(Convert.ToInt16(id), username);
                 return Request.CreateResponse(HttpStatusCode.OK, response);
 
-            }
-            catch (UnableToCompleteException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
-            }
-        }
-
-
-        [HttpGet]
-        [Route("get-my-publication-categories")]
-        public HttpResponseMessage GetMyPublicationCategories()
-        {
-            try
-            {
-                var response = PublicationCategoryService.GetMyPublicationCategories().ToList();
-                if (response.Count > 0)
-                {
-                    return new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        RequestMessage = Request,
-                        Content = new StringContent(
-                            JsonConvert.SerializeObject(response, Formatting.Indented))
-                    };
-                }
-
-                return new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    RequestMessage = Request,
-                    Content = new StringContent(
-                        JsonConvert.SerializeObject(response, Formatting.Indented))
-                };
             }
             catch (UnableToCompleteException ex)
             {
