@@ -184,7 +184,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
 
-                    string stateName = StringCaseManager.TitleCase(request.Name);
+                    string stateName = StringCaseService.TitleCase(request.Name);
 
                     var state = new State
                     {

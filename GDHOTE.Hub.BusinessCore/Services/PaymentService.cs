@@ -201,7 +201,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
 
 
-                    string narration = StringCaseManager.TitleCase(request.Narration);
+                    string narration = StringCaseService.TitleCase(request.Narration);
 
                     var payment = new Payment
                     {

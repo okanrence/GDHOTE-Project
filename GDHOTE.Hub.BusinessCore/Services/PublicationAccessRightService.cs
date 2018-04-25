@@ -189,7 +189,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
-                    string accessRightName = StringCaseManager.TitleCase(request.Name);
+                    string accessRightName = StringCaseService.TitleCase(request.Name);
 
                     var publicationAccessRight = new PublicationAccessRight
                     {

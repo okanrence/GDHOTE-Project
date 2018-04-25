@@ -5,6 +5,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -45,7 +46,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<CountryViewModel>();
             }
         }
-        public static List<Country> GetActiveCountries()
+        public static List<CountryResponse> GetActiveCountries()
         {
             try
             {
@@ -55,13 +56,15 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active && c.DateDeleted == null)
                         .OrderBy(c => c.Name)
                         .ToList();
-                    return countries;
+                    var item = JsonConvert.SerializeObject(countries);
+                    var response = JsonConvert.DeserializeObject<List<CountryResponse>>(item);
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<Country>();
+                return new List<CountryResponse>();
             }
         }
         public static Country GetCountry(int id)
@@ -161,7 +164,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
-                    string countryName = StringCaseManager.TitleCase(request.Name);
+                    string countryName = StringCaseService.TitleCase(request.Name);
 
                     var country = new Country
                     {

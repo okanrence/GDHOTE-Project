@@ -10,8 +10,8 @@ namespace GDHOTE.Hub.CoreObject.ViewModels
 {
     public class PaymentFormViewModel : CreatePaymentRequest
     {
-        public List<PaymentType> PaymentTypes { get; set; }
-        public List<PaymentMode> ModeOfPayments { get; set; }
-        public List<Currency> Currencies { get; set; }
+        public List<PaymentTypeResponse> PaymentTypes { get; set; }
+        public List<PaymentModeResponse> ModeOfPayments { get; set; }
+        public List<CurrencyResponse> Currencies { get; set; }
     }
 }

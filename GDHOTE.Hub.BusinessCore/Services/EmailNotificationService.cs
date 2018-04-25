@@ -371,7 +371,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
         }
 
-        public static Response SendBirthdayNotificationEmail(SendEmailRequest sendRequest, string currentUser)
+        public static Response SendBirthdayNotificationEmailOld(SendEmailRequest sendRequest, string currentUser)
         {
             var response = new Response();
 
@@ -382,13 +382,112 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 Type = EmailType.BirthdayNotification,
                 Data = new Hashtable
                 {
-                    //["Subject"] = "Welcome to " + Get("settings.organisation.name"),
                     ["FirstName"] = sendRequest.Firstname,
                     ["LastName"] = sendRequest.Surname,
                 }
             };
             response = SendNotificationEmail(emailRequest, currentUser);
             return response;
+        }
+
+
+
+        public static Response SendBirthdayNotificationEmail(SendEmailRequest sendRequest, string currentUser)
+        {
+            try
+            {
+                var response = new Response();
+
+
+                //Get User Initiating Creation Request
+                var user = UserService.GetUserByUserName(currentUser);
+
+                if (user == null)
+                {
+                    return new Response
+                    {
+                        ErrorCode = "01",
+                        ErrorMessage = "Unable to validate User"
+                    };
+                }
+
+                //Validate Request
+                if (sendRequest == null)
+                {
+                    return new Response
+                    {
+                        ErrorCode = "01",
+                        ErrorMessage = "Invalid Request"
+                    };
+                }
+
+                //Validate Email address
+                if (StringCaseService.IsValidEmail(sendRequest.RecipientEmailAddress))
+                {
+                    return new Response
+                    {
+                        ErrorCode = "01",
+                        ErrorMessage = "Invalid Email Address"
+                    };
+                }
+
+                var emailType = EmailType.BirthdayNotification;
+                int templateCount = Convert.ToInt16(Get("settings.email.birthday.template.count"));
+                Random rnd = new Random();
+                int number = rnd.Next(1, templateCount);
+                var mailTemplate = emailType.ToString() + number;
+
+                var viewsPath = Path.GetFullPath(EmailTemplatePath);
+                var engines = new ViewEngineCollection { new FileSystemRazorViewEngine(viewsPath) };
+                var service = new EmailService(engines);
+                dynamic email = new Email(mailTemplate);
+                email.To = sendRequest.RecipientEmailAddress;
+                email.Bcc = BlindCopy;
+                email.Subject = sendRequest.Subject;
+                email.FirstName = sendRequest.Firstname;
+                email.LastName = sendRequest.Surname;
+                service.Send(email);
+
+
+
+                //Log Notification
+                new Task(() =>
+                {
+                    using (var db = GdhoteConnection())
+                    {
+                        var notification = new Notification
+                        {
+                            Recipient = sendRequest.RecipientEmailAddress,
+                            NotificationTypeId = (int)NotificationType.Email,
+                            ContentBody = emailType.ToString(),
+                            Status = 'S',
+                            CreatedById = user.UserId,
+                            DateCreated = DateTime.Now,
+                            RecordDate = DateTime.Now
+                        };
+                        db.Insert(notification);
+                    }
+
+                }).Start();
+
+                response = new Response
+                {
+                    ErrorCode = "00",
+                    ErrorMessage = "Successful"
+                };
+                return response;
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                var response = new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured Sending message"
+                };
+                return response;
+            }
+
         }
         public static Response SendWeddingAnniversaryNotificationEmail(SendEmailRequest sendRequest, string currentUser)
         {

@@ -168,7 +168,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
 
-                    string yearName = StringCaseManager.TitleCase(request.Name);
+                    string yearName = StringCaseService.TitleCase(request.Name);
 
 
                     var yearGroup = new YearGroup

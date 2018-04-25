@@ -40,7 +40,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<PaymentType> GetActivePaymentTypes()
+        public static List<PaymentTypeResponse> GetActivePaymentTypes()
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/payment/get-active-payment-types";
             var client = new RestClient(fullUrl);
@@ -50,7 +50,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<PaymentType>();
+            var result = new List<PaymentTypeResponse>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -59,7 +59,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<PaymentType>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<PaymentTypeResponse>>(response.Content);
             }
             catch (Exception ex)
             {

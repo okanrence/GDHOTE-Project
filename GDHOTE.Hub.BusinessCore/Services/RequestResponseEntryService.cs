@@ -17,12 +17,12 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 using (var db = GdhoteConnection())
                 {
                     entry.DateCreated = DateTime.Now;
-                    var result = db.Insert(entry);
+                    db.Insert(entry);
                 }
             }
             catch (Exception ex)
             {
-               LogService.LogError(ex.Message);
+                LogService.LogError(ex.Message);
             }
         }
     }

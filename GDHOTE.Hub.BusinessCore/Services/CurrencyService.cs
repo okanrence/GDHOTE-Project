@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -36,9 +37,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Fetch<CurrencyViewModel>()
+                    var currencies = db.Fetch<CurrencyViewModel>()
                         .OrderBy(c => c.Name).ToList();
-                    return countries;
+                    return currencies;
                 }
             }
             catch (Exception ex)
@@ -47,22 +48,24 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<CurrencyViewModel>();
             }
         }
-        public static List<Currency> GetActiveCurrencies()
+        public static List<CurrencyResponse> GetActiveCurrencies()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Fetch<Currency>()
+                    var currencies = db.Fetch<Currency>()
                         .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active && c.DateDeleted == null)
                         .OrderBy(c => c.Name).ToList();
-                    return countries;
+                    var item = JsonConvert.SerializeObject(currencies);
+                    var response = JsonConvert.DeserializeObject<List<CurrencyResponse>>(item);
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<Currency>();
+                return new List<CurrencyResponse>();
             }
         }
         public static Currency GetCurrency(int id)
@@ -166,7 +169,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
                     string currencyCode = request.CurrencyCode.ToUpper();
-                    string currencyName = StringCaseManager.TitleCase(request.Name);
+                    string currencyName = StringCaseService.TitleCase(request.Name);
 
 
                     var activityType = new Currency

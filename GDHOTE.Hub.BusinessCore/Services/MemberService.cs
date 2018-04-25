@@ -515,89 +515,94 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         var guardianAngel = workSheet.Cells[i, 18].Value != null ? workSheet.Cells[i, 18].Value.ToString() : null;
                         var yeargroup = workSheet.Cells[i, 19].Value != null ? workSheet.Cells[i, 19].Value.ToString() : null;
 
+                        if (string.IsNullOrEmpty(middleName)) middleName = "";
 
-                        //Check member already profiled
-                        var memberExist = db.Fetch<Member>().SingleOrDefault(m => m.Surname.ToLower().Equals(surname.ToLower())
-                                                  && m.FirstName.ToLower().Equals(firstName.ToLower()));
-
-                        //Insert if new member
-                        if (memberExist == null)
+                        if (!string.IsNullOrEmpty(surname) && !string.IsNullOrEmpty(firstName))
                         {
-                            recordCount += 1;
-                            //DateTime.TryParse(magusDateString, out var magusDate);
-                            //DateTime.TryParse(initiationDateString, out var initiationDate2);
-                            //DateTime.TryParse(dateWeddedString, out var dateWedded);
+                            //Check member already profiled
+                            var memberExist = db.Fetch<Member>()
+                             .SingleOrDefault(m => m.Surname.ToLower().Equals(surname.ToLower())
+                                                  && m.FirstName.ToLower().Equals(firstName.ToLower())
+                                                                                   && m.MiddleName.ToLower().Equals(middleName.ToLower()));
 
-                            var member = new Member
+                            //Insert if new member
+                            if (memberExist == null)
                             {
-                                FirstName = StringCaseManager.TitleCase(firstName),
-                                MiddleName = StringCaseManager.TitleCase(middleName),
-                                Surname = StringCaseManager.TitleCase(surname),
-                                Gender = !string.IsNullOrEmpty(gender) ? gender.Substring(0, 1) : "M",
-                                MaritalStatus = !string.IsNullOrEmpty(maritalStatus) ? maritalStatus.Substring(0, 1) : "S",
-                                DateOfBirth = DateTime.TryParse(dateOfBirthString, out var dateOfBirth)
-                                    ? DateTime.Parse(dateOfBirthString) : DateTime.Now,
-                                MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Active,
-                                CreatedById = user.UserId,
-                                ChannelId = channelId,
-                                ApprovedFlag = "N",
-                                MagusDate = DateTime.TryParse(magusDateString, out var magusDate)
-                                    ? DateTime.Parse(magusDateString) : (DateTime?)null,
-                                MagusStatus = magusDate == null ? false : true,
-                                InitiationDate = DateTime.TryParse(initiationDateString, out var initiationDate)
-                                    ? DateTime.Parse(magusDateString) : (DateTime?)null,
-                                InitiationStatus = initiationDate == null ? false : true,
-                                DateCreated = DateTime.Now,
-                                RecordDate = DateTime.Now,
-                                OfficerId = (int)OfficerType.NormalMember,
-                                OfficerDate = DateTime.Now
-                            };
-                            var result = db.Insert(member);
+                                recordCount += 1;
 
-                            int residenceStateId = 1;
-                            if (!string.IsNullOrEmpty(residenceState))
-                            {
-                                var state = states.SingleOrDefault(s => s.Name.ToLower().Equals(residenceState.ToLower()));
-                                if (state != null) residenceStateId = state.Id;
-                            }
-
-                            int residenceCountryId = 1;
-                            if (!string.IsNullOrEmpty(residenceCountry))
-                            {
-                                var country = countries.SingleOrDefault(c => c.Name.ToLower().Equals(residenceCountry.ToLower()));
-                                if (country != null) residenceCountryId = country.Id;
-                            }
-                            //Insert member details
-                            if (result != null)
-                            {
-                                if (int.TryParse(result.ToString(), out var memberKey))
+                                var member = new Member
                                 {
-                                    var memberDetails = new MemberDetails
-                                    {
-                                        MemberId = memberKey,
-                                        MobileNumber = mobileNumber,
-                                        AlternateNumber = alternateNumber,
-                                        EmailAddress = emailAddress,
-                                        StateOfOriginId = 1,
-                                        CountryOfOriginId = 1,
-                                        ResidenceStateId = residenceStateId,
-                                        ResidenceCountryId = residenceCountryId,
-                                        ResidenceAddress = StringCaseManager.TitleCase(residenceAddress),
-                                        HighestDegreeObtained = StringCaseManager.TitleCase(highestDegreeObtained),
-                                        CurrentWorkPlace = StringCaseManager.TitleCase(currentPlaceOfWork),
-                                        DateWedded = DateTime.TryParse(dateWeddedString, out var dateWedded)
-                                            ? DateTime.Parse(dateWeddedString) : (DateTime?)null,
-                                        GuardianAngel = StringCaseManager.TitleCase(guardianAngel),
-                                        MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Active,
-                                        CreatedById = user.UserId,
-                                        DateCreated = DateTime.Now,
-                                        RecordDate = DateTime.Now
-                                    };
-                                    db.Insert(memberDetails);
-                                }
-                            }
+                                    FirstName = StringCaseService.TitleCase(firstName),
+                                    MiddleName = StringCaseService.TitleCase(middleName),
+                                    Surname = StringCaseService.TitleCase(surname),
+                                    Gender = !string.IsNullOrEmpty(gender) ? gender.Substring(0, 1) : "M",
+                                    MaritalStatus = !string.IsNullOrEmpty(maritalStatus) ? maritalStatus.Substring(0, 1) : "S",
+                                    DateOfBirth = DateTime.TryParse(dateOfBirthString, out var dateOfBirth)
+                                        ? DateTime.Parse(dateOfBirthString) : DateTime.Now,
+                                    MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Active,
+                                    CreatedById = user.UserId,
+                                    ChannelId = channelId,
+                                    ApprovedFlag = "N",
+                                    MagusDate = DateTime.TryParse(magusDateString, out var magusDate)
+                                        ? DateTime.Parse(magusDateString) : (DateTime?)null,
+                                    MagusStatus = magusDate == null ? false : true,
+                                    InitiationDate = DateTime.TryParse(initiationDateString, out var initiationDate)
+                                        ? DateTime.Parse(magusDateString) : (DateTime?)null,
+                                    InitiationStatus = initiationDate == null ? false : true,
+                                    DateCreated = DateTime.Now,
+                                    RecordDate = DateTime.Now,
+                                    OfficerId = (int)OfficerType.NormalMember,
+                                    OfficerDate = DateTime.Now
+                                };
+                                var result = db.Insert(member);
 
+                                int residenceStateId = 1;
+                                if (!string.IsNullOrEmpty(residenceState))
+                                {
+                                    var state = states.SingleOrDefault(s => s.Name.ToLower().Equals(residenceState.ToLower()));
+                                    if (state != null) residenceStateId = state.Id;
+                                }
+
+                                int residenceCountryId = 1;
+                                if (!string.IsNullOrEmpty(residenceCountry))
+                                {
+                                    var country = countries.SingleOrDefault(c => c.Name.ToLower().Equals(residenceCountry.ToLower()));
+                                    if (country != null) residenceCountryId = country.Id;
+                                }
+                                //Insert member details
+                                if (result != null)
+                                {
+                                    if (int.TryParse(result.ToString(), out var memberKey))
+                                    {
+                                        var memberDetails = new MemberDetails
+                                        {
+                                            MemberId = memberKey,
+                                            MobileNumber = mobileNumber,
+                                            AlternateNumber = alternateNumber,
+                                            EmailAddress = emailAddress,
+                                            StateOfOriginId = 1,
+                                            CountryOfOriginId = 1,
+                                            ResidenceStateId = residenceStateId,
+                                            ResidenceCountryId = residenceCountryId,
+                                            ResidenceAddress = StringCaseService.TitleCase(residenceAddress),
+                                            HighestDegreeObtained = StringCaseService.TitleCase(highestDegreeObtained),
+                                            CurrentWorkPlace = StringCaseService.TitleCase(currentPlaceOfWork),
+                                            DateWedded = DateTime.TryParse(dateWeddedString, out var dateWedded)
+                                                ? DateTime.Parse(dateWeddedString) : (DateTime?)null,
+                                            GuardianAngel = StringCaseService.TitleCase(guardianAngel),
+                                            MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Active,
+                                            CreatedById = user.UserId,
+                                            DateCreated = DateTime.Now,
+                                            RecordDate = DateTime.Now
+                                        };
+                                        db.Insert(memberDetails);
+                                    }
+                                }
+
+                            }
                         }
+
+                       
                     }
                     response = new Response
                     {

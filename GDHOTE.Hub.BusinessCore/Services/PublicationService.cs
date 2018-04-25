@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
@@ -238,8 +236,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     {
                         newImageFileName = "NA";
                     }
+
                     //Save File Property to Db
-                    string publicationTitle = StringCaseManager.TitleCase(request.Title);
+                    string publicationTitle = StringCaseService.TitleCase(request.Title);
                     var publication = new Publication
                     {
                         Title = publicationTitle,
@@ -276,7 +275,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return response;
             }
         }
-
 
         public static Response MailPublication(MailPublicationRequest request, string currentUser)
         {

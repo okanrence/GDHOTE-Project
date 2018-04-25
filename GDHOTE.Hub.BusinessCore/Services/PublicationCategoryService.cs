@@ -199,7 +199,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
                     //Save File Property to Db
-                    string categoryName = StringCaseManager.TitleCase(request.Name);
+                    string categoryName = StringCaseService.TitleCase(request.Name);
                     var publicationCategory = new PublicationCategory
                     {
                         Name = categoryName,

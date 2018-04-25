@@ -164,7 +164,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
 
-                    string typeName = StringCaseManager.TitleCase(request.Name);
+                    string typeName = StringCaseService.TitleCase(request.Name);
 
 
                     var memberStatus = new MemberStatus

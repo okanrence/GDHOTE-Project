@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -47,7 +48,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<PaymentModeViewModel>();
             }
         }
-        public static List<PaymentMode> GetActivePaymentModes()
+        public static List<PaymentModeResponse> GetActivePaymentModes()
         {
             try
             {
@@ -57,13 +58,15 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         .Where(pm => pm.StatusId == (int)CoreObject.Enumerables.Status.Active && pm.DateDeleted == null)
                         .OrderBy(pm => pm.Name)
                         .ToList();
-                    return paymentModes;
+                    var item = JsonConvert.SerializeObject(paymentModes);
+                    var response = JsonConvert.DeserializeObject<List<PaymentModeResponse>>(item);
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<PaymentMode>();
+                return new List<PaymentModeResponse>();
             }
         }
         public static PaymentMode GetPaymentMode(int id)
@@ -164,7 +167,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
 
-                    string modeName = StringCaseManager.TitleCase(request.Name);
+                    string modeName = StringCaseService.TitleCase(request.Name);
 
                     var paymentMode = new PaymentMode
                     {

@@ -10,8 +10,7 @@ namespace GDHOTE.Hub.CoreObject.ViewModels
 {
     public class StateFormViewModel : CreateStateRequest
     {
-        public List<Country> Countries { get; set; }
+        public List<CountryResponse> Countries { get; set; }
         public List<Status> Statuses { get; set; }
-
     }
 }

@@ -185,7 +185,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
 
-                    string roleName = StringCaseManager.TitleCase(request.RoleName);
+                    string roleName = StringCaseService.TitleCase(request.RoleName);
 
                     var role = new Role
                     {

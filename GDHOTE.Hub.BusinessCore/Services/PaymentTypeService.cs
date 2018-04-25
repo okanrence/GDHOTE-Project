@@ -9,6 +9,7 @@ using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.Enumerables;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -48,7 +49,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<PaymentTypeViewModel>();
             }
         }
-        public static List<PaymentType> GetActivePaymentTypes()
+        public static List<PaymentTypeResponse> GetActivePaymentTypes()
         {
             try
             {
@@ -57,13 +58,15 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var paymentTypes = db.Fetch<PaymentType>()
                         .Where(p => p.StatusId == (int)CoreObject.Enumerables.Status.Active && p.DateDeleted == null)
                         .OrderBy(p => p.Name).ToList();
-                    return paymentTypes;
+                    var item = JsonConvert.SerializeObject(paymentTypes);
+                    var response = JsonConvert.DeserializeObject<List<PaymentTypeResponse>>(item);
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<PaymentType>();
+                return new List<PaymentTypeResponse>();
             }
         }
 
@@ -166,7 +169,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
 
-                    string typeName = StringCaseManager.TitleCase(request.Name);
+                    string typeName = StringCaseService.TitleCase(request.Name);
 
 
                     var paymentType = new PaymentType

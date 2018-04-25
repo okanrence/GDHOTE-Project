@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace GDHOTE.Hub.BusinessCore.BusinessLogic
+namespace GDHOTE.Hub.BusinessCore.Services
 {
-    public class StringCaseManager
+    public class StringCaseService
     {
         public static string TitleCase(string input)
         {
@@ -16,6 +17,11 @@ namespace GDHOTE.Hub.BusinessCore.BusinessLogic
             TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
             if (!string.IsNullOrEmpty(input)) result = ti.ToTitleCase(input.ToLower());
             return result;
+        }
+        public static bool IsValidEmail(string email)
+        {
+            // Return true if strIn is in valid e-mail format.
+            return Regex.IsMatch(email, @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
         }
     }
 }

@@ -59,7 +59,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<Currency> GetActiveCurrencies()
+        public static List<CurrencyResponse> GetActiveCurrencies()
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/currency/get-active-currencies";
             var client = new RestClient(fullUrl);
@@ -69,7 +69,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<Currency>();
+            var result = new List<CurrencyResponse>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -78,7 +78,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<Currency>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<CurrencyResponse>>(response.Content);
             }
             catch (Exception ex)
             {

@@ -198,7 +198,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
 
 
-                    string name = StringCaseManager.TitleCase(request.Name);
+                    string name = StringCaseService.TitleCase(request.Name);
 
                     var subMenu = new SubMenu
                     {

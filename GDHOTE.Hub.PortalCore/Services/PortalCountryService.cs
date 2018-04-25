@@ -40,7 +40,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<Country> GetActiveCountries()
+        public static List<CountryResponse> GetActiveCountries()
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/country/get-active-countries";
             var client = new RestClient(fullUrl);
@@ -50,7 +50,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<Country>();
+            var result = new List<CountryResponse>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -59,7 +59,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<Country>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<CountryResponse>>(response.Content);
             }
             catch (Exception ex)
             {
