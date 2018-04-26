@@ -125,7 +125,7 @@ namespace GDHOTE.Hub.PortalCore.Services
         }
         public static Response CreateMember(CreateMemberRequest createRequest)
         {
-            var channel = (int) CoreObject.Enumerables.Channel.Web;
+            var channel = (int)CoreObject.Enumerables.Channel.Web;
             var requestData = JsonConvert.SerializeObject(createRequest);
             string fullUrl = ConfigService.ReturnBaseUrl() + "/member/create-member";
             var client = new RestClient(fullUrl);
@@ -272,7 +272,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-        
+
         public static MemberInfoResponse GetMemberInformation(string id)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-member-information";
@@ -362,5 +362,36 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
+
+        public static List<MemberViewModel> GetMembersByCriteria(string criteria, string startdate, string enddate)
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-members-by-criteria";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("criteria", criteria, ParameterType.QueryString);
+            request.AddParameter("startdate", startdate, ParameterType.QueryString);
+            request.AddParameter("enddate", enddate, ParameterType.QueryString);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new List<MemberViewModel>();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<List<MemberViewModel>>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+            }
+            return result;
+        }
     }
 }

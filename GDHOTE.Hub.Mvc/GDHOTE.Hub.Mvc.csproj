@@ -778,6 +778,7 @@
     <Content Include="Views\Activity\ActivityForm.cshtml" />
     <Content Include="Views\Member\_MemberInfo.cshtml" />
     <Content Include="Views\Member\UploadMember.cshtml" />
+    <Content Include="Views\Member\_MemberListReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,50 +1,90 @@
 ﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.MemberViewModel>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Members";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Members</h2>
 
-@if (Model == null || Model.Count == 0)
+
+
+<div id="loadDiv" style="display: none; background-color: rgba(0, 0, 0, 0.3); position: fixed; top: 0px; left: 0px; z-index: 999; height: 100%; width: 100%;">
+    <p align="center" style="margin-top: 20%">
+        <img src="~/images/download.gif" />
+    </p>
+</div>
+
+
+
+
+@using (Ajax.BeginForm("FetchReportByDate", "Member", null, new AjaxOptions
 {
-    <p>No record(s) found</p>
-}
-else
+    HttpMethod = "POST",
+    LoadingElementId = "loadDiv",
+    //OnSuccess = "SuccessMessage",
+    //OnFailure = "FailMessage",
+    UpdateTargetId = "membersData"
+}))
 {
     <div>
-        <table id="members" class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Member Code</th>
-                    <th>Surname</th>
-                    <th>Other Name(s)</th>
-                    <th>Gender</th>
-                    <th>Martial Status</th>
-                    <th>Status</th>
-                    <th>Date Of Birth</th>
-                    <th>Magus</th>
-                    <th>Magus Date</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var member in Model)
-                {
-                    <tr>
-                        <td>@member.MemberCode</td>
-                        <td>@member.Surname</td>
-                        <td>@member.FirstName, @member.MiddleName </td>
-                        <td>@member.Gender</td>
-                        <td>@member.MaritalStatus</td>
-                        <td>@member.MemberStatus</td>
-                        <td>@member.DateOfBirth.ToString("dd-MMM-yyyy")</td>
-                        <td>@member.MagusStatus</td>
-                        <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy") ?? "") </td>
-                        <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        @Html.AntiForgeryToken()
     </div>
+    <div>
+        <div class="form-group">
+            <label id="lbl-criteria">Filter By</label>
+            <label id="drp-criteria">Criteria</label>
+            <label id="lbl-start-date">Start Date</label>
+            <input id="start-date" name="startdate" type="text" />
+            <label id="lbl-end-date">End Date</label>
+            <input id="end-date" name="enddate" type="text" />
+            <button type="button" id="btn-fetch" class="btn btn-primary">Fetch</button>
+            <button id="cmd-fetch" class="btn btn-primary" style="display: none">Fetch</button>
+            <br />
+        </div>
+    </div>
+}
+
+
+<div id="membersData">
+    @Html.Partial("_MemberListReport")
+</div>
+
+
+@section scripts
+{
+    <script>
+
+        $(document).ready(function () {
+
+            $(function () {
+                $('#start-date, #end-date').datepicker({
+                    format: 'dd-M-yyyy',
+                    autoclose: 1,
+                    todayHighlight: 1
+                });
+            });
+
+            $("#btn-fetch").button().click(function () {
+                var startDate = $("#start-date").val();
+                var endDate = $("#end-date").val();
+                if (startDate === '') {
+                    alert('Please select a Start Date');
+                    return;
+                }
+
+                if (endDate === '') {
+                    alert('Please select a End Date');
+                    return;
+                }
+
+                $("#cmd-fetch").click();
+            });
+
+
+
+
+        });
+
+
+    </script>
 }

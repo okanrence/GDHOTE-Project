@@ -25,6 +25,7 @@ else
             <table id="members" class="table table-bordered table-hover">
                 <thead>
                     <tr>
+                        <th>SN</th>
                         <th>Name</th>
                         <th>Gender</th>
                         <th>Martial Status</th>
@@ -37,9 +38,11 @@ else
                     </tr>
                 </thead>
                 <tbody>
+                    @{ int i = 0; }
                     @foreach (var member in Model)
                     {
                         <tr>
+                            <td>@i</td>  @{ i++; }
                             <td><button id="btn-member-info" data-notification-id="@member.Id" class="btn btn-link js-action">@member.FirstName, @member.Surname</button></td>
                             <td>@member.Gender</td>
                             <td>@member.MaritalStatus</td>
@@ -60,11 +63,6 @@ else
             <div id='divResult'>
             </div>
         </div>
-
-        @*<div id="memberinfomodal" class="modal fade" tabindex="-1" aria-hidden="true">
-                @Html.Action("GetMemberInfo", "Member");
-                <div id="divResult"></div>
-            </div>*@
     </div>
 }
 
@@ -84,13 +82,6 @@ else
                var token = $('input[name="__RequestVerificationToken"]', form).val();
 
                var request = { __RequestVerificationToken: token };
-                //var url = $('#gameModal').data('url') + id;
-
-               //$.get(url, function(data) {
-               //    $('#gameContainer').html(data);
-
-               //    $('#gameModal').modal('show');
-               //});
 
                $.ajax({
                     type: "POST",
@@ -102,19 +93,6 @@ else
                         $('#memberinfomodal').removeClass('hide');
                         if (data !== null) {
 
-                            //console.log('Am here');
-                            //console.log(data.Member);
-                            //if (data.ErrorCode === "00") {
-                            //    swal({
-                            //        title: "Success",
-                            //        text: "success",
-                            //        type: "success"
-                            //    });
-
-                            //    window.location.reload(true);
-                            //} else {
-                            //    alert(data.ErrorMessage);
-                            //}
                         };
                        $('#memberinfomodal').modal({
                                 keyboard: true
@@ -163,13 +141,7 @@ else
                                 });
                             }
                         });
-
-
-
-
             });
-
-
 
         });
     </script>

@@ -449,7 +449,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
                 }
- 
+
                 string username = User.Identity.Name;
                 var response = MemberService.UploadMembers(uploadRequest, username);
                 if (response != null)
@@ -474,5 +474,37 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
+
+
+        [HttpGet]
+        [Route("get-members-by-criteria")]
+        public HttpResponseMessage GetMembersByCriteria(string criteria, string startdate, string enddate)
+        {
+            try
+            {
+                var response = MemberService.GetMembersByCriteria(criteria, startdate, enddate).ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
     }
 }

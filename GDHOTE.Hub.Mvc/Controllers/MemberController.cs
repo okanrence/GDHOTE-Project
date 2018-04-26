@@ -158,6 +158,16 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var result = PortalMemberService.GetMemberInformation(id);
             return PartialView("_MemberInfo", result);
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public PartialViewResult FetchReportByDate(string criteria, string startdate, string enddate)
+        {
+            var members = PortalMemberService.GetMembersByCriteria(criteria, startdate, enddate).ToList();
+            return PartialView("_MemberListReport", members);
+        }
+
         private static MemberFormViewModel ReturnViewModel()
         {
             var genders = GenderService.GetGenders();

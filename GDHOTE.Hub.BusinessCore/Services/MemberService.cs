@@ -602,7 +602,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             }
                         }
 
-                       
+
                     }
                     response = new Response
                     {
@@ -622,6 +622,29 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     ErrorMessage = "Error occured while trying to upload record(s)"
                 };
                 return response;
+            }
+        }
+
+
+        public static List<MemberViewModel> GetMembersByCriteria(string criteria, string startdate, string enddate)
+        {
+            try
+            {
+                DateTime.TryParse(startdate, out var castStartDate);
+                DateTime.TryParse(enddate, out var castEndDate);
+                using (var db = GdhoteConnection())
+                {
+                    var members = db.Fetch<MemberViewModel>()
+                        .Where(m => m.RecordDate >= castStartDate && m.RecordDate < castEndDate)
+                        .OrderBy(m => m.FirstName)
+                        .ToList();
+                    return members;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new List<MemberViewModel>();
             }
         }
     }
