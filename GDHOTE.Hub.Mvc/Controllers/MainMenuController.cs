@@ -16,7 +16,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: MainMenu
         public ActionResult Index()
         {
-            var mainMenus = MainMenuService.GetAllMainMenus().ToList();
+            var mainMenus = PortalMainMenuService.GetAllMainMenus().ToList();
             return View("MainMenuIndex", mainMenus);
         }
         public ActionResult New()
@@ -26,7 +26,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var mainMenu = MainMenuService.GetMainMenu(id);
+            var mainMenu = PortalMainMenuService.GetMainMenu(id);
             if (mainMenu == null) return HttpNotFound();
             var viewModel = ReturnViewModel();
             return View("MainMenuForm", viewModel);

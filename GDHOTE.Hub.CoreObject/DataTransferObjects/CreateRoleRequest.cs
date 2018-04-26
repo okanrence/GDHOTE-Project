@@ -10,5 +10,8 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         [Required(ErrorMessage = "Please specify Role")]
         [Display(Name = "Role")]
         public string RoleName { get; set; }
+        [Required(ErrorMessage = "Please specify Role Type")]
+        [Display(Name = "Role Type")]
+        public int RoleTypeId { get; set; }
     }
 }

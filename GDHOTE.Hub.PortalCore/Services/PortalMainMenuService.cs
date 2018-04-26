@@ -41,7 +41,7 @@ namespace GDHOTE.Hub.PortalCore.Services
         }
 
 
-        public static List<MainMenu> GetActiveMainMenus()
+        public static List<MainMenuResponse> GetActiveMainMenus()
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-active-main-menus";
             var client = new RestClient(fullUrl);
@@ -51,7 +51,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<MainMenu>();
+            var result = new List<MainMenuResponse>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -60,7 +60,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<MainMenu>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<MainMenuResponse>>(response.Content);
             }
             catch (Exception ex)
             {

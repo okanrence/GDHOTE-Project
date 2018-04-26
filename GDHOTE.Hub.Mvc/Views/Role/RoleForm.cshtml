@@ -24,6 +24,11 @@
             @Html.ValidationMessageFor(r => r.RoleName)
         </div>
         <div class="form-group">
+            @Html.LabelFor(m => m.RoleTypeId)
+            @Html.DropDownListFor(m => m.RoleTypeId, new SelectList(Model.RoleTypes, "Id", "Name"), "Select Role Type", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.RoleTypeId)
+        </div>
+        <div class="form-group">
             <button type="submit" class="btn btn-primary">Save</button>
         </div>
         <div class="form-group">

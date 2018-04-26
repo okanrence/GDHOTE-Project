@@ -40,7 +40,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
         
-        public static List<RoleMenu> GetActiveRoleMenus()
+        public static List<RoleMenuResponse> GetActiveRoleMenus()
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-active-role-menus";
             var client = new RestClient(fullUrl);
@@ -50,7 +50,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<RoleMenu>();
+            var result = new List<RoleMenuResponse>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -59,7 +59,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<RoleMenu>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<RoleMenuResponse>>(response.Content);
             }
             catch (Exception ex)
             {

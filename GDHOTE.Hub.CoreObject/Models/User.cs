@@ -10,24 +10,16 @@ using NPoco;
 namespace GDHOTE.Hub.CoreObject.Models
 {
     [TableName("HUB_Users")]
-    [PrimaryKey("UserId", AutoIncrement = false)]
     public class User : BaseModel
     {
+        public long Id { get; set; }
         public string UserId { get; set; }
-        [DisplayName("Email Address")]
-        [Required]
-        [EmailAddress]
         public string EmailAddress { get; set; }
+        public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        [Required]
-        [DataType(DataType.Password)]
         public string Password { get; set; }
-        [Required]
-        [DisplayName("User Status")]
         public int UserStatusId { get; set; }
-        [Required]
-        [DisplayName("Role")]
         public string RoleId { get; set; }
         public int ChannelId { get; set; }
         public DateTime? LastLoginTime { get; set; }

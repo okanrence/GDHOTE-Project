@@ -28,7 +28,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var subMenu = SubMenuService.GetSubMenu(id);
+            var subMenu = PortalSubMenuService.GetSubMenu(id);
             if (subMenu == null) return HttpNotFound();
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(subMenu);

@@ -15,12 +15,43 @@ namespace GDHOTE.Hub.WebApi.Controllers
     public class RoleTypeController : ApiController
     {
         [HttpGet]
-        [Route("get-role-types")]
+        [Route("get-all-role-types")]
         public HttpResponseMessage GetRoleTypes()
         {
             try
             {
                 var response = RoleTypeService.GetRoleTypes().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpGet]
+        [Route("get-active-role-types")]
+        public HttpResponseMessage GetActiveRoleTypes()
+        {
+            try
+            {
+                var response = RoleTypeService.GetActiveRoleTypes().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)

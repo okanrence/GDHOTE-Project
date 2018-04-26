@@ -28,10 +28,11 @@ namespace GDHOTE.Hub.Mvc.Controllers
         public ActionResult Edit(string id)
         {
             var role = PortalRoleService.GetRole(id);
-            var viewModel = ReturnViewModel();
+            var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(role);
-            viewModel = JsonConvert.DeserializeObject<RoleFormViewModel>(item);
-
+            var viewModel = JsonConvert.DeserializeObject<RoleFormViewModel>(item);
+            viewModel.RoleTypes = viewModelTemp.RoleTypes;
+            viewModel.Statuses = viewModelTemp.Statuses;
             return View("RoleForm", viewModel);
         }
 
@@ -41,7 +42,12 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("RoleForm");
+                var item = JsonConvert.SerializeObject(createRequest);
+                var viewModelTemp = ReturnViewModel();
+                var viewModel = JsonConvert.DeserializeObject<RoleFormViewModel>(item);
+                viewModel.RoleTypes = viewModelTemp.RoleTypes;
+                viewModel.Statuses = viewModelTemp.Statuses;
+                return View("RoleForm", viewModel);
             }
             var result = PortalRoleService.CreateRole(createRequest);
             if (result != null)
@@ -61,8 +67,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            // If we got this far, something failed, redisplay form
-            return View("RoleForm");
+            return View("RoleForm", ReturnViewModel());
         }
 
         [HttpPost]
@@ -84,9 +89,11 @@ namespace GDHOTE.Hub.Mvc.Controllers
         private static RoleFormViewModel ReturnViewModel()
         {
             var statuses = PortalStatusService.GetStatuses().ToList();
+            var roleTypes = PortalRoleTypeService.GetActiveRoleTypes().ToList();
             var viewModel = new RoleFormViewModel
             {
-                Statuses = statuses
+                Statuses = statuses,
+                RoleTypes = roleTypes
             };
             return viewModel;
         }

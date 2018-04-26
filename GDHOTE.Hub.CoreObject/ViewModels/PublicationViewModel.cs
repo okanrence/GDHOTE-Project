@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using GDHOTE.Hub.CoreObject.Models;
+﻿using GDHOTE.Hub.CoreObject.Models;
 using NPoco;
 
 namespace GDHOTE.Hub.CoreObject.ViewModels
@@ -13,8 +10,6 @@ namespace GDHOTE.Hub.CoreObject.ViewModels
         public string AccessRight { get; set; }
         public string Status { get; set; }
         public string CreatedBy { get; set; }
-       
-        
     }
 }
 

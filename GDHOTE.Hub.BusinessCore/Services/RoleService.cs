@@ -11,6 +11,7 @@ using NPoco;
 using NPoco.Expressions;
 using GDHOTE.Hub.CoreObject.Enumerables;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -52,7 +53,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<RoleViewModel>();
             }
         }
-        public static List<Role> GetActiveRoles()
+        public static List<RoleResponse> GetActiveRoles()
         {
             try
             {
@@ -61,17 +62,19 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var roles = db.Fetch<Role>()
                         .Where(r => r.StatusId == (int)CoreObject.Enumerables.Status.Active)
                         .ToList();
-                    return roles;
+                    var item = JsonConvert.SerializeObject(roles);
+                    var response = JsonConvert.DeserializeObject<List<RoleResponse>>(item);
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<Role>();
+                return new List<RoleResponse>();
             }
         }
 
-        public static List<Role> GetRolesByRoleType(int id)
+        public static List<RoleResponse> GetRolesByRoleType(int id)
         {
             try
             {
@@ -80,13 +83,15 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var roles = db.Fetch<Role>()
                         .Where(r => r.RoleTypeId == id && r.StatusId == (int)CoreObject.Enumerables.Status.Active)
                         .ToList();
-                    return roles;
+                    var item = JsonConvert.SerializeObject(roles);
+                    var response = JsonConvert.DeserializeObject<List<RoleResponse>>(item);
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<Role>();
+                return new List<RoleResponse>();
             }
         }
         public static Role GetRole(string id)
@@ -186,11 +191,11 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
 
                     string roleName = StringCaseService.TitleCase(request.RoleName);
-
                     var role = new Role
                     {
                         RoleId = Guid.NewGuid().ToString(),
                         RoleName = roleName,
+                        RoleTypeId = request.RoleTypeId,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
                         CreatedById = user.UserId,
                         DateCreated = DateTime.Now,

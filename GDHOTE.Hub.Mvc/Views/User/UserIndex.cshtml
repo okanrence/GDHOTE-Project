@@ -16,34 +16,41 @@
 }
 else
 {
-    <div>
-        <table id="users" class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Name</th>
-                    <th>Role</th>
-                    <th>User Status</th>
-                    <th>CreatedDate</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var user in Model)
-                {
+    <div id="responsive">
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+
+        <div>
+            <table id="users" class="table table-bordered table-hover">
+                <thead>
                     <tr>
-                        <td>@Html.ActionLink(user.EmailAddress, "Edit", "User", new { id = user.UserId }, null)</td>
-                        <td>@user.FirstName , @user.LastName </td>
-                        <td>@user.UserRole </td>
-                        <td>@user.UserStatus</td>
-                        <td>@user.DateCreated.ToString("dd-MMM-yyyy")</td>
-                        <td><button data-user-id="@user.UserId" class="btn btn-link js-delete">Delete</button></td>
+                        <th>User</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>User Status</th>
+                        <th>CreatedDate</th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(user.EmailAddress, "Edit", "User", new { id = user.UserId }, null)</td>
+                            <td>@user.FirstName , @user.LastName </td>
+                            <td>@user.UserRole </td>
+                            <td>@user.UserStatus</td>
+                            <td>@user.DateCreated.ToString("dd-MMM-yyyy")</td>
+                            <td><button data-user-id="@user.UserId" class="btn btn-link js-delete">Delete</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 }
+
 @section scripts
 {
     <script>
@@ -63,7 +70,7 @@ else
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: '@Url.Action("DeletePublicationCategory", "PublicationCategory")/' + id,
+                            url: '@Url.Action("DeleteUser", "User")/' + id,
                             method: "POST",
                             data: request,
                             success: function (data) {

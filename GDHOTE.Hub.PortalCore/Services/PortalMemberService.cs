@@ -184,6 +184,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
+
         public static Response DeleteMember(string id)
         {
 
@@ -214,7 +215,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<MemberDetailsViewModel> GetMembersByName(string query)
+        public static List<MemberDetailsResponse> GetMembersByName(string query)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-members-by-search-query";
             var client = new RestClient(fullUrl);
@@ -225,7 +226,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             request.AddParameter("seachQuery", query);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<MemberDetailsViewModel>();
+            var result = new List<MemberDetailsResponse>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -234,7 +235,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<MemberDetailsViewModel>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<MemberDetailsResponse>>(response.Content);
             }
             catch (Exception ex)
             {

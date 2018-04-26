@@ -41,7 +41,7 @@ namespace GDHOTE.Hub.PortalCore.Services
         }
 
 
-        public static List<SubMenu> GetActiveSubMenus()
+        public static List<SubMenuResponse> GetActiveSubMenus()
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-active-sub-menus";
             var client = new RestClient(fullUrl);
@@ -51,7 +51,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<SubMenu>();
+            var result = new List<SubMenuResponse>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -60,7 +60,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<SubMenu>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<SubMenuResponse>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -70,7 +70,7 @@ namespace GDHOTE.Hub.PortalCore.Services
         }
 
 
-        public static List<SubMenu> GetSubMenusByMainMenu(string id)
+        public static List<SubMenuResponse> GetSubMenusByMainMenu(string id)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-sub-menus-by-main-menu";
             var client = new RestClient(fullUrl);
@@ -81,7 +81,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             request.AddParameter("id", id, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<SubMenu>();
+            var result = new List<SubMenuResponse>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -90,7 +90,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<SubMenu>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<SubMenuResponse>>(response.Content);
             }
             catch (Exception ex)
             {

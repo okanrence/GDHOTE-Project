@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -48,7 +49,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<SubMenuViewModel>();
             }
         }
-        public static List<SubMenu> GetActiveSubMenus()
+        public static List<SubMenuResponse> GetActiveSubMenus()
         {
             try
             {
@@ -58,17 +59,19 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active)
                         .OrderBy(c => c.DisplaySequence)
                         .ToList();
-                    return subMenus;
+                    var item = JsonConvert.SerializeObject(subMenus);
+                    var response = JsonConvert.DeserializeObject<List<SubMenuResponse>>(item);
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<SubMenu>();
+                return new List<SubMenuResponse>();
             }
         }
 
-        public static List<SubMenu> GetSubMenusByMainMenu(string id)
+        public static List<SubMenuResponse> GetSubMenusByMainMenu(string id)
         {
             try
             {
@@ -78,13 +81,15 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         .Where(c => c.MenuId == id && c.StatusId == (int)CoreObject.Enumerables.Status.Active)
                         .OrderBy(c => c.DisplaySequence)
                         .ToList();
-                    return subMenus;
+                    var item = JsonConvert.SerializeObject(subMenus);
+                    var response = JsonConvert.DeserializeObject<List<SubMenuResponse>>(item);
+                    return response;  
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<SubMenu>();
+                return new List<SubMenuResponse>();
             }
         }
         public static SubMenu GetSubMenu(string id)
@@ -119,6 +124,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return "Error occured while trying to update SubMenu";
             }
         }
+
+
         public static Response Delete(string id, string currentUser)
         {
             try
@@ -175,8 +182,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 };
             }
         }
-
-
+        
         public static Response CreateSubMenu(CreateSubMenuRequest request, string currentUser)
         {
             try

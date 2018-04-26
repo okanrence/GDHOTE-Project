@@ -165,6 +165,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     
                     adminUser.UserId = Guid.NewGuid().ToString();
+                    adminUser.UserName = createRequest.EmailAddress;
                     adminUser.Password = PasswordManager.ReturnHashPassword(createRequest.Password);
                     adminUser.CreatedById = user.UserId;
                     adminUser.ChannelId = channelCode;
@@ -193,7 +194,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             Data = new Hashtable
                             {
                                 ["FirstName"] = createRequest.FirstName,
-                                ["LastName"] = createRequest.LastName,
+                                ["LastName"] = createRequest.LastName
                             }
                         };
 

@@ -9,6 +9,7 @@ using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.Enumerables;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -48,7 +49,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<RoleMenuViewModel>();
             }
         }
-        public static List<RoleMenu> GetActiveRoleMenus()
+        public static List<RoleMenuResponse> GetActiveRoleMenus()
         {
             try
             {
@@ -57,13 +58,15 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var roleMenus = db.Fetch<RoleMenu>()
                         .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active)
                         .ToList();
-                    return roleMenus;
+                    var item = JsonConvert.SerializeObject(roleMenus);
+                    var response = JsonConvert.DeserializeObject<List<RoleMenuResponse>>(item);
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<RoleMenu>();
+                return new List<RoleMenuResponse>();
             }
         }
 

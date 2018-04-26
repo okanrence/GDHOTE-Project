@@ -82,7 +82,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var viewModel = new RoleMenuFormViewModel
             {
                 Statuses = statuses,
-                SubMenus = new List<SubMenu>(),
+                SubMenus = new List<SubMenuResponse>(),
                 MainMenus = mainMenus,
                 Roles = roles
             };

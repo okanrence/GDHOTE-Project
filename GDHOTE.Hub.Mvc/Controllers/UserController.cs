@@ -36,9 +36,12 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             var user = PortalUserService.GetUser(id);
             if (user == null) return HttpNotFound();
-            var viewModel = ReturnViewModel();
+            var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(user);
-            viewModel = JsonConvert.DeserializeObject<AdminUserFormViewModel>(item);
+            var viewModel = JsonConvert.DeserializeObject<AdminUserFormViewModel>(item);
+            viewModel.RoleTypes = viewModelTemp.RoleTypes;
+            viewModel.Roles = viewModelTemp.Roles;
+            viewModel.UserStatuses = viewModelTemp.UserStatuses;
             return View("UserForm", viewModel);
         }
 
@@ -84,8 +87,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         private static AdminUserFormViewModel ReturnViewModel()
         {
-            var roleTypes = PortalRoleTypeService.GetRoleTypes().ToList();
-            var roles = new List<Role>(); // PortalRoleService.GetActiveRoles().ToList();
+            var roleTypes = PortalRoleTypeService.GetActiveRoleTypes().ToList();
+            var roles = new List<RoleResponse>(); 
             var userStatues = PortalUserStatusService.GetActiveUserStatuses().ToList();
             var viewModel = new AdminUserFormViewModel
             {

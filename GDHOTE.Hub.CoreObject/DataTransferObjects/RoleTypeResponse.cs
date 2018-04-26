@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NPoco;
 
-namespace GDHOTE.Hub.CoreObject.Models
+namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
-    [TableName("HUB_RoleTypes")]
-    public class RoleType : BaseModel
+    public class RoleTypeResponse
     {
         public int Id { get; set; }
         public string Name { get; set; }

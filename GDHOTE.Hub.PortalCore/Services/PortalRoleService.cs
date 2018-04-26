@@ -40,7 +40,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<Role> GetActiveRoles()
+        public static List<RoleResponse> GetActiveRoles()
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/role/get-active-roles";
             var client = new RestClient(fullUrl);
@@ -50,7 +50,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<Role>();
+            var result = new List<RoleResponse>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -59,7 +59,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<Role>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<RoleResponse>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -69,7 +69,7 @@ namespace GDHOTE.Hub.PortalCore.Services
         }
 
 
-        public static List<Role> GetRolesByRoleType(string id)
+        public static List<RoleResponse> GetRolesByRoleType(string id)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/role/get-roles-by-role-type";
             var client = new RestClient(fullUrl);
@@ -80,7 +80,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             request.AddParameter("id", id, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<Role>();
+            var result = new List<RoleResponse>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -89,7 +89,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<Role>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<RoleResponse>>(response.Content);
             }
             catch (Exception ex)
             {

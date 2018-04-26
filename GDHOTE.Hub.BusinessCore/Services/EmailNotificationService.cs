@@ -93,7 +93,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
         }
 
-
         public static Response SendRegistrationConfirmationEmail(EmailRequest emailRequest, string currentUser)
         {
             try
@@ -232,8 +231,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return response;
             }
         }
-
-
+        
         public static Response SendPasswordResetEmail(EmailRequest emailRequest, string currentUser)
         {
             try
@@ -390,8 +388,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
             return response;
         }
 
-
-
         public static Response SendBirthdayNotificationEmail(SendEmailRequest sendRequest, string currentUser)
         {
             try
@@ -449,7 +445,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 service.Send(email);
 
 
-
                 //Log Notification
                 new Task(() =>
                 {
@@ -489,6 +484,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
 
         }
+
         public static Response SendWeddingAnniversaryNotificationEmail(SendEmailRequest sendRequest, string currentUser)
         {
             var response = new Response();

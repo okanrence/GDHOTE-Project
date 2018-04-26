@@ -5,6 +5,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -45,7 +46,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<MainMenuViewModel>();
             }
         }
-        public static List<MainMenu> GetActiveMainMenus()
+        public static List<MainMenuResponse> GetActiveMainMenus()
         {
             try
             {
@@ -55,13 +56,15 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active)
                         .OrderBy(c => c.DisplaySequence)
                         .ToList();
-                    return mainMenus;
+                    var item = JsonConvert.SerializeObject(mainMenus);
+                    var response = JsonConvert.DeserializeObject<List<MainMenuResponse>>(item);
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<MainMenu>();
+                return new List<MainMenuResponse>();
             }
         }
         public static MainMenu GetMainMenu(string id)
@@ -96,6 +99,62 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return "Error occured while trying to update MainMenu";
             }
         }
+
+        public static Response CreateMainMenu(CreateMainMenuRequest request, string currentUser)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var response = new Response();
+
+                    //Get User Initiating Creation Request
+                    var user = UserService.GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
+
+
+
+                    string name = StringCaseService.TitleCase(request.Name);
+
+                    var mainMenu = new MainMenu
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Name = name,
+                        DisplaySequence = request.DisplaySequence,
+                        StatusId = (int)CoreObject.Enumerables.Status.Active,
+                        CreatedById = user.UserId,
+                        DateCreated = DateTime.Now,
+                        RecordDate = DateTime.Now
+                    };
+
+                    db.Insert(mainMenu);
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to insert record"
+                };
+            }
+
+        }
+
         public static Response Delete(string id, string currentUser)
         {
             try
@@ -154,61 +213,5 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
         }
 
-
-
-        public static Response CreateMainMenu(CreateMainMenuRequest request, string currentUser)
-        {
-            try
-            {
-                using (var db = GdhoteConnection())
-                {
-                    var response = new Response();
-
-                    //Get User Initiating Creation Request
-                    var user = UserService.GetUserByUserName(currentUser);
-                    if (user == null)
-                    {
-                        return new Response
-                        {
-                            ErrorCode = "01",
-                            ErrorMessage = "Unable to validate User"
-                        };
-                    }
-
-
-
-                    string name = StringCaseService.TitleCase(request.Name);
-
-                    var mainMenu = new MainMenu
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        Name = name,
-                        DisplaySequence = request.DisplaySequence,
-                        StatusId = (int)CoreObject.Enumerables.Status.Active,
-                        CreatedById = user.UserId,
-                        DateCreated = DateTime.Now,
-                        RecordDate = DateTime.Now
-                    };
-
-                    db.Insert(mainMenu);
-                    response = new Response
-                    {
-                        ErrorCode = "00",
-                        ErrorMessage = "Successful"
-                    };
-                    return response;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.LogError(ex.Message);
-                return new Response
-                {
-                    ErrorCode = "01",
-                    ErrorMessage = "Error occured while trying to insert record"
-                };
-            }
-
-        }
     }
 }
