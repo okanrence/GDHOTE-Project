@@ -157,7 +157,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     //Delete Payment
                     payment.Remarks = request.Comment;
                     payment.PaymentStatusId = (int)CoreObject.Enumerables.PaymentStatus.Deleted;
-                    payment.DeletedById = user.UserId;
+                    payment.DeletedById = user.Id;
                     payment.DateDeleted = DateTime.Now;
                     db.Update(payment);
                     response = new Response
@@ -212,7 +212,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         CurrencyId = request.CurrencyId,
                         Narration = narration,
                         PaymentStatusId = (int)CoreObject.Enumerables.PaymentStatus.New,
-                        CreatedById = user.UserId,
+                        CreatedById = user.Id,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };
@@ -277,7 +277,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     payment.Remarks = request.Comment;
                     payment.PaymentStatusId = (int)CoreObject.Enumerables.PaymentStatus.Deleted;
-                    payment.DeletedById = user.UserId;
+                    payment.DeletedById = user.Id;
                     payment.DateDeleted = DateTime.Now;
                     db.Update(payment);
 

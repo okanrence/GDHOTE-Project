@@ -161,7 +161,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete Sub Menu
                     subMenu.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
-                    subMenu.DeletedById = user.UserId;
+                    subMenu.DeletedById = user.Id;
                     subMenu.DateDeleted = DateTime.Now;
                     db.Update(subMenu);
                     response = new Response
@@ -213,7 +213,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         DisplaySequence = request.DisplaySequence,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
                         MenuId = request.MenuId,
-                        CreatedById = user.UserId,
+                        CreatedById = user.Id,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };

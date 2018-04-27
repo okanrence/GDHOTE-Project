@@ -120,7 +120,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete Year Group
                     yearGroup.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
-                    yearGroup.DeletedById = user.UserId;
+                    yearGroup.DeletedById = user.Id;
                     yearGroup.DateDeleted = DateTime.Now;
                     db.Update(yearGroup);
                     var result = "Operation Successful";
@@ -175,7 +175,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     {
                         Name = yearName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
-                        CreatedById = user.UserId,
+                        CreatedById = user.Id,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };

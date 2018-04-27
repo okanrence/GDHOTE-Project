@@ -37,7 +37,7 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
             {
 
                 Token = PasswordManager.ReturnHashPassword(refreshTokenId),
-                ClientId = clientid,
+                ClientId = Convert.ToInt64(clientid),
                 Subject = context.Ticket.Identity.Name,
                 IssuedUtc = DateTime.UtcNow,
                 ExpiresUtc = DateTime.UtcNow.AddMinutes(Convert.ToDouble(refreshTokenLifeTime))

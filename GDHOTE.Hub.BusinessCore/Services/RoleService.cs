@@ -144,7 +144,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete Payment Mode
                     role.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
-                    role.DeletedById = user.UserId;
+                    role.DeletedById = user.Id;
                     role.DateDeleted = DateTime.Now;
                     db.Update(role);
                     var result = "Operation Successful";
@@ -197,7 +197,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         RoleName = roleName,
                         RoleTypeId = request.RoleTypeId,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
-                        CreatedById = user.UserId,
+                        CreatedById = user.Id,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };

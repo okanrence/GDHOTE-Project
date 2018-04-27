@@ -118,7 +118,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete Country
                     country.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
-                    country.DeletedById = user.UserId;
+                    country.DeletedById = user.Id;
                     country.DateDeleted = DateTime.Now;
                     db.Update(country);
                     var result = "Operation Successful";
@@ -170,7 +170,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     {
                         Name = countryName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
-                        CreatedById = user.UserId,
+                        CreatedById = user.Id,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };

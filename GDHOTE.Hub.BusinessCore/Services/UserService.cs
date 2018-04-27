@@ -124,7 +124,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return "Error occured while trying to update User";
             }
         }
-      
+
         public static Response CreateUser(CreateAdminUserRequest createRequest, string currentUser, int channelCode)
         {
             try
@@ -163,11 +163,11 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var item = JsonConvert.SerializeObject(createRequest);
                     var adminUser = JsonConvert.DeserializeObject<User>(item);
 
-                    
+
                     adminUser.UserId = Guid.NewGuid().ToString();
                     adminUser.UserName = createRequest.EmailAddress;
                     adminUser.Password = PasswordManager.ReturnHashPassword(createRequest.Password);
-                    adminUser.CreatedById = user.UserId;
+                    adminUser.CreatedById = user.Id;
                     adminUser.ChannelId = channelCode;
                     adminUser.UserStatusId = (int)UserStatusEnum.Active;
                     adminUser.PasswordChange = true;
@@ -219,6 +219,70 @@ namespace GDHOTE.Hub.BusinessCore.Services
         }
 
 
+        public static Response UpdateUser(UpdateAdminUserRequest updateRequest, string currentUser, int channelCode)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var response = new Response();
+
+                    //Check if user exist
+                    var adminUserExist = db.Fetch<User>().SingleOrDefault(m => m.UserId == updateRequest.UserId);
+                    if (adminUserExist == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "User doesn't exist"
+                        };
+                    }
+
+
+                    //Get User Initiating Creation Request
+                    var user = GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
+
+                    //Update User details
+                    adminUserExist.FirstName = updateRequest.EmailAddress;
+                    adminUserExist.LastName = updateRequest.LastName;
+                    adminUserExist.ChannelId = channelCode;
+                    adminUserExist.RoleId = updateRequest.RoleId;
+                    adminUserExist.UpdatedById = user.Id;
+                    adminUserExist.UserStatusId = updateRequest.UserStatusId;
+                    adminUserExist.DateUpdated = DateTime.Now;
+
+                    db.Update(adminUserExist);
+
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+
+                    return response;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                var response = new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to update record"
+                };
+                return response;
+            }
+        }
+
         public static Response Delete(string userId, string currentUser)
         {
             try
@@ -251,7 +315,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete User
                     userExist.UserStatusId = (int)UserStatusEnum.Deleted;
-                    userExist.DeletedById = user.UserId;
+                    userExist.DeletedById = user.Id;
                     userExist.DateDeleted = DateTime.Now;
                     db.Update(userExist);
                     response = new Response

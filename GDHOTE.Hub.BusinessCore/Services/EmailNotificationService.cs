@@ -64,7 +64,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             NotificationTypeId = (int)NotificationType.Email,
                             ContentBody = emailRequest.Type.ToString(),
                             Status = 'S',
-                            CreatedById = user.UserId,
+                            CreatedById = user.Id,
                             DateCreated = DateTime.Now,
                             RecordDate = DateTime.Now
                         };
@@ -135,7 +135,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             NotificationTypeId = (int)NotificationType.Email,
                             ContentBody = emailRequest.Type.ToString(),
                             Status = 'S',
-                            CreatedById = user.UserId,
+                            CreatedById = user.Id,
                             DateCreated = DateTime.Now,
                             RecordDate = DateTime.Now
                         };
@@ -204,7 +204,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             NotificationTypeId = (int)NotificationType.Email,
                             ContentBody = emailRequest.Type.ToString(),
                             Status = 'S',
-                            CreatedById = user.UserId,
+                            CreatedById = user.Id,
                             DateCreated = DateTime.Now,
                             RecordDate = DateTime.Now
                         };
@@ -272,7 +272,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             NotificationTypeId = (int)NotificationType.Email,
                             ContentBody = emailRequest.Type.ToString(),
                             Status = 'S',
-                            CreatedById = user.UserId,
+                            CreatedById = user.Id,
                             DateCreated = DateTime.Now,
                             RecordDate = DateTime.Now
                         };
@@ -341,7 +341,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             NotificationTypeId = (int)NotificationType.Email,
                             ContentBody = emailRequest.Type.ToString(),
                             Status = 'S',
-                            CreatedById = user.UserId,
+                            CreatedById = user.Id,
                             DateCreated = DateTime.Now,
                             RecordDate = DateTime.Now
                         };
@@ -456,7 +456,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             NotificationTypeId = (int)NotificationType.Email,
                             ContentBody = emailType.ToString(),
                             Status = 'S',
-                            CreatedById = user.UserId,
+                            CreatedById = user.Id,
                             DateCreated = DateTime.Now,
                             RecordDate = DateTime.Now
                         };

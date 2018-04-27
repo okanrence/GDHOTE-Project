@@ -16,8 +16,39 @@ namespace GDHOTE.Hub.WebApi.Controllers
     public class UserStatusController : ApiController
     {
         [HttpGet]
-        [Route("get-user-statuses")]
+        [Route("get-all-user-statuses")]
         public HttpResponseMessage GetUserStatuses()
+        {
+            try
+            {
+                var response = UserStatusService.GetUserStatuses().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpGet]
+        [Route("get-active-user-statuses")]
+        public HttpResponseMessage GetActiveUserStatuses()
         {
             try
             {

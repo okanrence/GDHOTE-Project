@@ -4,7 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -45,20 +47,23 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
         }
 
-        public static List<UserStatus> GetActiveUserStatuses()
+        public static List<UserStatusResponse> GetActiveUserStatuses()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var userStatuses = db.Fetch<UserStatus>();
-                    return userStatuses;
+                    var userStatuses = db.Fetch<UserStatus>()
+                        .ToList();
+                    var item = JsonConvert.SerializeObject(userStatuses);
+                    var response = JsonConvert.DeserializeObject<List<UserStatusResponse>>(item);
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<UserStatus>();
+                return new List<UserStatusResponse>();
             }
         }
         public static UserStatus GetUserStatus(int id)

@@ -15,7 +15,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: State
         public ActionResult Index()
         {
-           var states = PortalStateService.GetAllStates().ToList();
+            var states = PortalStateService.GetAllStates().ToList();
             return View("StateIndex", states);
         }
         public ActionResult New()
@@ -28,10 +28,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var viewModel = ReturnViewModel();
-                var item = JsonConvert.SerializeObject(createRequest);
-                viewModel = JsonConvert.DeserializeObject<StateFormViewModel>(item);
-                return View("StateForm", viewModel);
+                return View("StateForm", ReturnViewModel());
             }
             var result = PortalStateService.CreateState(createRequest);
             if (result != null)
@@ -52,14 +49,15 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
             // If we got this far, something failed, redisplay form
-            return View("StateForm");
+            return View("StateForm", ReturnViewModel());
         }
         public ActionResult Edit(string id)
         {
             var state = PortalStateService.GetState(id);
-            var viewModel = ReturnViewModel();
+            var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(state);
-            viewModel = JsonConvert.DeserializeObject<StateFormViewModel>(item);
+            var viewModel = JsonConvert.DeserializeObject<StateFormViewModel>(item);
+            viewModel.Countries = viewModelTemp.Countries;
             return View("StateForm", viewModel);
         }
 

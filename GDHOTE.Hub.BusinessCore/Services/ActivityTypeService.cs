@@ -115,7 +115,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete Bank
                     activityType.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
-                    activityType.DeletedById = user.UserId;
+                    activityType.DeletedById = user.Id;
                     activityType.DateDeleted = DateTime.Now;
                     db.Update(activityType);
                     var result = "Operation Successful";
@@ -167,7 +167,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         Name = name,
                         DependencyTypeId = request.DependencyTypeId,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
-                        CreatedById = user.UserId,
+                        CreatedById = user.Id,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };

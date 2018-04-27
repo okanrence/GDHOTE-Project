@@ -137,7 +137,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete Publication Category
                     publicationCategory.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
-                    publicationCategory.DeletedById = user.UserId;
+                    publicationCategory.DeletedById = user.Id;
                     publicationCategory.DateDeleted = DateTime.Now;
                     db.Update(publicationCategory);
                     var result = "Operation Successful";
@@ -205,7 +205,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         Name = categoryName,
                         DisplayImageFile = newFileName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
-                        CreatedById = user.UserId,
+                        CreatedById = user.Id,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };

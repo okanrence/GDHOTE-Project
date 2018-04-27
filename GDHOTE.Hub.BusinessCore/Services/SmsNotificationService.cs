@@ -53,7 +53,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             NotificationTypeId = (int)NotificationType.Sms,
                             ContentBody = request.Message,
                             Status = 'S',
-                            CreatedById = user.UserId,
+                            CreatedById = user.Id,
                             DateCreated = DateTime.Now,
                             RecordDate = DateTime.Now
                         };

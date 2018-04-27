@@ -36,13 +36,13 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             var user = PortalUserService.GetUser(id);
             if (user == null) return HttpNotFound();
-            var viewModelTemp = ReturnViewModel();
+            var viewModelTemp = ReturnUpdateViewModel();
             var item = JsonConvert.SerializeObject(user);
-            var viewModel = JsonConvert.DeserializeObject<AdminUserFormViewModel>(item);
+            var viewModel = JsonConvert.DeserializeObject<UpdateAdminUserFormViewModel>(item);
             viewModel.RoleTypes = viewModelTemp.RoleTypes;
             viewModel.Roles = viewModelTemp.Roles;
             viewModel.UserStatuses = viewModelTemp.UserStatuses;
-            return View("UserForm", viewModel);
+            return View("EditUser", viewModel);
         }
 
 
@@ -77,6 +77,38 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return View("UserForm", ReturnViewModel());
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Update(UpdateAdminUserRequest updateRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = ReturnUpdateViewModel();
+                return View("EditUser", viewModel);
+            }
+            var result = PortalUserService.UpdateUser(updateRequest);
+            if (result != null)
+            {
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+
+            }
+            else
+            {
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
+            }
+            // If we got this far, something failed, redisplay form
+            return View("EditUser", ReturnUpdateViewModel());
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult DeleteUser(string id)
@@ -88,9 +120,20 @@ namespace GDHOTE.Hub.Mvc.Controllers
         private static AdminUserFormViewModel ReturnViewModel()
         {
             var roleTypes = PortalRoleTypeService.GetActiveRoleTypes().ToList();
-            var roles = new List<RoleResponse>(); 
-            var userStatues = PortalUserStatusService.GetActiveUserStatuses().ToList();
+            var roles = new List<RoleResponse>();
             var viewModel = new AdminUserFormViewModel
+            {
+                RoleTypes = roleTypes,
+                Roles = roles
+            };
+            return viewModel;
+        }
+        private static UpdateAdminUserFormViewModel ReturnUpdateViewModel()
+        {
+            var roleTypes = PortalRoleTypeService.GetActiveRoleTypes().ToList();
+            var roles = PortalRoleService.GetActiveRoles();
+            var userStatues = PortalUserStatusService.GetActiveUserStatuses().ToList();
+            var viewModel = new UpdateAdminUserFormViewModel
             {
                 RoleTypes = roleTypes,
                 Roles = roles,

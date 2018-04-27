@@ -103,6 +103,38 @@ namespace GDHOTE.Hub.PortalCore.Services
         }
 
 
+        public static Response UpdateUser(UpdateAdminUserRequest updateRequest)
+        {
+            var channel = (int)CoreObject.Enumerables.Channel.Web;
+            var requestData = JsonConvert.SerializeObject(updateRequest);
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/user/update-user";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("channel", channel.ToString());
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("application/json", requestData, ParameterType.RequestBody);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new Response();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<Response>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+            }
+            return result;
+        }
+
         public static Response DeleteUser(string id)
         {
             var channel = (int)CoreObject.Enumerables.Channel.Web;

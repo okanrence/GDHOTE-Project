@@ -26,7 +26,7 @@ namespace GDHOTE.Hub.CoreObject.Models
         public DateTime? MagusDate { get; set; }
         public int ChannelId { get; set; }
         public string ApprovedFlag { get; set; }
-        public string ApprovedById { get; set; }
+        public long ApprovedById { get; set; }
         public int OfficerId { get; set; }
         public DateTime? OfficerDate { get; set; }
         public DateTime? DateApproved { get; set; }

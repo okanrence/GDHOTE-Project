@@ -158,7 +158,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete Publication
                     publication.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
-                    publication.DeletedById = user.UserId;
+                    publication.DeletedById = user.Id;
                     publication.DateDeleted = DateTime.Now;
                     db.Update(publication);
                     var result = "Operation Successful";
@@ -249,7 +249,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         UploadFile = newUploadFileName,
                         DisplayImageFile = newImageFileName,
                         Author = request.Author,
-                        CreatedById = user.UserId,
+                        CreatedById = user.Id,
                         DatePublished = request.DatePublished,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now

@@ -71,7 +71,7 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                             context.SetError("invalid_grant", customerUser.ErrorMessage);
                             return;
                         }
-                       
+
                         //id = customer.Customer.Id;
                         //role = customer.CustomerUserViewModel.RoleName;
                         props = new AuthenticationProperties(new Dictionary<string, string>
@@ -85,7 +85,7 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                                 "lastName",customerUser.User.LastName
                             },
                             {
-                                "as:client_id",customerUser.User.UserId
+                                "as:client_id",customerUser.User.Id.ToString()
                             },
                             {
                                 "userName", context.UserName
@@ -117,7 +117,7 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                                 "lastName",adminUser.User.LastName
                             },
                             {
-                                "as:client_id", adminUser.User.RoleId
+                                "as:client_id", adminUser.User.Id.ToString()
                             },
                             {
                                 "userName", context.UserName

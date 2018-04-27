@@ -118,7 +118,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete Member Status
                     memberStatus.StatusId = (int) CoreObject.Enumerables.Status.Deleted;
-                    memberStatus.DeletedById = user.UserId;
+                    memberStatus.DeletedById = user.Id;
                     memberStatus.DateDeleted = DateTime.Now;
                     db.Update(memberStatus);
                     var result = "Operation Successful";
@@ -171,7 +171,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     {
                         Name = typeName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
-                        CreatedById = user.UserId,
+                        CreatedById = user.Id,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };

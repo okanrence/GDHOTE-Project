@@ -117,7 +117,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete Member Details
                     memberDetails.MemberStatusId = (int)MemberStatus.Deleted;
-                    memberDetails.DeletedById = user.UserId;
+                    memberDetails.DeletedById = user.Id;
                     memberDetails.DateDeleted = DateTime.Now;
                     db.Update(memberDetails);
 
@@ -175,7 +175,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var request = JsonConvert.SerializeObject(createRequest);
                     var memberDetails = JsonConvert.DeserializeObject<MemberDetails>(request);
 
-                    memberDetails.CreatedById = user.UserId;
+                    memberDetails.CreatedById = user.Id;
                     memberDetails.DateCreated = DateTime.Now;
                     memberDetails.RecordDate = DateTime.Now;
 
@@ -210,9 +210,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var response = new Response();
 
                     //check member details exist
-                    var memberDetailsExist = db.Fetch<MemberDetails>()
+                    var detailsExist = db.Fetch<MemberDetails>()
                         .SingleOrDefault(m => m.Id == updateRequest.Id);
-                    if (memberDetailsExist == null)
+                    if (detailsExist == null)
                     {
                         return new Response
                         {
@@ -234,20 +234,20 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
                     
                     //Update member details
-                    memberDetailsExist.MobileNumber = updateRequest.MobileNumber;
-                    memberDetailsExist.AlternateNumber = updateRequest.AlternateNumber;
-                    memberDetailsExist.EmailAddress = updateRequest.EmailAddress;
-                    memberDetailsExist.StateOfOriginId = updateRequest.StateOfOriginId;
-                    memberDetailsExist.CountryOfOriginId = updateRequest.CountryOfOriginId;
-                    memberDetailsExist.ResidenceStateId = updateRequest.ResidenceStateId;
-                    memberDetailsExist.ResidenceCountryId = updateRequest.ResidenceCountryId;
-                    memberDetailsExist.ResidenceAddress = updateRequest.ResidenceAddress;
-                    memberDetailsExist.DateWedded = updateRequest.DateWedded;
-                    memberDetailsExist.HighestDegreeObtained = updateRequest.HighestDegreeObtained;
-                    memberDetailsExist.CurrentWorkPlace = updateRequest.CurrentWorkPlace;
-                    memberDetailsExist.UpdatedById = user.UserId;
-                    memberDetailsExist.DateUpdated = DateTime.Now;
-                    db.Update(memberDetailsExist);
+                    detailsExist.MobileNumber = updateRequest.MobileNumber;
+                    detailsExist.AlternateNumber = updateRequest.AlternateNumber;
+                    detailsExist.EmailAddress = updateRequest.EmailAddress;
+                    detailsExist.StateOfOriginId = updateRequest.StateOfOriginId;
+                    detailsExist.CountryOfOriginId = updateRequest.CountryOfOriginId;
+                    detailsExist.ResidenceStateId = updateRequest.ResidenceStateId;
+                    detailsExist.ResidenceCountryId = updateRequest.ResidenceCountryId;
+                    detailsExist.ResidenceAddress = updateRequest.ResidenceAddress;
+                    detailsExist.DateWedded = updateRequest.DateWedded;
+                    detailsExist.HighestDegreeObtained = updateRequest.HighestDegreeObtained;
+                    detailsExist.CurrentWorkPlace = updateRequest.CurrentWorkPlace;
+                    detailsExist.UpdatedById = user.Id;
+                    detailsExist.DateUpdated = DateTime.Now;
+                    db.Update(detailsExist);
 
                     response = new Response
                     {

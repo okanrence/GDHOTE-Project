@@ -135,7 +135,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete PublicationAccessRight
                     publicationAccessRight.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
-                    publicationAccessRight.DeletedById = user.UserId;
+                    publicationAccessRight.DeletedById = user.Id;
                     publicationAccessRight.DateDeleted = DateTime.Now;
                     db.Update(publicationAccessRight);
                     response = new Response
@@ -195,7 +195,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     {
                         Name = accessRightName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
-                        CreatedById = user.UserId,
+                        CreatedById = user.Id,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };

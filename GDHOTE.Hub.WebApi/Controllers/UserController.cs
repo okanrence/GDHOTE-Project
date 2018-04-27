@@ -122,6 +122,49 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpPost]
+        [Route("update-user")]
+        public HttpResponseMessage UpdateUser(UpdateAdminUserRequest updateRequest)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+
+                string headerKey = "channel";
+                var headers = Request.Headers.GetValues(headerKey);
+                var headerValue = headers.FirstOrDefault();
+                if (!int.TryParse(headerValue, out var channelCode))
+                    channelCode = (int)CoreObject.Enumerables.Channel.Kiosk;
+
+
+                string username = User.Identity.Name;
+                var response = UserService.UpdateUser(updateRequest, username, channelCode);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+        [HttpPost]
         [Route("delete-user")]
         public HttpResponseMessage DeleteAdminUser(string id)
         {

@@ -121,7 +121,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete Payment Type
                     paymentType.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
-                    paymentType.DeletedById = user.UserId;
+                    paymentType.DeletedById = user.Id;
                     paymentType.DateDeleted = DateTime.Now;
                     db.Update(paymentType);
                     var result = "Operation Successful";
@@ -176,7 +176,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     {
                         Name = typeName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
-                        CreatedById = user.UserId,
+                        CreatedById = user.Id,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };

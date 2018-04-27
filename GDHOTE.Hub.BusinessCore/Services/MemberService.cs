@@ -152,7 +152,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete Bank
                     member.MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Deleted;
-                    member.DeletedById = user.UserId;
+                    member.DeletedById = user.Id;
                     member.DateDeleted = DateTime.Now;
                     db.Update(member);
                     response = new Response
@@ -231,7 +231,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var request = JsonConvert.SerializeObject(createRequest);
                     var member = JsonConvert.DeserializeObject<Member>(request);
 
-                    member.CreatedById = user.UserId;
+                    member.CreatedById = user.Id;
                     member.ChannelId = channelCode;
                     member.MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Active;
                     member.ApprovedFlag = "N";
@@ -254,7 +254,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 MemberId = memberId,
                                 MobileNumber = createRequest.MobileNumber,
                                 EmailAddress = createRequest.EmailAddress,
-                                CreatedById = user.UserId,
+                                CreatedById = user.Id,
                                 DateCreated = DateTime.Now,
                                 RecordDate = DateTime.Now
                             };
@@ -357,7 +357,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
 
                     member.MemberCode = gender + nextsequence;
-                    member.ApprovedById = user.UserId;
+                    member.ApprovedById = user.Id;
                     member.ApprovedFlag = "Y";
                     member.DateApproved = DateTime.Now;
                     member.DateUpdated = DateTime.Now;
@@ -423,7 +423,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var item = JsonConvert.SerializeObject(updateRequest);
                     var member = JsonConvert.DeserializeObject<Member>(item);
                     member.ApprovedFlag = "N";
-                    member.UpdatedById = user.UserId;
+                    member.UpdatedById = user.Id;
                     member.DateUpdated = DateTime.Now;
 
                     db.Update(member);
@@ -540,7 +540,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                     DateOfBirth = DateTime.TryParse(dateOfBirthString, out var dateOfBirth)
                                         ? DateTime.Parse(dateOfBirthString) : DateTime.Now,
                                     MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Active,
-                                    CreatedById = user.UserId,
+                                    CreatedById = user.Id,
                                     ChannelId = channelId,
                                     ApprovedFlag = "N",
                                     MagusDate = DateTime.TryParse(magusDateString, out var magusDate)
@@ -591,7 +591,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                                 ? DateTime.Parse(dateWeddedString) : (DateTime?)null,
                                             GuardianAngel = StringCaseService.TitleCase(guardianAngel),
                                             MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Active,
-                                            CreatedById = user.UserId,
+                                            CreatedById = user.Id,
                                             DateCreated = DateTime.Now,
                                             RecordDate = DateTime.Now
                                         };
