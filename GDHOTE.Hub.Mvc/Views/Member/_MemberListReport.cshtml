@@ -7,42 +7,67 @@
 else
 {
     <div>
-        <table id="members" class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>SN</th>
-                    <th>Member Code</th>
-                    <th>Surname</th>
-                    <th>Other Name(s)</th>
-                    <th>Gender</th>
-                    <th>Martial Status</th>
-                    <th>Status</th>
-                    <th>Date Of Birth</th>
-                    <th>Magus</th>
-                    <th>Magus Date</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                @{ int i = 1; }
-                @foreach (var member in Model)
-                {
+        <div>
+            <a href="#" class="export">Export To Excel</a>
+            <br />
+            <br />
+        </div>
+
+        <div>
+            <table id="members" class="table table-bordered table-hover">
+                <thead>
                     <tr>
-                        <td>@i</td>@{ i++; }
-                        <td>@member.MemberCode</td>
-                        <td>@member.Surname</td>
-                        <td>@member.FirstName, @member.MiddleName </td>
-                        <td>@member.Gender</td>
-                        <td>@member.MaritalStatus</td>
-                        <td>@member.MemberStatus</td>
-                        <td>@member.DateOfBirth.ToString("dd-MMM-yyyy")</td>
-                        <td>@member.MagusStatus</td>
-                        <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy") ?? "") </td>
-                        <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>
+                        <th>SN</th>
+                        <th>Member Code</th>
+                        <th>Surname</th>
+                        <th>Other Name(s)</th>
+                        <th>Gender</th>
+                        <th>Martial Status</th>
+                        <th>Status</th>
+                        <th>Date Of Birth</th>
+                        <th>Magus</th>
+                        <th>Magus Date</th>
+                        <th>Date</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @{ int i = 1; }
+                    @foreach (var member in Model)
+                    {
+                        <tr>
+                            <td>@i</td>@{ i++; }
+                            <td>@member.MemberCode</td>
+                            <td>@member.Surname</td>
+                            <td>@member.FirstName, @member.MiddleName </td>
+                            <td>@member.Gender</td>
+                            <td>@member.MaritalStatus</td>
+                            <td>@member.MemberStatus</td>
+                            <td>@member.DateOfBirth.ToString("dd-MMM-yyyy")</td>
+                            <td>@((member.MagusStatus) ? "Y" : "N")</td>
+                            <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy") ?? "") </td>
+                            <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
+
 }
+<script>
+
+    // This must be a hyperlink
+    $(".export").on('click', function (event) {
+        exportToExcel('members');
+    });
+
+
+    function exportToExcel(mytblId) {
+        var htmltable = document.getElementById(mytblId);
+        var html = htmltable.outerHTML;
+        window.open('data:application/vnd.ms-excel,' + encodeURIComponent(html));
+    }
+
+
+</script>
 

@@ -482,7 +482,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
         {
             try
             {
-                var response = MemberService.GetMembersByCriteria(criteria, startdate, enddate).ToList();
+                var response = MemberService.GetMembersByCriteria(Convert.ToInt16(criteria), startdate, enddate).ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)

@@ -626,7 +626,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
         }
 
 
-        public static List<MemberViewModel> GetMembersByCriteria(string criteria, string startdate, string enddate)
+        public static List<MemberViewModel> GetMembersByCriteria(int criteria, string startdate, string enddate)
         {
             try
             {
@@ -634,10 +634,41 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 DateTime.TryParse(enddate, out var castEndDate);
                 using (var db = GdhoteConnection())
                 {
-                    var members = db.Fetch<MemberViewModel>()
-                        .Where(m => m.RecordDate >= castStartDate && m.RecordDate < castEndDate)
-                        .OrderBy(m => m.FirstName)
-                        .ToList();
+                    var members = new List<MemberViewModel>();
+                    switch (criteria)
+                    {
+                        case 1:
+                            members = db.Fetch<MemberViewModel>()
+                              .Where(m => m.MagusDate >= castStartDate && m.MagusDate < castEndDate.AddDays(1))
+                                .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
+                              .ToList();
+                            break;
+                        case 2:
+                            members = db.Fetch<MemberViewModel>()
+                                .Where(m => m.InitiationDate >= castStartDate && m.InitiationDate < castEndDate.AddDays(1))
+                                .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
+                                .ToList();
+                            break;
+                        case 3:
+                            members = db.Fetch<MemberViewModel>()
+                                .Where(m => m.DateOfBirth >= castStartDate && m.DateOfBirth < castEndDate.AddDays(1))
+                                .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
+                                .ToList();
+                            break;
+                        case 4:
+                            members = db.Fetch<MemberViewModel>()
+                                .Where(m => m.OfficerDate >= castStartDate && m.OfficerDate < castEndDate.AddDays(1))
+                                .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
+                                .ToList();
+                            break;
+                        default:
+                            members = db.Fetch<MemberViewModel>()
+                                .Where(m => m.RecordDate >= castStartDate && m.RecordDate < castEndDate.AddDays(1))
+                                .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
+                                .ToList();
+                            break;
+
+                    }
                     return members;
                 }
             }

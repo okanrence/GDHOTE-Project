@@ -16,7 +16,10 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: Member
         public ActionResult Index()
         {
-            var members = PortalMemberService.GetAllMembers().ToList();
+            string criteria = "";
+            string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
+            string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
+            var members = PortalMemberService.GetMembersByCriteria(criteria, startDate, endDate).ToList();
             return View(members);
         }
         public ActionResult List()
