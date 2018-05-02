@@ -38,11 +38,11 @@ else
                             <td>@i</td>@{ i++; }
                             <td>@member.MemberCode</td>
                             <td>@member.Surname</td>
-                            <td>@member.FirstName, @member.MiddleName </td>
+                            <td>@member.FirstName, @(!string.IsNullOrEmpty(member.MiddleName) ? member.MiddleName : "" ) </td>
                             <td>@member.Gender</td>
                             <td>@member.MaritalStatus</td>
                             <td>@member.MemberStatus</td>
-                            <td>@member.DateOfBirth.ToString("dd-MMM-yyyy")</td>
+                            <td>@(member.DateOfBirth?.Date.ToString("dd-MMM-yyyy") ?? "") </td>
                             <td>@((member.MagusStatus) ? "Y" : "N")</td>
                             <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy") ?? "") </td>
                             <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>

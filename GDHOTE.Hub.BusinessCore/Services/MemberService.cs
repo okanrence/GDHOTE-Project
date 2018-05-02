@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -231,6 +232,11 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var request = JsonConvert.SerializeObject(createRequest);
                     var member = JsonConvert.DeserializeObject<Member>(request);
 
+                    string surname = StringCaseService.TitleCase(member.Surname);
+                    string firstName = StringCaseService.TitleCase(member.FirstName);
+
+                    member.Surname = surname;
+                    member.FirstName = firstName;
                     member.CreatedById = user.Id;
                     member.ChannelId = channelCode;
                     member.MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Active;
@@ -266,9 +272,33 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 ErrorMessage = "Successful",
                                 Reference = memberId.ToString()
                             };
+                        }
+                    }
 
+                    //Insert member account details
+                    if (result != null)
+                    {
+                        if (int.TryParse(result.ToString(), out var memberId))
+                        {
+                            var account = new Account
+                            {
+                                MemberId = memberId,
+                                AccountName = surname + " " + firstName,
+                                Balance = 0,
+                                StatusId = (int)CoreObject.Enumerables.Status.Active,
+                                CreatedById = user.Id,
+                                DateCreated = DateTime.Now,
+                                RecordDate = DateTime.Now
+                            };
+                            db.Insert(account);
+                        }
+                    }
 
-                            //Notify member
+                    //Notify member
+                    if (result != null)
+                    {
+                        if (int.TryParse(result.ToString(), out var memberId))
+                        {
                             new Task(() =>
                             {
                                 var req = new EmailRequest
@@ -278,17 +308,17 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                     RecipientEmailAddress = createRequest.EmailAddress,
                                     Data = new Hashtable
                                     {
-                                        //["Subject"] = "Welcome to " + Get("settings.organisation.name"),
                                         ["FirstName"] = createRequest.FirstName,
                                         ["LastName"] = createRequest.Surname,
                                     }
                                 };
 
                                 EmailNotificationService.SendRegistrationConfirmationEmail(req, currentUser);
-
                             }).Start();
                         }
+
                     }
+
                     return response;
                 }
 
@@ -529,16 +559,17 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             if (memberExist == null)
                             {
                                 recordCount += 1;
-
+                                firstName = StringCaseService.TitleCase(firstName);
+                                surname = StringCaseService.TitleCase(surname);
                                 var member = new Member
                                 {
-                                    FirstName = StringCaseService.TitleCase(firstName),
+                                    FirstName = firstName,// StringCaseService.TitleCase(firstName),
                                     MiddleName = StringCaseService.TitleCase(middleName),
-                                    Surname = StringCaseService.TitleCase(surname),
+                                    Surname = surname,// StringCaseService.TitleCase(surname),
                                     Gender = !string.IsNullOrEmpty(gender) ? gender.Substring(0, 1) : "M",
                                     MaritalStatus = !string.IsNullOrEmpty(maritalStatus) ? maritalStatus.Substring(0, 1) : "S",
                                     DateOfBirth = DateTime.TryParse(dateOfBirthString, out var dateOfBirth)
-                                        ? DateTime.Parse(dateOfBirthString) : DateTime.Now,
+                                        ? DateTime.Parse(dateOfBirthString) : (DateTime?)null,
                                     MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Active,
                                     CreatedById = user.Id,
                                     ChannelId = channelId,
@@ -569,6 +600,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                     var country = countries.SingleOrDefault(c => c.Name.ToLower().Equals(residenceCountry.ToLower()));
                                     if (country != null) residenceCountryId = country.Id;
                                 }
+
                                 //Insert member details
                                 if (result != null)
                                 {
@@ -596,6 +628,25 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                             RecordDate = DateTime.Now
                                         };
                                         db.Insert(memberDetails);
+                                    }
+
+                                    //Insert member account details
+                                    if (result != null)
+                                    {
+                                        if (int.TryParse(result.ToString(), out var memberId))
+                                        {
+                                            var account = new Account
+                                            {
+                                                MemberId = memberId,
+                                                AccountName = surname + " " + firstName,
+                                                Balance = 0,
+                                                StatusId = (int)CoreObject.Enumerables.Status.Active,
+                                                CreatedById = user.Id,
+                                                DateCreated = DateTime.Now,
+                                                RecordDate = DateTime.Now
+                                            };
+                                            db.Insert(account);
+                                        }
                                     }
                                 }
 
@@ -625,7 +676,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
         }
 
-
         public static List<MemberViewModel> GetMembersByCriteria(int criteria, string startdate, string enddate)
         {
             try
@@ -650,9 +700,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 .ToList();
                             break;
                         case 3:
-                            members = db.Fetch<MemberViewModel>()
-                                .Where(m => m.DateOfBirth >= castStartDate && m.DateOfBirth < castEndDate.AddDays(1))
-                                .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
+                            members = db.Query<MemberViewModel>("exec sp_HUB_GetBirthdayMembers @startdate, @enddate", new { startdate = castStartDate, enddate = castEndDate })
+                                .OrderBy(m => m.DateOfBirth).ThenBy(m => m.DateOfBirth.Value.Date.Month).ThenBy(m => m.DateOfBirth.Value.Date.Month)
                                 .ToList();
                             break;
                         case 4:

@@ -18,7 +18,7 @@ namespace GDHOTE.Hub.CoreObject.Models
         public string Surname { get; set; }
         public string Gender { get; set; }
         public string MaritalStatus { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public int MemberStatusId { get; set; }
         public bool InitiationStatus { get; set; }
         public bool MagusStatus { get; set; }

@@ -282,6 +282,7 @@
     <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MainMenuController.cs" />
+    <Compile Include="Controllers\MemberAccountController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\MemberDetailsController.cs" />
     <Compile Include="Controllers\MemberStatusController.cs" />
@@ -784,6 +785,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\MemberAccount\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

@@ -38,7 +38,7 @@ else
                     </tr>
                 </thead>
                 <tbody>
-                    @{ int i = 0; }
+                    @{ int i = 1; }
                     @foreach (var member in Model)
                     {
                         <tr>
@@ -47,7 +47,7 @@ else
                             <td>@member.Gender</td>
                             <td>@member.MaritalStatus</td>
                             <td>@member.MemberStatus</td>
-                            <td>@member.DateOfBirth.ToString("dd-MMM-yyyy")</td>
+                            <td>@(member.DateOfBirth?.Date.ToString("dd-MMM-yyyy")) </td>
                             <td>@member.MagusStatus</td>
                             <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy")) </td>
                             <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>

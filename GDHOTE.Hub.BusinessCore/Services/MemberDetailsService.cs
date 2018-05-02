@@ -232,7 +232,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             ErrorMessage = "Unable to validate User"
                         };
                     }
-                    
+
                     //Update member details
                     detailsExist.MobileNumber = updateRequest.MobileNumber;
                     detailsExist.AlternateNumber = updateRequest.AlternateNumber;
@@ -268,6 +268,35 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 };
                 return response;
             }
+        }
+
+        public static List<MemberDetailsViewModel> GetMembersDetailsByCriteria(int criteria, string startdate, string enddate)
+        {
+            try
+            {
+                DateTime.TryParse(startdate, out var castStartDate);
+                DateTime.TryParse(enddate, out var castEndDate);
+                using (var db = GdhoteConnection())
+                {
+                    var details = new List<MemberDetailsViewModel>();
+                    switch (criteria)
+                    {
+                        case 1:
+                            details = db.Fetch<MemberDetailsViewModel>()
+                                .Where(m => m.MagusDate >= castStartDate && m.MagusDate < castEndDate.AddDays(1))
+                                .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
+                                .ToList();
+                            break;
+                    }
+                    return details;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new List<MemberDetailsViewModel>();
+            }
+
         }
     }
 }
