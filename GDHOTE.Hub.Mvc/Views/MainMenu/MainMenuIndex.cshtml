@@ -36,10 +36,10 @@ else
                     @foreach (var mainMenu in Model)
                     {
                         <tr>
-                            <td>@Html.ActionLink(mainMenu.Name, "Edit", "MainMenu", new { id = mainMenu.Id }, null)</td>
+                            <td>@Html.ActionLink(mainMenu.Name, "Edit", "MainMenu", new { id = mainMenu.MenuKey }, null)</td>
                             <td>@mainMenu.Status</td>
                             <td>@mainMenu.DisplaySequence</td>
-                            <td><button data-main-menu-id="@mainMenu.Id" class="btn btn-link js-delete">Delete</button></td>
+                            <td><button data-main-menu-id="@mainMenu.MenuKey" class="btn btn-link js-delete">Delete</button></td>
                         </tr>
                     }
                 </tbody>

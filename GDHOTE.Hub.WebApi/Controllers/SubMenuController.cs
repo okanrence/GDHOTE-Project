@@ -84,7 +84,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
         {
             try
             {
-                var response = SubMenuService.GetSubMenusByMainMenu(id).ToList();
+                var response = SubMenuService.GetSubMenusByMainMenu(Convert.ToInt16(id)).ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -107,6 +107,8 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
+
+
         [HttpGet]
         [Route("get-sub-menu")]
         public HttpResponseMessage GetSubMenu(string id)

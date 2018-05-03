@@ -32,7 +32,6 @@
                                     <div class="col-md-12">
                                         <div class="col-md-3">
                                             <label for="" class="form__label">Member Code</label>
-                                            @*@Html.LabelFor(m => m.Member.MemberCode)*@
                                         </div>
                                         <div class="col-md-9">
                                             @Html.DisplayFor(m => m.Member.MemberCode)
@@ -40,7 +39,6 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="col-md-3">
-                                            @*<label id="lblaction">Name</label>*@
                                             <label for="" class="form__label">Name</label>
                                         </div>
                                         <div class="col-md-9">
@@ -49,16 +47,14 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="col-md-3">
-                                            @*@Html.LabelFor(m => m.Member.DateOfBirth)*@
                                             <label for="" class="form__label">DOB</label>
                                         </div>
                                         <div class="col-md-9">
-                                            @Model.Member.DateOfBirth?.Date.ToString("dd-MMM-yyyy")
+                                            @(Model.Member.DateOfBirth?.Date.ToString("dd-MMM-yyyy"))
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="col-md-3">
-                                            @*@Html.LabelFor(m => m.Member.MaritalStatus)*@
                                             <label for="" class="form__label">Marital Status</label>
                                         </div>
                                         <div class="col-md-9">
@@ -75,7 +71,6 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="col-md-3">
-                                            @*@Html.LabelFor(m => m.Member.MemberStatus)*@
                                             <label for="" class="form__label">Member Status</label>
                                         </div>
                                         <div class="col-md-9">
@@ -147,34 +142,34 @@
                         }
                         else if (Model.Activities.Count == 0)
                         {
-                        <p>No record(s) found</p>
+                            <p>No record(s) found</p>
                         }
                         else
                         {
-                        <div>
-                            <table id="memberactivities" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Activity</th>
-                                        <th>StartDate</th>
-                                        <th>EndDate</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var activity in Model.Activities)
-                                    {
+                            <div>
+                                <table id="memberactivities" class="table table-bordered table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>@activity.ActivityType</td>
-                                            <td>@(activity.StartDate.ToString("dd-MMM-yyyy") ?? "")</td>
-                                            <td>@(activity.EndDate?.Date.ToString("dd-MMM-yyyy"))</td>
-                                            <td>@(activity.DateCreated.ToString("dd-MMM-yyyy") ?? "")</td>
-                                            @*<td><button id="btn-delete-bank-details" data-bank-details-id="@activity.Id" class="btn btn-link js-action">Delete</button></td>*@
+                                            <th>Activity</th>
+                                            <th>StartDate</th>
+                                            <th>EndDate</th>
+                                            <th>Date</th>
                                         </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var activity in Model.Activities)
+                                        {
+                                            <tr>
+                                                <td>@activity.ActivityType</td>
+                                                <td>@(activity.StartDate.ToString("dd-MMM-yyyy") ?? "")</td>
+                                                <td>@(activity.EndDate?.Date.ToString("dd-MMM-yyyy"))</td>
+                                                <td>@(activity.DateCreated.ToString("dd-MMM-yyyy") ?? "")</td>
+                                                @*<td><button id="btn-delete-bank-details" data-bank-details-id="@activity.Id" class="btn btn-link js-action">Delete</button></td>*@
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         }
                     </div>
 

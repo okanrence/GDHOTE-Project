@@ -25,7 +25,7 @@ namespace GDHOTE.Hub.WebApi.Handlers
         {
             var routeData = request.RequestUri.AbsolutePath;
 
-            if (!routeData.StartsWith("/GdhoteCore/api") || !routeData.StartsWith("/api"))
+            if (!routeData.StartsWith("/gdhotecore/api") || !routeData.StartsWith("/api"))
             {
                 return await base.SendAsync(request, cancellationToken);
             }

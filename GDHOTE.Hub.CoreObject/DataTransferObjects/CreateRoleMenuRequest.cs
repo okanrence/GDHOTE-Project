@@ -10,9 +10,9 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
     {
         [Required]
         [Display(Name = "Role")]
-        public string RoleId { get; set; }
+        public int RoleId { get; set; }
         [Required]
         [Display(Name = "Sub Menu")]
-        public string SubMenuId { get; set; }
+        public int SubMenuId { get; set; }
     }
 }

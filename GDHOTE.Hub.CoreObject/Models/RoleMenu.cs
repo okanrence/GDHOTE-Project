@@ -9,12 +9,12 @@ using NPoco;
 namespace GDHOTE.Hub.CoreObject.Models
 {
     [TableName("HUB_RoleMenus")]
-    [PrimaryKey("Id", AutoIncrement = false)]
     public class RoleMenu : BaseModel
     {
-        public string Id { get; set; }
-        public string RoleId { get; set; }
-        public string SubMenuId { get; set; }
+        public int Id { get; set; }
+        public int RoleId { get; set; }
+        public int SubMenuId { get; set; }
         public int StatusId { get; set; }
+        public string RoleMenuKey { get; set; }
     }
 }

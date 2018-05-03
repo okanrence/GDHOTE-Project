@@ -42,7 +42,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 using (var db = GdhoteConnection())
                 {
                     var roles = db.Fetch<RoleViewModel>()
-                        .OrderBy(r => r.RoleName)
+                        .OrderBy(r => r.Name)
                         .ToList();
                     return roles;
                 }
@@ -94,13 +94,13 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<RoleResponse>();
             }
         }
-        public static Role GetRole(string id)
+        public static Role GetRole(string roleKey)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var role = db.Fetch<Role>().SingleOrDefault(s => s.RoleId == id);
+                    var role = db.Fetch<Role>().SingleOrDefault(s => s.RoleKey == roleKey);
                     return role;
                 }
             }
@@ -127,13 +127,13 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return "Error occured while trying to update Role";
             }
         }
-        public static string Delete(string roleId, string currentUser)
+        public static string Delete(string roleKey, string currentUser)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var role = db.Fetch<Role>().SingleOrDefault(c => c.RoleId == roleId);
+                    var role = db.Fetch<Role>().SingleOrDefault(c => c.RoleKey == roleKey);
                     if (role == null)
                     {
                         return "Record does not exist";
@@ -179,7 +179,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Check if name already exist
                     var roleExist = db.Fetch<Role>()
-                        .SingleOrDefault(c => c.RoleName.ToLower().Equals(request.RoleName.ToLower()));
+                        .SingleOrDefault(c => c.Name.ToLower().Equals(request.Name.ToLower()));
                     if (roleExist != null)
                     {
                         return new Response
@@ -190,11 +190,11 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
 
-                    string roleName = StringCaseService.TitleCase(request.RoleName);
+                    string roleName = StringCaseService.TitleCase(request.Name);
                     var role = new Role
                     {
-                        RoleId = Guid.NewGuid().ToString(),
-                        RoleName = roleName,
+                        RoleKey = Guid.NewGuid().ToString(),
+                        Name = roleName,
                         RoleTypeId = request.RoleTypeId,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
                         CreatedById = user.Id,

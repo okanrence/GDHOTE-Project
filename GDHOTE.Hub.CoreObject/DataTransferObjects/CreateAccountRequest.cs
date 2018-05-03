@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace GDHOTE.Hub.CoreObject.DataTransferObjects
@@ -8,5 +9,7 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
     {
         public string AccountName { get; set; }
         public long MemberId { get; set; }
+        [Display(Name = "Account Type")]
+        public int AccountTypeId { get; set; }
     }
 }

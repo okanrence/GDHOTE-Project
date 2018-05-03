@@ -9,7 +9,7 @@
     var pagename = "";
     if (Model != null)
     {
-        pagename = Model.RoleName == null ? "New Role" : "Edit Role";
+        pagename = Model.Name == null ? "New Role" : "Edit Role";
     }
 
 }
@@ -19,9 +19,9 @@
     <div>
         <span class="text-danger">@ViewBag.ErrorBag</span>
         <div class="form-group">
-            @Html.LabelFor(r => r.RoleName)
-            @Html.TextBoxFor(r => r.RoleName, new {@class = "form-control gdhote-text-capitalize"})
-            @Html.ValidationMessageFor(r => r.RoleName)
+            @Html.LabelFor(r => r.Name)
+            @Html.TextBoxFor(r => r.Name, new {@class = "form-control gdhote-text-capitalize"})
+            @Html.ValidationMessageFor(r => r.Name)
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.RoleTypeId)

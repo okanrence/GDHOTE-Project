@@ -164,6 +164,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
+
         [HttpPost]
         [Route("delete-user")]
         public HttpResponseMessage DeleteAdminUser(string id)
@@ -199,6 +200,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
+
 
         [HttpPost]
         [Route("start-reset-password")]

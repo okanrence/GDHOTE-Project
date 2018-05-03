@@ -10,20 +10,21 @@ using RestSharp;
 
 namespace GDHOTE.Hub.PortalCore.Services
 {
-    public class PortalUserService
+    public class PortalAccountService
     {
-
-        public static List<UserViewModel> GetAllUsers()
+        public static List<AccountViewModel> GetAllAccounts(string startdate, string enddate)
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/user/get-all-users";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/account/get-all-accounts";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
             //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
             //request.AddHeader("refresh_token", token.RefreshToken);
+            //request.AddParameter("startdate", startdate, ParameterType.QueryString);
+            //request.AddParameter("enddate", enddate, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<UserViewModel>();
+            var result = new List<AccountViewModel>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -32,7 +33,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<UserViewModel>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<AccountViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -41,18 +42,17 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static User GetUser(string id)
+        public static List<AccountViewModel> GetActiveAccounts()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/user/get-user";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/account/get-active-accounts";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
             //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
             //request.AddHeader("refresh_token", token.RefreshToken);
-            request.AddParameter("id", id, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new User();
+            var result = new List<AccountViewModel>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -61,7 +61,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<User>(response.Content);
+                result = JsonConvert.DeserializeObject<List<AccountViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -70,15 +70,41 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response CreateUser(CreateAdminUserRequest createRequest)
+        public static Account GetAccount(string id)
         {
-            var channel = (int)CoreObject.Enumerables.Channel.Web;
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/account/get-account";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("id", id);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new Account();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<Account>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+            }
+            return result;
+        }
+        public static Response CreateAccount(CreateAccountRequest createRequest)
+        {
             var requestData = JsonConvert.SerializeObject(createRequest);
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/user/create-user";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/account/create-account";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("channel", channel.ToString());
             //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("application/json", requestData, ParameterType.RequestBody);
@@ -102,48 +128,13 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-
-        public static Response UpdateUser(UpdateAdminUserRequest updateRequest)
+        public static Response DeleteAccount(string id)
         {
-            var channel = (int)CoreObject.Enumerables.Channel.Web;
-            var requestData = JsonConvert.SerializeObject(updateRequest);
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/user/update-user";
+
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/account/delete-account";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("channel", channel.ToString());
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
-            request.AddParameter("application/json", requestData, ParameterType.RequestBody);
-            request.RequestFormat = DataFormat.Json;
-
-            var result = new Response();
-            IRestResponse response = new RestResponse();
-            try
-            {
-                response = client.Execute(request);
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
-                }
-                result = JsonConvert.DeserializeObject<Response>(response.Content);
-            }
-            catch (Exception ex)
-            {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
-            }
-            return result;
-        }
-
-        public static Response DeleteUser(string id)
-        {
-            var channel = (int)CoreObject.Enumerables.Channel.Web;
-
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/user/delete-user";
-            var client = new RestClient(fullUrl);
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("channel", channel.ToString());
             //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("id", id, ParameterType.QueryString);
@@ -153,45 +144,25 @@ namespace GDHOTE.Hub.PortalCore.Services
             IRestResponse response = new RestResponse();
             try
             {
+                string responseMessage = "", responseCode = "";
                 response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<Response>(response.Content);
-            }
-            catch (Exception ex)
-            {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
-            }
-            return result;
-        }
-
-
-        public static Response StartPasswordReset(PasswordResetRequest resetRequest)
-        {
-            //var channel = (int)CoreObject.Enumerables.Channel.Web;
-            var requestData = JsonConvert.SerializeObject(resetRequest);
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/user/start-reset-password";
-            var client = new RestClient(fullUrl);
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("channel", channel.ToString());
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
-            request.AddParameter("application/json", requestData, ParameterType.RequestBody);
-            request.RequestFormat = DataFormat.Json;
-
-            var result = new Response();
-            IRestResponse response = new RestResponse();
-            try
-            {
-                response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                    responseMessage = response.Content;
+                    responseCode = "01";
                 }
-                result = JsonConvert.DeserializeObject<Response>(response.Content);
+                else
+                {
+                    responseMessage = response.Content;
+                    responseCode = responseMessage.ToLower().Contains("successful") ? "00" : "01";
+                }
+
+                result.ErrorCode = responseCode;
+                result.ErrorMessage = responseMessage;
             }
             catch (Exception ex)
             {

@@ -21,7 +21,7 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         public string EmailAddress { get; set; }
         [Required(ErrorMessage = "Please specify Role")]
         [DisplayName("Role")]
-        public string RoleId { get; set; }
+        public int RoleId { get; set; }
         [Required(ErrorMessage = "Please specify user status")]
         [DisplayName("User Status")]
         public int UserStatusId { get; set; }

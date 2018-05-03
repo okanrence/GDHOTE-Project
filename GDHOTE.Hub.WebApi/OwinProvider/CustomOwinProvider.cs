@@ -72,8 +72,8 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                             return;
                         }
 
-                        //id = customer.Customer.Id;
-                        //role = customer.CustomerUserViewModel.RoleName;
+                        id = customerUser.User.Id.ToString();
+                        role = customerUser.User.UserRole;
                         props = new AuthenticationProperties(new Dictionary<string, string>
                         {
                             { "as:clientRefreshTokenLifeTime","10"},
@@ -104,7 +104,7 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                             context.SetError("invalid_grant", adminUser.ErrorMessage);
                             return;
                         }
-                        id = adminUser.User.UserId;
+                        id = adminUser.User.Id.ToString();
                         role = adminUser.User.UserRole;
                         props = new AuthenticationProperties(new Dictionary<string, string>
                         {
@@ -123,7 +123,7 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                                 "userName", context.UserName
                             },
                             {
-                                "RoleId", adminUser.User.RoleId
+                                "RoleId", adminUser.User.RoleId.ToString()
                             }
                         });
                         break;

@@ -1,13 +1,13 @@
-﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.SubMenuViewModel>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.AccountViewModel>
 
 @{
-    ViewBag.Title = "SubMenuIndex";
+    ViewBag.Title = "Accounts";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Sub Menu</h2>
+<h2>Accounts</h2>
 <p>
-    @Html.ActionLink("New Sub Menu", "New", "SubMenu", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("New Account", "New", "MemberAccount", null, new { @class = "btn btn-primary" })
 </p>
 
 
@@ -17,55 +17,52 @@
 }
 else
 {
-
     <div id="responsive">
         <div class="form-group">
             @Html.AntiForgeryToken()
         </div>
 
         <div>
-            <table id="submenus" class="table table-bordered table-hover">
+            <table id="accounts" class="table table-bordered table-hover">
                 <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Main Menu</th>
-                    <th>Url</th>
-                    <th>Status</th>
-                    <th>Display Sequence</th>
-                    <th>CreatedDate</th>
-                    <th></th>
-                </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Balance</th>
+                        <th>Account Type</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th></th>
+                    </tr>
                 </thead>
                 <tbody>
-                @foreach (var subMenu in Model)
-                {
-                    <tr>
-                        <td>@Html.ActionLink(subMenu.Name, "Edit", "SubMenu", new { id = subMenu.SubMenuKey }, null)</td>
-                        <td>@subMenu.Name </td>
-                        <td>@subMenu.Url </td>
-                        <td>@subMenu.Status</td>
-                        <td>@subMenu.DisplaySequence</td>
-                        <td>@subMenu.DateCreated.ToString("dd-MMM-yyyy")</td>
-                        <td><button data-sub-menu-id="@subMenu.SubMenuKey" class="btn btn-link js-delete">Delete</button></td>
-                    </tr>
-                }
+                    @foreach (var account in Model)
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(account.AccountName, "Edit", "MemberAccount", new { id = account.Id }, null)</td>
+                            <td>@($"{account.Balance:#,##0.00}") </td>
+                            <td>@account.AccountType</td>
+                            <td>@account.Status</td>
+                            <td>@account.DateCreated.ToString("dd-MMM-yyyy")</td>
+                            <td><button data-account-id="@account.Id" class="btn btn-link js-delete">Delete</button></td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
+
     </div>
 
-    
 }
+
 @section scripts
 {
     <script>
         $(document).ready(function () {
-            $("#submenus").DataTable();
+            $("#accounts").DataTable();
 
-            $("#submenus").on("click", ".js-delete", function () {
+            $("#accounts").on("click", ".js-delete", function () {
                 var button = $(this);
-
-                var id = button.attr("data-sub-menu-id");
+                var id = button.attr("data-account-id");
 
                 var form = $('#responsive');
                 var token = $('input[name="__RequestVerificationToken"]', form).val();
@@ -76,7 +73,7 @@ else
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: '@Url.Action("DeleteSubMenu", "SubMenu")/' + id,
+                            url: '@Url.Action("DeleteAccount", "MemberAccount")/' + id,
                             method: "POST",
                             data: request,
                             success: function (data) {
@@ -104,3 +101,4 @@ else
         });
     </script>
 }
+

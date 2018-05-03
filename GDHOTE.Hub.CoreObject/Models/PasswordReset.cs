@@ -9,7 +9,7 @@ namespace GDHOTE.Hub.CoreObject.Models
     public class PasswordReset
     {
         public long Id { get; set; }
-        public string UserId { get; set; }
+        public long UserId { get; set; }
         public string EmailAddress { get; set; }
         public string ResetCode { get; set; }
         public int ChannelId { get; set; }

@@ -8,7 +8,7 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
     {
         [Required(ErrorMessage = "Please specify Main Menu")]
         [Display(Name = "Main Menu")]
-        public string MenuId { get; set; }
+        public int MenuId { get; set; }
         [Required(ErrorMessage = "Please specify Name")]
         [Display(Name = "Name")]
         public string Name { get; set; }

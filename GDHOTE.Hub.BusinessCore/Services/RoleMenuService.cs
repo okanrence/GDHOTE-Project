@@ -70,13 +70,13 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
         }
 
-        public static RoleMenu GetRoleMenu(string id)
+        public static RoleMenu GetRoleMenu(string roleMenuKey)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var roleMenu = db.Fetch<RoleMenu>().SingleOrDefault(c => c.Id == id);
+                    var roleMenu = db.Fetch<RoleMenu>().SingleOrDefault(c => c.RoleMenuKey == roleMenuKey);
                     return roleMenu;
                 }
             }
@@ -104,14 +104,14 @@ namespace GDHOTE.Hub.BusinessCore.Services
         }
 
 
-        public static List<RoleMenuViewModel> GetRoleMenuByRole(string roleId)
+        public static List<RoleMenuViewModel> GetRoleMenuByRole(int roleId)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
                     var roleMenus = db.Fetch<RoleMenuViewModel>()
-                        .Where(r => r.RoleId == roleId)
+                        .Where(r => r.RoleId == roleId && r.StatusId == (int)CoreObject.Enumerables.Status.Active)
                         .ToList();
                     return roleMenus;
                 }
@@ -144,7 +144,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
                     //Check to menu doesnt exist for Role
-                    var roleExist = db.Fetch<RoleMenu>().SingleOrDefault(r => r.SubMenuId == request.SubMenuId && r.RoleId == request.RoleId);
+                    var roleExist = db.Fetch<RoleMenu>()
+                        .SingleOrDefault(r => r.SubMenuId == request.SubMenuId && r.RoleId == request.RoleId);
                     if (roleExist != null)
                     {
                         return new Response
@@ -157,7 +158,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     var roleMenu = new RoleMenu
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        RoleMenuKey = Guid.NewGuid().ToString(),
                         RoleId = request.RoleId,
                         SubMenuId = request.SubMenuId,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
@@ -188,7 +189,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
         }
 
 
-        public static Response Delete(string id, string currentUser)
+        public static Response Delete(string roleMenuKey, string currentUser)
         {
             try
             {
@@ -196,7 +197,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 {
                     var response = new Response();
 
-                    var roleMenu = db.Fetch<RoleMenu>().SingleOrDefault(c => c.Id == id);
+                    var roleMenu = db.Fetch<RoleMenu>().SingleOrDefault(c => c.RoleMenuKey == roleMenuKey);
                     if (roleMenu == null)
                     {
                         return new Response

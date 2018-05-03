@@ -258,7 +258,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 email.To = emailRequest.RecipientEmailAddress;
                 email.Subject = emailRequest.Subject;
                 email.Code = emailRequest.Data["Code"];
-                email.LastName = emailRequest.Data["LastName"];
+                //email.LastName = emailRequest.Data["LastName"];
                 service.Send(email);
 
                 //Log Notification
@@ -305,7 +305,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
             try
             {
                 var response = new Response();
-
 
                 //Get User Initiating Creation Request
                 var user = UserService.GetUserByUserName(currentUser);

@@ -1,5 +1,5 @@
 ﻿@using System.Collections
-@using GDHOTE.Hub.CoreObject.Models
+@using GDHOTE.Hub.CoreObject.DataTransferObjects
 @using GDHOTE.Hub.CoreObject.ViewModels
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -14,7 +14,7 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 @{
-                    IEnumerable<MainMenu> mainMenus = ViewBag.MainMenu;
+                    IEnumerable<MainMenuResponse> mainMenus = ViewBag.MainMenu;
                     IEnumerable<RoleMenuViewModel> subMenus = ViewBag.SubMenu;
                     var deployedName = ViewBag.DeployedAppName;
 
@@ -22,7 +22,7 @@
                     {
                         foreach (var mainMenu in mainMenus)
                         {
-                            var childrenMenu = subMenus.ToList().Where(s => s.MenuId == mainMenu.Id && s.StatusId == (int)GDHOTE.Hub.CoreObject.Enumerables.Status.Active).OrderBy(s => s.DisplaySequence);
+                            var childrenMenu = subMenus.ToList().Where(s => s.MenuId == mainMenu.Id).OrderBy(s => s.DisplaySequence);
                             if (childrenMenu.Any())
                             {
                                 @:<li class="dropdown">

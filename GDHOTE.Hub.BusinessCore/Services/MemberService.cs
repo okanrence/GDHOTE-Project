@@ -243,10 +243,12 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     member.ApprovedFlag = "N";
                     member.InitiationDate = member.InitiationStatus == false ? null : member.InitiationDate;
                     member.MagusDate = member.MagusStatus == false ? null : member.MagusDate;
-                    member.DateCreated = DateTime.Now;
-                    member.RecordDate = DateTime.Now;
+                    member.MemberKey = Guid.NewGuid().ToString();
                     member.OfficerId = (int)OfficerType.NormalMember;
                     member.OfficerDate = DateTime.Now;
+                    member.DateCreated = DateTime.Now;
+                    member.RecordDate = DateTime.Now;
+
 
                     var result = db.Insert(member);
 
@@ -286,6 +288,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 AccountName = surname + " " + firstName,
                                 Balance = 0,
                                 StatusId = (int)CoreObject.Enumerables.Status.Active,
+                                AccountTypeId = (int)CoreObject.Enumerables.AccountType.Member,
+                                AccountKey = Guid.NewGuid().ToString(),
                                 CreatedById = user.Id,
                                 DateCreated = DateTime.Now,
                                 RecordDate = DateTime.Now
@@ -580,6 +584,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                     InitiationDate = DateTime.TryParse(initiationDateString, out var initiationDate)
                                         ? DateTime.Parse(magusDateString) : (DateTime?)null,
                                     InitiationStatus = initiationDate == null ? false : true,
+                                    MemberKey = Guid.NewGuid().ToString(),
                                     DateCreated = DateTime.Now,
                                     RecordDate = DateTime.Now,
                                     OfficerId = (int)OfficerType.NormalMember,
@@ -641,6 +646,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                                 AccountName = surname + " " + firstName,
                                                 Balance = 0,
                                                 StatusId = (int)CoreObject.Enumerables.Status.Active,
+                                                AccountTypeId = (int)CoreObject.Enumerables.AccountType.Member,
+                                                AccountKey = Guid.NewGuid().ToString(),
                                                 CreatedById = user.Id,
                                                 DateCreated = DateTime.Now,
                                                 RecordDate = DateTime.Now

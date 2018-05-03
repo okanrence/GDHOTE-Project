@@ -45,6 +45,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
+
         [HttpGet]
         [Route("get-active-roles")]
         public HttpResponseMessage GetActiveRoles()
@@ -182,7 +183,6 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 string username = User.Identity.Name;
                 var response = RoleService.Delete(id, username);
                 return Request.CreateResponse(HttpStatusCode.OK, response);
-
             }
             catch (UnableToCompleteException ex)
             {

@@ -30,7 +30,7 @@
         </div>
         <div class="form-group">
             @Html.LabelFor(r => r.RoleId)
-            @Html.DropDownListFor(r => r.RoleId, new SelectList(Model.Roles, "RoleId", "RoleName"), "Select Role", new { @class = "form-control" })
+            @Html.DropDownListFor(r => r.RoleId, new SelectList(Model.Roles, "Id", "Name"), "Select Role", new { @class = "form-control" })
             @Html.ValidationMessageFor(r => r.RoleId)
         </div>
         <div class="form-group">

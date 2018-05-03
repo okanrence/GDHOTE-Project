@@ -781,11 +781,13 @@
     <Content Include="Views\Member\UploadMember.cshtml" />
     <Content Include="Views\Member\_MemberListReport.cshtml" />
     <Content Include="Views\User\EditUser.cshtml" />
+    <Content Include="Views\MemberAccount\AccountIndex.cshtml" />
+    <Content Include="Views\MemberAccount\AccountForm.cshtml" />
+    <Content Include="Views\Activity\_ActivityReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
-    <Folder Include="Views\MemberAccount\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

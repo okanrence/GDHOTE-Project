@@ -58,7 +58,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 using (var db = GdhoteConnection())
                 {
-                    var user = db.Fetch<User>().SingleOrDefault(s => s.UserId == id);
+                    var user = db.Fetch<User>().SingleOrDefault(u => u.UserKey == id);
                     return user;
                 }
             }
@@ -164,7 +164,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var adminUser = JsonConvert.DeserializeObject<User>(item);
 
 
-                    adminUser.UserId = Guid.NewGuid().ToString();
+                    adminUser.UserKey = Guid.NewGuid().ToString();
                     adminUser.UserName = createRequest.EmailAddress;
                     adminUser.Password = PasswordManager.ReturnHashPassword(createRequest.Password);
                     adminUser.CreatedById = user.Id;
@@ -228,7 +228,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var response = new Response();
 
                     //Check if user exist
-                    var adminUserExist = db.Fetch<User>().SingleOrDefault(m => m.UserId == updateRequest.UserId);
+                    var adminUserExist = db.Fetch<User>().SingleOrDefault(m => m.UserKey == updateRequest.UserId);
                     if (adminUserExist == null)
                     {
                         return new Response
@@ -291,7 +291,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 {
                     var response = new Response();
 
-                    var userExist = db.Fetch<User>().SingleOrDefault(u => u.UserId == userId);
+                    var userExist = db.Fetch<User>().SingleOrDefault(u => u.UserKey == userId);
                     if (userExist == null)
                     {
                         return new Response
@@ -336,6 +336,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 };
             }
         }
+
         public static Response RequestResetPassword(PasswordResetRequest request)
         {
             try
@@ -376,7 +377,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //check password reset
                     var pwdReset = db.Query<PasswordReset>()
-                            .SingleOrDefault(p => p.UserId == userExist.UserId && p.DateUpdated == null);
+                            .SingleOrDefault(p => p.UserId == userExist.Id && p.DateUpdated == null);
 
                     string code;
                     bool resend = false;
@@ -388,7 +389,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         pwd.ChannelId = request.ChannelId;
                         pwd.DateCreated = DateTime.Now;
                         pwd.DateExpiry = DateTime.Now.AddDays(1);
-                        pwd.UserId = userExist.UserId;
+                        pwd.UserId = userExist.Id;
                         pwd.EmailAddress = userExist.EmailAddress;
                         db.Insert(pwd);
                     }
@@ -406,6 +407,10 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     }
 
+                    //update User Password
+                    userExist.Password = PasswordManager.ReturnHashPassword(code);
+                    userExist.PasswordChange = true;
+                    db.Update(userExist);
 
                     new Task(() =>
                     {
@@ -416,7 +421,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             RecipientEmailAddress = userExist.EmailAddress,
                             Data = new Hashtable
                             {
-                                //["Subject"] = "Gdhote Password Reset",
                                 ["Code"] = code,
                                 ["Resend"] = resend
                             }

@@ -16,7 +16,7 @@ else
         <table id="members" class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>Member Code</th>
+                    <th>Name</th>
                     <th>Mobile No</th>
                     <th>Email</th>
                     <th>State Of Origin</th>
@@ -31,7 +31,7 @@ else
                 @foreach (var member in Model)
                 {
                     <tr>
-                        <td>@Html.ActionLink(!string.IsNullOrEmpty(member.MobileNumber) ? member.MobileNumber : "NA", "Edit", "MemberDetails", new { id = member.Id }, null)</td>
+                        <td>@Html.ActionLink(member.Surname + ", " + member.FirstName, "Edit", "MemberDetails", new { id = member.Id }, null)</td>
                         <td>@member.MobileNumber</td>
                         <td>@member.EmailAddress</td>
                         <td>@member.StateOfOriginId</td>

@@ -67,13 +67,13 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<MainMenuResponse>();
             }
         }
-        public static MainMenu GetMainMenu(string id)
+        public static MainMenu GetMainMenu(string menuKey)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var mainMenu = db.Fetch<MainMenu>().SingleOrDefault(c => c.Id == id);
+                    var mainMenu = db.Fetch<MainMenu>().SingleOrDefault(c => c.MenuKey == menuKey);
                     return mainMenu;
                 }
             }
@@ -120,12 +120,23 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
 
+                    //Check if menu already exist
+                    var menuExist = db.Fetch<MainMenu>()
+                        .SingleOrDefault(c => c.Name.ToLower().Equals(request.Name.ToLower()));
+                    if (menuExist != null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record already exist"
+                        };
+                    }
 
                     string name = StringCaseService.TitleCase(request.Name);
 
                     var mainMenu = new MainMenu
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        MenuKey = Guid.NewGuid().ToString(),
                         Name = name,
                         DisplaySequence = request.DisplaySequence,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
@@ -155,7 +166,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
         }
 
-        public static Response Delete(string id, string currentUser)
+        public static Response Delete(string menuKey, string currentUser)
         {
             try
             {
@@ -164,7 +175,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     var response = new Response();
 
-                    var mainMenu = db.Fetch<MainMenu>().SingleOrDefault(c => c.Id == id);
+                    var mainMenu = db.Fetch<MainMenu>().SingleOrDefault(c => c.MenuKey == menuKey);
                     if (mainMenu == null)
                     {
                         return new Response

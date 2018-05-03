@@ -91,8 +91,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 //Successful
                 if (result.ErrorCode == "00")
                 {
-                    //return RedirectToAction("Login");
-                    ViewBag.ErrorBag = "Email has been sent to your box";
+                    return RedirectToAction("ForgotPasswordConfirmation");
+
                 }
                 else
                 {
@@ -116,7 +116,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return View();
         }
 
-       
+
         //
         // POST: /Account/LogOff
         [HttpPost]

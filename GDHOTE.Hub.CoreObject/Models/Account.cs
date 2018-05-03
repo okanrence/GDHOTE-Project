@@ -13,5 +13,7 @@ namespace GDHOTE.Hub.CoreObject.Models
         public long MemberId { get; set; }
         public decimal Balance { get; set; }
         public int StatusId { get; set; }
+        public int AccountTypeId { get; set; }
+        public string AccountKey { get; set; }
     }
 }

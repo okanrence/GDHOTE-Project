@@ -113,7 +113,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
         {
             try
             {
-                var response = RoleMenuService.GetRoleMenuByRole(id).ToList();
+                var response = RoleMenuService.GetRoleMenuByRole( Convert.ToInt16(id)).ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -136,6 +136,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
+
 
         [HttpPost]
         [Route("create-role-menu")]

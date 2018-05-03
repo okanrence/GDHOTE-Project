@@ -43,8 +43,8 @@ else
                             <td>@member.Gender</td>
                             <td>@member.MaritalStatus</td>
                             <td>@member.MemberStatus</td>
-                            <td>@member.DateOfBirth.ToString("dd-MMM-yyyy")</td>
-                            <td>@member.MagusFlag</td>
+                            <td>@(member.DateOfBirth?.Date.ToString("dd-MMM-yyyy") ?? "") </td>
+                            <td>@member.MagusStatus</td>
                             <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy") ?? "") </td>
                             <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>
                             <td><button data-member-id="@member.Id" class="btn btn-link js-action">Approve</button></td>

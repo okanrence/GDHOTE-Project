@@ -71,7 +71,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
         }
 
-        public static List<SubMenuResponse> GetSubMenusByMainMenu(string id)
+        public static List<SubMenuResponse> GetSubMenusByMainMenu(int id)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         .ToList();
                     var item = JsonConvert.SerializeObject(subMenus);
                     var response = JsonConvert.DeserializeObject<List<SubMenuResponse>>(item);
-                    return response;  
+                    return response;
                 }
             }
             catch (Exception ex)
@@ -92,13 +92,13 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<SubMenuResponse>();
             }
         }
-        public static SubMenu GetSubMenu(string id)
+        public static SubMenu GetSubMenu(string subMenuKey)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var subMenu = db.Fetch<SubMenu>().SingleOrDefault(c => c.Id == id);
+                    var subMenu = db.Fetch<SubMenu>().SingleOrDefault(c => c.SubMenuKey == subMenuKey);
                     return subMenu;
                 }
             }
@@ -126,7 +126,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
         }
 
 
-        public static Response Delete(string id, string currentUser)
+        public static Response Delete(string subMenuKey, string currentUser)
         {
             try
             {
@@ -135,7 +135,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     var response = new Response();
 
-                    var subMenu = db.Fetch<SubMenu>().SingleOrDefault(c => c.Id == id);
+                    var subMenu = db.Fetch<SubMenu>().SingleOrDefault(c => c.SubMenuKey == subMenuKey);
                     if (subMenu == null)
                     {
                         return new Response
@@ -182,7 +182,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 };
             }
         }
-        
+
         public static Response CreateSubMenu(CreateSubMenuRequest request, string currentUser)
         {
             try
@@ -202,14 +202,25 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
+                    //Check if sub menu already exist
+                    var subMenuExist = db.Fetch<SubMenu>().SingleOrDefault(c => c.Name.ToLower().Equals(request.Name.ToLower()));
+                    if (subMenuExist != null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record already exist"
+                        };
+                    }
 
 
                     string name = StringCaseService.TitleCase(request.Name);
 
                     var subMenu = new SubMenu
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        SubMenuKey = Guid.NewGuid().ToString(),
                         Name = name,
+                        Url = request.Url,
                         DisplaySequence = request.DisplaySequence,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
                         MenuId = request.MenuId,
