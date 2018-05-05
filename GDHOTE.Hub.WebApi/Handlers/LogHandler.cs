@@ -23,9 +23,9 @@ namespace GDHOTE.Hub.WebApi.Handlers
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            var routeData = request.RequestUri.AbsolutePath;
+            var routeData = request.RequestUri.AbsolutePath.ToLower();
 
-            if (!routeData.StartsWith("/gdhotecore/api") || !routeData.StartsWith("/api"))
+            if (!routeData.StartsWith("/gdhotecore/api") && !routeData.StartsWith("/api"))
             {
                 return await base.SendAsync(request, cancellationToken);
             }

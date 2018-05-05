@@ -20,6 +20,14 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var activiteTypes = PortalActivityService.GetAllActivities(startDate, endDate).ToList();
             return View("ActivityIndex", activiteTypes);
         }
+        public ActionResult List()
+        {
+            string criteria = "";
+            string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
+            string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
+            var activities = PortalActivityService.GetActivitiesByCriteria(criteria, startDate, endDate).ToList();
+            return View("ActivityList", activities);
+        }
         public ActionResult New()
         {
             var viewModel = ReturnViewModel();
@@ -69,6 +77,14 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             var result = PortalActivityService.DeleteActivity(id);
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public PartialViewResult FetchReportByDate(string criteria, string startdate, string enddate)
+        {
+            var activities = PortalActivityService.GetActivitiesByCriteria(criteria, startdate, enddate).ToList();
+            return PartialView("_ActivityReport", activities);
         }
 
         private static ActivityFormViewModel ReturnViewModel()

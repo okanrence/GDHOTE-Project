@@ -10,11 +10,11 @@ using RestSharp;
 
 namespace GDHOTE.Hub.PortalCore.Services
 {
-   public class PortalActivityService
+  public  class PortalTransactionService
     {
-        public static List<ActivityViewModel> GetAllActivities(string startdate, string enddate)
+        public static List<TransactionViewModel> GetTransactions(string startdate, string enddate)
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/get-all-activities";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/transaction/get-transactions";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -24,7 +24,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             request.AddParameter("enddate", enddate, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<ActivityViewModel>();
+            var result = new List<TransactionViewModel>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -33,26 +33,28 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<ActivityViewModel>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<TransactionViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoTransaction", ex);
             }
             return result;
         }
 
-        public static List<ActivityViewModel> GetMemberActivities()
+        public static List<TransactionViewModel> GetApprovedTransactions(string startdate, string enddate)
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/get-member-activities";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/transaction/get-approved-transactions";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
             //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
             //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("startdate", startdate, ParameterType.QueryString);
+            request.AddParameter("enddate", enddate, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<ActivityViewModel>();
+            var result = new List<TransactionViewModel>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -61,18 +63,18 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<ActivityViewModel>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<TransactionViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoTransaction", ex);
             }
             return result;
         }
-
-        public static Activity GetActivity(string id)
+        
+        public static Transaction GetTransaction(string id)
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/get-activity";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/transaction/get-transaction";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -81,7 +83,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             request.AddParameter("id", id);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new Activity();
+            var result = new Transaction();
             IRestResponse response = new RestResponse();
             try
             {
@@ -90,18 +92,19 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<Activity>(response.Content);
+                result = JsonConvert.DeserializeObject<Transaction>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoTransaction", ex);
             }
             return result;
         }
-        public static Response CreateActivity(CreateActivityRequest createRequest)
+
+        public static Response ConfirmTransaction(ConfirmTransactionRequest createRequest)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/create-activity";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/transaction/confirm-transaction";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
@@ -123,81 +126,37 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoTransaction", ex);
             }
             return result;
         }
 
-        public static Response DeleteActivity(string id)
+        public static Response DeleteTransaction(ConfirmTransactionRequest createRequest)
         {
-
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/delete-activity";
+            var requestData = JsonConvert.SerializeObject(createRequest);
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/transaction/delete-transaction";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
             //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
             //request.AddHeader("refresh_token", token.RefreshToken);
-            request.AddParameter("id", id, ParameterType.QueryString);
+            request.AddParameter("application/json", requestData, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;
 
             var result = new Response();
             IRestResponse response = new RestResponse();
             try
             {
-                string responseMessage = "", responseCode = "";
                 response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    responseMessage = response.Content;
-                    responseCode = "01";
-                }
-                else
-                {
-                    responseMessage = response.Content;
-                    responseCode = responseMessage.ToLower().Contains("successful") ? "00" : "01";
-                }
-
-                result.ErrorCode = responseCode;
-                result.ErrorMessage = responseMessage;
+                result = JsonConvert.DeserializeObject<Response>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
-            }
-            return result;
-        }
-
-        public static List<ActivityViewModel> GetActivitiesByCriteria(string criteria, string startdate, string enddate)
-        {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/get-activities-by-criteria";
-            var client = new RestClient(fullUrl);
-            var request = new RestRequest(Method.GET);
-            request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
-            request.AddParameter("criteria", criteria, ParameterType.QueryString);
-            request.AddParameter("startdate", startdate, ParameterType.QueryString);
-            request.AddParameter("enddate", enddate, ParameterType.QueryString);
-            request.RequestFormat = DataFormat.Json;
-
-            var result = new List<ActivityViewModel>();
-            IRestResponse response = new RestResponse();
-            try
-            {
-                response = client.Execute(request);
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
-                }
-                result = JsonConvert.DeserializeObject<List<ActivityViewModel>>(response.Content);
-            }
-            catch (Exception ex)
-            {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoTransaction", ex);
             }
             return result;
         }

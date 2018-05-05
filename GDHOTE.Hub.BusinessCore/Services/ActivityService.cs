@@ -213,5 +213,58 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 };
             }
         }
+
+        public static List<ActivityViewModel> GetActivitiesByCriteria(int criteria, string startdate, string enddate)
+        {
+            try
+            {
+                DateTime.TryParse(startdate, out var castStartDate);
+                DateTime.TryParse(enddate, out var castEndDate);
+                using (var db = GdhoteConnection())
+                {
+                    var activities = new List<ActivityViewModel>();
+                    switch (criteria)
+                    {
+                        case 1:
+                            activities = db.Fetch<ActivityViewModel>()
+                              .Where(m => m.StartDate >= castStartDate && m.EndDate < castEndDate.AddDays(1))
+                                .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
+                              .ToList();
+                            break;
+                        case 2:
+                            activities = db.Fetch<ActivityViewModel>()
+                                .Where(m => m.StartDate >= castStartDate && m.EndDate < castEndDate.AddDays(1))
+                                .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
+                                .ToList();
+                            break;
+                        case 3:
+                            activities = db.Fetch<ActivityViewModel>()
+                                .Where(m => m.StartDate >= castStartDate && m.EndDate < castEndDate.AddDays(1))
+                                .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
+                                .ToList();
+                            break;
+                        case 4:
+                            activities = db.Fetch<ActivityViewModel>()
+                                .Where(m => m.StartDate >= castStartDate && m.EndDate < castEndDate.AddDays(1))
+                                .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
+                                .ToList();
+                            break;
+                        default:
+                            activities = db.Fetch<ActivityViewModel>()
+                                .Where(m => m.RecordDate >= castStartDate && m.RecordDate < castEndDate.AddDays(1))
+                                .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
+                                .ToList();
+                            break;
+
+                    }
+                    return activities;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new List<ActivityViewModel>();
+            }
+        }
     }
 }

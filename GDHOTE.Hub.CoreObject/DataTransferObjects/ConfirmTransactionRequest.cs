@@ -5,10 +5,10 @@ using System.Text;
 
 namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
-    public class ConfirmPaymentRequest
+    public class ConfirmTransactionRequest
     {
         [Required]
-        public string PaymentKey{ get; set; }
+        public string TransactionReference { get; set; }
         [Required]
         public string Action { get; set; }
         public string Comment { get; set; }

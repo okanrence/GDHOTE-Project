@@ -293,6 +293,7 @@
     <Compile Include="Controllers\StateController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\SubMenuController.cs" />
+    <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserStatusController.cs" />
     <Compile Include="Controllers\YearGroupController.cs" />

@@ -12,16 +12,16 @@ using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
 {
-    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "payment")]
-    public class PaymentController : ApiController
+    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "transaction")]
+    public class TransactionController : ApiController
     {
         [HttpGet]
-        [Route("get-payments")]
-        public HttpResponseMessage GetPayments(string startdate, string enddate)
+        [Route("get-transactions")]
+        public HttpResponseMessage GetTransactions(string startdate, string enddate)
         {
             try
             {
-                var response = PaymentService.GetPayments(startdate, enddate).ToList();
+                var response = TransactionService.GetTransactions(startdate, enddate).ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -47,12 +47,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpGet]
-        [Route("get-approved-payments")]
-        public HttpResponseMessage GetApprovedPayments(string startdate, string enddate)
+        [Route("get-approved-transactions")]
+        public HttpResponseMessage GetApprovedTransactions(string startdate, string enddate)
         {
             try
             {
-                var response = PaymentService.GetApprovedPayments(startdate, enddate).ToList();
+                var response = TransactionService.GetApprovedTransactions(startdate, enddate).ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -76,44 +76,14 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
+        
         [HttpGet]
-        [Route("get-pending-approval")]
-        public HttpResponseMessage GetPaymentsPendingApproval()
+        [Route("get-transaction")]
+        public HttpResponseMessage GetTransaction(string id)
         {
             try
             {
-                var response = PaymentService.GetPaymentsPendingApproval().ToList();
-                if (response.Count > 0)
-                {
-                    return new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        RequestMessage = Request,
-                        Content = new StringContent(
-                            JsonConvert.SerializeObject(response, Formatting.Indented))
-                    };
-                }
-
-                return new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    RequestMessage = Request,
-                    Content = new StringContent(
-                        JsonConvert.SerializeObject(response, Formatting.Indented))
-                };
-            }
-            catch (UnableToCompleteException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
-            }
-        }
-
-
-        [HttpGet]
-        [Route("get-payment")]
-        public HttpResponseMessage GetPayment(string id)
-        {
-            try
-            {
-                var response = PaymentService.GetPayment(Convert.ToInt16(id));
+                var response = TransactionService.GetTransaction(Convert.ToInt16(id));
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -136,10 +106,10 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
-      
+
         [HttpPost]
-        [Route("create-payment")]
-        public HttpResponseMessage CreatePayment(CreatePaymentRequest request)
+        [Route("confirm-transaction")]
+        public HttpResponseMessage ConfirmTransaction(ConfirmTransactionRequest request)
         {
             try
             {
@@ -148,7 +118,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
                 }
                 string username = User.Identity.Name;
-                var response = PaymentService.CreatePayment(request, username);
+                var response = TransactionService.ConfirmTransaction(request, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -172,9 +142,10 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
+
         [HttpPost]
-        [Route("confirm-payment")]
-        public HttpResponseMessage ConfirmPayment(ConfirmPaymentRequest request)
+        [Route("delete-transaction")]
+        public HttpResponseMessage DeleteTransaction(ConfirmTransactionRequest request)
         {
             try
             {
@@ -183,42 +154,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
                 }
                 string username = User.Identity.Name;
-                var response = PaymentService.ConfirmPayment(request, username);
-                if (response != null)
-                {
-                    return new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        RequestMessage = Request,
-                        Content = new StringContent(
-                            JsonConvert.SerializeObject(response, Formatting.Indented))
-                    };
-                }
-                return new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    RequestMessage = Request,
-                    Content = new StringContent(
-                        JsonConvert.SerializeObject(response, Formatting.Indented))
-                };
-
-            }
-            catch (UnableToCompleteException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
-            }
-        }
-
-        [HttpPost]
-        [Route("delete-payment")]
-        public HttpResponseMessage DeletePayment(ConfirmPaymentRequest request)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-                }
-                string username = User.Identity.Name;
-                var response = PaymentService.Delete(request, username);
+                var response = TransactionService.Delete(request, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)

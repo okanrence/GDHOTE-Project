@@ -231,7 +231,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return response;
             }
         }
-        
+
         public static Response SendPasswordResetEmail(EmailRequest emailRequest, string currentUser)
         {
             try
@@ -417,7 +417,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 }
 
                 //Validate Email address
-                if (StringCaseService.IsValidEmail(sendRequest.RecipientEmailAddress))
+                if (!StringCaseService.IsValidEmail(sendRequest.RecipientEmailAddress))
                 {
                     return new Response
                     {

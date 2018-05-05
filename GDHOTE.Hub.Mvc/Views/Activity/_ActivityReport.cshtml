@@ -1,16 +1,5 @@
 ﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.ActivityViewModel>
 
-@{
-    ViewBag.Title = "Activity";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<h2>Activities</h2>
-
-<p>
-    @Html.ActionLink("New Activity", "New", "Activity", null, new { @class = "btn btn-primary" })
-</p>
-
 
 @if (Model == null || Model.Count == 0)
 {
@@ -23,29 +12,30 @@ else
             @Html.AntiForgeryToken()
         </div>
         <div>
-            <table id="Activitys" class="table table-bordered table-hover">
+            <table id="Activities" class="table table-bordered table-hover">
                 <thead>
                     <tr>
+                        <th>SN</th>
                         <th>Name</th>
                         <th>Activity</th>
-                        <th>StartDate</th>
-                        <th>EndDate</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
                         <th>Status</th>
                         <th>Date</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
+                    @{ int i = 1; }
                     @foreach (var activity in Model)
                     {
                         <tr>
-                            <td>@Html.ActionLink($"{ activity.FirstName}, {activity.Surname}", "Edit", "Activity", new { id = activity.Id }, null)</td>
+                            <td>@i</td>@{ i++; }
+                            <td>@activity.Surname, @activity.FirstName</td>
                             <td>@activity.ActivityType</td>
                             <td>@activity.StartDate.ToString("dd-MMM-yyyy")</td>
                             <td>@(activity.EndDate?.Date.ToString("dd-MMM-yyyy"))</td>
                             <td>@activity.Status</td>
                             <td>@activity.DateCreated.ToString("dd-MMM-yyyy")</td>
-                            <td><button data-Activity-id="@activity.Id" class="btn btn-link js-delete">Delete</button></td>
                         </tr>
                     }
                 </tbody>
@@ -55,52 +45,4 @@ else
     </div>
 
 }
-@section scripts
-{
-    <script>
-        $(document).ready(function () {
-            $("#Activitys").DataTable();
-
-            $("#Activitys").on("click", ".js-delete", function () {
-                var button = $(this);
-                var id = button.attr("data-Activity-id");
-
-                var form = $('#responsive');
-                var token = $('input[name="__RequestVerificationToken"]', form).val();
-
-                //Submit request
-                var request = { __RequestVerificationToken: token };
-
-                bootbox.confirm("Are you sure you want to proceed?", function (result) {
-                    if (result) {
-                        $.ajax({
-                            url: '@Url.Action("DeleteActivity", "Activity")/' + id,
-                            method: "POST",
-                            data: request,
-                            success: function (data) {
-                                if (data !== null) {
-                                    if (data.ErrorCode === "00") {
-                                        swal({
-                                            title: "Success",
-                                            text: "success",
-                                            type: "success"
-                                        });
-
-                                        window.location.reload(true);
-                                    }
-                                    else {
-                                        alert(data.ErrorMessage);
-                                    }
-                                };
-
-                            }
-                        });
-                    }
-                });
-
-            });
-        });
-    </script>
-}
-
 

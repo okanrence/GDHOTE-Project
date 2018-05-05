@@ -296,12 +296,12 @@
     <Compile Include="Controllers\RoleMenuController.cs" />
     <Compile Include="Controllers\StateController.cs" />
     <Compile Include="Controllers\SubMenuController.cs" />
+    <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\YearGroupController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Handlers\LogHandler.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -784,6 +784,8 @@
     <Content Include="Views\MemberAccount\AccountIndex.cshtml" />
     <Content Include="Views\MemberAccount\AccountForm.cshtml" />
     <Content Include="Views\Activity\_ActivityReport.cshtml" />
+    <Content Include="Views\Activity\ActivityList.cshtml" />
+    <Content Include="Views\Transaction\TransactionIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
