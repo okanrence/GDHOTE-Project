@@ -17,10 +17,12 @@ namespace GDHOTE.Hub.CoreObject.Models
         public int TransactionStatusId { get; set; }
         public int CurrencyId { get; set; }
         public int PaymentModeId { get; set; }
-        public long PaymentId { get; set; }
         public string BankReference { get; set; }
         public string Remarks { get; set; }
         public long ApprovedById { get; set; }
         public DateTime? DateApproved { get; set; }
+        public string GatewayReference { get; set; }
+        public string GatewayResponseCode { get; set; }
+        public string GatewayResponseDetails { get; set; }
     }
 }

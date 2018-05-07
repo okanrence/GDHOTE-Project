@@ -100,8 +100,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public PartialViewResult FetchReportByDate(string startDate, string endDate)
         {
-            var visitors = PortalPaymentService.GetPayments(startDate, endDate);
-            return PartialView("_PaymentReport", visitors);
+            var payments = PortalPaymentService.GetPayments(startDate, endDate);
+            return PartialView("_PaymentReport", payments);
         }
 
         private static PaymentFormViewModel ReturnViewModel()

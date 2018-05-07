@@ -8,7 +8,7 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
     public class ConfirmPaymentRequest
     {
         [Required]
-        public string PaymentKey{ get; set; }
+        public string PaymentReference { get; set; }
         [Required]
         public string Action { get; set; }
         public string Comment { get; set; }

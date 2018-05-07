@@ -3,15 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.PortalCore.Services;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class TransactionController : Controller
+    public class TransactionController : BaseController
     {
         // GET: Transaction
         public ActionResult Index()
         {
-            return View("TransactionIndex");
+            string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
+            string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
+            var transactions = PortalTransactionService.GetTransactions(startDate, endDate).ToList();
+            return View("TransactionIndex", transactions);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteMember(ConfirmPaymentRequest confirmRequest)
+        {
+            var result = PortalPaymentService.DeletePayment(confirmRequest);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult ConfirmPayment(ConfirmPaymentRequest confirmRequest)
+        {
+            var result = PortalPaymentService.ConfirmPayment(confirmRequest);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public PartialViewResult FetchReportByDate(string startDate, string endDate)
+        {
+            var transactions = PortalTransactionService.GetTransactions(startDate, endDate).ToList();
+            return PartialView("_TransactionReport", transactions);
+        }
+
     }
 }

@@ -786,6 +786,7 @@
     <Content Include="Views\Activity\_ActivityReport.cshtml" />
     <Content Include="Views\Activity\ActivityList.cshtml" />
     <Content Include="Views\Transaction\TransactionIndex.cshtml" />
+    <Content Include="Views\Transaction\_TransactionReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

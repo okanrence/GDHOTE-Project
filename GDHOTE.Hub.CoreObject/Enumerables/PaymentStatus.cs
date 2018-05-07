@@ -8,6 +8,7 @@ namespace GDHOTE.Hub.CoreObject.Enumerables
     {
         New = 1,
         Approved = 2,
-        Deleted = 3
+        Pending =3,
+        Deleted = 4
     }
 }

@@ -131,7 +131,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 {
                     var response = new Response();
 
-                    var payment = db.Fetch<Payment>().SingleOrDefault(c => c.PaymentKey == request.PaymentKey);
+                    var payment = db.Fetch<Payment>()
+                        .SingleOrDefault(c => c.PaymentReference == request.PaymentReference);
                     if (payment == null)
                     {
                         return new Response
@@ -212,10 +213,11 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
-                    ////Get Internal account to Debit
-                    //var internalAccount = 1;
+                    //Get Internal account to Debit
+                    var internalAccount = InternalAccountService.ReturnInternalAccount(request.CurrencyId, request.PaymentTypeId);
 
                     //insert payment
+                    string paymentReference = Guid.NewGuid().ToString();
                     var payment = new Payment
                     {
                         MemberId = request.MemberId,
@@ -226,7 +228,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         Narration = narration,
                         PaymentStatusId = (int)CoreObject.Enumerables.PaymentStatus.New,
                         CreatedById = user.Id,
-                        PaymentKey = Guid.NewGuid().ToString(),
+                        PaymentReference = paymentReference,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };
@@ -241,17 +243,15 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     {
                         if (int.TryParse(result.ToString(), out var paymentId))
                         {
-                            var tranRef = Guid.NewGuid().ToString();
                             //insert credit transaction
                             var creditTran = new Transaction
                             {
-                                TransactionReference = tranRef,
+                                TransactionReference = paymentReference,
                                 AccountId = memberAccount.Id,
                                 Amount = request.Amount,
                                 DebitCredit = "C",
                                 Narration = narration,
                                 CurrencyId = request.CurrencyId,
-                                PaymentId = paymentId,
                                 PaymentModeId = request.PaymentModeId,
                                 TransactionStatusId = (int)CoreObject.Enumerables.TransactionStatus.New,
                                 CreatedById = user.Id,
@@ -263,13 +263,12 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             //insert credit transaction
                             var debitTran = new Transaction
                             {
-                                TransactionReference = tranRef,
-                                AccountId = 1000,// memberAccount.Id,
+                                TransactionReference = paymentReference,
+                                AccountId = internalAccount.Id,
                                 Amount = request.Amount,
                                 DebitCredit = "D",
                                 Narration = narration,
                                 CurrencyId = request.CurrencyId,
-                                PaymentId = paymentId,
                                 PaymentModeId = request.PaymentModeId,
                                 TransactionStatusId = (int)CoreObject.Enumerables.TransactionStatus.New,
                                 CreatedById = user.Id,
@@ -277,6 +276,29 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 RecordDate = DateTime.Now
                             };
                             db.Insert(debitTran);
+
+                            response = new Response
+                            {
+                                ErrorCode = "01",
+                                ErrorMessage = "Unbale to update balance"
+                            };
+
+                            //Double check if code is fit to stay here
+                            //Alternative is to move to a backend service
+
+                            //Update Member's account Balance
+                            memberAccount.Balance = memberAccount.Balance + request.Amount;
+                            memberAccount.UpdatedById = user.Id;
+                            memberAccount.DateUpdated = DateTime.Now;
+                            db.Update(memberAccount);
+
+
+                            //Update Internal Account Balance
+                            internalAccount.Balance = internalAccount.Balance - request.Amount;
+                            memberAccount.UpdatedById = user.Id;
+                            memberAccount.DateUpdated = DateTime.Now;
+                            db.Update(internalAccount);
+
 
                             response = new Response
                             {
@@ -310,7 +332,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     var response = new Response();
 
-                    var payment = db.Fetch<Payment>().SingleOrDefault(p => p.PaymentKey == request.PaymentKey);
+                    var payment = db.Fetch<Payment>()
+                        .SingleOrDefault(p => p.PaymentReference == request.PaymentReference);
                     if (payment == null)
                     {
                         return new Response
@@ -319,7 +342,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             ErrorMessage = "Record does not exist"
                         };
                     }
-                    
+
                     //Get User Initiating Creation Request
                     var user = UserService.GetUserByUserName(currentUser);
                     if (user == null)
@@ -330,7 +353,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             ErrorMessage = "User does not exist"
                         };
                     }
-                    
+
                     //Update Payment
                     //var action = request.Action;
 
@@ -357,6 +380,129 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     ErrorMessage = "Error occured while trying to Confirm Payment"
                 };
             }
+        }
+
+
+        public static Response GeneratePaymentReference(CreatePaymentRequest request, string currentUser)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var response = new Response();
+
+                    //Get User Initiating Creation Request
+                    var user = UserService.GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
+
+                    string narration = StringCaseService.TitleCase(request.Narration);
+
+                    //Get account details
+                    var memberAccount = db.Fetch<Account>().SingleOrDefault(a => a.MemberId == request.MemberId);
+                    if (memberAccount == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "No account(s) found for member"
+                        };
+                    }
+
+                    //Get Internal account to Debit
+                    var internalAccount = InternalAccountService.ReturnInternalAccount(request.CurrencyId, request.PaymentTypeId);
+
+                    //insert payment
+                    string paymentReference = Guid.NewGuid().ToString();
+                    var payment = new Payment
+                    {
+                        MemberId = request.MemberId,
+                        Amount = request.Amount,
+                        PaymentTypeId = request.PaymentTypeId,
+                        PaymentModeId = request.PaymentModeId,
+                        CurrencyId = request.CurrencyId,
+                        Narration = narration,
+                        PaymentStatusId = (int)CoreObject.Enumerables.PaymentStatus.Pending,
+                        CreatedById = user.Id,
+                        PaymentReference = paymentReference,
+                        DateCreated = DateTime.Now,
+                        RecordDate = DateTime.Now
+                    };
+
+                    var result = db.Insert(payment);
+                    response = new Response
+                    {
+                        ErrorCode = "01",
+                        ErrorMessage = "Unable to complete all entries"
+                    };
+
+                    //Double check if transaction entries can be moved out
+                    //till confirmation has been gotten from payment gateway
+                    if (result != null)
+                    {
+                        if (int.TryParse(result.ToString(), out var paymentId))
+                        {
+                            //insert credit transaction
+                            var creditTran = new Transaction
+                            {
+                                TransactionReference = paymentReference,
+                                AccountId = memberAccount.Id,
+                                Amount = request.Amount,
+                                DebitCredit = "C",
+                                Narration = narration,
+                                CurrencyId = request.CurrencyId,
+                                PaymentModeId = request.PaymentModeId,
+                                TransactionStatusId = (int)CoreObject.Enumerables.TransactionStatus.Pending,
+                                CreatedById = user.Id,
+                                DateCreated = DateTime.Now,
+                                RecordDate = DateTime.Now
+                            };
+                            db.Insert(creditTran);
+
+                            //insert credit transaction
+                            var debitTran = new Transaction
+                            {
+                                TransactionReference = paymentReference,
+                                AccountId = internalAccount.Id,
+                                Amount = request.Amount,
+                                DebitCredit = "D",
+                                Narration = narration,
+                                CurrencyId = request.CurrencyId,
+                                PaymentModeId = request.PaymentModeId,
+                                TransactionStatusId = (int)CoreObject.Enumerables.TransactionStatus.Pending,
+                                CreatedById = user.Id,
+                                DateCreated = DateTime.Now,
+                                RecordDate = DateTime.Now
+                            };
+                            db.Insert(debitTran);
+
+                            response = new Response
+                            {
+                                ErrorCode = "00",
+                                ErrorMessage = "Successful",
+                                Reference = paymentReference
+                            };
+                        }
+                    }
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to insert record"
+                };
+            }
+
         }
     }
 }
