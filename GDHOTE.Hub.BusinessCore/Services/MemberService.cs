@@ -520,6 +520,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     var channelId = uploadRequest.ChannelCode;
 
+                    //Get Member Statuses
+                    var memberStatuses = db.Fetch<CoreObject.Models.MemberStatus>().ToList();
+
                     //Get Countries
                     var countries = db.Fetch<Country>().ToList();
 
@@ -531,7 +534,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     {
                         var surname = workSheet.Cells[i, 1].Value != null ? workSheet.Cells[i, 1].Value.ToString() : null;
                         var firstName = workSheet.Cells[i, 2].Value != null ? workSheet.Cells[i, 2].Value.ToString() : null;
-                        var middleName = workSheet.Cells[i, 3].Value != null ? workSheet.Cells[i, 3].Value.ToString() : null;
+                        var othernames = workSheet.Cells[i, 3].Value != null ? workSheet.Cells[i, 3].Value.ToString() : null;
                         var mobileNumber = workSheet.Cells[i, 4].Value != null ? workSheet.Cells[i, 4].Value.ToString() : null;
                         var alternateNumber = workSheet.Cells[i, 5].Value != null ? workSheet.Cells[i, 5].Value.ToString() : null;
                         var dateOfBirthString = workSheet.Cells[i, 6].Value != null ? workSheet.Cells[i, 6].Value.ToString() : null;
@@ -548,8 +551,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         var currentPlaceOfWork = workSheet.Cells[i, 17].Value != null ? workSheet.Cells[i, 17].Value.ToString() : null;
                         var guardianAngel = workSheet.Cells[i, 18].Value != null ? workSheet.Cells[i, 18].Value.ToString() : null;
                         var yeargroup = workSheet.Cells[i, 19].Value != null ? workSheet.Cells[i, 19].Value.ToString() : null;
+                        var memberStatusString = workSheet.Cells[i, 20].Value != null ? workSheet.Cells[i, 20].Value.ToString() : null;
 
-                        if (string.IsNullOrEmpty(middleName)) middleName = "";
+                        if (string.IsNullOrEmpty(othernames)) othernames = "";
 
                         if (!string.IsNullOrEmpty(surname) && !string.IsNullOrEmpty(firstName))
                         {
@@ -557,24 +561,49 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             var memberExist = db.Fetch<Member>()
                              .SingleOrDefault(m => m.Surname.ToLower().Equals(surname.ToLower())
                                                   && m.FirstName.ToLower().Equals(firstName.ToLower())
-                                                                                   && m.MiddleName.ToLower().Equals(middleName.ToLower()));
+                                                                                   && m.OtherNames.ToLower().Equals(othernames.ToLower()));
+                            //if (surname.ToLower() == "ayodele1"
+                            //    || surname.ToLower() == "adeniji1"
+                            //    || surname.ToLower() == "otesanya")
+                            //{
+                            //    string s = "Am here";
+                            //}
 
+                            if (dateOfBirthString == "4689")
+                            {
+                                //string s = "Am here";
+                                //var testDate = DateTime.TryParse(dateOfBirthString, out var dateOfBirth)
+                                //    ? DateTime.Parse(dateOfBirthString)
+                                //    : (DateTime?) null;
+
+                                var initiationDateTest = DateTime.TryParse(initiationDateString, out var initiationDate)
+                                    ? DateTime.Parse(magusDateString)
+                                    : (DateTime?) null;
+                            }
                             //Insert if new member
                             if (memberExist == null)
                             {
+                                int memberStatusId = 1;
+                                if (!string.IsNullOrEmpty(memberStatusString))
+                                {
+                                    var memberStatus = memberStatuses
+                                        .SingleOrDefault(c => c.Name.ToLower().Equals(memberStatusString.ToLower()));
+                                    if (memberStatus != null) memberStatusId = memberStatus.Id;
+                                }
+
                                 recordCount += 1;
                                 firstName = StringCaseService.TitleCase(firstName);
                                 surname = StringCaseService.TitleCase(surname);
                                 var member = new Member
                                 {
-                                    FirstName = firstName,// StringCaseService.TitleCase(firstName),
-                                    MiddleName = StringCaseService.TitleCase(middleName),
                                     Surname = surname,// StringCaseService.TitleCase(surname),
+                                    FirstName = firstName,// StringCaseService.TitleCase(firstName),
+                                    OtherNames = StringCaseService.TitleCase(othernames),
                                     Gender = !string.IsNullOrEmpty(gender) ? gender.Substring(0, 1) : "M",
                                     MaritalStatus = !string.IsNullOrEmpty(maritalStatus) ? maritalStatus.Substring(0, 1) : "S",
                                     DateOfBirth = DateTime.TryParse(dateOfBirthString, out var dateOfBirth)
                                         ? DateTime.Parse(dateOfBirthString) : (DateTime?)null,
-                                    MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Active,
+                                    MemberStatusId = memberStatusId,//(int)CoreObject.Enumerables.MemberStatus.Active,
                                     CreatedById = user.Id,
                                     ChannelId = channelId,
                                     ApprovedFlag = "N",
@@ -592,69 +621,93 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 };
                                 var result = db.Insert(member);
 
+                                long memberId = 0;
                                 int residenceStateId = 1;
-                                if (!string.IsNullOrEmpty(residenceState))
-                                {
-                                    var state = states.SingleOrDefault(s => s.Name.ToLower().Equals(residenceState.ToLower()));
-                                    if (state != null) residenceStateId = state.Id;
-                                }
-
                                 int residenceCountryId = 1;
-                                if (!string.IsNullOrEmpty(residenceCountry))
+
+                                if (result != null)
                                 {
-                                    var country = countries.SingleOrDefault(c => c.Name.ToLower().Equals(residenceCountry.ToLower()));
-                                    if (country != null) residenceCountryId = country.Id;
+                                    if (long.TryParse(result.ToString(), out memberId))
+                                    {
+                                        if (!string.IsNullOrEmpty(residenceState))
+                                        {
+                                            var state = states.SingleOrDefault(s => s.Name.ToLower().Equals(residenceState.ToLower()));
+                                            if (state != null) residenceStateId = state.Id;
+                                        }
+
+                                        if (!string.IsNullOrEmpty(residenceCountry))
+                                        {
+                                            var country = countries.SingleOrDefault(c => c.Name.ToLower().Equals(residenceCountry.ToLower()));
+                                            if (country != null) residenceCountryId = country.Id;
+                                        }
+                                    }
                                 }
 
                                 //Insert member details
-                                if (result != null)
+                                if (memberId > 0)
                                 {
-                                    if (int.TryParse(result.ToString(), out var memberKey))
+                                    var memberDetails = new MemberDetails
                                     {
-                                        var memberDetails = new MemberDetails
+                                        MemberId = memberId,
+                                        MobileNumber = mobileNumber,
+                                        AlternateNumber = alternateNumber,
+                                        EmailAddress = emailAddress,
+                                        StateOfOriginId = 1,
+                                        CountryOfOriginId = 1,
+                                        ResidenceStateId = residenceStateId,
+                                        ResidenceCountryId = residenceCountryId,
+                                        ResidenceAddress = StringCaseService.TitleCase(residenceAddress),
+                                        HighestDegreeObtained = StringCaseService.TitleCase(highestDegreeObtained),
+                                        CurrentWorkPlace = StringCaseService.TitleCase(currentPlaceOfWork),
+                                        DateWedded = DateTime.TryParse(dateWeddedString, out var dateWedded)
+                                            ? DateTime.Parse(dateWeddedString) : (DateTime?)null,
+                                        GuardianAngel = StringCaseService.TitleCase(guardianAngel),
+                                        MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Active,
+                                        YearGroupId = 0,
+                                        CreatedById = user.Id,
+                                        DateCreated = DateTime.Now,
+                                        RecordDate = DateTime.Now
+                                    };
+                                    db.Insert(memberDetails);
+                                }
+
+                                //Insert activity for Initiation Date
+                                if (memberId > 0)
+                                {
+                                    int activityTypeId = 1;
+                                    if (member.InitiationDate != null)
+                                    {
+                                        var activity = new Activity
                                         {
-                                            MemberId = memberKey,
-                                            MobileNumber = mobileNumber,
-                                            AlternateNumber = alternateNumber,
-                                            EmailAddress = emailAddress,
-                                            StateOfOriginId = 1,
-                                            CountryOfOriginId = 1,
-                                            ResidenceStateId = residenceStateId,
-                                            ResidenceCountryId = residenceCountryId,
-                                            ResidenceAddress = StringCaseService.TitleCase(residenceAddress),
-                                            HighestDegreeObtained = StringCaseService.TitleCase(highestDegreeObtained),
-                                            CurrentWorkPlace = StringCaseService.TitleCase(currentPlaceOfWork),
-                                            DateWedded = DateTime.TryParse(dateWeddedString, out var dateWedded)
-                                                ? DateTime.Parse(dateWeddedString) : (DateTime?)null,
-                                            GuardianAngel = StringCaseService.TitleCase(guardianAngel),
-                                            MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Active,
+                                            MemberId = memberId,
+                                            ActivityTypeId = activityTypeId,
+                                            StartDate = member.InitiationDate.Value,
+                                            StatusId = (int)CoreObject.Enumerables.Status.Active,
                                             CreatedById = user.Id,
                                             DateCreated = DateTime.Now,
                                             RecordDate = DateTime.Now
                                         };
-                                        db.Insert(memberDetails);
+                                        db.Insert(activity);
                                     }
+                                }
 
-                                    //Insert member account details
-                                    if (result != null)
+
+                                //Insert member account details
+                                if (memberId > 0)
+                                {
+                                    var account = new Account
                                     {
-                                        if (int.TryParse(result.ToString(), out var memberId))
-                                        {
-                                            var account = new Account
-                                            {
-                                                MemberId = memberId,
-                                                AccountName = surname + " " + firstName,
-                                                Balance = 0,
-                                                StatusId = (int)CoreObject.Enumerables.Status.Active,
-                                                AccountTypeId = (int)CoreObject.Enumerables.AccountType.Member,
-                                                AccountKey = Guid.NewGuid().ToString(),
-                                                CreatedById = user.Id,
-                                                DateCreated = DateTime.Now,
-                                                RecordDate = DateTime.Now
-                                            };
-                                            db.Insert(account);
-                                        }
-                                    }
+                                        MemberId = memberId,
+                                        AccountName = surname + " " + firstName,
+                                        Balance = 0,
+                                        StatusId = (int)CoreObject.Enumerables.Status.Active,
+                                        AccountTypeId = (int)CoreObject.Enumerables.AccountType.Member,
+                                        AccountKey = Guid.NewGuid().ToString(),
+                                        CreatedById = user.Id,
+                                        DateCreated = DateTime.Now,
+                                        RecordDate = DateTime.Now
+                                    };
+                                    db.Insert(account);
                                 }
 
                             }

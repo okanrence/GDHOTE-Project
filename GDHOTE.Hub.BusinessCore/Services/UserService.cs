@@ -395,7 +395,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
                     else
                     {
-
                         //code has expired, regenerate
                         code = CommonServices.RandomString(5);
                         resend = true;

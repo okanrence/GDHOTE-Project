@@ -14,19 +14,19 @@
     <div>
         <span class="text-danger">@ViewBag.ErrorBag</span>
         <div class="form-group">
+            @Html.LabelFor(m => m.Surname)
+            @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Surname)
+        </div>
+        <div class="form-group">
             @Html.LabelFor(m => m.FirstName)
             @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.FirstName)
         </div>
         <div class="form-group">
-            @Html.LabelFor(m => m.MiddleName)
-            @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.MiddleName)
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Surname)
-            @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Surname)
+            @Html.LabelFor(m => m.OtherNames)
+            @Html.TextBoxFor(m => m.OtherNames, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.OtherNames)
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.MobileNumber)

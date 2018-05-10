@@ -9,12 +9,13 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
     public class CreateMemberRequest
     {
+        [Required(ErrorMessage = "Please specify Surname")]
+        public string Surname { get; set; }
         [Required(ErrorMessage = "Please specify First name")]
         [Display(Name = "Firstname")]
         public string FirstName { get; set; }
-        public string MiddleName { get; set; }
-        [Required(ErrorMessage = "Please specify Surname")]
-        public string Surname { get; set; }
+        [Display(Name = "Other Names")]
+        public string OtherNames { get; set; }
         [Required(ErrorMessage = "Please specify Gender")]
         public string Gender { get; set; }
         public bool MagusStatus { get; set; }

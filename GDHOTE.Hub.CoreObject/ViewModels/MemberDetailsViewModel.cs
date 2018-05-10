@@ -9,7 +9,7 @@ namespace GDHOTE.Hub.CoreObject.ViewModels
     {
         public string Surname { get; set; }
         public string FirstName { get; set; }
-        public string MiddleName { get; set; }
+        public string OtherNames { get; set; }
         public string MemberCode { get; set; }
         public string CreatedBy { get; set; }
         public DateTime DateOfBirth { get; set; }

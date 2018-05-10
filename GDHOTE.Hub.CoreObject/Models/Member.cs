@@ -13,9 +13,9 @@ namespace GDHOTE.Hub.CoreObject.Models
     {
         public long Id { get; set; }
         public string MemberCode { get; set; }
-        public string FirstName { get; set; }
-        public string MiddleName { get; set; }
         public string Surname { get; set; }
+        public string FirstName { get; set; }
+        public string OtherNames { get; set; }
         public string Gender { get; set; }
         public string MaritalStatus { get; set; }
         public DateTime? DateOfBirth { get; set; }
