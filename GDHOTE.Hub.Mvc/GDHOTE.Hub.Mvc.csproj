@@ -788,6 +788,7 @@
     <Content Include="Views\Transaction\TransactionIndex.cshtml" />
     <Content Include="Views\Transaction\_TransactionReport.cshtml" />
     <Content Include="Views\MemberAccount\CreateInternalAccount.cshtml" />
+    <Content Include="Views\MemberAccount\InternalAccountList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

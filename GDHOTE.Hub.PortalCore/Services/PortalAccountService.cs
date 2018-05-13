@@ -70,9 +70,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<AccountViewModel> GetInternalAccounts()
+        public static List<AccountViewModel> GetAllInternalAccounts()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/account/get-internal-accounts";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/account/get-all-internal-accounts";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -90,6 +90,34 @@ namespace GDHOTE.Hub.PortalCore.Services
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
                 result = JsonConvert.DeserializeObject<List<AccountViewModel>>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+            }
+            return result;
+        }
+
+        public static List<AccountResponse> GetActiveInternalAccounts()
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/account/get-active-internal-accounts";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new List<AccountResponse>();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<List<AccountResponse>>(response.Content);
             }
             catch (Exception ex)
             {

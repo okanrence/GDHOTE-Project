@@ -7,5 +7,6 @@ namespace GDHOTE.Hub.CoreObject.ViewModels
     public class PaymentTypeFormViewModel : CreatePaymentTypeRequest
     {
         public List<Status> Statuses { get; set; }
+        public List<AccountResponse> InternalAccounts { get; set; }
     }
 }

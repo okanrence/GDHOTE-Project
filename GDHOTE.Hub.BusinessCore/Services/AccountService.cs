@@ -65,7 +65,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<AccountViewModel>();
             }
         }
-        public static List<AccountViewModel> GetInternalAccounts()
+        public static List<AccountViewModel> GetAllInternalAccounts()
         {
             try
             {
@@ -82,6 +82,28 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 LogService.LogError(ex.Message);
                 return new List<AccountViewModel>();
+            }
+        }
+
+        public static List<AccountResponse> GetActiveInternalAccounts()
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var accounts = db.Fetch<AccountViewModel>()
+                        .Where(a => a.AccountTypeId == (int)CoreObject.Enumerables.AccountType.InternalAccount)
+                        .OrderBy(c => c.AccountName)
+                        .ToList();
+                    var item = JsonConvert.SerializeObject(accounts);
+                    var response = JsonConvert.DeserializeObject<List<AccountResponse>>(item);
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new List<AccountResponse>();
             }
         }
         public static Account GetAccount(int id)
@@ -190,6 +212,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         BankId = 0,
                         MemberId = request.MemberId,
                         AccountTypeId = request.AccountTypeId,
+                        CurrencyId = (int)CoreObject.Enumerables.Currency.Naira,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
                         AccountKey = Guid.NewGuid().ToString(),
                         CreatedById = user.Id,
@@ -262,6 +285,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         BankId = request.BankId,
                         MemberId = 0,
                         AccountTypeId = request.AccountTypeId,
+                        CurrencyId = request.CurrencyId,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
                         AccountKey = Guid.NewGuid().ToString(),
                         CreatedById = user.Id,

@@ -15,6 +15,7 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         [DisplayName("Account Name")]
         public string AccountName { get; set; }
         [Required(ErrorMessage = "Select a valid bank")]
+        [DisplayName("Bank")]
         public int BankId { get; set; }
         [Display(Name = "Account Type")]
         public int AccountTypeId { get; set; }

@@ -9,7 +9,7 @@ namespace GDHOTE.Hub.CoreObject.ViewModels
         public string MemberCode { get; set; }
         public string Surname { get; set; }
         public string FirstName { get; set; }
-        public string MiddleName { get; set; }
+        public string OtherNames { get; set; }
         public string PaymentType { get; set; }
         public string PaymentMode { get; set; }
         public string Currency { get; set; }

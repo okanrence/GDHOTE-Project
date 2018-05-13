@@ -213,7 +213,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
                     //Get Internal account to Debit
-                    var internalAccount = InternalAccountService.ReturnInternalAccount(request.CurrencyId, request.PaymentTypeId);
+                    //var internalAccount = InternalAccountService.ReturnInternalAccount(request.CurrencyId, request.PaymentTypeId);
+                    var paymentType = db.Fetch<PaymentType>().SingleOrDefault(p => p.Id == request.PaymentTypeId);
+                
 
                     //insert payment
                     string paymentReference = Guid.NewGuid().ToString();
@@ -263,7 +265,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             var debitTran = new Transaction
                             {
                                 TransactionReference = paymentReference,
-                                AccountId = internalAccount.Id,
+                                AccountId = paymentType.AccountId,
                                 Amount = request.Amount,
                                 DebitCredit = "D",
                                 Narration = narration,
@@ -293,6 +295,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
 
                             //Update Internal Account Balance
+                            var internalAccount = db.Fetch<Account>().SingleOrDefault(a => a.Id == paymentType.AccountId);
                             internalAccount.Balance = internalAccount.Balance - request.Amount;
                             memberAccount.UpdatedById = user.Id;
                             memberAccount.DateUpdated = DateTime.Now;
@@ -415,7 +418,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
                     //Get Internal account to Debit
-                    var internalAccount = InternalAccountService.ReturnInternalAccount(request.CurrencyId, request.PaymentTypeId);
+                    //var internalAccount = InternalAccountService.ReturnInternalAccount(request.CurrencyId, request.PaymentTypeId);
+                    var paymentType = db.Fetch<PaymentType>().SingleOrDefault(p => p.Id == request.PaymentTypeId);
 
                     //insert payment
                     string paymentReference = Guid.NewGuid().ToString();
@@ -468,7 +472,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             var debitTran = new Transaction
                             {
                                 TransactionReference = paymentReference,
-                                AccountId = internalAccount.Id,
+                                AccountId = paymentType.AccountId,
                                 Amount = request.Amount,
                                 DebitCredit = "D",
                                 Narration = narration,

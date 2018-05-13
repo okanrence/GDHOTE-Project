@@ -78,12 +78,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpGet]
-        [Route("get-internal-accounts")]
+        [Route("get-all-internal-accounts")]
         public HttpResponseMessage GetInternalAccounts()
         {
             try
             {
-                var response = AccountService.GetInternalAccounts().ToList();
+                var response = AccountService.GetAllInternalAccounts().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -107,6 +107,36 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
+
+        [HttpGet]
+        [Route("get-active-internal-accounts")]
+        public HttpResponseMessage GetActiveInternalAccounts()
+        {
+            try
+            {
+                var response = AccountService.GetActiveInternalAccounts().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
 
         [HttpGet]
         [Route("get-account")]

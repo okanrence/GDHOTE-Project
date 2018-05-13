@@ -109,8 +109,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult InternalAccountList()
         {
-            var accounts = PortalAccountService.GetInternalAccounts();
-            return View("AccountIndex", accounts);
+            var accounts = PortalAccountService.GetAllInternalAccounts();
+            return View("InternalAccountList", accounts);
         }
         private static AccountFormViewModel ReturnViewModel()
         {

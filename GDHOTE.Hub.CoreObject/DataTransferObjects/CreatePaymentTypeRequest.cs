@@ -10,5 +10,8 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         [Required(ErrorMessage = "Please specify Payment Type")]
         [Display(Name = "Payment Type")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "Please specify account")]
+        [Display(Name = "Internal Account")]
+        public long AccountId { get; set; }
     }
 }

@@ -176,6 +176,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     {
                         Name = typeName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
+                        AccountId = request.AccountId,
                         CreatedById = user.Id,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now

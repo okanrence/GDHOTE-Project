@@ -1,18 +1,17 @@
-﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.PaymentTypeViewModel>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.AccountViewModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Accounts";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-<h2>Payment Type</h2>
+<h2>Accounts</h2>
 <p>
-    @Html.ActionLink("New Payment Type", "New", "PaymentType", null, new { @class = "result-list-button" })
+    @Html.ActionLink("New Account", "CreateInternalAccount", "MemberAccount", null, new { @class = "btn btn-primary" })
 </p>
 
 
-@if (Model == null)
+@if (Model == null || Model.Count == 0)
 {
     <p>No record(s) found</p>
 }
@@ -22,31 +21,39 @@ else
         <div class="form-group">
             @Html.AntiForgeryToken()
         </div>
+
         <div>
-            <table id="paymenttypes" class="table table-bordered table-hover">
+            <table id="accounts" class="table table-bordered table-hover">
                 <thead>
                     <tr>
+                        <th>AccountNo</th>
                         <th>Name</th>
-                        <th>Account</th>
+                        <th>Balance</th>
+                        <th>Bank</th>
+                        <th>Currency</th>
                         <th>Status</th>
                         <th>Date</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var paymentType in Model)
+                    @foreach (var account in Model)
                     {
-                        <tr>
-                            <td>@Html.ActionLink(paymentType.Name, "Edit", "PaymentType", new { id = paymentType.Id }, null)</td>
-                            <td>@paymentType.AccountNumber | @paymentType.AccountName</td>
-                            <td>@paymentType.Status</td>
-                            <td>@paymentType.DateCreated.ToString("dd-MMM-yyyy")</td>
-                            <td><button data-paymenttype-id="@paymentType.Id" class="btn btn-link js-delete">Delete</button></td>
-                        </tr>
+                    <tr>
+                        <td>@Html.ActionLink(account.AccountNumber, "Edit", "MemberAccount", new { id = account.Id }, null)</td>
+                        <td>@account.AccountName</td>
+                        <td>@($"{account.Balance:#,##0.00}") </td>
+                        <td>@account.BankName</td>
+                        <td>@account.Currency</td>
+                        <td>@account.Status</td>
+                        <td>@account.DateCreated.ToString("dd-MMM-yyyy")</td>
+                        <td><button data-account-id="@account.Id" class="btn btn-link js-delete">Delete</button></td>
+                    </tr>
                     }
                 </tbody>
             </table>
         </div>
+
     </div>
 
 }
@@ -55,12 +62,11 @@ else
 {
     <script>
         $(document).ready(function () {
-            $("#paymenttypes").DataTable();
+            $("#accounts").DataTable();
 
-            $("#paymenttypes").on("click", ".js-delete", function () {
+            $("#accounts").on("click", ".js-delete", function () {
                 var button = $(this);
-
-                var id = button.attr("data-paymenttype-id");
+                var id = button.attr("data-account-id");
 
                 var form = $('#responsive');
                 var token = $('input[name="__RequestVerificationToken"]', form).val();
@@ -71,7 +77,7 @@ else
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: '@Url.Action("DeletePaymentType", "PaymentType")/' + id,
+                            url: '@Url.Action("DeleteAccount", "MemberAccount")/' + id,
                             method: "POST",
                             data: request,
                             success: function (data) {
@@ -99,3 +105,4 @@ else
         });
     </script>
 }
+
