@@ -140,7 +140,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             ErrorCode = "01",
                             ErrorMessage = "Record does not exist"
                         };
-
                     }
 
                     //Get User Initiating Creation Request

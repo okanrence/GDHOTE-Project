@@ -28,7 +28,7 @@ else
                     <tr>
                         <th>Name</th>
                         <th>Activity</th>
-                      <th>StartDate</th>
+                        <th>StartDate</th>
                         <th>EndDate</th>
                         <th>Status</th>
                         <th>Date</th>
@@ -38,15 +38,15 @@ else
                 <tbody>
                     @foreach (var activity in Model)
                     {
-                    <tr>
-                        <td>@Html.ActionLink($"{ activity.FirstName}, {activity.Surname}", "Edit", "Activity", new { id = activity.Id }, null)</td>
-                        <td>@activity.ActivityType</td>
-                        <td>@activity.StartDate.ToString("dd-MMM-yyyy")</td>
-                        <td>@(activity.EndDate?.Date.ToString("dd-MMM-yyyy"))</td>
-                        <td>@activity.Status</td>
-                        <td>@activity.DateCreated.ToString("dd-MMM-yyyy")</td>
-                        <td><button data-Activity-id="@activity.Id" class="btn btn-link js-delete">Delete</button></td>
-                    </tr>
+                        <tr>
+                            <td>@Html.ActionLink($"{ activity.FirstName}, {activity.Surname}", "Edit", "Activity", new { id = activity.Id }, null)</td>
+                            <td>@activity.ActivityType</td>
+                            <td>@activity.StartDate.ToString("dd-MMM-yyyy")</td>
+                            <td>@(activity.EndDate?.Date.ToString("dd-MMM-yyyy"))</td>
+                            <td>@activity.Status</td>
+                            <td>@activity.DateCreated.ToString("dd-MMM-yyyy")</td>
+                            <td><button data-Activity-id="@activity.Id" class="btn btn-link js-delete">Delete</button></td>
+                        </tr>
                     }
                 </tbody>
             </table>

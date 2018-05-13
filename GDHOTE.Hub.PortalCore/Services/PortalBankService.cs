@@ -10,11 +10,11 @@ using RestSharp;
 
 namespace GDHOTE.Hub.PortalCore.Services
 {
-    public class PortalCountryService
+    public class PortalBankService
     {
-        public static List<CountryViewModel> GetAllCountries()
+        public static List<BankViewModel> GetAllBanks()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/country/get-all-countries";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/bank/get-all-banks";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -22,7 +22,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<CountryViewModel>();
+            var result = new List<BankViewModel>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -31,7 +31,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<CountryViewModel>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<BankViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -40,9 +40,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<CountryResponse> GetActiveCountries()
+        public static List<BankResponse> GetActiveBanks()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/country/get-active-countries";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/bank/get-active-banks";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -50,7 +50,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<CountryResponse>();
+            var result = new List<BankResponse>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -59,7 +59,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<CountryResponse>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<BankResponse>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -68,9 +68,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Country GetCountry(string id)
+        public static Bank GetBank(string id)
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/country/get-country";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/bank/get-bank";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -79,7 +79,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             request.AddParameter("id", id);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new Country();
+            var result = new Bank();
             IRestResponse response = new RestResponse();
             try
             {
@@ -88,7 +88,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<Country>(response.Content);
+                result = JsonConvert.DeserializeObject<Bank>(response.Content);
             }
             catch (Exception ex)
             {
@@ -96,10 +96,10 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-        public static Response CreateCountry(CreateCountryRequest createRequest)
+        public static Response CreateBank(CreateBankRequest createRequest)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/country/create-country";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/bank/create-bank";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
@@ -126,10 +126,10 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response DeleteCountry(string id)
+        public static Response DeleteBank(string id)
         {
 
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/country/delete-country";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/bank/delete-bank";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
@@ -155,6 +155,5 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-
     }
 }

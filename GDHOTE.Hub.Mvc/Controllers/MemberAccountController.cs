@@ -70,12 +70,68 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var result = PortalAccountService.DeleteAccount(id);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+
+        public ActionResult CreateInternalAccount()
+        {
+            var viewModel = ReturnInternalAccountViewModel();
+            viewModel.AccountTypeId = (int)CoreObject.Enumerables.AccountType.InternalAccount;
+            return View("CreateInternalAccount", viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SaveInternalAccount(CreateInternalAccountRequest createRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("CreateInternalAccount", ReturnInternalAccountViewModel());
+            }
+            var result = PortalAccountService.CreateInternalAccount(createRequest);
+            if (result != null)
+            {
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("InternalAccountList");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+            }
+            else
+            {
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
+            }
+            // If we got this far, something failed, redisplay form
+            return View("CreateInternalAccount", ReturnInternalAccountViewModel());
+        }
+        public ActionResult InternalAccountList()
+        {
+            var accounts = PortalAccountService.GetInternalAccounts();
+            return View("AccountIndex", accounts);
+        }
         private static AccountFormViewModel ReturnViewModel()
         {
             var accountTypes = PortalAccountTypeService.GetActiveAccountTypes();
             var viewModel = new AccountFormViewModel
             {
-                AccountTypes = accountTypes 
+                AccountTypes = accountTypes
+            };
+            return viewModel;
+        }
+
+        private static InternalAccountFormViewModel ReturnInternalAccountViewModel()
+        {
+            var accountTypes = PortalAccountTypeService.GetActiveAccountTypes();
+            var banks = PortalBankService.GetActiveBanks();
+            var currencies = PortalCurrencyService.GetActiveCurrencies();
+            var viewModel = new InternalAccountFormViewModel
+            {
+                AccountTypes = accountTypes,
+                Banks = banks,
+                Currencies = currencies
             };
             return viewModel;
         }

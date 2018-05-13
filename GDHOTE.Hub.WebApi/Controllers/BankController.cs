@@ -12,16 +12,16 @@ using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
 {
-    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "country")]
-    public class CountryController : ApiController
+    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "bank")]
+    public class BankController : ApiController
     {
         [HttpGet]
-        [Route("get-all-countries")]
-        public HttpResponseMessage GetAllCountries()
+        [Route("get-all-banks")]
+        public HttpResponseMessage GetAllBanks()
         {
             try
             {
-                var response = CountryService.GetAllCountries().ToList();
+                var response = BankService.GetAllBanks().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -47,12 +47,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpGet]
-        [Route("get-active-countries")]
-        public HttpResponseMessage GetActiveCountries()
+        [Route("get-active-banks")]
+        public HttpResponseMessage GetActiveBanks()
         {
             try
             {
-                var response = CountryService.GetActiveCountries().ToList();
+                var response = BankService.GetActiveBanks().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -77,12 +77,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("get-country")]
-        public HttpResponseMessage GetCountry(string id)
+        [Route("get-bank")]
+        public HttpResponseMessage GetBank(string id)
         {
             try
             {
-                var response = CountryService.GetCountry(Convert.ToInt16(id));
+                var response = BankService.GetBank(Convert.ToInt16(id));
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -106,8 +106,8 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("create-country")]
-        public HttpResponseMessage CreateCountry(CreateCountryRequest createRequest)
+        [Route("create-bank")]
+        public HttpResponseMessage CreateBank(CreateBankRequest createRequest)
         {
             try
             {
@@ -117,7 +117,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 }
 
                 string username = User.Identity.Name;
-                var response = CountryService.CreateCountry(createRequest, username);
+                var response = BankService.CreateBank(createRequest, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -143,13 +143,13 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpPost]
-        [Route("delete-country")]
-        public HttpResponseMessage DeleteCountry(string id)
+        [Route("delete-bank")]
+        public HttpResponseMessage DeleteBank(string id)
         {
             try
             {
                 string username = User.Identity.Name;
-                var response = CountryService.Delete(Convert.ToInt16(id), username);
+                var response = BankService.Delete(Convert.ToInt16(id), username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)

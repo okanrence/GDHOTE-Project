@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
@@ -9,15 +8,15 @@ using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
-    public class CountryService : BaseService
+    public class BankService : BaseService
     {
-        public static string Save(Country country)
+        public static string Save(Bank bank)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Insert(country);
+                    var result = db.Insert(bank);
                     return result.ToString();
                 }
             }
@@ -25,16 +24,16 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 LogService.LogError(ex.Message);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
-                return "Error occured while trying to insert country";
+                return "Error occured while trying to insert Bank";
             }
         }
-        public static List<CountryViewModel> GetAllCountries()
+        public static List<BankViewModel> GetAllBanks()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Fetch<CountryViewModel>()
+                    var countries = db.Fetch<BankViewModel>()
                         .OrderBy(c => c.Name)
                         .ToList();
                     return countries;
@@ -43,60 +42,61 @@ namespace GDHOTE.Hub.BusinessCore.Services
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<CountryViewModel>();
+                return new List<BankViewModel>();
             }
         }
-        public static List<CountryResponse> GetActiveCountries()
+        public static List<BankResponse> GetActiveBanks()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Fetch<Country>()
+                    var banks = db.Fetch<Bank>()
                         .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active && c.DateDeleted == null)
                         .OrderBy(c => c.Name)
                         .ToList();
-                    var item = JsonConvert.SerializeObject(countries);
-                    var response = JsonConvert.DeserializeObject<List<CountryResponse>>(item);
+                    var item = JsonConvert.SerializeObject(banks);
+                    var response = JsonConvert.DeserializeObject<List<BankResponse>>(item);
                     return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<CountryResponse>();
+                return new List<BankResponse>();
             }
         }
-        public static Country GetCountry(int id)
+        public static Bank GetBank(int id)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var country = db.Fetch<Country>().SingleOrDefault(c => c.Id == id);
-                    return country;
+                    var bank = db.Fetch<Bank>()
+                        .SingleOrDefault(b => b.Id == id);
+                    return bank;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new Country();
+                return new Bank();
             }
         }
-        public static string Update(Country country)
+        public static string Update(Bank bank)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Update(country);
+                    var result = db.Update(bank);
                     return result.ToString();
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return "Error occured while trying to update Country";
+                return "Error occured while trying to update Bank";
             }
         }
         public static Response Delete(int id, string currentUser)
@@ -105,10 +105,11 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 using (var db = GdhoteConnection())
                 {
+
                     var response = new Response();
 
-                    var country = db.Fetch<Country>().SingleOrDefault(c => c.Id == id);
-                    if (country == null)
+                    var bank = db.Fetch<Bank>().SingleOrDefault(c => c.Id == id);
+                    if (bank == null)
                     {
                         return new Response
                         {
@@ -128,11 +129,11 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
-                    //Delete Country
-                    country.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
-                    country.DeletedById = user.Id;
-                    country.DateDeleted = DateTime.Now;
-                    db.Update(country);
+                    //Delete Bank
+                    bank.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
+                    bank.DeletedById = user.Id;
+                    bank.DateDeleted = DateTime.Now;
+                    db.Update(bank);
                     response = new Response
                     {
                         ErrorCode = "00",
@@ -152,7 +153,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
         }
 
-        public static Response CreateCountry(CreateCountryRequest request, string currentUser)
+        public static Response CreateBank(CreateBankRequest request, string currentUser)
         {
             try
             {
@@ -173,9 +174,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
                     //Check if name already exist
-                    var countryExist = db.Fetch<Country>()
-                        .SingleOrDefault(c => c.Name.ToLower().Equals(request.Name.ToLower()));
-                    if (countryExist != null)
+                    var bankExist = db.Fetch<Bank>()
+                        .SingleOrDefault(b => b.Name.ToLower().Equals(request.Name.ToLower()));
+                    if (bankExist != null)
                     {
                         return new Response
                         {
@@ -184,18 +185,18 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
-                    string countryName = StringCaseService.TitleCase(request.Name);
+                    string bankName = StringCaseService.TitleCase(request.Name);
 
-                    var country = new Country
+                    var bank = new Bank
                     {
-                        Name = countryName,
+                        Name = bankName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
                         CreatedById = user.Id,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };
 
-                    db.Insert(country);
+                    db.Insert(bank);
                     response = new Response
                     {
                         ErrorCode = "00",

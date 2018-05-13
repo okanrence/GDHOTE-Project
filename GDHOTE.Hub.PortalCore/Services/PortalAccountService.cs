@@ -70,6 +70,33 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
+        public static List<AccountViewModel> GetInternalAccounts()
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/account/get-internal-accounts";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new List<AccountViewModel>();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<List<AccountViewModel>>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+            }
+            return result;
+        }
         public static Account GetAccount(string id)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/account/get-account";
@@ -102,6 +129,37 @@ namespace GDHOTE.Hub.PortalCore.Services
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
             string fullUrl = ConfigService.ReturnBaseUrl() + "/account/create-account";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Content-Type", "application/json");
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("application/json", requestData, ParameterType.RequestBody);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new Response();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<Response>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+            }
+            return result;
+        }
+
+
+        public static Response CreateInternalAccount(CreateInternalAccountRequest createRequest)
+        {
+            var requestData = JsonConvert.SerializeObject(createRequest);
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/account/create-internal-account";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");

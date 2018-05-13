@@ -78,6 +78,37 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpGet]
+        [Route("get-internal-accounts")]
+        public HttpResponseMessage GetInternalAccounts()
+        {
+            try
+            {
+                var response = AccountService.GetInternalAccounts().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpGet]
         [Route("get-account")]
         public HttpResponseMessage GetAccount(string id)
         {
@@ -141,6 +172,44 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
+
+
+        [HttpPost]
+        [Route("create-internal-account")]
+        public HttpResponseMessage CreateInternalAccount(CreateInternalAccountRequest createRequest)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+
+                string username = User.Identity.Name;
+                var response = AccountService.CreateInternalAccount(createRequest, username);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+        
 
 
         [HttpPost]
