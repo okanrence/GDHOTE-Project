@@ -7,7 +7,8 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
     public class CreateActivityTypeRequest
     {
-        [Required]
+        [Required(ErrorMessage = "Please specify Activity Type")]
+        [Display(Name = "Activity Type")]
         public string Name { get; set; }
         [Display(Name = "Dependency Type")]
         //[Required(AllowEmptyStrings = true)]

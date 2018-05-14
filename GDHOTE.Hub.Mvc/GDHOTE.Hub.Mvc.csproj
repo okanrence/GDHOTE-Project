@@ -275,6 +275,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AccuralController.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\ActivityTypeController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -789,6 +790,8 @@
     <Content Include="Views\Transaction\_TransactionReport.cshtml" />
     <Content Include="Views\MemberAccount\CreateInternalAccount.cshtml" />
     <Content Include="Views\MemberAccount\InternalAccountList.cshtml" />
+    <Content Include="Views\Accural\AccuralIndex.cshtml" />
+    <Content Include="Views\Accural\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

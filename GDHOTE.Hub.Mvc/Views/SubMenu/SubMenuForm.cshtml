@@ -5,37 +5,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@{
-    var pagename = "";
-    if (Model != null)
-    {
-        pagename = Model == null ? "New Main Menu" : "Edit Main Menu";
-    }
 
+@{
+    var pagename = "New Sub Menu";
 }
 <h2>@pagename</h2>
+
 @using (Html.BeginForm("Save", "SubMenu"))
 {
     <div>
         <span class="text-danger">@ViewBag.ErrorBag</span>
         <div class="form-group">
             @Html.LabelFor(s => s.MenuId)
-            @Html.DropDownListFor(s => s.MenuId, new SelectList(Model.MainMenus, "Id", "Name"), "Select Menu", new {@class = "form-control"})
+            @Html.DropDownListFor(s => s.MenuId, new SelectList(Model.MainMenus, "Id", "Name"), "Select Menu", new { @class = "form-control" })
             @Html.ValidationMessageFor(s => s.MenuId)
         </div>
         <div class="form-group">
             @Html.LabelFor(s => s.Name)
-            @Html.TextBoxFor(s => s.Name, new {@class = "form-control gdhote-text-capitalize", autocomplete = "off"})
+            @Html.TextBoxFor(s => s.Name, new { @class = "form-control gdhote-text-capitalize", autocomplete = "off" })
             @Html.ValidationMessageFor(s => s.Name)
         </div>
         <div class="form-group">
             @Html.LabelFor(s => s.Url)
-            @Html.TextBoxFor(s => s.Url, new {@class = "form-control gdhote-text-capitalize", autocomplete = "off"})
+            @Html.TextBoxFor(s => s.Url, new { @class = "form-control gdhote-text-capitalize", autocomplete = "off" })
             @Html.ValidationMessageFor(s => s.Url)
         </div>
         <div class="form-group">
             @Html.LabelFor(s => s.DisplaySequence)
-            @Html.TextBoxFor(s => s.DisplaySequence, new {@class = "form-control", autocomplete = "off"})
+            @Html.TextBoxFor(s => s.DisplaySequence, new { @class = "form-control", autocomplete = "off" })
             @Html.ValidationMessageFor(s => s.DisplaySequence)
         </div>
         <div class="form-group">
