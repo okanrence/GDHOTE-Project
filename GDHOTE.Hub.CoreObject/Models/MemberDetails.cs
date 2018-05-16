@@ -21,7 +21,7 @@ namespace GDHOTE.Hub.CoreObject.Models
         public int CountryOfOriginId { get; set; }
         public int ResidenceStateId { get; set; }
         public int ResidenceCountryId { get; set; }
-        public int MemberStatusId { get; set; }
+        public int StatusId { get; set; }
         public string ResidenceAddress { get; set; }
         public DateTime? DateWedded { get; set; }
         public int YearGroupId { get; set; }

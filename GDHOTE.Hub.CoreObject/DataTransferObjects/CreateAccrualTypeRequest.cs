@@ -5,11 +5,11 @@ using System.Text;
 
 namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
-    public class CreateAccuralTypeRequest
+    public class CreateAccrualTypeRequest
     {
-        [Required(ErrorMessage = "Please specify Accural Type")]
-        [Display(Name = "Accural Type")]
+        [Required(ErrorMessage = "Please specify Accrual Type")]
+        [Display(Name = "Accrual Type")]
         public string Name { get; set; }
-        public int Period { get; set; }
+        //public int Period { get; set; }
     }
 }

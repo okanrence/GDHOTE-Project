@@ -31,5 +31,7 @@ namespace GDHOTE.Hub.CoreObject.Models
         public DateTime? OfficerDate { get; set; }
         public DateTime? DateApproved { get; set; }
         public string MemberKey { get; set; }
+        public int StatusId { get; set; }
+
     }
 }

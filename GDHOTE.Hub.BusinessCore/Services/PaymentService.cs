@@ -215,7 +215,14 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     //Get Internal account to Debit
                     //var internalAccount = InternalAccountService.ReturnInternalAccount(request.CurrencyId, request.PaymentTypeId);
                     var paymentType = db.Fetch<PaymentType>().SingleOrDefault(p => p.Id == request.PaymentTypeId);
-                
+                    if (paymentType == null)
+                    {
+                        //Use Default internal account
+                        paymentType = new PaymentType
+                        {
+                            AccountId = 1
+                        };
+                    }
 
                     //insert payment
                     string paymentReference = Guid.NewGuid().ToString();

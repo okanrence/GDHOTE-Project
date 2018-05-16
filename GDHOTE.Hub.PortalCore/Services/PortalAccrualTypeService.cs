@@ -10,11 +10,11 @@ using RestSharp;
 
 namespace GDHOTE.Hub.PortalCore.Services
 {
-    public class PortalAccuralTypeService
+    public class PortalAccrualTypeService
     {
-        public static List<AccuralTypeViewModel> GetAllAccuralTypes()
+        public static List<AccrualTypeViewModel> GetAllAccrualTypes()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/accural/get-all-accural-types";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/accrual/get-all-accrual-types";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -22,7 +22,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<AccuralTypeViewModel>();
+            var result = new List<AccrualTypeViewModel>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -31,7 +31,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<AccuralTypeViewModel>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<AccrualTypeViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -40,9 +40,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<AccuralTypeResponse> GetActiveAccuralTypes()
+        public static List<AccrualTypeResponse> GetActiveAccrualTypes()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/accural/get-active-accural-types";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/accrual/get-active-accrual-types";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -50,7 +50,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<AccuralTypeResponse>();
+            var result = new List<AccrualTypeResponse>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -59,7 +59,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<AccuralTypeResponse>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<AccrualTypeResponse>>(response.Content);
             }
             catch (Exception ex)
             {
@@ -68,9 +68,9 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static AccuralType GetAccuralType(string id)
+        public static AccrualType GetAccrualType(string id)
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/accural/get-accural-type";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/accrual/get-accrual-type";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
@@ -79,7 +79,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             request.AddParameter("id", id);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new AccuralType();
+            var result = new AccrualType();
             IRestResponse response = new RestResponse();
             try
             {
@@ -88,7 +88,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<AccuralType>(response.Content);
+                result = JsonConvert.DeserializeObject<AccrualType>(response.Content);
             }
             catch (Exception ex)
             {
@@ -97,10 +97,10 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response CreateAccuralType(CreateAccuralTypeRequest createRequest)
+        public static Response CreateAccrualType(CreateAccrualTypeRequest createRequest)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/accural/create-accural-type";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/accrual/create-accrual-type";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
@@ -127,10 +127,10 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response DeleteAccuralType(string id)
+        public static Response DeleteAccrualType(string id)
         {
 
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/accural/delete-accural-type";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/accrual/delete-accrual-type";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");

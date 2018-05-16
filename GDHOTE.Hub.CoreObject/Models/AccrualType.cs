@@ -5,8 +5,8 @@ using NPoco;
 
 namespace GDHOTE.Hub.CoreObject.Models
 {
-    [TableName("HUB_AccuralTypes")]
-    public class AccuralType : BaseModel
+    [TableName("HUB_AccrualTypes")]
+    public class AccrualType : BaseModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -19,7 +19,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 using (var db = GdhoteConnection())
                 {
                     var members = db.Fetch<MemberDetailsViewModel>()
-                        .Where(m => m.DateOfBirth.Date.Month == castDateOfBirth.Date.Month
+                        .Where(m => m.MemberStatusId == (int)CoreObject.Enumerables.MemberStatus.Active &&
+                                    m.DateOfBirth.Date.Month == castDateOfBirth.Date.Month
                                     && m.DateOfBirth.Date.Day == castDateOfBirth.Date.Day)
                         .OrderBy(m => m.FirstName).ToList();
                     var item = JsonConvert.SerializeObject(members);
@@ -86,7 +87,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 using (var db = GdhoteConnection())
                 {
                     var members = db.Fetch<MemberDetailsViewModel>()
-                        .Where(m => m.DateWedded != null
+                        .Where(m => m.MemberStatusId == (int)CoreObject.Enumerables.MemberStatus.Active
+                                    && m.DateWedded != null
                                    && m.DateWedded.Value.Date.Month == castWeddingDate.Date.Month
                                    && m.DateWedded.Value.Date.Day == castWeddingDate.Date.Day)
                         .OrderBy(m => m.FirstName).ToList();

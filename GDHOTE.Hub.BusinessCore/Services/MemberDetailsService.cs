@@ -116,7 +116,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
                     //Delete Member Details
-                    memberDetails.MemberStatusId = (int)MemberStatus.Deleted;
+                    memberDetails.StatusId = (int)MemberStatus.Deleted;
                     memberDetails.DeletedById = user.Id;
                     memberDetails.DateDeleted = DateTime.Now;
                     db.Update(memberDetails);

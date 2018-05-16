@@ -9,15 +9,15 @@ using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
-    public class AccuralTypeService : BaseService
+    public class AccrualTypeService : BaseService
     {
-        public static string Save(AccuralType accuralType)
+        public static string Save(AccrualType accrualType)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Insert(accuralType);
+                    var result = db.Insert(accrualType);
                     return result.ToString();
                 }
             }
@@ -25,79 +25,79 @@ namespace GDHOTE.Hub.BusinessCore.Services
             {
                 LogService.LogError(ex.Message);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
-                return "Error occured while trying to insert AccuralType";
+                return "Error occured while trying to insert AccrualType";
             }
         }
-        public static List<AccuralTypeViewModel> GetAllAccuralTypes()
+        public static List<AccrualTypeViewModel> GetAllAccrualTypes()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Fetch<AccuralTypeViewModel>()
+                    var accrualTypes = db.Fetch<AccrualTypeViewModel>()
                         .OrderBy(c => c.Name)
                         .ToList();
-                    return countries;
+                    return accrualTypes;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<AccuralTypeViewModel>();
+                return new List<AccrualTypeViewModel>();
             }
         }
-        public static List<AccuralTypeResponse> GetActiveAccuralTypes()
+        public static List<AccrualTypeResponse> GetActiveAccrualTypes()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var accuralTypes = db.Fetch<AccuralType>()
+                    var accrualTypes = db.Fetch<AccrualType>()
                         .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active && c.DateDeleted == null)
                         .OrderBy(c => c.Name)
                         .ToList();
-                    var item = JsonConvert.SerializeObject(accuralTypes);
-                    var response = JsonConvert.DeserializeObject<List<AccuralTypeResponse>>(item);
+                    var item = JsonConvert.SerializeObject(accrualTypes);
+                    var response = JsonConvert.DeserializeObject<List<AccrualTypeResponse>>(item);
                     return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new List<AccuralTypeResponse>();
+                return new List<AccrualTypeResponse>();
             }
         }
-        public static AccuralType GetAccuralType(int id)
+        public static AccrualType GetAccrualType(int id)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var accuralType = db.Fetch<AccuralType>()
+                    var accrualType = db.Fetch<AccrualType>()
                         .SingleOrDefault(b => b.Id == id);
-                    return accuralType;
+                    return accrualType;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return new AccuralType();
+                return new AccrualType();
             }
         }
-        public static string Update(AccuralType accuralType)
+        public static string Update(AccrualType accrualType)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Update(accuralType);
+                    var result = db.Update(accrualType);
                     return result.ToString();
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return "Error occured while trying to update AccuralType";
+                return "Error occured while trying to update AccrualType";
             }
         }
         public static Response Delete(int id, string currentUser)
@@ -109,8 +109,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     var response = new Response();
 
-                    var accuralType = db.Fetch<AccuralType>().SingleOrDefault(c => c.Id == id);
-                    if (accuralType == null)
+                    var accrualType = db.Fetch<AccrualType>().SingleOrDefault(c => c.Id == id);
+                    if (accrualType == null)
                     {
                         return new Response
                         {
@@ -130,11 +130,11 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
-                    //Delete AccuralType
-                    accuralType.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
-                    accuralType.DeletedById = user.Id;
-                    accuralType.DateDeleted = DateTime.Now;
-                    db.Update(accuralType);
+                    //Delete AccrualType
+                    accrualType.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
+                    accrualType.DeletedById = user.Id;
+                    accrualType.DateDeleted = DateTime.Now;
+                    db.Update(accrualType);
                     response = new Response
                     {
                         ErrorCode = "00",
@@ -154,7 +154,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
         }
 
-        public static Response CreateAccuralType(CreateAccuralTypeRequest request, string currentUser)
+        public static Response CreateAccrualType(CreateAccrualTypeRequest request, string currentUser)
         {
             try
             {
@@ -175,9 +175,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
                     //Check if name already exist
-                    var accuralTypeExist = db.Fetch<AccuralType>()
+                    var accrualTypeExist = db.Fetch<AccrualType>()
                         .SingleOrDefault(b => b.Name.ToLower().Equals(request.Name.ToLower()));
-                    if (accuralTypeExist != null)
+                    if (accrualTypeExist != null)
                     {
                         return new Response
                         {
@@ -186,18 +186,18 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
-                    string accuralTypeName = StringCaseService.TitleCase(request.Name);
+                    string accrualTypeName = StringCaseService.TitleCase(request.Name);
 
-                    var accuralType = new AccuralType
+                    var accrualType = new AccrualType
                     {
-                        Name = accuralTypeName,
+                        Name = accrualTypeName,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
                         CreatedById = user.Id,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };
 
-                    db.Insert(accuralType);
+                    db.Insert(accrualType);
                     response = new Response
                     {
                         ErrorCode = "00",

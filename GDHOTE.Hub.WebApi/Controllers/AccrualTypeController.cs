@@ -12,16 +12,16 @@ using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
 {
-    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "accural")]
-    public class AccuralTypeController : ApiController
+    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "accrual")]
+    public class AccrualTypeController : ApiController
     {
         [HttpGet]
-        [Route("get-all-accural-types")]
-        public HttpResponseMessage GetAllAccuralTypes()
+        [Route("get-all-accrual-types")]
+        public HttpResponseMessage GetAllAccrualTypes()
         {
             try
             {
-                var response = AccuralTypeService.GetAllAccuralTypes().ToList();
+                var response = AccrualTypeService.GetAllAccrualTypes().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -47,12 +47,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpGet]
-        [Route("get-active-accural-types")]
-        public HttpResponseMessage GetActiveAccuralTypes()
+        [Route("get-active-accrual-types")]
+        public HttpResponseMessage GetActiveAccrualTypes()
         {
             try
             {
-                var response = AccuralTypeService.GetActiveAccuralTypes().ToList();
+                var response = AccrualTypeService.GetActiveAccrualTypes().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -77,12 +77,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("get-accural-type")]
-        public HttpResponseMessage GetAccuralType(string id)
+        [Route("get-accrual-type")]
+        public HttpResponseMessage GetAccrualType(string id)
         {
             try
             {
-                var response = AccuralTypeService.GetAccuralType(Convert.ToInt16(id));
+                var response = AccrualTypeService.GetAccrualType(Convert.ToInt16(id));
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -107,8 +107,8 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpPost]
-        [Route("create-accural-type")]
-        public HttpResponseMessage CreateAccuralType(CreateAccuralTypeRequest createRequest)
+        [Route("create-accrual-type")]
+        public HttpResponseMessage CreateAccrualType(CreateAccrualTypeRequest createRequest)
         {
             try
             {
@@ -118,7 +118,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 }
 
                 string username = User.Identity.Name;
-                var response = AccuralTypeService.CreateAccuralType(createRequest, username);
+                var response = AccrualTypeService.CreateAccrualType(createRequest, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -144,13 +144,13 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpPost]
-        [Route("delete-accural-type")]
-        public HttpResponseMessage DeleteAccuralType(string id)
+        [Route("delete-accrual-type")]
+        public HttpResponseMessage DeleteAccrualType(string id)
         {
             try
             {
                 string username = User.Identity.Name;
-                var response = AccuralTypeService.Delete(Convert.ToInt16(id), username);
+                var response = AccrualTypeService.Delete(Convert.ToInt16(id), username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)

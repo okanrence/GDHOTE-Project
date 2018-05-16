@@ -50,7 +50,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                     Session["AccessToken"] = result.AccessToken;
 
                     var authTicket = new FormsAuthenticationTicket(1, loginRequest.EmailAddress, DateTime.Now,
-                        DateTime.Now.AddMinutes(5), false, roles);
+                        DateTime.Now.AddMinutes(30), false, roles);
                     string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
                     var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
 

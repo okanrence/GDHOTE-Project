@@ -238,7 +238,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     member.Surname = surname;
                     member.FirstName = firstName;
-                    member.CreatedById = user.Id;
                     member.ChannelId = channelCode;
                     member.MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Active;
                     member.ApprovedFlag = "N";
@@ -246,6 +245,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     member.MagusDate = member.MagusStatus == false ? null : member.MagusDate;
                     member.MemberKey = Guid.NewGuid().ToString();
                     member.OfficerId = (int)OfficerType.NormalMember;
+                    member.StatusId = (int)CoreObject.Enumerables.Status.Active;
+                    member.CreatedById = user.Id;
                     member.OfficerDate = DateTime.Now;
                     member.DateCreated = DateTime.Now;
                     member.RecordDate = DateTime.Now;
@@ -263,6 +264,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 MemberId = memberId,
                                 MobileNumber = createRequest.MobileNumber,
                                 EmailAddress = createRequest.EmailAddress,
+                                StatusId = (int)CoreObject.Enumerables.Status.Active,
                                 CreatedById = user.Id,
                                 DateCreated = DateTime.Now,
                                 RecordDate = DateTime.Now
@@ -539,23 +541,25 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         var surname = workSheet.Cells[i, 2].Value != null ? workSheet.Cells[i, 2].Value.ToString() : null;
                         var firstName = workSheet.Cells[i, 3].Value != null ? workSheet.Cells[i, 3].Value.ToString() : null;
                         var othernames = workSheet.Cells[i, 4].Value != null ? workSheet.Cells[i, 4].Value.ToString() : null;
-                        var mobileNumber = workSheet.Cells[i, 5].Value != null ? workSheet.Cells[i, 5].Value.ToString() : null;
-                        var alternateNumber = workSheet.Cells[i, 6].Value != null ? workSheet.Cells[i, 6].Value.ToString() : null;
-                        var dateOfBirthString = workSheet.Cells[i, 7].Value != null ? workSheet.Cells[i, 7].Value.ToString() : null;
-                        var gender = workSheet.Cells[i, 8].Value != null ? workSheet.Cells[i, 8].Value.ToString() : null;
-                        var maritalStatus = workSheet.Cells[i, 9].Value != null ? workSheet.Cells[i, 9].Value.ToString() : null;
-                        var emailAddress = workSheet.Cells[i, 10].Value != null ? workSheet.Cells[i, 10].Value.ToString() : null;
-                        var initiationDateString = workSheet.Cells[i, 11].Value != null ? workSheet.Cells[i, 11].Value.ToString() : null;
-                        var magusDateString = workSheet.Cells[i, 12].Value != null ? workSheet.Cells[i, 12].Value.ToString() : null;
-                        var residenceAddress = workSheet.Cells[i, 13].Value != null ? workSheet.Cells[i, 13].Value.ToString() : null;
-                        var residenceCountry = workSheet.Cells[i, 14].Value != null ? workSheet.Cells[i, 14].Value.ToString() : null;
-                        var residenceState = workSheet.Cells[i, 15].Value != null ? workSheet.Cells[i, 15].Value.ToString() : null;
-                        var dateWeddedString = workSheet.Cells[i, 16].Value != null ? workSheet.Cells[i, 16].Value.ToString() : null;
-                        var highestDegreeObtained = workSheet.Cells[i, 17].Value != null ? workSheet.Cells[i, 17].Value.ToString() : null;
-                        var currentPlaceOfWork = workSheet.Cells[i, 18].Value != null ? workSheet.Cells[i, 18].Value.ToString() : null;
-                        var guardianAngel = workSheet.Cells[i, 19].Value != null ? workSheet.Cells[i, 19].Value.ToString() : null;
-                        var yeargroup = workSheet.Cells[i, 20].Value != null ? workSheet.Cells[i, 20].Value.ToString() : null;
-                        var memberStatusString = workSheet.Cells[i, 21].Value != null ? workSheet.Cells[i, 21].Value.ToString() : null;
+                        var dateOfBirthString = workSheet.Cells[i, 5].Value != null ? workSheet.Cells[i, 5].Value.ToString() : null;
+                        var gender = workSheet.Cells[i, 6].Value != null ? workSheet.Cells[i, 6].Value.ToString() : null;
+                        var maritalStatus = workSheet.Cells[i, 7].Value != null ? workSheet.Cells[i, 7].Value.ToString() : null;
+                        var initiationDateString = workSheet.Cells[i, 8].Value != null ? workSheet.Cells[i, 8].Value.ToString() : null;
+                        var magusDateString = workSheet.Cells[i, 9].Value != null ? workSheet.Cells[i, 9].Value.ToString() : null;
+                        var guardianAngel = workSheet.Cells[i, 10].Value != null ? workSheet.Cells[i, 10].Value.ToString() : null;
+                        var yeargroupString = workSheet.Cells[i, 11].Value != null ? workSheet.Cells[i, 11].Value.ToString() : null;
+                        var memberStatusString = workSheet.Cells[i, 12].Value != null ? workSheet.Cells[i, 12].Value.ToString() : null;
+                        var mobileNumber = workSheet.Cells[i, 13].Value != null ? workSheet.Cells[i, 13].Value.ToString() : null;
+                        var alternateNumber = workSheet.Cells[i, 14].Value != null ? workSheet.Cells[i, 14].Value.ToString() : null;
+                        var emailAddress = workSheet.Cells[i, 15].Value != null ? workSheet.Cells[i, 15].Value.ToString() : null;
+                        var residenceAddress = workSheet.Cells[i, 16].Value != null ? workSheet.Cells[i, 16].Value.ToString() : null;
+                        var residenceCountry = workSheet.Cells[i, 17].Value != null ? workSheet.Cells[i, 17].Value.ToString() : null;
+                        var residenceState = workSheet.Cells[i, 18].Value != null ? workSheet.Cells[i, 18].Value.ToString() : null;
+                        var dateWeddedString = workSheet.Cells[i, 19].Value != null ? workSheet.Cells[i, 19].Value.ToString() : null;
+                        var highestDegreeObtained = workSheet.Cells[i, 20].Value != null ? workSheet.Cells[i, 20].Value.ToString() : null;
+                        var currentPlaceOfWork = workSheet.Cells[i, 21].Value != null ? workSheet.Cells[i, 21].Value.ToString() : null;
+
+
 
                         if (string.IsNullOrEmpty(othernames)) othernames = "";
 
@@ -566,33 +570,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
                              .SingleOrDefault(m => m.Surname.ToLower().Equals(surname.ToLower())
                                                   && m.FirstName.ToLower().Equals(firstName.ToLower())
                                                                                    && m.OtherNames.ToLower().Equals(othernames.ToLower()));
-                            //if (surname.ToUpper() == "SOLE")
-                            //{
-                            //    string s = "Am here";
-                            //    var testDate = DateTime.TryParse(dateOfBirthString, out var dateOfBirth)
-                            //        ? DateTime.Parse(dateOfBirthString)
-                            //        : (DateTime?)null;
-
-                            //    var initiationDateTest = DateTime.TryParseExact(initiationDateString, "dd-MMM-yyyy", CultureInfo.InvariantCulture,
-                            //        DateTimeStyles.None, out var initiationDate1)
-                            //        ? DateTime.Parse(initiationDateString)
-                            //        : (DateTime?)null;
-                            //}
-
-                            //if (dateOfBirthString == "4689")
-                            //{
-                            //    string s = "Am here";
-                            //    var testDate = DateTime.TryParse(dateOfBirthString, out var dateOfBirth)
-                            //        ? DateTime.Parse(dateOfBirthString)
-                            //        : (DateTime?)null;
-
-                            //    var initiationDateTest = DateTime.TryParseExact(initiationDateString, "dd-MMM-yy", CultureInfo.InvariantCulture,
-                            //        DateTimeStyles.None, out var initiationDate1)
-                            //        ? DateTime.Parse(initiationDateString)
-                            //        : (DateTime?) null;
-                            //}
-
-
                             //Insert if new member
                             if (memberExist == null)
                             {
@@ -620,7 +597,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                     DateOfBirth = DateTime.TryParse(dateOfBirthString, out var dateOfBirth)
                                         ? DateTime.Parse(dateOfBirthString) : (DateTime?)null,
                                     MemberStatusId = memberStatusId,//(int)CoreObject.Enumerables.MemberStatus.Active,
-                                    CreatedById = user.Id,
                                     ChannelId = channelId,
                                     ApprovedFlag = "N",
                                     MagusDate = DateTime.TryParse(magusDateString, out var magusDate)
@@ -630,10 +606,13 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                         ? DateTime.Parse(initiationDateString) : (DateTime?)null,
                                     InitiationStatus = initiationDate == null ? false : true,
                                     MemberKey = Guid.NewGuid().ToString(),
-                                    DateCreated = DateTime.Now,
-                                    RecordDate = DateTime.Now,
                                     OfficerId = (int)OfficerType.NormalMember,
-                                    OfficerDate = DateTime.Now
+                                    OfficerDate = DateTime.Now,
+                                    StatusId = (int)CoreObject.Enumerables.Status.Active,
+                                    CreatedById = user.Id,
+                                    DateCreated = DateTime.Now,
+                                    RecordDate = DateTime.Now
+
                                 };
                                 var result = db.Insert(member);
 
@@ -678,8 +657,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                         DateWedded = DateTime.TryParse(dateWeddedString, out var dateWedded)
                                             ? DateTime.Parse(dateWeddedString) : (DateTime?)null,
                                         GuardianAngel = StringCaseService.TitleCase(guardianAngel),
-                                        MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Active,
-                                        YearGroupId = 0,
+                                        StatusId = (int)CoreObject.Enumerables.Status.Active,
+                                        YearGroupId = Int16.TryParse(yeargroupString, out var yeargroup)
+                                            ? Int16.Parse(yeargroupString) : 0,
                                         CreatedById = user.Id,
                                         DateCreated = DateTime.Now,
                                         RecordDate = DateTime.Now

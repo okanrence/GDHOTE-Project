@@ -6,12 +6,12 @@ using System.Web.Mvc;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class AccuralController : Controller
+    public class AccrualController : BaseController
     {
-        // GET: Accural
+        // GET: Accrual
         public ActionResult Index()
         {
-            return View("AccuralIndex");
+            return View("AccrualIndex");
         }
 
         public ActionResult New()

@@ -6,8 +6,8 @@ using NPoco;
 
 namespace GDHOTE.Hub.CoreObject.ViewModels
 {
-    [TableName("vx_HUB_AccuralTypes")]
-    public class AccuralTypeViewModel : AccuralType
+    [TableName("vx_HUB_AccrualTypes")]
+    public class AccrualTypeViewModel : AccrualType
     {
         public string Status { get; set; }
         public string CreatedBy { get; set; }
