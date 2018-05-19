@@ -110,11 +110,11 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-member")]
-        public HttpResponseMessage GetMember(int id)
+        public HttpResponseMessage GetMember(string id)
         {
             try
             {
-                var response = MemberService.GetMember(Convert.ToInt16(id));
+                var response = MemberService.GetMember(id);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -140,12 +140,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("delete-member")]
-        public HttpResponseMessage DeleteMember(int id)
+        public HttpResponseMessage DeleteMember(string id)
         {
             try
             {
                 string username = User.Identity.Name;
-                var response = MemberService.Delete(Convert.ToInt16(id), username);
+                var response = MemberService.Delete(id, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -377,7 +377,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
         {
             try
             {
-                var response = MemberInfoService.GetMemberInformation(Convert.ToInt32(id));
+                var response = MemberInfoService.GetMemberInformation(id);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)

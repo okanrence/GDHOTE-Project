@@ -14,6 +14,7 @@ namespace GDHOTE.Hub.CoreObject.Models
         public long ActivityTypeId { get; set; }
         public long MemberId { get; set; }
         public int StatusId { get; set; }
+        public string ActivityKey { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
     }

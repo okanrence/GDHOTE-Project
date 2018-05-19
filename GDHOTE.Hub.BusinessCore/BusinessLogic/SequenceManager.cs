@@ -24,7 +24,10 @@ namespace GDHOTE.Hub.BusinessCore.BusinessLogic
         public static string PadGenderSequence(string gender, string sequence)
         {
             string genderSequence = "";
-            genderSequence = gender + sequence.PadLeft(PadLength, '0');
+
+            genderSequence = !string.IsNullOrEmpty(sequence)
+                ? gender + sequence.PadLeft(PadLength, '0')
+                : "";
 
             return genderSequence;
         }

@@ -19,9 +19,9 @@ else
                     <th>Name</th>
                     <th>Mobile No</th>
                     <th>Email</th>
-                    <th>State Of Origin</th>
+                    @*<th>State Of Origin</th>
                     <th>Country Of Origin</th>
-                    <th>Residence Country</th>
+                    <th>Residence Country</th>*@
                     <th>Year Group</th>
                     <th>Date</th>
                     <th></th>
@@ -34,9 +34,9 @@ else
                         <td>@Html.ActionLink(member.Surname + ", " + member.FirstName, "Edit", "MemberDetails", new { id = member.Id }, null)</td>
                         <td>@member.MobileNumber</td>
                         <td>@member.EmailAddress</td>
-                        <td>@member.StateOfOriginId</td>
+                        @*<td>@member.StateOfOriginId</td>
                         <td>@member.CountryOfOriginId</td>
-                        <td>@member.ResidenceCountryId</td>
+                        <td>@member.ResidenceCountryId</td>*@
                         <td>@member.YearGroupId</td>
                         <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>
                         <td><button data-member-id="@member.Id" class="btn btn-link js-delete">Delete</button></td>

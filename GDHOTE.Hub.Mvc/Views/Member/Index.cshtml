@@ -5,10 +5,6 @@
 }
 
 <h2>Members</h2>
-<p>
-    @Html.ActionLink("New Member", "New", "Member", null, new { @class = "btn btn-primary" })
-</p>
-
 
 @if (Model == null || Model.Count == 0)
 {
@@ -35,6 +31,7 @@ else
                         <th>Magus Date</th>
                         <th>Date</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,7 +40,7 @@ else
                     {
                         <tr>
                             <td>@i</td>  @{ i++; }
-                            <td><button id="btn-member-info" data-notification-id="@member.Id" class="btn btn-link js-action">@member.Surname, @member.FirstName</button></td>
+                            <td><button id="btn-member-info" data-notification-id="@member.MemberKey" class="btn btn-link js-action">@member.Surname, @member.FirstName</button></td>
                             <td>@member.Gender</td>
                             <td>@member.MaritalStatus</td>
                             <td>@member.MemberStatus</td>
@@ -51,7 +48,8 @@ else
                             <td>@((member.MagusStatus) ? "Y" : "N")</td>
                             <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy")) </td>
                             <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>
-                            <td><button data-member-id="@member.Id" class="btn btn-link js-delete">Delete</button></td>
+                            <td>@Html.ActionLink("Edit", "Edit", "Member", new { id = member.MemberKey }, null)</td>
+                            <td><button data-member-id="@member.MemberKey" class="btn btn-link js-delete">Delete</button></td>
                         </tr>
                     }
                 </tbody>
@@ -71,7 +69,7 @@ else
     <script>
         $(document).ready(function () {
 
-            $("#members").DataTable();
+           $("#members").DataTable();
 
            $("#members").on("click", ".js-action", function () {
 
@@ -141,7 +139,9 @@ else
                                 });
                             }
                         });
-            });
+           });
+
+
 
         });
     </script>

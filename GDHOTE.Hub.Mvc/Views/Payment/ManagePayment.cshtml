@@ -35,7 +35,7 @@ else
                 @foreach (var payment in Model)
                 {
                     <tr>
-                        <td>@Html.ActionLink(payment.Surname + "," + payment.FirstName, "Edit", "Payment", new { id = payment.PaymentKey }, null)</td>
+                        <td>@Html.ActionLink(payment.Surname + ", " + payment.FirstName, "Edit", "Payment", new { id = payment.PaymentReference }, null)</td>
                         <td>@payment.Narration</td>
                         <td>@($"{payment.Amount:#,##0.00}") </td>
                         <td>@payment.PaymentMode</td>

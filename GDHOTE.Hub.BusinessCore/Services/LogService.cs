@@ -47,8 +47,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
         {
             myLogger.Info(msg);
 
-            var log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-            log.Info(msg);
+            //var log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+            //log.Info(msg);
         }
 
         public static void LogError(Exception ex)

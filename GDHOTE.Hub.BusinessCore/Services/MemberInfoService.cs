@@ -106,16 +106,17 @@ namespace GDHOTE.Hub.BusinessCore.Services
         }
 
 
-        public static MemberInfoResponse GetMemberInformation(long id)
+        public static MemberInfoResponse GetMemberInformation(string memberkey)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var member = db.Fetch<MemberViewModel>().SingleOrDefault(m => m.Id == id);
-                    var memberDetails = db.Fetch<MemberDetailsViewModel>().SingleOrDefault(m => m.MemberId == id);
+                    var member = db.Fetch<MemberViewModel>().SingleOrDefault(m => m.MemberKey == memberkey);
+                    var memberDetails = db.Fetch<MemberDetailsViewModel>().SingleOrDefault(m => m.MemberId == member.Id);
                     var activities = db.Fetch<ActivityViewModel>()
-                        .Where(m => m.MemberId == id).OrderBy(m => m.StartDate).ToList();
+                        .Where(m => m.MemberId == member.Id)
+                        .OrderBy(m => m.StartDate).ToList();
 
                     var memberInfoResponse = new MemberInfoResponse
                     {

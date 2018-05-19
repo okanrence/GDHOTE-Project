@@ -15,27 +15,32 @@
 <h2>@pagename</h2>
 @using (Html.BeginForm("Save", "MemberDetails"))
 {
-    @Html.ValidationSummary(true, "Please fix the below errors.")
+    <span class="text-danger">@ViewBag.ErrorBag</span>
     <div class="form-group">
         @Html.LabelFor(m => m.MobileNumber)
-        @Html.TextBoxFor(m => m.MobileNumber, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.MobileNumber, new { @class = "form-control", autocomplete = "off" })
         @Html.ValidationMessageFor(m => m.MobileNumber)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.AlternateNumber)
-        @Html.TextBoxFor(m => m.AlternateNumber, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.AlternateNumber, new { @class = "form-control", autocomplete = "off" })
         @Html.ValidationMessageFor(m => m.AlternateNumber)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.EmailAddress)
-        @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control", autocomplete = "off" })
         @Html.ValidationMessageFor(m => m.EmailAddress)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.YearGroupId)
-        @Html.DropDownListFor(m => m.YearGroupId, new SelectList(Model.YearGroups, "Id", "Name"), "Select Year Group", new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.YearGroupId, new { @class = "form-control", autocomplete = "off" })
         @Html.ValidationMessageFor(m => m.YearGroupId)
     </div>
+    @*<div class="form-group">
+            @Html.LabelFor(m => m.YearGroupId)
+            @Html.DropDownListFor(m => m.YearGroupId, new SelectList(Model.YearGroups, "Id", "Name"), "Select Year Group", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.YearGroupId)
+        </div>*@
     <div class="form-group">
         @Html.LabelFor(m => m.CountryOfOriginId)
         @Html.DropDownListFor(m => m.CountryOfOriginId, new SelectList(Model.Countries, "Id", "Name"), "Select Country", new { @class = "form-control" })
@@ -48,7 +53,7 @@
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.ResidenceAddress)
-        @Html.TextAreaFor(m => m.ResidenceAddress, new { @class = "form-control" })
+        @Html.TextAreaFor(m => m.ResidenceAddress, new { @class = "form-control", autocomplete = "off" })
         @Html.ValidationMessageFor(m => m.ResidenceAddress)
     </div>
     <div class="form-group">
@@ -63,11 +68,19 @@
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.DateWedded)
-        @Html.TextBoxFor(m => m.DateWedded, "{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.DateWedded, "{0:d MMM yyyy}", new { @class = "form-control", autocomplete = "off" })
         @Html.ValidationMessageFor(m => m.DateWedded)
     </div>
-    @*<div>@Html.HiddenFor(m => m.MemberDetails.MemberDetailsId)</div>
-    <div>@Html.HiddenFor(m => m.MemberDetails.MemberKey)</div>*@
+    <div class="form-group">
+        @Html.LabelFor(m => m.HighestDegreeObtained)
+        @Html.TextAreaFor(m => m.HighestDegreeObtained, new { @class = "form-control", autocomplete = "off" })
+        @Html.ValidationMessageFor(m => m.HighestDegreeObtained)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.CurrentWorkPlace)
+        @Html.TextAreaFor(m => m.CurrentWorkPlace, new { @class = "form-control", autocomplete = "off" })
+        @Html.ValidationMessageFor(m => m.CurrentWorkPlace)
+    </div>
     <div>
         <button type="submit" class="btn btn-primary">Save</button>
     </div>

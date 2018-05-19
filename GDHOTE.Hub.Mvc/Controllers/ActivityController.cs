@@ -15,10 +15,16 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: Activity
         public ActionResult Index()
         {
-            string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
-            string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
-            var activiteTypes = PortalActivityService.GetAllActivities(startDate, endDate).ToList();
-            return View("ActivityIndex", activiteTypes);
+            //string criteria = "";
+            //string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
+            //string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
+            var members = PortalMemberService.GetAllMembers().ToList();
+            return View("ActivityIndex", members);
+
+            //string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
+            //string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
+            //var activities = PortalActivityService.GetAllActivities(startDate, endDate).ToList();
+            //return View("ActivityIndex", activities);
         }
         public ActionResult List()
         {
@@ -61,7 +67,6 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 {
                     ViewBag.ErrorBag = result.ErrorMessage;
                 }
-
             }
             else
             {
@@ -86,7 +91,37 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var activities = PortalActivityService.GetActivitiesByCriteria(criteria, startdate, enddate).ToList();
             return PartialView("_ActivityReport", activities);
         }
+        public ActionResult MemberActivity(string id)
+        {
+            //Ensure to review this code later
+            long memberId = 0;
+            var activities = PortalActivityService.GetMemberActivities(id).ToList();
+            if (activities.Count == 0)
+            {
+                //Get Member Id
+                var member = PortalMemberService.GetMember(id);
+                if (member != null) memberId = member.Id;
+            }
+            else
+            {
+                memberId = activities[0].MemberId;
 
+            }
+            ViewBag.MemberId = memberId;
+            return View("MemberActivity", activities);
+        }
+        public ActionResult NewMemberActivity(string id)
+        {
+            var member = PortalMemberService.GetMember(id);
+            var viewModelTemp = ReturnViewModel();
+            viewModelTemp.MemberId = member.Id;
+            return View("_MemberActivityForm", viewModelTemp);
+        }
+        public JsonResult SaveMemberActivty(CreateActivityRequest createRequest)
+        {
+            var result = PortalActivityService.CreateActivity(createRequest);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         private static ActivityFormViewModel ReturnViewModel()
         {
             var activityTypes = PortalActivityTypeService.GetActiveActivityTypes().ToList();

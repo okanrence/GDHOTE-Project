@@ -51,14 +51,14 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<ActivityViewModel>();
             }
         }
-        public static List<ActivityViewModel> GetMemberActivities(int memberId)
+        public static List<ActivityViewModel> GetMemberActivities(string memberKey)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
                     var activities = db.Fetch<ActivityViewModel>()
-                        .Where(a => a.MemberId == memberId)
+                        .Where(m => m.MemberKey == memberKey)
                         .OrderBy(a => a.StartDate)
                         .ToList();
                     return activities;
@@ -124,6 +124,16 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
+                    //Ensure Member is valid
+                    var memberExist = db.Fetch<Member>().SingleOrDefault(m=>m.Id == request.MemberId);
+                    if (memberExist == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Member does not exist"
+                        };
+                    }
 
                     var activity = new Activity
                     {
@@ -132,6 +142,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         StartDate = request.StartDate,
                         EndDate = request.EndDate,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
+                        ActivityKey = Guid.NewGuid().ToString(),
                         CreatedById = user.Id,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
@@ -158,7 +169,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
         }
 
-        public static Response Delete(long id, string currentUser)
+        public static Response Delete(string activityKey, string currentUser)
         {
             try
             {
@@ -167,7 +178,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     var response = new Response();
 
-                    var activity = db.Fetch<Activity>().SingleOrDefault(c => c.Id == id);
+                    var activity = db.Fetch<Activity>()
+                        .SingleOrDefault(a => a.ActivityKey == activityKey);
                     if (activity == null)
                     {
                         return new Response

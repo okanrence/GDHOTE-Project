@@ -91,7 +91,25 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 throw new UnableToCompleteException(ex.Message, MethodBase.GetCurrentMethod().Name);
             }
         }
-        public static Member GetMember(int id)
+        public static Member GetMember(string memberKey)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var member = db.Fetch<Member>()
+                        .SingleOrDefault(m => m.MemberKey == memberKey);
+                    return member;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new Member();
+            }
+        }
+
+        public static Member GetMemberOld(int id)
         {
             try
             {
@@ -123,7 +141,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return "Error occured while trying to update member";
             }
         }
-        public static Response Delete(int id, string currentUser)
+        public static Response Delete(string memberKey, string currentUser)
         {
             try
             {
@@ -131,7 +149,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 {
                     var response = new Response();
 
-                    var member = db.Fetch<Member>().SingleOrDefault(c => c.Id == id);
+                    var member = db.Fetch<Member>()
+                        .SingleOrDefault(c => c.MemberKey == memberKey);
                     if (member == null)
                     {
                         return new Response
@@ -265,6 +284,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 MobileNumber = createRequest.MobileNumber,
                                 EmailAddress = createRequest.EmailAddress,
                                 StatusId = (int)CoreObject.Enumerables.Status.Active,
+                                MemberDetailKey = Guid.NewGuid().ToString(),
                                 CreatedById = user.Id,
                                 DateCreated = DateTime.Now,
                                 RecordDate = DateTime.Now
@@ -302,8 +322,17 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             db.Insert(account);
                         }
                     }
+                    //Notify member by Sms
+                    if (result != null)
+                    {
+                        if (int.TryParse(result.ToString(), out var memberId))
+                        {
 
-                    //Notify member
+                        }
+                    }
+
+
+                    //Notify member by Mail
                     if (result != null)
                     {
                         if (int.TryParse(result.ToString(), out var memberId))
@@ -423,7 +452,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
         }
 
 
-
         public static Response UpdateMember(UpdateMemberRequest updateRequest, string currentUser)
         {
             try
@@ -435,7 +463,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Check member exist
                     var memberExist = db.Fetch<Member>()
-                        .SingleOrDefault(m => m.Id == updateRequest.MemberId);
+                        .SingleOrDefault(m => m.MemberKey == updateRequest.MemberKey);
 
                     if (memberExist == null)
                     {
@@ -459,13 +487,16 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Log audit trail
 
-                    var item = JsonConvert.SerializeObject(updateRequest);
-                    var member = JsonConvert.DeserializeObject<Member>(item);
-                    member.ApprovedFlag = "N";
-                    member.UpdatedById = user.Id;
-                    member.DateUpdated = DateTime.Now;
-
-                    db.Update(member);
+                    memberExist.Surname = updateRequest.Surname;
+                    memberExist.FirstName = updateRequest.FirstName;
+                    memberExist.OtherNames = updateRequest.OtherNames;
+                    memberExist.MaritalStatus = updateRequest.MaritalStatus;
+                    memberExist.DateOfBirth = updateRequest.DateOfBirth;
+                    memberExist.InitiationDate = updateRequest.InitiationDate;
+                    memberExist.MagusDate = updateRequest.MagusDate;
+                    memberExist.UpdatedById = user.Id;
+                    memberExist.DateUpdated = DateTime.Now;
+                    db.Update(memberExist);
                     response = new Response
                     {
                         ErrorCode = "00",
@@ -560,7 +591,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         var currentPlaceOfWork = workSheet.Cells[i, 21].Value != null ? workSheet.Cells[i, 21].Value.ToString() : null;
 
 
-
                         if (string.IsNullOrEmpty(othernames)) othernames = "";
 
                         if (!string.IsNullOrEmpty(surname) && !string.IsNullOrEmpty(firstName))
@@ -585,6 +615,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 firstName = StringCaseService.TitleCase(firstName);
                                 surname = StringCaseService.TitleCase(surname);
                                 gender = !string.IsNullOrEmpty(gender) ? gender.Substring(0, 1) : "M";
+
 
                                 var member = new Member
                                 {
@@ -658,6 +689,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                             ? DateTime.Parse(dateWeddedString) : (DateTime?)null,
                                         GuardianAngel = StringCaseService.TitleCase(guardianAngel),
                                         StatusId = (int)CoreObject.Enumerables.Status.Active,
+                                        MemberDetailKey = Guid.NewGuid().ToString(),
                                         YearGroupId = Int16.TryParse(yeargroupString, out var yeargroup)
                                             ? Int16.Parse(yeargroupString) : 0,
                                         CreatedById = user.Id,
@@ -670,15 +702,36 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 //Insert activity for Initiation Date
                                 if (memberId > 0)
                                 {
-                                    int activityTypeId = 1;
                                     if (member.InitiationDate != null)
                                     {
                                         var activity = new Activity
                                         {
                                             MemberId = memberId,
-                                            ActivityTypeId = activityTypeId,
+                                            ActivityTypeId = (int)CoreObject.Enumerables.ActivityType.Initiation,
                                             StartDate = member.InitiationDate.Value,
                                             StatusId = (int)CoreObject.Enumerables.Status.Active,
+                                            ActivityKey = Guid.NewGuid().ToString(),
+                                            CreatedById = user.Id,
+                                            DateCreated = DateTime.Now,
+                                            RecordDate = DateTime.Now
+                                        };
+                                        db.Insert(activity);
+                                    }
+                                }
+
+
+                                //Insert activity for Magus Date
+                                if (memberId > 0)
+                                {
+                                    if (member.MagusDate != null)
+                                    {
+                                        var activity = new Activity
+                                        {
+                                            MemberId = memberId,
+                                            ActivityTypeId = (int)CoreObject.Enumerables.ActivityType.Maguship,
+                                            StartDate = member.InitiationDate.Value,
+                                            StatusId = (int)CoreObject.Enumerables.Status.Active,
+                                            ActivityKey = Guid.NewGuid().ToString(),
                                             CreatedById = user.Id,
                                             DateCreated = DateTime.Now,
                                             RecordDate = DateTime.Now

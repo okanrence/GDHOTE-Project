@@ -148,13 +148,14 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var response = new Response();
 
                     //check member exist
-                    var memberExist = db.Fetch<Member>().SingleOrDefault(m => m.Id == createRequest.MemberId);
+                    var memberExist = db.Fetch<Member>()
+                        .SingleOrDefault(m => m.Id == createRequest.MemberId);
                     if (memberExist == null)
                     {
                         return new Response
                         {
                             ErrorCode = "01",
-                            ErrorMessage = "Member doesn't already exist"
+                            ErrorMessage = "Member doesn't exist"
                         };
                     }
 
@@ -217,7 +218,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         return new Response
                         {
                             ErrorCode = "01",
-                            ErrorMessage = "Member Details doesn't already exist"
+                            ErrorMessage = "Member Details doesn't exist"
                         };
                     }
 

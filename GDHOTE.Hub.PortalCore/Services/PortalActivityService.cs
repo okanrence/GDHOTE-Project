@@ -10,7 +10,7 @@ using RestSharp;
 
 namespace GDHOTE.Hub.PortalCore.Services
 {
-   public class PortalActivityService
+    public class PortalActivityService
     {
         public static List<ActivityViewModel> GetAllActivities(string startdate, string enddate)
         {
@@ -42,7 +42,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<ActivityViewModel> GetMemberActivities()
+        public static List<ActivityViewModel> GetMemberActivities(string id)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/activity/get-member-activities";
             var client = new RestClient(fullUrl);
@@ -50,6 +50,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             request.AddHeader("Content-Type", "application/json");
             //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
             //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("id", id, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<ActivityViewModel>();
@@ -201,5 +202,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
+
+      
     }
 }

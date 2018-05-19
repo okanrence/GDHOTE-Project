@@ -1,0 +1,38 @@
+﻿@model GDHOTE.Hub.CoreObject.ViewModels.ActivityFormViewModel
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title">Activity Page</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label id="lblnokresponse"></label>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(a => a.ActivityTypeId)
+                @Html.DropDownListFor(a => a.ActivityTypeId, new SelectList(Model.ActivityTypes, "Id", "Name"), "Select Activity", new { @class = "form-control" })
+                @Html.ValidationMessageFor(a => a.ActivityTypeId)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.StartDate)
+                @Html.TextBoxFor(m => m.StartDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.StartDate)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.EndDate)
+                @Html.TextBoxFor(m => m.EndDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.EndDate)
+            </div>
+            <div class="form-group">
+                @Html.AntiForgeryToken()
+            </div>
+            <div class="form-group">
+                <button type="button" data-dismiss="modal" class="btn green button-cancel">Cancel<i class="fa fa-check"></i></button>
+                <button type="submit" id="btn-submit-activity" class="btn green button-submit">Submit<i class="fa fa-check"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+

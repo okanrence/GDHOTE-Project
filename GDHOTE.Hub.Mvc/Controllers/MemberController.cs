@@ -41,7 +41,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var member = PortalMemberService.GetMember(id);
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(member);
-            var viewModel = JsonConvert.DeserializeObject<MemberFormViewModel>(item);
+            var viewModel = JsonConvert.DeserializeObject<UpdateMemberFormViewModel>(item);
             viewModel.Genders = viewModelTemp.Genders;
             viewModel.MaritalStatuses = viewModelTemp.MaritalStatuses;
             return View("UpdateMemberForm", viewModel);
@@ -67,7 +67,6 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 {
                     ViewBag.ErrorBag = result.ErrorMessage;
                 }
-
             }
             else
             {
@@ -83,9 +82,27 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("MemberForm", ReturnViewModel());
+                return View("UpdateMemberForm");
             }
-            return View("MemberForm");
+            var result = PortalMemberService.UpdateMember(updateRequest);
+            if (result != null)
+            {
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+            }
+            else
+            {
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
+            }
+            // If we got this far, something failed, redisplay form
+            return View("UpdateMemberForm");
         }
 
 
@@ -100,12 +117,10 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult ApproveMember(ApproveMemberRequest approveRequest)
         {
-
             if (!ModelState.IsValid)
             {
                 return Json(ModelState);
             }
-
             var result = PortalMemberService.ApproveMember(approveRequest);
             return Json(result, JsonRequestBehavior.AllowGet);
         }

@@ -795,6 +795,10 @@
     <Content Include="Views\Accrual\New.cshtml" />
     <Content Include="Views\AccrualType\AccrualIndex.cshtml" />
     <Content Include="Views\AccrualType\AccrualTypeForm.cshtml" />
+    <Content Include="Views\Activity\MemberActivity.cshtml" />
+    <Content Include="Views\Activity\_MemberActivityForm.cshtml" />
+    <Content Include="Views\Activity\ActivityIndexOld.cshtml" />
+    <Content Include="Views\MemberDetails\UpdateDetailsForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

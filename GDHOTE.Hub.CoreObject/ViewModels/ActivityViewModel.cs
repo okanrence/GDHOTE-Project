@@ -6,6 +6,7 @@ namespace GDHOTE.Hub.CoreObject.ViewModels
     [TableName("vx_HUB_Activities")]
     public class ActivityViewModel : Activity
     {
+        public string MemberKey { get; set; }
         public string MemberCode { get; set; }
         public string Surname { get; set; }
         public string FirstName { get; set; }

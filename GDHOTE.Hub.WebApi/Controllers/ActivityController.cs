@@ -51,7 +51,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
         {
             try
             {
-                var response = ActivityService.GetMemberActivities(Convert.ToInt32(id)).ToList();
+                var response = ActivityService.GetMemberActivities(id).ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -153,7 +153,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
                 }
                 string username = User.Identity.Name;
-                var response = ActivityService.Delete(Convert.ToInt64(id), username);
+                var response = ActivityService.Delete(id, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
