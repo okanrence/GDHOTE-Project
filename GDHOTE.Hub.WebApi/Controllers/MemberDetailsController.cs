@@ -51,7 +51,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
         {
             try
             {
-                var response = MemberDetailsService.GetMemberDetails(Convert.ToInt16(id));
+                var response = MemberDetailsService.GetMemberDetails(id);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -119,7 +119,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
             try
             {
                 string username = User.Identity.Name;
-                var response = MemberDetailsService.Delete(Convert.ToInt16(id), username);
+                var response = MemberDetailsService.Delete(id, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)

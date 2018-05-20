@@ -6,6 +6,7 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
     public class UpdateMemberDetailsRequest : CreateMemberDetailsRequest
     {
-        public long Id { get; set; }
+        public string MemberDetailsKey { get; set; }
+        //public long Id { get; set; }
     }
 }

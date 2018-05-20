@@ -284,7 +284,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 MobileNumber = createRequest.MobileNumber,
                                 EmailAddress = createRequest.EmailAddress,
                                 StatusId = (int)CoreObject.Enumerables.Status.Active,
-                                MemberDetailKey = Guid.NewGuid().ToString(),
+                                MemberDetailsKey = Guid.NewGuid().ToString(),
                                 CreatedById = user.Id,
                                 DateCreated = DateTime.Now,
                                 RecordDate = DateTime.Now
@@ -327,6 +327,20 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     {
                         if (int.TryParse(result.ToString(), out var memberId))
                         {
+                            if (!string.IsNullOrEmpty(createRequest.MobileNumber))
+                            {
+                                new Task(() =>
+                                {
+                                    var req = new SmsMessageRequest
+                                    {
+                                        Message = "Dear " + createRequest.FirstName + " " + createRequest.Surname + ", your details has been successfully submitted.",
+                                        MobileNumber = createRequest.MobileNumber,
+                                        //Type = SmsType.CustomerProfile,
+                                        //CustomerId = emailExist.CustomerId
+                                    };
+                                    SmsNotificationService.SendMessage(req, currentUser);
+                                }).Start();
+                            }
 
                         }
                     }
@@ -689,7 +703,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                             ? DateTime.Parse(dateWeddedString) : (DateTime?)null,
                                         GuardianAngel = StringCaseService.TitleCase(guardianAngel),
                                         StatusId = (int)CoreObject.Enumerables.Status.Active,
-                                        MemberDetailKey = Guid.NewGuid().ToString(),
+                                        MemberDetailsKey = Guid.NewGuid().ToString(),
                                         YearGroupId = Int16.TryParse(yeargroupString, out var yeargroup)
                                             ? Int16.Parse(yeargroupString) : 0,
                                         CreatedById = user.Id,

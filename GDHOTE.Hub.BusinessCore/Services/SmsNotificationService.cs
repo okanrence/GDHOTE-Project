@@ -21,7 +21,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                 //Get User Initiating Creation Request
                 var user = UserService.GetUserByUserName(currentUser);
-
                 if (user == null)
                 {
                     return new Response

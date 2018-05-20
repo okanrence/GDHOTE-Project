@@ -30,11 +30,11 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var memberDetails = PortalMemberDetailsService.GetMemberDetails(id);
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(memberDetails);
-            var viewModel = JsonConvert.DeserializeObject<MemberDetailsFormModel>(item);
+            var viewModel = JsonConvert.DeserializeObject<UpdateMemberDetailsFormModel>(item);
             viewModel.Countries = viewModelTemp.Countries;
             viewModel.States = viewModelTemp.States;
-            viewModel.YearGroups = viewModelTemp.YearGroups;
-            return View("MemberDetailsForm", viewModel);
+            //viewModel.YearGroups = viewModelTemp.YearGroups;
+            return View("UpdateDetailsForm", viewModel);
         }
 
         public ActionResult Save(CreateMemberDetailsRequest createRequest)
@@ -69,6 +69,33 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return View("MemberDetailsForm", ReturnViewModel());
         }
 
+
+        public ActionResult Update(UpdateMemberDetailsRequest updateRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("UpdateDetailsForm");
+            }
+            var result = PortalMemberDetailsService.UpdateMemberDetails(updateRequest);
+            if (result != null)
+            {
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+            }
+            else
+            {
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
+            }
+            // If we got this far, something failed, redisplay form
+            return View("UpdateDetailsForm");
+        }
         private static MemberDetailsFormModel ReturnViewModel()
         {
             var states = PortalStateService.GetActiveStates().ToList();

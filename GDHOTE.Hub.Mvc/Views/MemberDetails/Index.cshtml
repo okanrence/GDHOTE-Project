@@ -31,7 +31,7 @@ else
                 @foreach (var member in Model)
                 {
                     <tr>
-                        <td>@Html.ActionLink(member.Surname + ", " + member.FirstName, "Edit", "MemberDetails", new { id = member.Id }, null)</td>
+                        <td>@Html.ActionLink(member.Surname + ", " + member.FirstName, "Edit", "MemberDetails", new { id = member.MemberDetailsKey }, null)</td>
                         <td>@member.MobileNumber</td>
                         <td>@member.EmailAddress</td>
                         @*<td>@member.StateOfOriginId</td>
@@ -39,7 +39,7 @@ else
                         <td>@member.ResidenceCountryId</td>*@
                         <td>@member.YearGroupId</td>
                         <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>
-                        <td><button data-member-id="@member.Id" class="btn btn-link js-delete">Delete</button></td>
+                        <td><button data-member-id="@member.MemberDetailsKey" class="btn btn-link js-delete">Delete</button></td>
                     </tr>
                 }
             </tbody>

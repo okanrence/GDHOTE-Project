@@ -28,6 +28,6 @@ namespace GDHOTE.Hub.CoreObject.Models
         public string GuardianAngel { get; set; }
         public string HighestDegreeObtained { get; set; }
         public string CurrentWorkPlace { get; set; }
-        public string MemberDetailKey { get; set; }
+        public string MemberDetailsKey { get; set; }
     }
 }

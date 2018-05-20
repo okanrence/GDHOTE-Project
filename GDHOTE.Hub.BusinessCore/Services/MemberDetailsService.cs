@@ -51,14 +51,14 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<MemberDetailsViewModel>();
             }
         }
-        public static MemberDetails GetMemberDetails(int id)
+        public static MemberDetails GetMemberDetails(string memberDetailsKey)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
                     var memberDetails = db.Fetch<MemberDetails>()
-                        .SingleOrDefault(m => m.Id == id);
+                        .SingleOrDefault(m => m.MemberDetailsKey == memberDetailsKey);
                     return memberDetails;
                 }
             }
@@ -86,7 +86,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
         }
 
-        public static Response Delete(int id, string currentUser)
+        public static Response Delete(string memberDetailsKey, string currentUser)
         {
             try
             {
@@ -94,7 +94,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 {
                     var response = new Response();
 
-                    var memberDetails = db.Fetch<MemberDetails>().SingleOrDefault(c => c.MemberId == id);
+                    var memberDetails = db.Fetch<MemberDetails>()
+                        .SingleOrDefault(m => m.MemberDetailsKey == memberDetailsKey);
                     if (memberDetails == null)
                     {
                         return new Response
@@ -176,6 +177,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var request = JsonConvert.SerializeObject(createRequest);
                     var memberDetails = JsonConvert.DeserializeObject<MemberDetails>(request);
 
+                    memberDetails.MemberDetailsKey = Guid.NewGuid().ToString();
                     memberDetails.CreatedById = user.Id;
                     memberDetails.DateCreated = DateTime.Now;
                     memberDetails.RecordDate = DateTime.Now;
@@ -212,7 +214,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //check member details exist
                     var detailsExist = db.Fetch<MemberDetails>()
-                        .SingleOrDefault(m => m.Id == updateRequest.Id);
+                        .SingleOrDefault(m => m.MemberDetailsKey == updateRequest.MemberDetailsKey);
                     if (detailsExist == null)
                     {
                         return new Response
@@ -242,14 +244,38 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     detailsExist.CountryOfOriginId = updateRequest.CountryOfOriginId;
                     detailsExist.ResidenceStateId = updateRequest.ResidenceStateId;
                     detailsExist.ResidenceCountryId = updateRequest.ResidenceCountryId;
+                    detailsExist.YearGroupId = updateRequest.YearGroupId;
                     detailsExist.ResidenceAddress = updateRequest.ResidenceAddress;
                     detailsExist.DateWedded = updateRequest.DateWedded;
                     detailsExist.HighestDegreeObtained = updateRequest.HighestDegreeObtained;
                     detailsExist.CurrentWorkPlace = updateRequest.CurrentWorkPlace;
                     detailsExist.UpdatedById = user.Id;
                     detailsExist.DateUpdated = DateTime.Now;
-                    db.Update(detailsExist);
+                    var result = db.Update(detailsExist);
 
+
+                    //Notify member by Sms
+                    if (result != null)
+                    {
+                        if (int.TryParse(result.ToString(), out var memberId))
+                        {
+                            if (!string.IsNullOrEmpty(updateRequest.MobileNumber))
+                            {
+                                new Task(() =>
+                                {
+                                    var req = new SmsMessageRequest
+                                    {
+                                        Message = "Dear Member, your details has been successfully updated.",
+                                        MobileNumber = updateRequest.MobileNumber,
+                                        //Type = SmsType.CustomerProfile,
+                                        //CustomerId = emailExist.CustomerId
+                                    };
+                                    SmsNotificationService.SendMessage(req, currentUser);
+                                }).Start();
+                            }
+
+                        }
+                    }
                     response = new Response
                     {
                         ErrorCode = "00",
