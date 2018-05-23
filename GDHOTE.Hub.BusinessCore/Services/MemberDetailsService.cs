@@ -68,14 +68,14 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new MemberDetails();
             }
         }
-        public static MemberDetails GetMemberDetailsByMemberKey(int memberKey)
+        public static MemberDetails GetMemberDetailsById(long id)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
                     var memberDetails = db.Fetch<MemberDetails>()
-                        .SingleOrDefault(m => m.MemberId == memberKey);
+                        .SingleOrDefault(m => m.MemberId == id);
                     return memberDetails;
                 }
             }

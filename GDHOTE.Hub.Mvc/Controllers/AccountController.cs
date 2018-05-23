@@ -37,6 +37,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 return View(loginRequest);
             }
 
+            WeddingAnniversaryService.StartEmailProcess();
+
             var integration = new LoginIntegration(loginRequest.EmailAddress, loginRequest.Password);
             TokenResponse result = integration.Invoke();
             if (result != null)

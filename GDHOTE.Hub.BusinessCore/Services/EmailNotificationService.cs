@@ -396,7 +396,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                 //Get User Initiating Creation Request
                 var user = UserService.GetUserByUserName(currentUser);
-
                 if (user == null)
                 {
                     return new Response
@@ -438,7 +437,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 dynamic email = new Email(mailTemplate);
                 email.To = sendRequest.RecipientEmailAddress;
                 email.Bcc = BlindCopy;
-                email.Subject = sendRequest.Subject;
+                email.Subject = "Happy Birthday";// sendRequest.Subject;
                 email.FirstName = sendRequest.Firstname;
                 email.LastName = sendRequest.Surname;
                 service.Send(email);
@@ -488,6 +487,47 @@ namespace GDHOTE.Hub.BusinessCore.Services
         {
             var response = new Response();
 
+            //Get User Initiating Creation Request
+            var user = UserService.GetUserByUserName(currentUser);
+            if (user == null)
+            {
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Unable to validate User"
+                };
+            }
+
+            //Validate Request
+            if (sendRequest == null)
+            {
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Invalid Request"
+                };
+            }
+
+            //Validate Email address
+            if (!StringCaseService.IsValidEmail(sendRequest.RecipientEmailAddress))
+            {
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Invalid Email Address"
+                };
+            }
+
+            int totalYears = 0;
+            if (sendRequest.MemberId > 0)
+            {
+                var member = MemberDetailsService.GetMemberDetailsById(sendRequest.MemberId);
+                if (member != null)
+                {
+                    totalYears = DateTime.Now.Year - member.DateWedded.Value.Year;
+                }
+            }
+
             var emailRequest = new EmailRequest
             {
                 RecipientEmailAddress = sendRequest.RecipientEmailAddress,
@@ -495,12 +535,55 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 Type = EmailType.WeddingAnniversaryNotification,
                 Data = new Hashtable
                 {
-                    //["Subject"] = "Welcome to " + Get("settings.organisation.name"),
-                    ["FirstName"] = sendRequest.Firstname,
-                    ["LastName"] = sendRequest.Surname,
+                    ["FamilyName"] = sendRequest.Surname,
+                    ["TotalYears"] = totalYears == 0 ? "" : totalYears + " year(s)",
                 }
             };
-            response = SendNotificationEmail(emailRequest, currentUser);
+
+
+            var emailType = EmailType.WeddingAnniversaryNotification;
+            int templateCount = 1;// Convert.ToInt16(Get("settings.email.birthday.template.count"));
+            Random rnd = new Random();
+            int number = rnd.Next(1, templateCount);
+            var mailTemplate = emailType.ToString() + number;
+
+            var viewsPath = Path.GetFullPath(EmailTemplatePath);
+            var engines = new ViewEngineCollection { new FileSystemRazorViewEngine(viewsPath) };
+            var service = new EmailService(engines);
+            dynamic email = new Email(mailTemplate);
+            email.To = emailRequest.RecipientEmailAddress;
+            email.Bcc = BlindCopy;
+            email.Subject = emailRequest.Subject;
+            email.FamilyName = emailRequest.Data["FamilyName"];
+            email.TotalYears = emailRequest.Data["TotalYears"];
+            service.Send(email);
+
+
+            //Log Notification
+            new Task(() =>
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var notification = new Notification
+                    {
+                        Recipient = sendRequest.RecipientEmailAddress,
+                        NotificationTypeId = (int)NotificationType.Email,
+                        ContentBody = emailType.ToString(),
+                        Status = 'S',
+                        CreatedById = user.Id,
+                        DateCreated = DateTime.Now,
+                        RecordDate = DateTime.Now
+                    };
+                    db.Insert(notification);
+                }
+
+            }).Start();
+
+            response = new Response
+            {
+                ErrorCode = "00",
+                ErrorMessage = "Successful"
+            };
             return response;
         }
 
