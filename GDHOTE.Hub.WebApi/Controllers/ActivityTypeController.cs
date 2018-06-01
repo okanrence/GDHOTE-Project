@@ -81,7 +81,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
         {
             try
             {
-                var response = ActivityTypeService.GetActivityType(Convert.ToInt16(id));
+                var response = ActivityTypeService.GetActivityType(id);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -140,6 +140,43 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
+
+        [HttpPost]
+        [Route("update-activity-type")]
+        public HttpResponseMessage UpdateActivityType(UpdateActivityTypeRequest updateRequest)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+
+                string username = User.Identity.Name;
+                var response = ActivityTypeService.UpdateActivityType(updateRequest, username);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
         [HttpPost]
         [Route("delete-activity-type")]
         public HttpResponseMessage DeleteActivityType(string id)
@@ -147,7 +184,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
             try
             {
                 string username = User.Identity.Name;
-                var response = ActivityTypeService.Delete(Convert.ToInt16(id), username);
+                var response = ActivityTypeService.Delete(id, username);
                 return Request.CreateResponse(HttpStatusCode.OK, response);
 
             }

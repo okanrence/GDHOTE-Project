@@ -103,7 +103,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     //Check if serivce has ran
                     var checker = CheckerService.GetCheckerByAppId(appId);
 
-
                     if (checker == null) return;
 
                     if (string.IsNullOrEmpty(checker.ApplicationId)) return;

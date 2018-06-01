@@ -4,9 +4,9 @@ using GDHOTE.Hub.CoreObject.Models;
 
 namespace GDHOTE.Hub.CoreObject.ViewModels
 {
-    public class ActivityTypeFormViewModel : CreateActivityTypeRequest
+    public class UpdateActivityTypeFormViewModel : UpdateActivityTypeRequest
     {
-        //public List<Status> Statuses { get; set; }
+        public List<Status> Statuses { get; set; }
         public List<ActivityType> DependencyTypes { get; set; }
     }
 }

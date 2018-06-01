@@ -230,25 +230,12 @@ namespace GDHOTE.Hub.PortalCore.Services
             IRestResponse response = new RestResponse();
             try
             {
-                string responseMessage = "", responseCode = "";
                 response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
                 }
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    responseMessage = response.Content;
-                    responseCode = "01";
-                }
-                else
-                {
-                    responseMessage = response.Content;
-                    responseCode = responseMessage.ToLower().Contains("successful") ? "00" : "01";
-                }
-
-                result.ErrorCode = responseCode;
-                result.ErrorMessage = responseMessage;
+                result = JsonConvert.DeserializeObject<Response>(response.Content);
             }
             catch (Exception ex)
             {

@@ -12,16 +12,16 @@ using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
 {
-    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "account")]
-    public class AccountController : ApiController
+    [RoutePrefix(ConstantManager.ApiDefaultNamespace + "checker")]
+    public class CheckerController : ApiController
     {
         [HttpGet]
-        [Route("get-all-accounts")]
-        public HttpResponseMessage GetAllAccounts()
+        [Route("get-all-checkers")]
+        public HttpResponseMessage GetAllCheckers()
         {
             try
             {
-                var response = AccountService.GetAllAccounts().ToList();
+                var response = CheckerService.GetAllCheckers().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -47,74 +47,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpGet]
-        [Route("get-active-accounts")]
-        public HttpResponseMessage GetActiveAccounts()
+        [Route("get-active-checkers")]
+        public HttpResponseMessage GetActivecheckers()
         {
             try
             {
-                var response = AccountService.GetActiveAccounts().ToList();
-                if (response.Count > 0)
-                {
-                    return new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        RequestMessage = Request,
-                        Content = new StringContent(
-                            JsonConvert.SerializeObject(response, Formatting.Indented))
-                    };
-                }
-
-                return new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    RequestMessage = Request,
-                    Content = new StringContent(
-                        JsonConvert.SerializeObject(response, Formatting.Indented))
-                };
-            }
-            catch (UnableToCompleteException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
-            }
-        }
-
-
-        [HttpGet]
-        [Route("get-all-internal-accounts")]
-        public HttpResponseMessage GetInternalAccounts()
-        {
-            try
-            {
-                var response = AccountService.GetAllInternalAccounts().ToList();
-                if (response.Count > 0)
-                {
-                    return new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        RequestMessage = Request,
-                        Content = new StringContent(
-                            JsonConvert.SerializeObject(response, Formatting.Indented))
-                    };
-                }
-
-                return new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    RequestMessage = Request,
-                    Content = new StringContent(
-                        JsonConvert.SerializeObject(response, Formatting.Indented))
-                };
-            }
-            catch (UnableToCompleteException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
-            }
-        }
-
-
-        [HttpGet]
-        [Route("get-active-internal-accounts")]
-        public HttpResponseMessage GetActiveInternalAccounts()
-        {
-            try
-            {
-                var response = AccountService.GetActiveInternalAccounts().ToList();
+                var response = CheckerService.GetActiveCheckers().ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -139,12 +77,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("get-account")]
-        public HttpResponseMessage GetAccount(string id)
+        [Route("get-checker")]
+        public HttpResponseMessage GetChecker(string id)
         {
             try
             {
-                var response = AccountService.GetAccount(Convert.ToInt16(id));
+                var response = CheckerService.GetCheckerByAppId(id);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -168,8 +106,8 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("create-account")]
-        public HttpResponseMessage CreateAccount(CreateAccountRequest createRequest)
+        [Route("create-checker")]
+        public HttpResponseMessage Createchecker(CreateCheckerRequest createRequest)
         {
             try
             {
@@ -179,7 +117,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 }
 
                 string username = User.Identity.Name;
-                var response = AccountService.CreateAccount(createRequest, username);
+                var response = CheckerService.CreateChecker(createRequest, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -205,18 +143,13 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
 
         [HttpPost]
-        [Route("create-internal-account")]
-        public HttpResponseMessage CreateInternalAccount(CreateInternalAccountRequest createRequest)
+        [Route("delete-checker")]
+        public HttpResponseMessage DeleteChecker(string id)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-                }
-
                 string username = User.Identity.Name;
-                var response = AccountService.CreateInternalAccount(createRequest, username);
+                var response = CheckerService.Delete(id, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -239,17 +172,16 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
-
 
 
         [HttpPost]
-        [Route("delete-account")]
-        public HttpResponseMessage DeleteAccount(string id)
+        [Route("update-checker")]
+        public HttpResponseMessage UpdateChecker(string id)
         {
             try
             {
                 string username = User.Identity.Name;
-                var response = AccountService.Delete(id, username);
+                var response = CheckerService.UpdateChecker(id, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -266,13 +198,11 @@ namespace GDHOTE.Hub.WebApi.Controllers
                         JsonConvert.SerializeObject(response, Formatting.Indented))
                 };
 
-
             }
             catch (UnableToCompleteException ex)
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
-
     }
 }

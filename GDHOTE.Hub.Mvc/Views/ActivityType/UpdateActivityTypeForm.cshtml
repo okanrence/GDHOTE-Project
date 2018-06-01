@@ -1,0 +1,38 @@
+﻿@model GDHOTE.Hub.CoreObject.ViewModels.UpdateActivityTypeFormViewModel
+
+
+@{
+    ViewBag.Title = "Edit Activity Type";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit Activity Type</h2>
+@using (Html.BeginForm("Update", "ActivityType"))
+{
+    <div>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+        <div class="form-group">
+            @Html.LabelFor(a => a.Name)
+            @Html.TextBoxFor(a => a.Name, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(a => a.Name)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(a => a.DependencyTypeId)
+            @Html.DropDownListFor(a => a.DependencyTypeId, new SelectList(Model.DependencyTypes, "Id", "Name"), "Select Dependency", new { @class = "form-control" })
+            @Html.ValidationMessageFor(a => a.DependencyTypeId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(a => a.StatusId)
+            @Html.DropDownListFor(a => a.StatusId, new SelectList(Model.Statuses, "Id", "Name"), "Select Dependency", new { @class = "form-control" })
+            @Html.ValidationMessageFor(a => a.StatusId)
+        </div>
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+        <div>@Html.HiddenFor(a => a.ActivityTypeKey)</div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+
+}

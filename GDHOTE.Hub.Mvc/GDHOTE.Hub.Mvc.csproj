@@ -793,6 +793,7 @@
     <Content Include="Views\Activity\_MemberActivityForm.cshtml" />
     <Content Include="Views\Activity\ActivityIndexOld.cshtml" />
     <Content Include="Views\MemberDetails\UpdateDetailsForm.cshtml" />
+    <Content Include="Views\ActivityType\UpdateActivityTypeForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

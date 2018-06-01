@@ -138,36 +138,56 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return "Error occured while trying to update Account";
             }
         }
-        public static string Delete(int id, string currentUser)
+        public static Response Delete(string accountKey, string currentUser)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
+                    var response = new Response();
 
-
-                    var account = db.Fetch<Account>().SingleOrDefault(c => c.Id == id);
+                    var account = db.Fetch<Account>().SingleOrDefault(a=> a.AccountKey == accountKey);
                     if (account == null)
                     {
-                        return "Record does not exist";
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
                     }
 
                     //Get User Initiating Creation Request
                     var user = UserService.GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
+                    }
 
                     //Delete Account
                     account.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
                     account.DeletedById = user.Id;
                     account.DateDeleted = DateTime.Now;
                     db.Update(account);
-                    var result = "Operation Successful";
-                    return result;
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return "Error occured while trying to delete record";
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to delete record"
+                };
             }
         }
 

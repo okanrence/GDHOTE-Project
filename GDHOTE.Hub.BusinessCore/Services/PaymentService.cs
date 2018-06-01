@@ -202,7 +202,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     string narration = StringCaseService.TitleCase(request.Narration);
 
                     //Get account details
-                    var memberAccount = db.Fetch<Account>().SingleOrDefault(a => a.MemberId == request.MemberId);
+                    var memberAccount = db.Fetch<Account>()
+                        .SingleOrDefault(a => a.MemberId == request.MemberId);
                     if (memberAccount == null)
                     {
                         return new Response
@@ -214,7 +215,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Get Internal account to Debit
                     //var internalAccount = InternalAccountService.ReturnInternalAccount(request.CurrencyId, request.PaymentTypeId);
-                    var paymentType = db.Fetch<PaymentType>().SingleOrDefault(p => p.Id == request.PaymentTypeId);
+                    var paymentType = db.Fetch<PaymentType>()
+                        .SingleOrDefault(p => p.Id == request.PaymentTypeId);
                     if (paymentType == null)
                     {
                         //Use Default internal account
@@ -226,6 +228,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //insert payment
                     string paymentReference = Guid.NewGuid().ToString();
+                    paymentReference = paymentReference.Replace("-", "");
                     var payment = new Payment
                     {
                         MemberId = request.MemberId,
@@ -414,7 +417,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     string narration = StringCaseService.TitleCase(request.Narration);
 
                     //Get account details
-                    var memberAccount = db.Fetch<Account>().SingleOrDefault(a => a.MemberId == request.MemberId);
+                    var memberAccount = db.Fetch<Account>()
+                        .SingleOrDefault(a => a.MemberId == request.MemberId);
                     if (memberAccount == null)
                     {
                         return new Response
@@ -426,10 +430,12 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Get Internal account to Debit
                     //var internalAccount = InternalAccountService.ReturnInternalAccount(request.CurrencyId, request.PaymentTypeId);
-                    var paymentType = db.Fetch<PaymentType>().SingleOrDefault(p => p.Id == request.PaymentTypeId);
+                    var paymentType = db.Fetch<PaymentType>()
+                        .SingleOrDefault(p => p.Id == request.PaymentTypeId);
 
                     //insert payment
                     string paymentReference = Guid.NewGuid().ToString();
+                    paymentReference = paymentReference.Replace("-", "");
                     var payment = new Payment
                     {
                         MemberId = request.MemberId,

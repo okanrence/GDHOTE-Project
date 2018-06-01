@@ -15,5 +15,6 @@ namespace GDHOTE.Hub.CoreObject.Models
         public string Name { get; set; }
         public int StatusId { get; set; }
         public int DependencyTypeId { get; set; }
+        public string ActivityTypeKey { get; set; }
     }
 }

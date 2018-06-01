@@ -24,7 +24,6 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult List()
         {
-            //var members = PortalMemberService.GetAllMembers().ToList();
             string criteria = "";
             string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
             string endDate = DateTime.Now.ToString("dd-MMM-yyyy");

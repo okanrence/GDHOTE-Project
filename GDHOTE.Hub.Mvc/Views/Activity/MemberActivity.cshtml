@@ -24,11 +24,11 @@ else
                 <thead>
                     <tr>
                         <th>SN</th>
-                        <th>Name</th>
                         <th>Activity</th>
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Status</th>
+                        <th>Remarks</th>
                         <th>Date</th>
                         <th></th>
                         <th></th>
@@ -41,11 +41,11 @@ else
                         <tr>
                             <td>@i</td>
                             @{ i++; }
-                            <td>@activity.Surname, @activity.FirstName</td>
                             <td>@activity.ActivityType</td>
                             <td>@activity.StartDate.ToString("dd-MMM-yyyy")</td>
                             <td>@(activity.EndDate?.Date.ToString("dd-MMM-yyyy"))</td>
                             <td>@activity.Status</td>
+                            <td>@activity.Remarks</td>
                             <td>@activity.DateCreated.ToString("dd-MMM-yyyy")</td>
                             <td><button edit-member-activity="@activity.ActivityKey" class="btn btn-link js-edit">Edit</button></td>
                             <td><button delete-member-activity="@activity.ActivityKey" class="btn btn-link js-delete">Delete</button></td>
@@ -98,6 +98,7 @@ else
                 var activityTypeId = $("#ActivityTypeId").val();
                 var startDate = $("#StartDate").val();
                 var endDate = $("#EndDate").val();
+                var remarks = $("#Remarks").val();
 
                 var form = $('#activitymodal');
                 var token = $('input[name="__RequestVerificationToken"]', form).val();
@@ -105,7 +106,7 @@ else
                 //Submit request
                 var request = {
                     __RequestVerificationToken: token, MemberId: memberId, ActivityTypeId: activityTypeId,
-                    StartDate: startDate, EndDate: endDate
+                    StartDate: startDate, EndDate: endDate, Remarks: remarks
                 };
 
 

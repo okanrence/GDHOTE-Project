@@ -17,5 +17,7 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        [Display(Name = "Remarks")]
+        public string Remarks { get; set; }
     }
 }

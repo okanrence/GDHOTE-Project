@@ -104,8 +104,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<MemberDetailsResponse>();
             }
         }
-
-
+        
         public static MemberInfoResponse GetMemberInformation(string memberkey)
         {
             try

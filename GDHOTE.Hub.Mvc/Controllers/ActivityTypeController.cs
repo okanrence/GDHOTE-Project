@@ -27,13 +27,13 @@ namespace GDHOTE.Hub.Mvc.Controllers
         public ActionResult Edit(string id)
         {
             var activitype = PortalActivityTypeService.GetActivityType(id);
-            var viewModelTemp = ReturnViewModel();
+            var viewModelTemp = ReturnUpdateViewModel();
             var item = JsonConvert.SerializeObject(activitype);
-            var viewModel = JsonConvert.DeserializeObject<ActivityTypeFormViewModel>(item);
+            var viewModel = JsonConvert.DeserializeObject<UpdateActivityTypeFormViewModel>(item);
             viewModel.Statuses = viewModelTemp.Statuses;
             viewModel.DependencyTypes = viewModelTemp.DependencyTypes;
 
-            return View("ActivityTypeForm", viewModel);
+            return View("UpdateActivityTypeForm", viewModel);
         }
         public ActionResult Save(CreateActivityTypeRequest createRequest)
         {
@@ -54,7 +54,6 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 {
                     ViewBag.ErrorBag = result.ErrorMessage;
                 }
-
             }
             else
             {
@@ -63,6 +62,37 @@ namespace GDHOTE.Hub.Mvc.Controllers
             // If we got this far, something failed, redisplay form
             return View("ActivityTypeForm", ReturnViewModel());
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Update(UpdateActivityTypeRequest updateRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("UpdateActivityTypeForm", ReturnUpdateViewModel());
+            }
+            var result = PortalActivityTypeService.UpdateActivityType(updateRequest);
+            if (result != null)
+            {
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+            }
+            else
+            {
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
+            }
+            // If we got this far, something failed, redisplay form
+            return View("UpdateActivityTypeForm", ReturnUpdateViewModel());
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -74,9 +104,21 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         private static ActivityTypeFormViewModel ReturnViewModel()
         {
-            var statuses = PortalStatusService.GetStatuses().ToList();
+            //var statuses = PortalStatusService.GetStatuses().ToList();
             var activityTypes = PortalActivityTypeService.GetActiveActivityTypes().ToList();
             var viewModel = new ActivityTypeFormViewModel
+            {
+                //Statuses = statuses,
+                DependencyTypes = activityTypes
+            };
+            return viewModel;
+        }
+
+        private static UpdateActivityTypeFormViewModel ReturnUpdateViewModel()
+        {
+            var statuses = PortalStatusService.GetStatuses().ToList();
+            var activityTypes = PortalActivityTypeService.GetActiveActivityTypes().ToList();
+            var viewModel = new UpdateActivityTypeFormViewModel
             {
                 Statuses = statuses,
                 DependencyTypes = activityTypes

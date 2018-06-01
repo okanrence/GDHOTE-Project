@@ -65,13 +65,14 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<ActivityType>();
             }
         }
-        public static ActivityType GetActivityType(int id)
+        public static ActivityType GetActivityType(string activityTypeKey)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var activityType = db.Fetch<ActivityType>().SingleOrDefault(c => c.Id == id);
+                    var activityType = db.Fetch<ActivityType>()
+                        .SingleOrDefault(a => a.ActivityTypeKey == activityTypeKey);
                     return activityType;
                 }
             }
@@ -97,17 +98,23 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return "Error occured while trying to update ActivityType";
             }
         }
-        public static string Delete(int id, string currentUser)
+        public static Response Delete(string activityTypeKey, string currentUser)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
+                    var response = new Response();
 
-                    var activityType = db.Fetch<ActivityType>().SingleOrDefault(c => c.Id == id);
+                    var activityType = db.Fetch<ActivityType>()
+                        .SingleOrDefault(c => c.ActivityTypeKey == activityTypeKey);
                     if (activityType == null)
                     {
-                        return "Record does not exist";
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
                     }
 
                     //Get User Initiating Creation Request
@@ -118,14 +125,22 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     activityType.DeletedById = user.Id;
                     activityType.DateDeleted = DateTime.Now;
                     db.Update(activityType);
-                    var result = "Operation Successful";
-                    return result;
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return "Error occured while trying to delete record";
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to delete record"
+                };
             }
         }
 
@@ -167,12 +182,74 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         Name = name,
                         DependencyTypeId = request.DependencyTypeId,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
+                        ActivityTypeKey = Guid.NewGuid().ToString(),
                         CreatedById = user.Id,
                         DateCreated = DateTime.Now,
                         RecordDate = DateTime.Now
                     };
 
                     db.Insert(activityType);
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                var response = new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to insert record"
+                };
+                return response;
+            }
+
+        }
+
+
+        public static Response UpdateActivityType(UpdateActivityTypeRequest updateRequest, string currentUser)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var response = new Response();
+
+                    //Get User Initiating Creation Request
+                    var user = UserService.GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
+
+                    //Check member exist
+                    var activityType = db.Fetch<ActivityType>()
+                        .SingleOrDefault(a => a.ActivityTypeKey == updateRequest.ActivityTypeKey);
+
+                    if (activityType == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record not found"
+                        };
+                    }
+
+                    string name = StringCaseService.TitleCase(updateRequest.Name);
+                    activityType.Name = name;
+                    activityType.DependencyTypeId = updateRequest.DependencyTypeId;
+                    activityType.StatusId = updateRequest.StatusId;
+                    activityType.UpdatedById = user.Id;
+                    activityType.DateUpdated = DateTime.Now;
+                    db.Update(activityType);
                     response = new Response
                     {
                         ErrorCode = "00",

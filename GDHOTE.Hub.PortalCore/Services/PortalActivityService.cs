@@ -129,6 +129,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
+
         public static Response DeleteActivity(string id)
         {
 
@@ -203,6 +204,6 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-      
+
     }
 }

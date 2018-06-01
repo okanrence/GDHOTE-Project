@@ -17,7 +17,6 @@ using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
 using Newtonsoft.Json;
 using OfficeOpenXml;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -225,7 +224,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     //Check member already profiled
                     var memberExist = db.Fetch<Member>()
                         .SingleOrDefault(m => m.Surname.ToLower().Equals(createRequest.Surname.ToLower())
-                                              && m.FirstName.ToLower().Equals(createRequest.FirstName.ToLower()));
+                                              && m.FirstName.ToLower().Equals(createRequest.FirstName.ToLower())
+                                              && m.OtherNames.ToLower().Equals(createRequest.OtherNames.ToLower()));
                     if (memberExist != null)
                     {
                         return new Response
@@ -254,9 +254,11 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     string surname = StringCaseService.TitleCase(member.Surname);
                     string firstName = StringCaseService.TitleCase(member.FirstName);
+                    string othertNames = StringCaseService.TitleCase(member.OtherNames);
 
                     member.Surname = surname;
                     member.FirstName = firstName;
+                    member.OtherNames = othertNames;
                     member.ChannelId = channelCode;
                     member.MemberStatusId = (int)CoreObject.Enumerables.MemberStatus.Active;
                     member.ApprovedFlag = "N";
@@ -269,8 +271,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     member.OfficerDate = DateTime.Now;
                     member.DateCreated = DateTime.Now;
                     member.RecordDate = DateTime.Now;
-
-
+                    
                     var result = db.Insert(member);
 
                     //Insert member details
@@ -322,6 +323,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             db.Insert(account);
                         }
                     }
+
                     //Notify member by Sms
                     if (result != null)
                     {
@@ -501,9 +503,10 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Log audit trail
 
-                    memberExist.Surname = updateRequest.Surname;
-                    memberExist.FirstName = updateRequest.FirstName;
-                    memberExist.OtherNames = updateRequest.OtherNames;
+                    //Update
+                    memberExist.Surname = StringCaseService.TitleCase(updateRequest.Surname);
+                    memberExist.FirstName = StringCaseService.TitleCase(updateRequest.FirstName);
+                    memberExist.OtherNames = StringCaseService.TitleCase(updateRequest.OtherNames);
                     memberExist.MaritalStatus = updateRequest.MaritalStatus;
                     memberExist.DateOfBirth = updateRequest.DateOfBirth;
                     memberExist.InitiationDate = updateRequest.InitiationDate;
@@ -814,33 +817,41 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         case 1:
                             members = db.Fetch<MemberViewModel>()
                               .Where(m => m.MagusDate >= castStartDate && m.MagusDate < castEndDate.AddDays(1))
-                                .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
+                                .OrderBy(m => m.FirstName)
+                                .ThenBy(m => m.Surname)
                               .ToList();
                             break;
                         case 2:
                             members = db.Fetch<MemberViewModel>()
                                 .Where(m => m.InitiationDate >= castStartDate && m.InitiationDate < castEndDate.AddDays(1))
-                                .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
+                                .OrderBy(m => m.FirstName)
+                                .ThenBy(m => m.Surname)
                                 .ToList();
                             break;
                         case 3:
                             members = db.Query<MemberViewModel>("exec sp_HUB_GetBirthdayMembers @startdate, @enddate", new { startdate = castStartDate, enddate = castEndDate })
-                                .OrderBy(m => m.DateOfBirth).ThenBy(m => m.DateOfBirth.Value.Date.Month).ThenBy(m => m.DateOfBirth.Value.Date.Month)
+                                .OrderBy(m => m.DateOfBirth)
+                                .ThenBy(m => m.DateOfBirth.Value.Date.Month)
                                 .ToList();
                             break;
                         case 4:
                             members = db.Fetch<MemberViewModel>()
                                 .Where(m => m.OfficerDate >= castStartDate && m.OfficerDate < castEndDate.AddDays(1))
-                                .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
+                                .OrderBy(m => m.FirstName)
+                                .ThenBy(m => m.Surname)
                                 .ToList();
                             break;
+                        //case 5:
+                        //    members = db.Query<MemberViewModel>("exec sp_HUB_GetWeddingAnnversaryMembers @startdate, @enddate", new { startdate = castStartDate, enddate = castEndDate })
+                        //        .OrderBy(m => m.DateOfBirth).ThenBy(m => m.DateOfBirth.Value.Date.Month).ThenBy(m => m.DateOfBirth.Value.Date.Month)
+                        //        .ToList();
+                        //    break;
                         default:
                             members = db.Fetch<MemberViewModel>()
                                 .Where(m => m.RecordDate >= castStartDate && m.RecordDate < castEndDate.AddDays(1))
                                 .OrderBy(m => m.FirstName).ThenBy(m => m.Surname)
                                 .ToList();
                             break;
-
                     }
                     return members;
                 }

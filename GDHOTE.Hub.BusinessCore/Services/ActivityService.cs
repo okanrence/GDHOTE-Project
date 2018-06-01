@@ -141,6 +141,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         MemberId = request.MemberId,
                         StartDate = request.StartDate,
                         EndDate = request.EndDate,
+                        Remarks = request.Remarks,
                         StatusId = (int)CoreObject.Enumerables.Status.Active,
                         ActivityKey = Guid.NewGuid().ToString(),
                         CreatedById = user.Id,
@@ -202,7 +203,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
 
-                    //Delete Bank
+                    //Delete Activity
                     activity.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
                     activity.DeletedById = user.Id;
                     activity.DateDeleted = DateTime.Now;

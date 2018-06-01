@@ -151,8 +151,21 @@ namespace GDHOTE.Hub.WebApi.Controllers
             {
                 string username = User.Identity.Name;
                 var response = AccountTypeService.Delete(Convert.ToInt16(id), username);
-                return Request.CreateResponse(HttpStatusCode.OK, response);
-
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
             }
             catch (UnableToCompleteException ex)
             {

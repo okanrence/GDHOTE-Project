@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GDHOTE.Hub.CoreObject.DataTransferObjects
+﻿namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
     public class CountryResponse
     {
