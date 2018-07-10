@@ -1,25 +1,33 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
-using GDHOTE.Hub.CoreObject.Enumerables;
 using GDHOTE.Hub.CoreObject.Models;
+using GDHOTE.Hub.PortalCore.Integrations;
+using GDHOTE.Hub.PortalCore.Models;
+using GDHOTE.Hub.PortalCore.Services;
 
-namespace GDHOTE.Hub.BusinessCore.Services
+namespace GDHOTE.Hub.WindowsService
 {
-    public class WeddingAnniversaryService : BaseService
+    public class BirthdayAnniversaryManager
     {
+        private static readonly string Username = ConfigurationManager.AppSettings["settings.service.username"];
+        private static readonly string Password = ConfigurationManager.AppSettings["settings.service.password"];
+
         public static void StartEmailProcess()
         {
             try
             {
-                string appId = "WeddingAnniversaryEmail";
+                string appId = "BirthdayAnniversaryEmail";
+                var token = new Token();
 
                 //Run Between Specific hours
-                string serviceRunTime = Get("settings.service.run.time");
+                string serviceRunTime = ConfigurationManager.AppSettings["settings.service.run.time"];
                 string startTime = serviceRunTime.Split('|')[0];
                 string endTime = serviceRunTime.Split('|')[1];
 
@@ -31,9 +39,24 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                 if (currentTime > startDate && currentTime < endDate)
                 {
-                    //Check if serivce has ran
-                    var checker = CheckerService.GetCheckerByAppId(appId);
+                    //Authenticate user
+                    var integration = new LoginIntegration(Username, Password);
+                    TokenResponse tokenResponse = integration.Invoke();
 
+                    if (tokenResponse != null)
+                    {
+                        if (!string.IsNullOrEmpty(tokenResponse.AccessToken))
+                        {
+                            ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, "No Authentication response");
+                        }
+                    }
+
+                    token.AuthToken = tokenResponse.AccessToken;
+                    token.RefreshToken = tokenResponse.RefreshToken;
+
+
+                    //Check if serivce has ran
+                    var checker = PortalCheckerService.GetChecker(appId, token);
 
                     if (checker == null) return;
 
@@ -42,9 +65,10 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     if (checker.CheckDate.Date == DateTime.Now.Date) return;
 
 
-                    string anniversaryDateString = DateTime.Now.ToString("dd-MMM-yyyy");
+                    string dateOfBirthString = DateTime.Now.ToString("dd-MMM-yyyy");
 
-                    var memberList = MemberInfoService.GetMembersByWeddingAnniversary(anniversaryDateString);
+                    var memberList = PortalMemberService.GetMembersByBirthdayAnniversary(dateOfBirthString);
+
                     if (memberList != null)
                     {
                         if (memberList.Count > 0)
@@ -54,28 +78,26 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 var emailRequest = new SendEmailRequest
                                 {
                                     MemberId = member.MemberId,
-                                    Subject = "Happy Wedding Anniversary",
+                                    Subject = "Happy Birthday",
                                     Firstname = member.FirstName,
                                     Surname = member.Surname,
                                     MailBody = "",
                                     RecipientEmailAddress = member.EmailAddress
 
                                 };
-                                EmailNotificationService.SendWeddingAnniversaryNotificationEmail(emailRequest, "");
+                                PortalNotificationService.SendBirthdayNotificationEmail(emailRequest);
                             }
-
                         }
                     }
 
                     //Update DB
-                    checker.CheckDate = DateTime.Now;
-                    checker.LastCheckDate = DateTime.Now;
-                    CheckerService.Update(checker);
+                    var result = PortalCheckerService.UpdateChecker(appId, token);
                 }
+
             }
             catch (Exception ex)
             {
-                LogService.LogError(ex.Message);
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
             }
         }
 
@@ -84,11 +106,11 @@ namespace GDHOTE.Hub.BusinessCore.Services
         {
             try
             {
-                string appId = "WeddingAnniversarySms";
-                string currentUser = "";
+                string appId = "BirthdayAnniversarySms";
+                var token = new Token();
 
                 //Run Between Specific hours
-                string serviceRunTime = Get("settings.service.run.time");
+                string serviceRunTime = ConfigurationManager.AppSettings["settings.service.run.time"];
                 string startTime = serviceRunTime.Split('|')[0];
                 string endTime = serviceRunTime.Split('|')[1];
 
@@ -100,8 +122,15 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                 if (currentTime > startDate && currentTime < endDate)
                 {
+                    //Authenticate user
+                    var integration = new LoginIntegration(Username, Password);
+                    TokenResponse tokenResponse = integration.Invoke();
+                    token.AuthToken = tokenResponse.AccessToken;
+                    token.RefreshToken = tokenResponse.RefreshToken;
+
+
                     //Check if serivce has ran
-                    var checker = CheckerService.GetCheckerByAppId(appId);
+                    var checker = PortalCheckerService.GetChecker(appId, token);
 
                     if (checker == null) return;
 
@@ -110,9 +139,10 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     if (checker.CheckDate.Date == DateTime.Now.Date) return;
 
 
-                    string anniversaryDateString = DateTime.Now.ToString("dd-MMM-yyyy");
+                    string dateOfBirthString = DateTime.Now.ToString("dd-MMM-yyyy");
 
-                    var memberList = MemberInfoService.GetMembersByWeddingAnniversary(anniversaryDateString);
+                    var memberList = PortalMemberService.GetMembersByBirthdayAnniversary(dateOfBirthString);
+
                     if (memberList != null)
                     {
                         if (memberList.Count > 0)
@@ -125,10 +155,10 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                     {
                                         var req = new SmsMessageRequest
                                         {
-                                            Message = "Dear Mr & Mrs " + member.Surname + ", your details has been successfully submitted.",
+                                            Message = "Happy Birthday " + member.FirstName + " " + member.Surname + ". Have a wonderful day",
                                             MobileNumber = member.MobileNumber
                                         };
-                                        SmsNotificationService.SendMessage(req, currentUser);
+                                        PortalNotificationService.SendSms(req, token);
                                     }).Start();
                                 }
                             }
@@ -137,15 +167,13 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
                     //Update DB
-                    checker.CheckDate = DateTime.Now;
-                    checker.LastCheckDate = DateTime.Now;
-                    CheckerService.Update(checker);
-
+                    var result = PortalCheckerService.UpdateChecker(appId, token);
                 }
+
             }
             catch (Exception ex)
             {
-                LogService.LogError(ex.Message);
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
             }
         }
     }

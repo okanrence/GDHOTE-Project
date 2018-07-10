@@ -85,7 +85,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
         }
 
-
         public static Response Delete(string id, string currentUser)
         {
             try
@@ -142,7 +141,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
         }
 
-        public static Response UpdateChecker(string id, string currentUser)
+        public static Response UpdateCheckerByAppId(string appid, string currentUser)
         {
             try
             {
@@ -151,7 +150,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var response = new Response();
 
                     var checker = db.Fetch<Checker>()
-                        .SingleOrDefault(c => c.ApplicationId == id);
+                        .SingleOrDefault(c => c.ApplicationId == appid);
                     if (checker == null)
                     {
                         return new Response

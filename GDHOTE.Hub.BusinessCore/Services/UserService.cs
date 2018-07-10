@@ -384,8 +384,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     if (pwdReset == null)
                     {
                         var pwd = new PasswordReset();
-                        code = CommonServices.RandomString(5);
-                        pwd.ResetCode = CommonServices.HashSha512(code);
+                        code = UtilService.RandomString(5);
+                        pwd.ResetCode = UtilService.HashSha512(code);
                         pwd.ChannelId = request.ChannelId;
                         pwd.DateCreated = DateTime.Now;
                         pwd.DateExpiry = DateTime.Now.AddDays(1);
@@ -396,9 +396,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     else
                     {
                         //code has expired, regenerate
-                        code = CommonServices.RandomString(5);
+                        code = UtilService.RandomString(5);
                         resend = true;
-                        pwdReset.ResetCode = CommonServices.HashSha512(code);
+                        pwdReset.ResetCode = UtilService.HashSha512(code);
                         pwdReset.DateCreated = DateTime.Now;
                         pwdReset.DateExpiry = DateTime.Now.AddDays(1);
                         pwdReset.ChannelId = request.ChannelId;

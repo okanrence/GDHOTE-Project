@@ -72,8 +72,10 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         private static PaymentTypeFormViewModel ReturnViewModel()
         {
+            var baseSrv = new BaseController();
+            
             var statuses = PortalStatusService.GetStatuses();
-            var internalAccounts = PortalAccountService.GetActiveInternalAccounts();
+            var internalAccounts = PortalAccountService.GetActiveInternalAccounts(baseSrv.SetToken());
             var viewModel = new PaymentTypeFormViewModel
             {
                 Statuses = statuses,

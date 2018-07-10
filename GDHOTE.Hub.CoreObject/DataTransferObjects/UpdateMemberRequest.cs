@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
-    public class UpdateMemberRequest //: CreateMemberRequest
+    public class UpdateMemberRequest  
     {
         public string MemberKey { get; set; }
         [Required(ErrorMessage = "Please specify Surname")]

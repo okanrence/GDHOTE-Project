@@ -14,7 +14,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: Country
         public ActionResult Index()
         {
-            var countries = PortalCountryService.GetAllCountries().ToList();
+            var countries = PortalCountryService.GetAllCountries(SetToken()).ToList();
             return View("CountryIndex", countries);
         }
         public ActionResult New()
@@ -31,7 +31,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 return View("CountryForm", createRequest);
             }
-            var result = PortalCountryService.CreateCountry(createRequest);
+            var result = PortalCountryService.CreateCountry(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -54,7 +54,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         public ActionResult Edit(string id)
         {
-            var country = PortalCountryService.GetCountry(id);
+            var country = PortalCountryService.GetCountry(id, SetToken());
             var viewModel = new CreateCountryRequest();
             var item = JsonConvert.SerializeObject(country);
             viewModel = JsonConvert.DeserializeObject<CreateCountryRequest>(item);
@@ -66,7 +66,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeleteCountry(string id)
         {
-            var result = PortalCountryService.DeleteCountry(id);
+            var result = PortalCountryService.DeleteCountry(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

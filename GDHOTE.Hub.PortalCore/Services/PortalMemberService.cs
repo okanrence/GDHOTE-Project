@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
@@ -403,6 +404,35 @@ namespace GDHOTE.Hub.PortalCore.Services
             //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
             //request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("weddingDate", weddingDate);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new List<MemberDetailsResponse>();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<List<MemberDetailsResponse>>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+            }
+            return result;
+        }
+
+        public static List<MemberDetailsResponse> GetMembersByBirthdayAnniversary(string dateOfBirth)
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-members-by-birthday";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("dateOfBirth", dateOfBirth);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<MemberDetailsResponse>();

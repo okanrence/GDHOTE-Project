@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GDHOTE.Hub.CommonServices\GDHOTE.Hub.CommonServices.csproj" />
     <ProjectReference Include="..\GDHOTE.Hub.CoreObject\GDHOTE.Hub.CoreObject.csproj" />
   </ItemGroup>
 

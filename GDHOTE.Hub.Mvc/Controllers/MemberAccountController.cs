@@ -16,7 +16,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: MemberAccount
         public ActionResult Index()
         {
-            var accounts = PortalAccountService.GetActiveAccounts();
+            var accounts = PortalAccountService.GetActiveAccounts(SetToken());
             return View("AccountIndex", accounts);
         }
         public ActionResult New()
@@ -26,7 +26,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var account = PortalAccountService.GetAccount(id);
+            var account = PortalAccountService.GetAccount(id, SetToken());
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(account);
             var viewModel = JsonConvert.DeserializeObject<AccountFormViewModel>(item);
@@ -41,7 +41,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 return View("AccountForm", ReturnViewModel());
             }
-            var result = PortalAccountService.CreateAccount(createRequest);
+            var result = PortalAccountService.CreateAccount(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -67,7 +67,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeleteAccount(string id)
         {
-            var result = PortalAccountService.DeleteAccount(id);
+            var result = PortalAccountService.DeleteAccount(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -87,7 +87,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 return View("CreateInternalAccount", ReturnInternalAccountViewModel());
             }
-            var result = PortalAccountService.CreateInternalAccount(createRequest);
+            var result = PortalAccountService.CreateInternalAccount(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -109,7 +109,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult InternalAccountList()
         {
-            var accounts = PortalAccountService.GetAllInternalAccounts();
+            var accounts = PortalAccountService.GetAllInternalAccounts(SetToken());
             return View("InternalAccountList", accounts);
         }
         private static AccountFormViewModel ReturnViewModel()

@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -17,6 +18,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
     {
         [HttpGet]
         [Route("get-all-checkers")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetAllCheckers()
         {
             try
@@ -48,6 +50,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-active-checkers")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetActivecheckers()
         {
             try
@@ -78,11 +81,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-checker")]
-        public HttpResponseMessage GetChecker(string id)
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage GetChecker(string appId)
         {
             try
             {
-                var response = CheckerService.GetCheckerByAppId(id);
+                var response = CheckerService.GetCheckerByAppId(appId);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -107,6 +111,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("create-checker")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage Createchecker(CreateCheckerRequest createRequest)
         {
             try
@@ -144,6 +149,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("delete-checker")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage DeleteChecker(string id)
         {
             try
@@ -176,12 +182,13 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("update-checker")]
-        public HttpResponseMessage UpdateChecker(string id)
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage UpdateChecker(string appId)
         {
             try
             {
                 string username = User.Identity.Name;
-                var response = CheckerService.UpdateChecker(id, username);
+                var response = CheckerService.UpdateCheckerByAppId(appId, username);
                 if (response != null)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)

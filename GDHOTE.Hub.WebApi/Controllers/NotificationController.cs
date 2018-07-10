@@ -19,7 +19,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
     {
         [HttpPost]
         [Route("send-birthday-email")]
-        public HttpResponseMessage SendEmail(SendEmailRequest emailRequest)
+        public HttpResponseMessage SendBirthdayNotificationEmail(SendEmailRequest emailRequest)
         {
             try
             {

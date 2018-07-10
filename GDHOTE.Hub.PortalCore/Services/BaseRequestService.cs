@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
+using GDHOTE.Hub.CommonServices.BusinessLogic;
 using RestSharp;
 
 namespace GDHOTE.Hub.PortalCore.Services
@@ -17,15 +19,14 @@ namespace GDHOTE.Hub.PortalCore.Services
             IRestResponse response = new RestResponse();
             try
             {
-
                 var client = new RestClient();
                 response = client.Execute(request);
                 return response;
             }
             catch (Exception ex)
             {
-
-                throw;
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
+                return response = new RestResponse();
             }
         }
     }

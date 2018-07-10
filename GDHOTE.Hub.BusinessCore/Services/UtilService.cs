@@ -8,7 +8,7 @@ using GDHOTE.Hub.CoreObject.Enumerables;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
-    public class CommonServices
+    public class UtilService
     {
         public static string HashSha512(string randomString)
         {
