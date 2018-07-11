@@ -278,8 +278,10 @@
     <Compile Include="Controllers\CheckerController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
+    <Compile Include="Controllers\GenderController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MainMenuController.cs" />
+    <Compile Include="Controllers\MartialStatusController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\MemberDetailsController.cs" />
     <Compile Include="Controllers\MemberStatusController.cs" />

@@ -806,9 +806,9 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GDHOTE.Hub.BusinessCore\GDHOTE.Hub.BusinessCore.csproj">
-      <Project>{ea856649-4ff0-4482-8f10-619e6e28402b}</Project>
-      <Name>GDHOTE.Hub.BusinessCore</Name>
+    <ProjectReference Include="..\GDHOTE.Hub.CommonServices\GDHOTE.Hub.CommonServices.csproj">
+      <Project>{5ff9fb4f-b3a3-4749-9a5b-e4bc4055831e}</Project>
+      <Name>GDHOTE.Hub.CommonServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\GDHOTE.Hub.CoreObject\GDHOTE.Hub.CoreObject.csproj">
       <Project>{fb6352c1-30ec-4cc5-aaa4-6dcaffcd6aa3}</Project>

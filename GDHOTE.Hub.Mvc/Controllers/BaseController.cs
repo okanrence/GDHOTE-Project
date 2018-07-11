@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
-using GDHOTE.Hub.BusinessCore.BusinessLogic;
+using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.PortalCore.Models;
 using GDHOTE.Hub.PortalCore.Services;
 

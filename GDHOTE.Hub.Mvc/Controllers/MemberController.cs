@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
-using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.ViewModels;
 using GDHOTE.Hub.PortalCore.Services;
 using Newtonsoft.Json;
@@ -193,8 +192,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         private static MemberFormViewModel ReturnViewModel()
         {
-            var genders = GenderService.GetGenders();
-            var maritalStatuses = MaritalStatusService.GetMaritalStatuses();
+            var genders = PortalGenderService.GetAllGenders();
+            var maritalStatuses = PortalMaritalStatusService.GetAllMaritalStatuses();
             var viewModel = new MemberFormViewModel
             {
                 Genders = genders,

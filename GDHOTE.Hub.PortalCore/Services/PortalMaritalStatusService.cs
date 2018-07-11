@@ -10,19 +10,17 @@ using RestSharp;
 
 namespace GDHOTE.Hub.PortalCore.Services
 {
-   public class PortalStatusService
+    public class PortalMaritalStatusService
     {
-        public static List<Status> GetStatuses()
+        public static List<MaritalStatus> GetAllMaritalStatuses()
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/status/get-statuses";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/martialstatus/get-all-martial-statuses";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
-            var result = new List<Status>();
+            var result = new List<MaritalStatus>();
             IRestResponse response = new RestResponse();
             try
             {
@@ -31,7 +29,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<Status>>(response.Content);
+                result = JsonConvert.DeserializeObject<List<MaritalStatus>>(response.Content);
             }
             catch (Exception ex)
             {

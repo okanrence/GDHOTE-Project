@@ -127,34 +127,56 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return "Error occured while trying to update Role";
             }
         }
-        public static string Delete(string roleKey, string currentUser)
+        public static Response Delete(string roleKey, string currentUser)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
+                    var response = new Response();
+
                     var role = db.Fetch<Role>().SingleOrDefault(c => c.RoleKey == roleKey);
                     if (role == null)
                     {
-                        return "Record does not exist";
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
                     }
 
                     //Get User Initiating Creation Request
                     var user = UserService.GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
 
                     //Delete Payment Mode
                     role.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
                     role.DeletedById = user.Id;
                     role.DateDeleted = DateTime.Now;
                     db.Update(role);
-                    var result = "Operation Successful";
-                    return result;
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return "Error occured while trying to delete record";
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to delete record"
+                };
             }
         }
         public static Response CreateRole(CreateRoleRequest request, string currentUser)
@@ -167,7 +189,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Get User Initiating Creation Request
                     var user = UserService.GetUserByUserName(currentUser);
-
                     if (user == null)
                     {
                         return new Response

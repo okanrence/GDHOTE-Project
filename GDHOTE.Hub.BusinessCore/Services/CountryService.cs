@@ -124,7 +124,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         return new Response
                         {
                             ErrorCode = "01",
-                            ErrorMessage = "Record does not exist"
+                            ErrorMessage = "Unable to validate User"
                         };
                     }
 
@@ -162,7 +162,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Get User Initiating Creation Request
                     var user = UserService.GetUserByUserName(currentUser);
-
                     if (user == null)
                     {
                         return new Response

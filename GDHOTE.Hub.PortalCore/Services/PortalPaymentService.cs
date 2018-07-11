@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Reflection;
 using System.Text;
+using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
@@ -31,13 +33,13 @@ namespace GDHOTE.Hub.PortalCore.Services
                 response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
                 }
                 result = JsonConvert.DeserializeObject<List<PaymentViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
             }
             return result;
         }
@@ -61,13 +63,13 @@ namespace GDHOTE.Hub.PortalCore.Services
                 response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
                 }
                 result = JsonConvert.DeserializeObject<List<PaymentViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
             }
             return result;
         }
@@ -89,13 +91,13 @@ namespace GDHOTE.Hub.PortalCore.Services
                 response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
                 }
                 result = JsonConvert.DeserializeObject<List<PaymentViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
             }
             return result;
         }
@@ -117,13 +119,13 @@ namespace GDHOTE.Hub.PortalCore.Services
                 response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
                 }
                 result = JsonConvert.DeserializeObject<Payment>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
             }
             return result;
         }
@@ -146,13 +148,13 @@ namespace GDHOTE.Hub.PortalCore.Services
                 response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
                 }
                 result = JsonConvert.DeserializeObject<Response>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
             }
             return result;
         }
@@ -176,13 +178,13 @@ namespace GDHOTE.Hub.PortalCore.Services
                 response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
                 }
                 result = JsonConvert.DeserializeObject<Response>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
             }
             return result;
         }
@@ -205,13 +207,13 @@ namespace GDHOTE.Hub.PortalCore.Services
                 response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
                 }
                 result = JsonConvert.DeserializeObject<Response>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoPayment", ex);
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
             }
             return result;
         }

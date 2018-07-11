@@ -128,7 +128,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         return new Response
                         {
                             ErrorCode = "01",
-                            ErrorMessage = "Record does not exist"
+                            ErrorMessage = "Unable to validate User"
                         };
                     }
 

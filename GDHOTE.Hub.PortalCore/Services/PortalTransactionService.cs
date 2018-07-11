@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Reflection;
 using System.Text;
+using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
@@ -10,7 +12,7 @@ using RestSharp;
 
 namespace GDHOTE.Hub.PortalCore.Services
 {
-  public  class PortalTransactionService
+    public class PortalTransactionService
     {
         public static List<TransactionViewModel> GetTransactions(string startdate, string enddate)
         {
@@ -31,13 +33,13 @@ namespace GDHOTE.Hub.PortalCore.Services
                 response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
                 }
                 result = JsonConvert.DeserializeObject<List<TransactionViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoTransaction", ex);
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
             }
             return result;
         }
@@ -61,17 +63,17 @@ namespace GDHOTE.Hub.PortalCore.Services
                 response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
                 }
                 result = JsonConvert.DeserializeObject<List<TransactionViewModel>>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoTransaction", ex);
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
             }
             return result;
         }
-        
+
         public static Transaction GetTransaction(string id)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/transaction/get-transaction";
@@ -90,13 +92,13 @@ namespace GDHOTE.Hub.PortalCore.Services
                 response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
                 }
                 result = JsonConvert.DeserializeObject<Transaction>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoTransaction", ex);
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
             }
             return result;
         }
@@ -120,13 +122,13 @@ namespace GDHOTE.Hub.PortalCore.Services
                 response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
                 }
                 result = JsonConvert.DeserializeObject<Response>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoTransaction", ex);
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
             }
             return result;
         }
@@ -150,13 +152,13 @@ namespace GDHOTE.Hub.PortalCore.Services
                 response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    //ErrorLogManager.LogError(callerFormName, computerDetails, "response.Content", JsonConvert.SerializeObject(response));
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
                 }
                 result = JsonConvert.DeserializeObject<Response>(response.Content);
             }
             catch (Exception ex)
             {
-                //ErrorLogManager.LogError(callerFormName, computerDetails, "DoTransaction", ex);
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
             }
             return result;
         }

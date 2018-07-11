@@ -102,36 +102,56 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return "Error occured while trying to update payment";
             }
         }
-        public static string Delete(int id, string currentUser)
+        public static Response Delete(int id, string currentUser)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
+                    var response = new Response();
 
                     var paymentType = db.Fetch<PaymentType>().SingleOrDefault(c => c.Id == id);
                     if (paymentType == null)
                     {
-                        return "Record does not exist";
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
                     }
 
                     //Get User Initiating Creation Request
                     var user = UserService.GetUserByUserName(currentUser);
-
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
 
                     //Delete Payment Type
                     paymentType.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
                     paymentType.DeletedById = user.Id;
                     paymentType.DateDeleted = DateTime.Now;
                     db.Update(paymentType);
-                    var result = "Operation Successful";
-                    return result;
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 LogService.LogError(ex.Message);
-                return "Error occured while trying to delete record";
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to delete record"
+                };
             }
         }
 
@@ -146,7 +166,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Get User Initiating Creation Request
                     var user = UserService.GetUserByUserName(currentUser);
-
                     if (user == null)
                     {
                         return new Response
