@@ -213,6 +213,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("create-internal-account")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage CreateInternalAccount(CreateInternalAccountRequest createRequest)
         {
             try
