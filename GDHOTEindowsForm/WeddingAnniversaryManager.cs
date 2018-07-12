@@ -21,7 +21,7 @@ namespace GDHOTEindowsForm
             {
                 string appId = "WeddingAnniversaryEmail";
                 var token = new Token();
-               
+
                 //Run Between Specific hours
                 string serviceRunTime = ConfigurationManager.AppSettings["settings.service.run.time"];
                 string startTime = serviceRunTime.Split('|')[0];
@@ -54,7 +54,7 @@ namespace GDHOTEindowsForm
 
                     string anniversaryDateString = DateTime.Now.ToString("dd-MMM-yyyy");
 
-                    var memberList = PortalMemberService.GetMembersByWeddingAnniversary(anniversaryDateString);
+                    var memberList = PortalMemberService.GetMembersByWeddingAnniversary(anniversaryDateString, token);
 
                     if (memberList != null)
                     {
@@ -127,7 +127,7 @@ namespace GDHOTEindowsForm
 
                     string anniversaryDateString = DateTime.Now.ToString("dd-MMM-yyyy");
 
-                    var memberList = PortalMemberService.GetMembersByWeddingAnniversary(anniversaryDateString);
+                    var memberList = PortalMemberService.GetMembersByWeddingAnniversary(anniversaryDateString, token);
                     if (memberList != null)
                     {
                         if (memberList.Count > 0)

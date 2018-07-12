@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -17,6 +18,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
     {
         [HttpGet]
         [Route("get-all-members")]
+        [UnAuthorized]
         public HttpResponseMessage GetAllMembers()
         {
             try
@@ -48,6 +50,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-active-members")]
+        [UnAuthorized]
         public HttpResponseMessage GetActiveMembers()
         {
             try
@@ -79,6 +82,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-pending-approval")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetMembersPendingApproval()
         {
             try
@@ -110,6 +114,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-member")]
+        [UnAuthorized]
         public HttpResponseMessage GetMember(string id)
         {
             try
@@ -140,6 +145,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("delete-member")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage DeleteMember(string id)
         {
             try
@@ -171,6 +177,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("create-member")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage CreateNewMember(CreateMemberRequest createRequest)
         {
             try
@@ -214,6 +221,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("approve-member")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage ApproveMember(ApproveMemberRequest approveRequest)
         {
             try
@@ -250,6 +258,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-members-by-search-query")]
+        [UnAuthorized]
         public HttpResponseMessage GetMembersBySearchQuery(string seachQuery)
         {
             try
@@ -312,6 +321,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-members-by-birthday")]
+        [UnAuthorized]
         public HttpResponseMessage GetMembersByBirthday(string dateOfBirth)
         {
             try
@@ -342,6 +352,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-members-by-wedding-anniversary")]
+        [UnAuthorized]
         public HttpResponseMessage GetMembersByWeddingAnniversary(string weddingDate)
         {
             try
@@ -373,6 +384,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-member-information")]
+        [UnAuthorized]
         public HttpResponseMessage GetMemberInformation(string id)
         {
             try
@@ -441,6 +453,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("upload-members")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage UploadMembers(UploadMemberRequest uploadRequest)
         {
             try
@@ -478,6 +491,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-members-by-criteria")]
+        [UnAuthorized]
         public HttpResponseMessage GetMembersByCriteria(string criteria, string startdate, string enddate)
         {
             try

@@ -67,7 +67,7 @@ namespace GDHOTEindowsForm
 
                     string dateOfBirthString = DateTime.Now.ToString("dd-MMM-yyyy");
 
-                    var memberList = PortalMemberService.GetMembersByBirthdayAnniversary(dateOfBirthString);
+                    var memberList = PortalMemberService.GetMembersByBirthdayAnniversary(dateOfBirthString, token);
 
                     if (memberList != null)
                     {
@@ -141,7 +141,7 @@ namespace GDHOTEindowsForm
 
                     string dateOfBirthString = DateTime.Now.ToString("dd-MMM-yyyy");
 
-                    var memberList = PortalMemberService.GetMembersByBirthdayAnniversary(dateOfBirthString);
+                    var memberList = PortalMemberService.GetMembersByBirthdayAnniversary(dateOfBirthString, token);
 
                     if (memberList != null)
                     {

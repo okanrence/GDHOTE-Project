@@ -18,7 +18,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             //string criteria = "";
             //string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
             //string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
-            var members = PortalMemberService.GetAllMembers().ToList();
+            var members = PortalMemberService.GetAllMembers(SetToken());
             return View("ActivityIndex", members);
 
             //string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
@@ -31,7 +31,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             string criteria = "";
             string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
             string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
-            var activities = PortalActivityService.GetActivitiesByCriteria(criteria, startDate, endDate).ToList();
+            var activities = PortalActivityService.GetActivitiesByCriteria(criteria, startDate, endDate, SetToken()).ToList();
             return View("ActivityList", activities);
         }
         public ActionResult New()
@@ -41,7 +41,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var activitype = PortalActivityService.GetActivity(id);
+            var activitype = PortalActivityService.GetActivity(id, SetToken());
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(activitype);
             var viewModel = JsonConvert.DeserializeObject<ActivityFormViewModel>(item);
@@ -55,7 +55,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 var viewModel = ReturnViewModel();
                 return View("ActivityForm", viewModel);
             }
-            var result = PortalActivityService.CreateActivity(createRequest);
+            var result = PortalActivityService.CreateActivity(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -80,7 +80,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeleteActivity(string id)
         {
-            var result = PortalActivityService.DeleteActivity(id);
+            var result = PortalActivityService.DeleteActivity(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -88,18 +88,18 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public PartialViewResult FetchReportByDate(string criteria, string startdate, string enddate)
         {
-            var activities = PortalActivityService.GetActivitiesByCriteria(criteria, startdate, enddate).ToList();
+            var activities = PortalActivityService.GetActivitiesByCriteria(criteria, startdate, enddate, SetToken()).ToList();
             return PartialView("_ActivityReport", activities);
         }
         public ActionResult MemberActivity(string id)
         {
             //Ensure to review this code later
             long memberId = 0;
-            var activities = PortalActivityService.GetMemberActivities(id).ToList();
+            var activities = PortalActivityService.GetMemberActivities(id, SetToken());
             if (activities.Count == 0)
             {
                 //Get Member Id
-                var member = PortalMemberService.GetMember(id);
+                var member = PortalMemberService.GetMember(id, SetToken());
                 if (member != null) memberId = member.Id;
             }
             else
@@ -112,19 +112,19 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult NewMemberActivity(string id)
         {
-            var member = PortalMemberService.GetMember(id);
+            var member = PortalMemberService.GetMember(id, SetToken());
             var viewModelTemp = ReturnViewModel();
             viewModelTemp.MemberId = member.Id;
             return View("_MemberActivityForm", viewModelTemp);
         }
         public JsonResult SaveMemberActivty(CreateActivityRequest createRequest)
         {
-            var result = PortalActivityService.CreateActivity(createRequest);
+            var result = PortalActivityService.CreateActivity(createRequest, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        private static ActivityFormViewModel ReturnViewModel()
+        private ActivityFormViewModel ReturnViewModel()
         {
-            var activityTypes = PortalActivityTypeService.GetActiveActivityTypes().ToList();
+            var activityTypes = PortalActivityTypeService.GetActiveActivityTypes(SetToken());
             var viewModel = new ActivityFormViewModel
             {
                 ActivityTypes = activityTypes

@@ -103,11 +103,11 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return PartialView("_PaymentReport", payments);
         }
 
-        private static PaymentFormViewModel ReturnViewModel()
+        private PaymentFormViewModel ReturnViewModel()
         {
-            var paymentModes = PortalPaymentModeService.GetActivePaymentModes().ToList();
-            var paymentTypes = PortalPaymentTypeService.GetActivePaymentTypes().ToList();
-            var currencies = PortalCurrencyService.GetActiveCurrencies().ToList();
+            var paymentModes = PortalPaymentModeService.GetActivePaymentModes();
+            var paymentTypes = PortalPaymentTypeService.GetActivePaymentTypes();
+            var currencies = PortalCurrencyService.GetActiveCurrencies(SetToken());
             var viewModel = new PaymentFormViewModel
             {
                 PaymentTypes = paymentTypes,

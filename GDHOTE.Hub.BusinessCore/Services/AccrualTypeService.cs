@@ -218,5 +218,66 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
 
         }
+
+        public static Response UpdateAccrualType(UpdateAccrualTypeRequest request, string currentUser)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var response = new Response();
+
+                    //Get User Initiating Creation Request
+                    var user = UserService.GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
+
+                    //Check request exist
+                    var accrualType = db.Fetch<AccrualType>().SingleOrDefault(b => b.Id == request.Id);
+                    if (accrualType == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record not found"
+                        };
+                    }
+
+                    string name = StringCaseService.TitleCase(request.Name);
+                    accrualType.Name = name;
+                    accrualType.StatusId = request.StatusId;
+                    accrualType.UpdatedById = user.Id;
+                    accrualType.DateUpdated = DateTime.Now;
+                    db.Update(accrualType);
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                string message = "";
+                message = ex.Message.Contains("duplicate") 
+                    ? "Cannot insert duplicate record" 
+                    : "Error occured while trying to insert record";
+                var response = new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = message
+                };
+                return response;
+            }
+
+        }
     }
 }

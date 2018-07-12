@@ -20,7 +20,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             //string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
             //var members = PortalMemberService.GetMembersByCriteria(criteria, startDate, endDate).ToList();
 
-            var members = PortalMemberService.GetAllMembers().ToList();
+            var members = PortalMemberService.GetAllMembers(SetToken());
             return View(members);
         }
         public ActionResult List()
@@ -28,7 +28,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             string criteria = "";
             string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
             string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
-            var members = PortalMemberService.GetMembersByCriteria(criteria, startDate, endDate).ToList();
+            var members = PortalMemberService.GetMembersByCriteria(criteria, startDate, endDate, SetToken());
             return View("ReadOnlyList", members);
         }
         public ActionResult New()
@@ -38,7 +38,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var member = PortalMemberService.GetMember(id);
+            var member = PortalMemberService.GetMember(id, SetToken());
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(member);
             var viewModel = JsonConvert.DeserializeObject<UpdateMemberFormViewModel>(item);
@@ -55,7 +55,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 return View("MemberForm", ReturnViewModel());
             }
-            var result = PortalMemberService.CreateMember(createRequest);
+            var result = PortalMemberService.CreateMember(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -84,7 +84,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 return View("UpdateMemberForm");
             }
-            var result = PortalMemberService.UpdateMember(updateRequest);
+            var result = PortalMemberService.UpdateMember(updateRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -108,7 +108,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         public ActionResult ApproveMember()
         {
-            var members = PortalMemberService.GetPendingApproval().ToList();
+            var members = PortalMemberService.GetPendingApproval(SetToken());
             return View(members);
         }
 
@@ -121,7 +121,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 return Json(ModelState);
             }
-            var result = PortalMemberService.ApproveMember(approveRequest);
+            var result = PortalMemberService.ApproveMember(approveRequest, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -129,7 +129,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeleteMember(string id)
         {
-            var result = PortalMemberService.DeleteMember(id);
+            var result = PortalMemberService.DeleteMember(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -145,7 +145,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 uploadRequest.UploadFileContent = new byte[uploadFile.ContentLength];
                 uploadFile.InputStream.Read(uploadRequest.UploadFileContent, 0, uploadFile.ContentLength);
                 uploadRequest.ChannelCode = (int)CoreObject.Enumerables.Channel.Web;
-                var result = PortalMemberService.UploadMembers(uploadRequest);
+                var result = PortalMemberService.UploadMembers(uploadRequest, SetToken());
                 if (result != null)
                 {
                     ViewBag.ErrorBag = result.ErrorMessage;
@@ -163,7 +163,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         //[ValidateAntiForgeryToken]
         public JsonResult GetMember(string term)
         {
-            var result = PortalMemberService.GetMembersByName(term);
+            var result = PortalMemberService.GetMembersByName(term, SetToken());
             var data = result.Select(r => new { value = r.MemberId, label = r.FirstName + " " + r.Surname }).ToList();
             return Json(data, JsonRequestBehavior.AllowGet);
         }
@@ -177,7 +177,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult GetMemberInfo(string id)
         {
-            var result = PortalMemberService.GetMemberInformation(id);
+            var result = PortalMemberService.GetMemberInformation(id, SetToken());
             return PartialView("_MemberInfo", result);
         }
 
@@ -186,7 +186,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public PartialViewResult FetchReportByDate(string criteria, string startdate, string enddate)
         {
-            var members = PortalMemberService.GetMembersByCriteria(criteria, startdate, enddate).ToList();
+            var members = PortalMemberService.GetMembersByCriteria(criteria, startdate, enddate, SetToken());
             return PartialView("_MemberListReport", members);
         }
 

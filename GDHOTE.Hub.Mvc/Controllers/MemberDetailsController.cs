@@ -16,7 +16,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: MemberDetails
         public ActionResult Index()
         {
-            var memberDetails = PortalMemberDetailsService.GetMembersDetails().ToList();
+            var memberDetails = PortalMemberDetailsService.GetMembersDetails(SetToken());
             return View(memberDetails);
         }
         public ActionResult New()
@@ -26,7 +26,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         public ActionResult Edit(string id)
         {
-            var memberDetails = PortalMemberDetailsService.GetMemberDetails(id);
+            var memberDetails = PortalMemberDetailsService.GetMemberDetails(id, SetToken());
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(memberDetails);
             var viewModel = JsonConvert.DeserializeObject<UpdateMemberDetailsFormModel>(item);
@@ -46,7 +46,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 return View("MemberDetailsForm", viewModel);
             }
 
-            var result = PortalMemberDetailsService.CreateMemberDetails(createRequest);
+            var result = PortalMemberDetailsService.CreateMemberDetails(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -75,7 +75,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 return View("UpdateDetailsForm");
             }
-            var result = PortalMemberDetailsService.UpdateMemberDetails(updateRequest);
+            var result = PortalMemberDetailsService.UpdateMemberDetails(updateRequest, SetToken());
             if (result != null)
             {
                 //Successful

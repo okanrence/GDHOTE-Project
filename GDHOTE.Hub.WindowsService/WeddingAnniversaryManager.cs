@@ -25,7 +25,7 @@ namespace GDHOTE.Hub.WindowsService
             {
                 string appId = "WeddingAnniversaryEmail";
                 var token = new Token();
-               
+
                 //Run Between Specific hours
                 string serviceRunTime = ConfigurationManager.AppSettings["settings.service.run.time"];
                 string startTime = serviceRunTime.Split('|')[0];
@@ -45,7 +45,7 @@ namespace GDHOTE.Hub.WindowsService
                     TokenResponse tokenResponse = integration.Invoke();
                     token.AuthToken = tokenResponse.AccessToken;
                     token.RefreshToken = tokenResponse.RefreshToken;
-                    
+
                     //Check if serivce has ran
                     var checker = PortalCheckerService.GetChecker(appId, token);
 
@@ -58,7 +58,7 @@ namespace GDHOTE.Hub.WindowsService
 
                     string anniversaryDateString = DateTime.Now.ToString("dd-MMM-yyyy");
 
-                    var memberList = PortalMemberService.GetMembersByWeddingAnniversary(anniversaryDateString);
+                    var memberList = PortalMemberService.GetMembersByWeddingAnniversary(anniversaryDateString, token);
 
                     if (memberList != null)
                     {
@@ -130,7 +130,7 @@ namespace GDHOTE.Hub.WindowsService
 
                     string anniversaryDateString = DateTime.Now.ToString("dd-MMM-yyyy");
 
-                    var memberList = PortalMemberService.GetMembersByWeddingAnniversary(anniversaryDateString);
+                    var memberList = PortalMemberService.GetMembersByWeddingAnniversary(anniversaryDateString, token);
                     if (memberList != null)
                     {
                         if (memberList.Count > 0)

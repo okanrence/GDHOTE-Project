@@ -7,7 +7,6 @@ using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
 using GDHOTE.Hub.PortalCore.Services;
 using Newtonsoft.Json;
-using NPoco.fastJSON;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -16,7 +15,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: ActivityType
         public ActionResult Index()
         {
-            var activiteTypes = PortalActivityTypeService.GetAllActivityTypes().ToList();
+            var activiteTypes = PortalActivityTypeService.GetAllActivityTypes(SetToken());
             return View("ActivityTypeIndex", activiteTypes);
         }
         public ActionResult New()
@@ -26,7 +25,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var activitype = PortalActivityTypeService.GetActivityType(id);
+            var activitype = PortalActivityTypeService.GetActivityType(id, SetToken());
             var viewModelTemp = ReturnUpdateViewModel();
             var item = JsonConvert.SerializeObject(activitype);
             var viewModel = JsonConvert.DeserializeObject<UpdateActivityTypeFormViewModel>(item);
@@ -42,7 +41,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 var viewModel = ReturnViewModel();
                 return View("ActivityTypeForm", viewModel);
             }
-            var result = PortalActivityTypeService.CreateActivityType(createRequest);
+            var result = PortalActivityTypeService.CreateActivityType(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -72,7 +71,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 return View("UpdateActivityTypeForm", ReturnUpdateViewModel());
             }
-            var result = PortalActivityTypeService.UpdateActivityType(updateRequest);
+            var result = PortalActivityTypeService.UpdateActivityType(updateRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -98,14 +97,14 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeleteActivityType(string id)
         {
-            var result = PortalActivityTypeService.DeleteActivityType(id);
+            var result = PortalActivityTypeService.DeleteActivityType(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private static ActivityTypeFormViewModel ReturnViewModel()
+        private ActivityTypeFormViewModel ReturnViewModel()
         {
             //var statuses = PortalStatusService.GetStatuses().ToList();
-            var activityTypes = PortalActivityTypeService.GetActiveActivityTypes().ToList();
+            var activityTypes = PortalActivityTypeService.GetActiveActivityTypes(SetToken());
             var viewModel = new ActivityTypeFormViewModel
             {
                 //Statuses = statuses,
@@ -114,10 +113,10 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return viewModel;
         }
 
-        private static UpdateActivityTypeFormViewModel ReturnUpdateViewModel()
+        private UpdateActivityTypeFormViewModel ReturnUpdateViewModel()
         {
             var statuses = PortalStatusService.GetStatuses().ToList();
-            var activityTypes = PortalActivityTypeService.GetActiveActivityTypes().ToList();
+            var activityTypes = PortalActivityTypeService.GetActiveActivityTypes(SetToken());
             var viewModel = new UpdateActivityTypeFormViewModel
             {
                 Statuses = statuses,

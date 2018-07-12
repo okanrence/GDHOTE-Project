@@ -86,9 +86,9 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var result = PortalSubMenuService.DeleteSubMenu(id);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        private static SubMenuFormViewModel ReturnViewModel()
+        private SubMenuFormViewModel ReturnViewModel()
         {
-            var mainMenus = PortalMainMenuService.GetActiveMainMenus().ToList();
+            var mainMenus = PortalMainMenuService.GetActiveMainMenus(SetToken());
             var statuses = PortalStatusService.GetStatuses();
             var viewModel = new SubMenuFormViewModel
             {

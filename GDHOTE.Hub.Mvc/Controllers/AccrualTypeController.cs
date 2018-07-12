@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
+using GDHOTE.Hub.CoreObject.ViewModels;
 using GDHOTE.Hub.PortalCore.Services;
 using Newtonsoft.Json;
 
@@ -15,7 +16,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: AccuralType
         public ActionResult Index()
         {
-            var accrualTypes = PortalAccrualTypeService.GetAllAccrualTypes();
+            var accrualTypes = PortalAccrualTypeService.GetAllAccrualTypes(SetToken());
             return View("AccrualIndex", accrualTypes);
         }
         public ActionResult New()
@@ -31,7 +32,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 return View("AccrualTypeForm", createRequest);
             }
-            var result = PortalAccrualTypeService.CreateAccrualType(createRequest);
+            var result = PortalAccrualTypeService.CreateAccrualType(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -54,20 +55,57 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         public ActionResult Edit(string id)
         {
-            var accrualTypes = PortalAccrualTypeService.GetAccrualType(id);
-            var viewModel = new CreateAccrualTypeRequest();
+            var accrualTypes = PortalAccrualTypeService.GetAccrualType(id, SetToken());
+            var viewModelTemp = ReturnUpdateViewModel();
             var item = JsonConvert.SerializeObject(accrualTypes);
-            viewModel = JsonConvert.DeserializeObject<CreateAccrualTypeRequest>(item);
-            return View("AccrualTypeForm", viewModel);
+            var viewModel = JsonConvert.DeserializeObject<UpdateAccrualTypeFormViewModel>(item);
+            viewModel.Statuses = viewModelTemp.Statuses;
+            return View("UpdateAccrualTypeForm", viewModel);
 
+        }
+
+        public ActionResult Update(UpdateAccrualTypeRequest updateRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("UpdateAccrualTypeForm", ReturnUpdateViewModel());
+            }
+            var result = PortalAccrualTypeService.UpdateAccrualType(updateRequest, SetToken());
+            if (result != null)
+            {
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+            }
+            else
+            {
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
+            }
+            // If we got this far, something failed, redisplay form
+            return View("UpdateAccrualTypeForm", ReturnUpdateViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult DeleteAccrualType(string id)
         {
-            var result = PortalAccrualTypeService.DeleteAccrualType(id);
+            var result = PortalAccrualTypeService.DeleteAccrualType(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        private UpdateAccrualTypeFormViewModel ReturnUpdateViewModel()
+        {
+            var statuses = PortalStatusService.GetStatuses();
+            var viewModel = new UpdateAccrualTypeFormViewModel
+            {
+                Statuses = statuses
+            };
+            return viewModel;
         }
     }
 }

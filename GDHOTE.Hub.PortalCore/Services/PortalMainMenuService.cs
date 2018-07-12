@@ -7,6 +7,7 @@ using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Models;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -14,14 +15,14 @@ namespace GDHOTE.Hub.PortalCore.Services
 {
     public class PortalMainMenuService
     {
-        public static List<MainMenuViewModel> GetAllMainMenus()
+        public static List<MainMenuViewModel> GetAllMainMenus(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-all-main-menus";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<MainMenuViewModel>();
@@ -42,15 +43,14 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-
-        public static List<MainMenuResponse> GetActiveMainMenus()
+        public static List<MainMenuResponse> GetActiveMainMenus(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-active-main-menus";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<MainMenuResponse>();
@@ -71,14 +71,14 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static MainMenu GetMainMenu(string id)
+        public static MainMenu GetMainMenu(string id, Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-main-menu";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("id", id);
             request.RequestFormat = DataFormat.Json;
 
@@ -100,15 +100,15 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response CreateMainMenu(CreateMainMenuRequest createRequest)
+        public static Response CreateMainMenu(CreateMainMenuRequest createRequest, Token token)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/create-main-menu";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("application/json", requestData, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;
 
@@ -130,16 +130,15 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-
-        public static Response DeleteMainMenu(string id)
+        public static Response DeleteMainMenu(string id, Token token)
         {
 
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/delete-main-menu";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("id", id, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
 

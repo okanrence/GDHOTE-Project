@@ -111,9 +111,9 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var accounts = PortalAccountService.GetAllInternalAccounts(SetToken());
             return View("InternalAccountList", accounts);
         }
-        private static AccountFormViewModel ReturnViewModel()
+        private AccountFormViewModel ReturnViewModel()
         {
-            var accountTypes = PortalAccountTypeService.GetActiveAccountTypes();
+            var accountTypes = PortalAccountTypeService.GetActiveAccountTypes(SetToken());
             var viewModel = new AccountFormViewModel
             {
                 AccountTypes = accountTypes
@@ -121,11 +121,11 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return viewModel;
         }
 
-        private static InternalAccountFormViewModel ReturnInternalAccountViewModel()
+        private InternalAccountFormViewModel ReturnInternalAccountViewModel()
         {
-            var accountTypes = PortalAccountTypeService.GetActiveAccountTypes();
-            var banks = PortalBankService.GetActiveBanks();
-            var currencies = PortalCurrencyService.GetActiveCurrencies();
+            var accountTypes = PortalAccountTypeService.GetActiveAccountTypes(SetToken());
+            var banks = PortalBankService.GetActiveBanks(SetToken());
+            var currencies = PortalCurrencyService.GetActiveCurrencies(SetToken());
             var viewModel = new InternalAccountFormViewModel
             {
                 AccountTypes = accountTypes,

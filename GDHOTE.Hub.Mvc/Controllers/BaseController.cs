@@ -35,7 +35,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
 
             //Get UserMenu
-            var mainMenus = PortalMainMenuService.GetActiveMainMenus().ToList();
+            var mainMenus = PortalMainMenuService.GetActiveMainMenus(SetToken());
             var subMenus = PortalRoleMenuService.GetRoleMenuByRole(roleId).ToList();
 
             ViewBag.MainMenu = mainMenus;

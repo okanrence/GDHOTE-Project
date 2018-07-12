@@ -73,10 +73,10 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return View("RoleMenuForm", ReturnViewModel());
         }
 
-        private static RoleMenuFormViewModel ReturnViewModel()
+        private RoleMenuFormViewModel ReturnViewModel()
         {
             var statuses = PortalStatusService.GetStatuses();
-            var mainMenus = PortalMainMenuService.GetActiveMainMenus().ToList();
+            var mainMenus = PortalMainMenuService.GetActiveMainMenus(SetToken());
             var roles = PortalRoleService.GetActiveRoles().ToList();
             var viewModel = new RoleMenuFormViewModel
             {

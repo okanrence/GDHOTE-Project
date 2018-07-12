@@ -15,7 +15,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: Currency
         public ActionResult Index()
         {
-            var currencies = PortalCurrencyService.GetAllCurrencies().ToList();
+            var currencies = PortalCurrencyService.GetAllCurrencies(SetToken());
             return View("CurrencyIndex", currencies);
         }
         public ActionResult New()
@@ -25,7 +25,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         public ActionResult Edit(string id)
         {
-            var currency = PortalCurrencyService.GetCurrency(id);
+            var currency = PortalCurrencyService.GetCurrency(id, SetToken());
             var viewModel = ReturnViewModel();
             var item = JsonConvert.SerializeObject(currency);
             viewModel = JsonConvert.DeserializeObject<CurrencyFormViewModel>(item);
@@ -40,7 +40,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 viewModel = JsonConvert.DeserializeObject<CurrencyFormViewModel>(item);
                 return View("CurrencyForm", viewModel);
             }
-            var result = PortalCurrencyService.CreateCurrency(createRequest);
+            var result = PortalCurrencyService.CreateCurrency(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -66,7 +66,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeleteCurrency(string id)
         {
-            var result = PortalCurrencyService.DeleteCurrency(id);
+            var result = PortalCurrencyService.DeleteCurrency(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

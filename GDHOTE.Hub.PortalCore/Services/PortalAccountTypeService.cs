@@ -6,6 +6,7 @@ using System.Text;
 using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Models;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -13,14 +14,14 @@ namespace GDHOTE.Hub.PortalCore.Services
 {
     public class PortalAccountTypeService
     {
-        public static List<AccountTypeViewModel> GetAllAccountTypes()
+        public static List<AccountTypeViewModel> GetAllAccountTypes(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/account/get-all-account-types";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<AccountTypeViewModel>();
@@ -41,14 +42,14 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<AccountTypeResponse> GetActiveAccountTypes()
+        public static List<AccountTypeResponse> GetActiveAccountTypes(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/account/get-active-account-types";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<AccountTypeResponse>();

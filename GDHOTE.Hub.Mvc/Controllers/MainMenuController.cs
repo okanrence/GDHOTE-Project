@@ -15,7 +15,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: MainMenu
         public ActionResult Index()
         {
-            var mainMenus = PortalMainMenuService.GetAllMainMenus().ToList();
+            var mainMenus = PortalMainMenuService.GetAllMainMenus(SetToken());
             return View("MainMenuIndex", mainMenus);
         }
         public ActionResult New()
@@ -25,7 +25,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var mainMenu = PortalMainMenuService.GetMainMenu(id);
+            var mainMenu = PortalMainMenuService.GetMainMenu(id, SetToken());
             if (mainMenu == null) return HttpNotFound();
             var viewModel = ReturnViewModel();
             return View("MainMenuForm", viewModel);
@@ -40,7 +40,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 var viewModel = ReturnViewModel();
                 return View("MainMenuForm", viewModel);
             }
-            var result = PortalMainMenuService.CreateMainMenu(createRequest);
+            var result = PortalMainMenuService.CreateMainMenu(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -65,7 +65,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeleteMainMenu(string id)
         {
-            var result = PortalMainMenuService.DeleteMainMenu(id);
+            var result = PortalMainMenuService.DeleteMainMenu(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

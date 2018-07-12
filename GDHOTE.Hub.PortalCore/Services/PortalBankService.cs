@@ -7,6 +7,7 @@ using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Models;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -14,7 +15,7 @@ namespace GDHOTE.Hub.PortalCore.Services
 {
     public class PortalBankService
     {
-        public static List<BankViewModel> GetAllBanks()
+        public static List<BankViewModel> GetAllBanks(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/bank/get-all-banks";
             var client = new RestClient(fullUrl);
@@ -42,7 +43,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<BankResponse> GetActiveBanks()
+        public static List<BankResponse> GetActiveBanks(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/bank/get-active-banks";
             var client = new RestClient(fullUrl);
@@ -70,7 +71,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Bank GetBank(string id)
+        public static Bank GetBank(string id, Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/bank/get-bank";
             var client = new RestClient(fullUrl);
@@ -98,7 +99,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-        public static Response CreateBank(CreateBankRequest createRequest)
+        public static Response CreateBank(CreateBankRequest createRequest, Token token)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
             string fullUrl = ConfigService.ReturnBaseUrl() + "/bank/create-bank";
@@ -128,7 +129,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response DeleteBank(string id)
+        public static Response DeleteBank(string id, Token token)
         {
 
             string fullUrl = ConfigService.ReturnBaseUrl() + "/bank/delete-bank";

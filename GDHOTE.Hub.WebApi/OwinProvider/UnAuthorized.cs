@@ -24,6 +24,7 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                     {
                         ErrorCode = "700",
                         ErrorMessage = "Your are not authorised to use this resource"
+                        //ErrorMessage = "Authorization has been denied for this request."
                     }, Formatting.Indented))
             };
         }

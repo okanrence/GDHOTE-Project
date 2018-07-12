@@ -230,7 +230,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
-                    //Check member exist
+                    //Check request exist
                     var activityType = db.Fetch<ActivityType>()
                         .SingleOrDefault(a => a.ActivityTypeKey == updateRequest.ActivityTypeKey);
 
