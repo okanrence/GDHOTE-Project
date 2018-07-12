@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -18,6 +19,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-all-publication-categories")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetAllPublicationCategories()
         {
             try
@@ -49,6 +51,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-active-publication-categories")]
+        [UnAuthorized]
         public HttpResponseMessage GetActivePublicationCategories()
         {
             try
@@ -80,6 +83,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-publication-category")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetPublicationCategory(string id)
         {
             try
@@ -109,6 +113,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("create-publication-category")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage CreatePublicationCategory(CreatePublicationCategoryRequest createRequest)
         {
             try
@@ -146,6 +151,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("delete-publication-category")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage DeletePublicationCategory(string id)
         {
             try

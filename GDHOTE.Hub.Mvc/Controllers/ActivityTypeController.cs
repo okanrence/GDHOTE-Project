@@ -115,7 +115,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         private UpdateActivityTypeFormViewModel ReturnUpdateViewModel()
         {
-            var statuses = PortalStatusService.GetStatuses().ToList();
+            var statuses = PortalStatusService.GetStatuses(SetToken());
             var activityTypes = PortalActivityTypeService.GetActiveActivityTypes(SetToken());
             var viewModel = new UpdateActivityTypeFormViewModel
             {

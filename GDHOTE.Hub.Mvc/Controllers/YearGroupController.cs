@@ -15,7 +15,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: YearGroup
         public ActionResult Index()
         {
-            var yearGroup = PortalYearGroupService.GetAllYearGroups().ToList();
+            var yearGroup = PortalYearGroupService.GetAllYearGroups(SetToken());
             return View("YearGroupIndex", yearGroup);
         }
         public ActionResult New()
@@ -24,7 +24,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var yearGroup = PortalYearGroupService.GetYearGroup(id);
+            var yearGroup = PortalYearGroupService.GetYearGroup(id, SetToken());
             var viewModel = ReturnViewModel();
             var item = JsonConvert.SerializeObject(yearGroup);
             viewModel = JsonConvert.DeserializeObject<YearGroupFormViewModel>(item);
@@ -42,7 +42,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 viewModel = JsonConvert.DeserializeObject<YearGroupFormViewModel>(item);
                 return View("YearGroupForm", viewModel);
             }
-            var result = PortalYearGroupService.CreateYearGroup(createRequest);
+            var result = PortalYearGroupService.CreateYearGroup(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -54,7 +54,6 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 {
                     ViewBag.ErrorBag = result.ErrorMessage;
                 }
-
             }
             else
             {
@@ -68,13 +67,13 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeleteYearGroup(string id)
         {
-            var result = PortalYearGroupService.DeleteYearGroup(id);
+            var result = PortalYearGroupService.DeleteYearGroup(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private static YearGroupFormViewModel ReturnViewModel()
+        private YearGroupFormViewModel ReturnViewModel()
         {
-            var statuses = PortalStatusService.GetStatuses().ToList();
+            var statuses = PortalStatusService.GetStatuses(SetToken());
             var viewModel = new YearGroupFormViewModel
             {
                 Statuses = statuses

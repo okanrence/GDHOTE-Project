@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -18,6 +19,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-all-users")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetUsers()
         {
             try
@@ -49,6 +51,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-user")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetUser(string id)
         {
             try
@@ -79,6 +82,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("create-user")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage CreateUser(CreateAdminUserRequest createRequest)
         {
             try
@@ -123,6 +127,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("update-user")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage UpdateUser(UpdateAdminUserRequest updateRequest)
         {
             try
@@ -167,6 +172,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("delete-user")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage DeleteAdminUser(string id)
         {
             try

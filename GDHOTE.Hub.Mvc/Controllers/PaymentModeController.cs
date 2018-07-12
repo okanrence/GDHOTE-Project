@@ -15,7 +15,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: PaymentMode
         public ActionResult Index()
         {
-            var paymentModes = PortalPaymentModeService.GetAllPaymentModes().ToList();
+            var paymentModes = PortalPaymentModeService.GetAllPaymentModes(SetToken());
             return View("PaymentModeIndex", paymentModes);
         }
         public ActionResult New()
@@ -24,7 +24,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var paymentMode = PortalPaymentModeService.GetPaymentMode(id);
+            var paymentMode = PortalPaymentModeService.GetPaymentMode(id, SetToken());
             var viewModel = ReturnViewModel();
             var item = JsonConvert.SerializeObject(paymentMode);
             viewModel = JsonConvert.DeserializeObject<PaymentModeFormViewModel>(item);
@@ -39,7 +39,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 viewModel = JsonConvert.DeserializeObject<PaymentModeFormViewModel>(item);
                 return View("PaymentModeForm", viewModel);
             }
-            var result = PortalPaymentModeService.CreatePaymentMode(createRequest);
+            var result = PortalPaymentModeService.CreatePaymentMode(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -65,13 +65,13 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeletePaymentMode(string id)
         {
-            var result = PortalPaymentModeService.DeletePaymentMode(id);
+            var result = PortalPaymentModeService.DeletePaymentMode(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private static PaymentModeFormViewModel ReturnViewModel()
+        private PaymentModeFormViewModel ReturnViewModel()
         {
-            var statuses = PortalStatusService.GetStatuses().ToList();
+            var statuses = PortalStatusService.GetStatuses(SetToken());
             var viewModel = new PaymentModeFormViewModel
             {
                 Statuses = statuses

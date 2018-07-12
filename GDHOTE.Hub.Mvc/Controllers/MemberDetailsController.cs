@@ -95,11 +95,11 @@ namespace GDHOTE.Hub.Mvc.Controllers
             // If we got this far, something failed, redisplay form
             return View("UpdateDetailsForm");
         }
-        private static MemberDetailsFormModel ReturnViewModel()
+        private MemberDetailsFormModel ReturnViewModel()
         {
-            var states = PortalStateService.GetActiveStates().ToList();
-            var countries = PortalCountryService.GetActiveCountries().ToList();
-            var yearGroups = PortalYearGroupService.GetActiveYearGroups().ToList();
+            var states = PortalStateService.GetActiveStates(SetToken());
+            var countries = PortalCountryService.GetActiveCountries();
+            var yearGroups = PortalYearGroupService.GetActiveYearGroups(SetToken());
             var viewModel = new MemberDetailsFormModel
             {
                 States = states,

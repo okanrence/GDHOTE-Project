@@ -263,7 +263,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             {
                                 new Task(() =>
                                 {
-                                    var req = new SmsMessageRequest
+                                    var req = new SendSmsRequest
                                     {
                                         Message = "Dear Member, your details has been successfully updated.",
                                         MobileNumber = updateRequest.MobileNumber,

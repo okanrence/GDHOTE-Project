@@ -69,9 +69,9 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private static MainMenuFormViewModel ReturnViewModel()
+        private MainMenuFormViewModel ReturnViewModel()
         {
-            var statuses = PortalStatusService.GetStatuses();
+            var statuses = PortalStatusService.GetStatuses(SetToken());
             var viewModel = new MainMenuFormViewModel
             {
                 Statuses = statuses

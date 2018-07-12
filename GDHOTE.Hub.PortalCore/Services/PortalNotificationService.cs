@@ -13,7 +13,7 @@ namespace GDHOTE.Hub.PortalCore.Services
 {
     public class PortalNotificationService
     {
-        public static Response SendBirthdayNotificationEmail(SendEmailRequest emailRequest)
+        public static Response SendBirthdayNotificationEmail(SendEmailRequest emailRequest, Token token)
         {
             var requestData = JsonConvert.SerializeObject(emailRequest);
             string fullUrl = ConfigService.ReturnBaseUrl() + "/notification/send-birthday-email";
@@ -44,7 +44,7 @@ namespace GDHOTE.Hub.PortalCore.Services
         }
 
 
-        public static Response SendWeddingAnniversaryNotificationEmail(SendEmailRequest emailRequest)
+        public static Response SendWeddingAnniversaryNotificationEmail(SendEmailRequest emailRequest, Token token)
         {
             var requestData = JsonConvert.SerializeObject(emailRequest);
             string fullUrl = ConfigService.ReturnBaseUrl() + "/notification/send-wedding-anniversary-email";
@@ -75,7 +75,7 @@ namespace GDHOTE.Hub.PortalCore.Services
         }
 
 
-        public static Response SendSms(SmsMessageRequest smsRequest, Token token)
+        public static Response SendSms(SendSmsRequest smsRequest, Token token)
         {
             var requestData = JsonConvert.SerializeObject(smsRequest);
             string fullUrl = ConfigService.ReturnBaseUrl() + "/notification/send-sms";

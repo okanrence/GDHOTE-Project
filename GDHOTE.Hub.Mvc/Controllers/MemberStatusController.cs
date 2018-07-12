@@ -14,8 +14,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: MembershipStatus
         public ActionResult Index()
         {
-            var memberStatuses = PortalMemberStatusService.GetAllMemberStatuses().ToList();
-            return View("MemberStatusIndex",memberStatuses);
+            var memberStatuses = PortalMemberStatusService.GetAllMemberStatuses(SetToken());
+            return View("MemberStatusIndex", memberStatuses);
         }
         public ActionResult New()
         {
@@ -24,7 +24,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var membershipStatus = PortalMemberStatusService.GetMemberStatus(id);
+            var membershipStatus = PortalMemberStatusService.GetMemberStatus(id, SetToken());
             var viewModel = new CreateMemberStatusRequest();
             var item = JsonConvert.SerializeObject(membershipStatus);
             viewModel = JsonConvert.DeserializeObject<CreateMemberStatusRequest>(item);
@@ -38,7 +38,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 return View("MemberStatusForm");
             }
-            var result = PortalMemberStatusService.CreateMemberStatus(createRequest);
+            var result = PortalMemberStatusService.CreateMemberStatus(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -64,7 +64,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeleteMemberStatus(string id)
         {
-            var result = PortalMemberStatusService.DeleteMemberStatus(id);
+            var result = PortalMemberStatusService.DeleteMemberStatus(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

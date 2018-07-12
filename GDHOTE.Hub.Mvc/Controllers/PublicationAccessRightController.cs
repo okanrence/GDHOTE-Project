@@ -15,7 +15,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: ReportAccessRight
         public ActionResult Index()
         {
-            var accessRights = PortalPublicationAccessRightService.GetAllPublicationAccessRights().ToList();
+            var accessRights = PortalPublicationAccessRightService.GetAllPublicationAccessRights(SetToken());
             return View("AccessRightIndex", accessRights);
         }
         public ActionResult New()
@@ -31,7 +31,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 return View("AccessRightForm", createRequest);
             }
-            var result = PortalPublicationAccessRightService.CreatePublicationAccessRight(createRequest);
+            var result = PortalPublicationAccessRightService.CreatePublicationAccessRight(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -54,7 +54,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         public ActionResult Edit(string id)
         {
-            var accessRight = PortalPublicationAccessRightService.GetPublicationAccessRight(id);
+            var accessRight = PortalPublicationAccessRightService.GetPublicationAccessRight(id, SetToken());
             var viewModel = new CreatePublicationAccessRightRequest();
             var item = JsonConvert.SerializeObject(accessRight);
             viewModel = JsonConvert.DeserializeObject<CreatePublicationAccessRightRequest>(item);
@@ -66,7 +66,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeletePublicationAccessRight(string id)
         {
-            var result = PortalPublicationAccessRightService.DeletePublicationAccessRight(id);
+            var result = PortalPublicationAccessRightService.DeletePublicationAccessRight(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

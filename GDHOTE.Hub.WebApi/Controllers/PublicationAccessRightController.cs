@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -19,6 +20,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-all-access-rights")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetAllPublicationAccessRights()
         {
             try
@@ -50,6 +52,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-active-access-rights")]
+        [UnAuthorized]
         public HttpResponseMessage GetActivePublicationAccessRights()
         {
             try
@@ -80,6 +83,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-access-right")]
+        [UnAuthorized]
         public HttpResponseMessage GetPublicationAccessRight(string id)
         {
             try
@@ -109,6 +113,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("create-access-right")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage CreatePublicationAccessRight(CreatePublicationAccessRightRequest createRequest)
         {
             try
@@ -146,6 +151,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("delete-access-right")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage DeletePublicationAccessRight(string id)
         {
             try
@@ -153,7 +159,6 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 string username = User.Identity.Name;
                 var response = PublicationAccessRightService.Delete(Convert.ToInt16(id), username);
                 return Request.CreateResponse(HttpStatusCode.OK, response);
-
             }
             catch (UnableToCompleteException ex)
             {

@@ -333,7 +333,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                             {
                                 new Task(() =>
                                 {
-                                    var req = new SmsMessageRequest
+                                    var req = new SendSmsRequest
                                     {
                                         Message = "Dear " + createRequest.FirstName + " " + createRequest.Surname + ", your details has been successfully submitted.",
                                         MobileNumber = createRequest.MobileNumber,

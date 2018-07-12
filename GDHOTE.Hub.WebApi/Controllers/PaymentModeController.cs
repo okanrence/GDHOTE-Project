@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -17,6 +18,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
     {
         [HttpGet]
         [Route("get-all-payment-modes")]
+        [UnAuthorized]
         public HttpResponseMessage GetAllPaymentModes()
         {
             try
@@ -47,6 +49,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-active-payment-modes")]
+        [UnAuthorized]
         public HttpResponseMessage GetActivePaymentModes()
         {
             try
@@ -76,6 +79,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [Route("get-payment-mode")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetPaymentMode(int id)
         {
             try
@@ -105,6 +109,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("create-payment-mode")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage CreatePaymentMode(CreatePaymentModeRequest createRequest)
         {
             try
@@ -141,6 +146,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("delete-payment-mode")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage DeletePaymentMode(int id)
         {
             try

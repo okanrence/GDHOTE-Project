@@ -7,6 +7,7 @@ using System.Web.Http;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -16,6 +17,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
     {
         [HttpGet]
         [Route("get-all-role-types")]
+        [UnAuthorized]
         public HttpResponseMessage GetRoleTypes()
         {
             try
@@ -47,6 +49,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-active-role-types")]
+        [UnAuthorized]
         public HttpResponseMessage GetActiveRoleTypes()
         {
             try

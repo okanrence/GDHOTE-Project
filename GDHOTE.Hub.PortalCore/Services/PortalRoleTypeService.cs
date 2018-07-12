@@ -6,6 +6,7 @@ using System.Text;
 using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
+using GDHOTE.Hub.PortalCore.Models;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -13,14 +14,14 @@ namespace GDHOTE.Hub.PortalCore.Services
 {
     public class PortalRoleTypeService
     {
-        public static List<RoleType> GetRoleTypes()
+        public static List<RoleType> GetRoleTypes(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/role/get-all-role-types";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<RoleType>();
@@ -41,14 +42,14 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<RoleTypeResponse> GetActiveRoleTypes()
+        public static List<RoleTypeResponse> GetActiveRoleTypes(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/role/get-active-role-types";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<RoleTypeResponse>();

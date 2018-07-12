@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
-using System.Text;
 using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.PortalCore.Models;
 using Newtonsoft.Json;
 using RestSharp;
 
 namespace GDHOTE.Hub.PortalCore.Services
 {
-   public class PortalStatusService
+    public class PortalAuthService
     {
-        public static List<Status> GetStatuses(Token token)
+        public static TokenResponse Login(string username, string password)
         {
-            string fullUrl = ConfigService.ReturnBaseUrl() + "/status/get-statuses";
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/auth/token";
             var client = new RestClient(fullUrl);
-            var request = new RestRequest(Method.GET);
-            request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            request.AddHeader("refresh_token", token.RefreshToken);
-            request.RequestFormat = DataFormat.Json;
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("user_type", "administrator");//"customer"
+            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.AddParameter("grant_type", "password");
+            request.AddParameter("username", username);
+            request.AddParameter("password", password);
 
-            var result = new List<Status>();
+            var result = new TokenResponse();
             IRestResponse response = new RestResponse();
             try
             {
@@ -32,7 +30,7 @@ namespace GDHOTE.Hub.PortalCore.Services
                 {
                     ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
                 }
-                result = JsonConvert.DeserializeObject<List<Status>>(response.Content);
+                result = JsonConvert.DeserializeObject<TokenResponse>(response.Content);
             }
             catch (Exception ex)
             {

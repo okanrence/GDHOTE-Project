@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -17,6 +18,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
     {
         [HttpGet]
         [Route("get-transactions")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetTransactions(string startdate, string enddate)
         {
             try
@@ -48,6 +50,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-approved-transactions")]
+        [UnAuthorized]
         public HttpResponseMessage GetApprovedTransactions(string startdate, string enddate)
         {
             try
@@ -76,9 +79,10 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
-        
+
         [HttpGet]
         [Route("get-transaction")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetTransaction(string id)
         {
             try
@@ -109,6 +113,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("confirm-transaction")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage ConfirmTransaction(ConfirmTransactionRequest request)
         {
             try
@@ -145,6 +150,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("delete-transaction")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage DeleteTransaction(ConfirmTransactionRequest request)
         {
             try

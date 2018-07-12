@@ -7,6 +7,7 @@ using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Models;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -14,14 +15,14 @@ namespace GDHOTE.Hub.PortalCore.Services
 {
     public class PortalPublicationService
     {
-        public static List<PublicationViewModel> GetAllPublications()
+        public static List<PublicationViewModel> GetAllPublications(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-all-publications";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<PublicationViewModel>();
@@ -42,14 +43,14 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<PublicationResponse> GetActivePublications()
+        public static List<PublicationResponse> GetActivePublications(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-active-publications";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<PublicationResponse>();
@@ -70,14 +71,14 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<Publication> GetPublicationsByCategoryId(string id)
+        public static List<Publication> GetPublicationsByCategoryId(string id, Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-publications-by-category";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("id", id);
             request.RequestFormat = DataFormat.Json;
 
@@ -99,14 +100,14 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Publication GetPublication(string id)
+        public static Publication GetPublication(string id, Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/get-publication";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("id", id);
             request.RequestFormat = DataFormat.Json;
 
@@ -128,15 +129,15 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response CreatePublication(CreatePublicationRequest createRequest)
+        public static Response CreatePublication(CreatePublicationRequest createRequest, Token token)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
             string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/create-publication";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("application/json", requestData, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;
 
@@ -158,15 +159,15 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response DeletePublication(string id)
+        public static Response DeletePublication(string id, Token token)
         {
 
             string fullUrl = ConfigService.ReturnBaseUrl() + "/publication/delete-publication";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("id", id, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
 

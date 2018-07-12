@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -17,6 +18,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
     {
         [HttpGet]
         [Route("get-members-details")]
+        [UnAuthorized]
         public HttpResponseMessage GetMembersDetails()
         {
             try
@@ -47,6 +49,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-member-details")]
+        [UnAuthorized]
         public HttpResponseMessage GetMemberDetails(string id)
         {
             try
@@ -78,6 +81,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("create-member-details")]
+        [UnAuthorized()]
         public HttpResponseMessage CreateMemberDetails(CreateMemberDetailsRequest createRequest)
         {
             try
@@ -114,6 +118,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("delete-member-details")]
+        [UnAuthorized()]
         public HttpResponseMessage DeleteMemberDetails(string id)
         {
             try
@@ -146,6 +151,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("update-member-details")]
+        [UnAuthorized]
         public HttpResponseMessage UpdateMemberDetails(UpdateMemberDetailsRequest updateRequest)
         {
             try
@@ -183,6 +189,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-members-details-by-criteria")]
+        [UnAuthorized()]
         public HttpResponseMessage GetMembersDetailsByCriteria(int criteria, string startdate, string enddate)
         {
             try

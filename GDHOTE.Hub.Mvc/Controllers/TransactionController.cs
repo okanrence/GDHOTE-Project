@@ -15,14 +15,15 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
             string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
-            var transactions = PortalTransactionService.GetTransactions(startDate, endDate).ToList();
+            var transactions = PortalTransactionService.GetTransactions(startDate, endDate, SetToken());
             return View("TransactionIndex", transactions);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult DeleteMember(ConfirmPaymentRequest confirmRequest)
+        public JsonResult DeletePayment(ConfirmPaymentRequest confirmRequest)
         {
-            var result = PortalPaymentService.DeletePayment(confirmRequest);
+            var result = PortalPaymentService.DeletePayment(confirmRequest, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -30,7 +31,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult ConfirmPayment(ConfirmPaymentRequest confirmRequest)
         {
-            var result = PortalPaymentService.ConfirmPayment(confirmRequest);
+            var result = PortalPaymentService.ConfirmPayment(confirmRequest, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -38,7 +39,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public PartialViewResult FetchReportByDate(string startDate, string endDate)
         {
-            var transactions = PortalTransactionService.GetTransactions(startDate, endDate).ToList();
+            var transactions = PortalTransactionService.GetTransactions(startDate, endDate, SetToken());
             return PartialView("_TransactionReport", transactions);
         }
 

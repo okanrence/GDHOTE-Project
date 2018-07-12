@@ -7,6 +7,7 @@ using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Models;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -14,14 +15,14 @@ namespace GDHOTE.Hub.PortalCore.Services
 {
     public class PortalPaymentService
     {
-        public static List<PaymentViewModel> GetPayments(string startdate, string enddate)
+        public static List<PaymentViewModel> GetPayments(string startdate, string enddate, Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/payment/get-payments";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("startdate", startdate, ParameterType.QueryString);
             request.AddParameter("enddate", enddate, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
@@ -44,14 +45,14 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<PaymentViewModel> GetApprovedPayments(string startdate, string enddate)
+        public static List<PaymentViewModel> GetApprovedPayments(string startdate, string enddate, Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/payment/get-approved-payments";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("startdate", startdate, ParameterType.QueryString);
             request.AddParameter("enddate", enddate, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
@@ -74,14 +75,14 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<PaymentViewModel> GetPendingApproval()
+        public static List<PaymentViewModel> GetPendingApproval(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/payment/get-pending-approval";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<PaymentViewModel>();
@@ -101,14 +102,15 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-        public static Payment GetPayment(string id)
+
+        public static Payment GetPayment(string id, Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/payment/get-Payment";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("id", id);
             request.RequestFormat = DataFormat.Json;
 
@@ -129,15 +131,16 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-        public static Response CreatePayment(CreatePaymentRequest createRequest)
+
+        public static Response CreatePayment(CreatePaymentRequest createRequest, Token token)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
             string fullUrl = ConfigService.ReturnBaseUrl() + "/payment/create-payment";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("application/json", requestData, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;
 
@@ -159,15 +162,15 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response ConfirmPayment(ConfirmPaymentRequest createRequest)
+        public static Response ConfirmPayment(ConfirmPaymentRequest createRequest, Token token)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
             string fullUrl = ConfigService.ReturnBaseUrl() + "/payment/confirm-payment";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("application/json", requestData, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;
 
@@ -188,15 +191,16 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-        public static Response DeletePayment(ConfirmPaymentRequest createRequest)
+
+        public static Response DeletePayment(ConfirmPaymentRequest createRequest , Token token)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
             string fullUrl = ConfigService.ReturnBaseUrl() + "/payment/delete-payment";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("application/json", requestData, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;
 

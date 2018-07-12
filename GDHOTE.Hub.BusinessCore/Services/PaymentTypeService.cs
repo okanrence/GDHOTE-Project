@@ -190,7 +190,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     string typeName = StringCaseService.TitleCase(request.Name);
 
-
                     var paymentType = new PaymentType
                     {
                         Name = typeName,

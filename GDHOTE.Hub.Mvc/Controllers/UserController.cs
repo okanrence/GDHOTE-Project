@@ -16,7 +16,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: User
         public ActionResult Index()
         {
-            var users = PortalUserService.GetAllUsers().ToList();
+            var users = PortalUserService.GetAllUsers(SetToken());
             return View("UserIndex", users);
         }
 
@@ -34,7 +34,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: User/Edit/5
         public ActionResult Edit(string id)
         {
-            var user = PortalUserService.GetUser(id);
+            var user = PortalUserService.GetUser(id, SetToken());
             if (user == null) return HttpNotFound();
             var viewModelTemp = ReturnUpdateViewModel();
             var item = JsonConvert.SerializeObject(user);
@@ -55,7 +55,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 var viewModel = ReturnViewModel();
                 return View("UserForm", viewModel);
             }
-            var result = PortalUserService.CreateUser(createRequest);
+            var result = PortalUserService.CreateUser(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -87,7 +87,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 var viewModel = ReturnUpdateViewModel();
                 return View("EditUser", viewModel);
             }
-            var result = PortalUserService.UpdateUser(updateRequest);
+            var result = PortalUserService.UpdateUser(updateRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -113,13 +113,13 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeleteUser(string id)
         {
-            var result = PortalUserService.DeleteUser(id);
+            var result = PortalUserService.DeleteUser(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private static AdminUserFormViewModel ReturnViewModel()
+        private AdminUserFormViewModel ReturnViewModel()
         {
-            var roleTypes = PortalRoleTypeService.GetActiveRoleTypes().ToList();
+            var roleTypes = PortalRoleTypeService.GetActiveRoleTypes(SetToken());
             var roles = new List<RoleResponse>();
             var viewModel = new AdminUserFormViewModel
             {
@@ -128,11 +128,11 @@ namespace GDHOTE.Hub.Mvc.Controllers
             };
             return viewModel;
         }
-        private static UpdateAdminUserFormViewModel ReturnUpdateViewModel()
+        private UpdateAdminUserFormViewModel ReturnUpdateViewModel()
         {
-            var roleTypes = PortalRoleTypeService.GetActiveRoleTypes().ToList();
-            var roles = PortalRoleService.GetActiveRoles();
-            var userStatues = PortalUserStatusService.GetActiveUserStatuses().ToList();
+            var roleTypes = PortalRoleTypeService.GetActiveRoleTypes(SetToken());
+            var roles = PortalRoleService.GetActiveRoles(SetToken());
+            var userStatues = PortalUserStatusService.GetActiveUserStatuses(SetToken());
             var viewModel = new UpdateAdminUserFormViewModel
             {
                 RoleTypes = roleTypes,

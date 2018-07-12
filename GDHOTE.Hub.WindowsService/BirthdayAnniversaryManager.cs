@@ -85,7 +85,7 @@ namespace GDHOTE.Hub.WindowsService
                                     RecipientEmailAddress = member.EmailAddress
 
                                 };
-                                PortalNotificationService.SendBirthdayNotificationEmail(emailRequest);
+                                PortalNotificationService.SendBirthdayNotificationEmail(emailRequest, token);
                             }
                         }
                     }
@@ -153,7 +153,7 @@ namespace GDHOTE.Hub.WindowsService
                                 {
                                     new Task(() =>
                                     {
-                                        var req = new SmsMessageRequest
+                                        var req = new SendSmsRequest
                                         {
                                             Message = "Happy Birthday " + member.FirstName + " " + member.Surname + ". Have a wonderful day",
                                             MobileNumber = member.MobileNumber

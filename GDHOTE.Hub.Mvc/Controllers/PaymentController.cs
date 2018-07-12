@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
 using GDHOTE.Hub.PortalCore.Services;
@@ -18,7 +14,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
             string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
-            var payments = PortalPaymentService.GetPayments(startDate, endDate).ToList();
+            var payments = PortalPaymentService.GetPayments(startDate, endDate, SetToken());
             return View("PaymentIndex", payments);
         }
         public ActionResult New()
@@ -27,7 +23,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var payment = PortalPaymentService.GetPayment(id);
+            var payment = PortalPaymentService.GetPayment(id, SetToken());
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(payment);
             var viewModel = JsonConvert.DeserializeObject<PaymentFormViewModel>(item);
@@ -48,7 +44,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 viewModel.ModeOfPayments = viewModelTemp.ModeOfPayments;
                 return View("PaymentForm", viewModel);
             }
-            var result = PortalPaymentService.CreatePayment(createRequest);
+            var result = PortalPaymentService.CreatePayment(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -74,7 +70,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
             string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
-            var payments = PortalPaymentService.GetPayments(startDate, endDate).ToList();
+            var payments = PortalPaymentService.GetPayments(startDate, endDate, SetToken());
             return View("ManagePayment", payments);
         }
 
@@ -83,7 +79,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeleteMember(ConfirmPaymentRequest confirmRequest)
         {
-            var result = PortalPaymentService.DeletePayment(confirmRequest);
+            var result = PortalPaymentService.DeletePayment(confirmRequest, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -91,7 +87,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult ConfirmPayment(ConfirmPaymentRequest confirmRequest)
         {
-            var result = PortalPaymentService.ConfirmPayment(confirmRequest);
+            var result = PortalPaymentService.ConfirmPayment(confirmRequest, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -99,14 +95,14 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public PartialViewResult FetchReportByDate(string startDate, string endDate)
         {
-            var payments = PortalPaymentService.GetPayments(startDate, endDate);
+            var payments = PortalPaymentService.GetPayments(startDate, endDate, SetToken());
             return PartialView("_PaymentReport", payments);
         }
 
         private PaymentFormViewModel ReturnViewModel()
         {
-            var paymentModes = PortalPaymentModeService.GetActivePaymentModes();
-            var paymentTypes = PortalPaymentTypeService.GetActivePaymentTypes();
+            var paymentModes = PortalPaymentModeService.GetActivePaymentModes(SetToken());
+            var paymentTypes = PortalPaymentTypeService.GetActivePaymentTypes(SetToken());
             var currencies = PortalCurrencyService.GetActiveCurrencies(SetToken());
             var viewModel = new PaymentFormViewModel
             {

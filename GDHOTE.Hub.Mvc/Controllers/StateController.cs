@@ -15,7 +15,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: State
         public ActionResult Index()
         {
-            var states = PortalStateService.GetAllStates().ToList();
+            var states = PortalStateService.GetAllStates(SetToken());
             return View("StateIndex", states);
         }
         public ActionResult New()
@@ -30,7 +30,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             {
                 return View("StateForm", ReturnViewModel());
             }
-            var result = PortalStateService.CreateState(createRequest);
+            var result = PortalStateService.CreateState(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -53,7 +53,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var state = PortalStateService.GetState(id);
+            var state = PortalStateService.GetState(id, SetToken());
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(state);
             var viewModel = JsonConvert.DeserializeObject<StateFormViewModel>(item);
@@ -65,14 +65,14 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeleteState(string id)
         {
-            var result = PortalStateService.DeleteState(id);
+            var result = PortalStateService.DeleteState(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private static StateFormViewModel ReturnViewModel()
+        private StateFormViewModel ReturnViewModel()
         {
-            var statuses = PortalStatusService.GetStatuses().ToList();
-            var countries = PortalCountryService.GetActiveCountries().ToList();
+            var statuses = PortalStatusService.GetStatuses(SetToken());
+            var countries = PortalCountryService.GetActiveCountries();
             var viewModel = new StateFormViewModel
             {
                 Statuses = statuses,

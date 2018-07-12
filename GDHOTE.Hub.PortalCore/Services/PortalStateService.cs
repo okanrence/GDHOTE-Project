@@ -7,6 +7,7 @@ using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Models;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -14,14 +15,14 @@ namespace GDHOTE.Hub.PortalCore.Services
 {
     public class PortalStateService
     {
-        public static List<StateViewModel> GetAllStates()
+        public static List<StateViewModel> GetAllStates(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/state/get-all-states";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<StateViewModel>();
@@ -42,14 +43,14 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static List<State> GetActiveStates()
+        public static List<State> GetActiveStates(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/state/get-active-states";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<State>();
@@ -71,14 +72,14 @@ namespace GDHOTE.Hub.PortalCore.Services
         }
 
 
-        public static List<State> GetStatesByCountryId(string countryId)
+        public static List<State> GetStatesByCountryId(string countryId, Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/state/get-states-by-country";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("id", countryId);
             request.RequestFormat = DataFormat.Json;
 
@@ -99,14 +100,14 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-        public static State GetState(string id)
+        public static State GetState(string id, Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/state/get-state";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("id", id);
             request.RequestFormat = DataFormat.Json;
 
@@ -127,15 +128,15 @@ namespace GDHOTE.Hub.PortalCore.Services
             }
             return result;
         }
-        public static Response CreateState(CreateStateRequest createRequest)
+        public static Response CreateState(CreateStateRequest createRequest, Token token)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
             string fullUrl = ConfigService.ReturnBaseUrl() + "/state/create-state";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("application/json", requestData, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;
 
@@ -157,15 +158,15 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response DeleteState(string id)
+        public static Response DeleteState(string id, Token token)
         {
 
             string fullUrl = ConfigService.ReturnBaseUrl() + "/state/delete-state";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("id", id, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
 

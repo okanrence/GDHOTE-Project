@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -17,6 +18,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
     {
         [HttpGet]
         [Route("get-all-states")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetAllStates()
         {
             try
@@ -47,6 +49,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-active-states")]
+        [UnAuthorized]
         public HttpResponseMessage GetActiveStates()
         {
             try
@@ -77,6 +80,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-state")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetState(string id)
         {
             try
@@ -107,6 +111,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("create-state")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage CreateState(CreateStateRequest createRequest)
         {
             try
@@ -140,10 +145,11 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
-        
+
 
         [HttpPost]
         [Route("delete-state")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage DeleteState(int id)
         {
             try

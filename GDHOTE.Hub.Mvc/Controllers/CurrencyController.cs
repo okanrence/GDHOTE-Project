@@ -70,9 +70,9 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private static CurrencyFormViewModel ReturnViewModel()
+        private CurrencyFormViewModel ReturnViewModel()
         {
-            var statuses = PortalStatusService.GetStatuses().ToList();
+            var statuses = PortalStatusService.GetStatuses(SetToken());
             var viewModel = new CurrencyFormViewModel
             {
                 Statuses = statuses

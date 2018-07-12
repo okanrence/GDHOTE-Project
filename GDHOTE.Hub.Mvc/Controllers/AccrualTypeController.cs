@@ -100,7 +100,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         private UpdateAccrualTypeFormViewModel ReturnUpdateViewModel()
         {
-            var statuses = PortalStatusService.GetStatuses();
+            var statuses = PortalStatusService.GetStatuses(SetToken());
             var viewModel = new UpdateAccrualTypeFormViewModel
             {
                 Statuses = statuses

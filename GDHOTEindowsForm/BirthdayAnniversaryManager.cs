@@ -39,9 +39,13 @@ namespace GDHOTEindowsForm
 
                 if (currentTime > startDate && currentTime < endDate)
                 {
+                    ////Authenticate user
+                    //var integration = new LoginIntegration(Username, Password);
+                    //TokenResponse tokenResponse = integration.Invoke();
+
                     //Authenticate user
-                    var integration = new LoginIntegration(Username, Password);
-                    TokenResponse tokenResponse = integration.Invoke();
+
+                    var tokenResponse = PortalAuthService.Login(Username, Password);
 
                     if (tokenResponse != null)
                     {
@@ -85,7 +89,7 @@ namespace GDHOTEindowsForm
                                     RecipientEmailAddress = member.EmailAddress
 
                                 };
-                                PortalNotificationService.SendBirthdayNotificationEmail(emailRequest);
+                                PortalNotificationService.SendBirthdayNotificationEmail(emailRequest , token);
                             }
                         }
                     }
@@ -153,7 +157,7 @@ namespace GDHOTEindowsForm
                                 {
                                     new Task(() =>
                                     {
-                                        var req = new SmsMessageRequest
+                                        var req = new SendSmsRequest
                                         {
                                             Message = "Happy Birthday " + member.FirstName + " " + member.Surname + ". Have a wonderful day",
                                             MobileNumber = member.MobileNumber

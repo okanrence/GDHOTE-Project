@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -17,6 +18,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
     {
         [HttpGet]
         [Route("get-all-member-statuses")]
+        [UnAuthorized]
         public HttpResponseMessage GetAllMemberStatus()
         {
             try
@@ -48,6 +50,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-active-member-statuses")]
+        [UnAuthorized]
         public HttpResponseMessage GetActiveMemberStatuses()
         {
             try
@@ -77,6 +80,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [Route("get-member-status")]
+        [UnAuthorized]
         public HttpResponseMessage GetMemberStatus(string id)
         {
             try
@@ -107,6 +111,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("create-member-status")]
+        [UnAuthorized]
         public HttpResponseMessage CreateMemberStatus(CreateMemberStatusRequest createRequest)
         {
             try
@@ -143,6 +148,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("delete-member-status")]
+        [UnAuthorized]
         public HttpResponseMessage DeleteMemberStatus(int id)
         {
             try

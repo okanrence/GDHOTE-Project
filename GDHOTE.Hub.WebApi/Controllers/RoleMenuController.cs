@@ -9,6 +9,7 @@ using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -18,6 +19,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
     {
         [HttpGet]
         [Route("get-all-role-menus")]
+        [UnAuthorized]
         public HttpResponseMessage GetAllRoleMenus()
         {
             try
@@ -49,6 +51,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-active-role-menus")]
+        [UnAuthorized]
         public HttpResponseMessage GetActiveRoleMenus()
         {
             try
@@ -79,6 +82,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-role-menu")]
+        [UnAuthorized]
         public HttpResponseMessage GetRoleMenu(string id)
         {
             try
@@ -109,11 +113,12 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-role-menus-by-role")]
+        [UnAuthorized]
         public HttpResponseMessage GetRoleMenuByRole(string id)
         {
             try
             {
-                var response = RoleMenuService.GetRoleMenuByRole( Convert.ToInt16(id)).ToList();
+                var response = RoleMenuService.GetRoleMenuByRole(Convert.ToInt16(id)).ToList();
                 if (response.Count > 0)
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
@@ -140,6 +145,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("create-role-menu")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage CreateRoleMenu(CreateRoleMenuRequest request)
         {
             try
@@ -176,6 +182,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("delete-role-menu")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage DeleteRoleMenu(string id)
         {
             try

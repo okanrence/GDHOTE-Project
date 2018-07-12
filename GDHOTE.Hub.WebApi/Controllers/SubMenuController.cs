@@ -9,6 +9,7 @@ using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -18,6 +19,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
     {
         [HttpGet]
         [Route("get-all-sub-menus")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetAllSubMenus()
         {
             try
@@ -49,6 +51,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-active-sub-menus")]
+        [UnAuthorized]
         public HttpResponseMessage GetActiveSubMenus()
         {
             try
@@ -80,6 +83,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-sub-menus-by-main-menu")]
+        [UnAuthorized]
         public HttpResponseMessage GetSubMenusByMainMenu(string id)
         {
             try
@@ -111,6 +115,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-sub-menu")]
+        [UnAuthorized]
         public HttpResponseMessage GetSubMenu(string id)
         {
             try
@@ -141,6 +146,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("create-sub-menu")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage CreateSubMenu(CreateSubMenuRequest request)
         {
             try
@@ -177,6 +183,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("delete-sub-menu")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage DeleteSubMenu(string id)
         {
             try

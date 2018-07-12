@@ -7,6 +7,7 @@ using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Models;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -15,14 +16,14 @@ namespace GDHOTE.Hub.PortalCore.Services
     public class PortalUserService
     {
 
-        public static List<UserViewModel> GetAllUsers()
+        public static List<UserViewModel> GetAllUsers(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/user/get-all-users";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<UserViewModel>();
@@ -43,14 +44,14 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static User GetUser(string id)
+        public static User GetUser(string id, Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/user/get-user";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("id", id, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
 
@@ -72,7 +73,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response CreateUser(CreateAdminUserRequest createRequest)
+        public static Response CreateUser(CreateAdminUserRequest createRequest, Token token)
         {
             var channel = (int)CoreObject.Enumerables.Channel.Web;
             var requestData = JsonConvert.SerializeObject(createRequest);
@@ -81,8 +82,8 @@ namespace GDHOTE.Hub.PortalCore.Services
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("channel", channel.ToString());
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("application/json", requestData, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;
 
@@ -105,7 +106,7 @@ namespace GDHOTE.Hub.PortalCore.Services
         }
 
 
-        public static Response UpdateUser(UpdateAdminUserRequest updateRequest)
+        public static Response UpdateUser(UpdateAdminUserRequest updateRequest, Token token)
         {
             var channel = (int)CoreObject.Enumerables.Channel.Web;
             var requestData = JsonConvert.SerializeObject(updateRequest);
@@ -114,8 +115,8 @@ namespace GDHOTE.Hub.PortalCore.Services
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("channel", channel.ToString());
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("application/json", requestData, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;
 
@@ -137,7 +138,7 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response DeleteUser(string id)
+        public static Response DeleteUser(string id, Token token)
         {
             var channel = (int)CoreObject.Enumerables.Channel.Web;
 
@@ -146,8 +147,8 @@ namespace GDHOTE.Hub.PortalCore.Services
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("channel", channel.ToString());
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("id", id, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
 

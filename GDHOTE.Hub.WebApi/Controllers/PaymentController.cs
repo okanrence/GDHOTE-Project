@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -17,6 +18,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
     {
         [HttpGet]
         [Route("get-payments")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetPayments(string startdate, string enddate)
         {
             try
@@ -45,9 +47,9 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
-
         [HttpGet]
         [Route("get-approved-payments")]
+        [UnAuthorized]
         public HttpResponseMessage GetApprovedPayments(string startdate, string enddate)
         {
             try
@@ -78,6 +80,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-pending-approval")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetPaymentsPendingApproval()
         {
             try
@@ -109,6 +112,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-payment")]
+        [UnAuthorized]
         public HttpResponseMessage GetPayment(string id)
         {
             try
@@ -136,9 +140,10 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
-      
+
         [HttpPost]
         [Route("create-payment")]
+        [UnAuthorized]
         public HttpResponseMessage CreatePayment(CreatePaymentRequest request)
         {
             try
@@ -174,6 +179,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("confirm-payment")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage ConfirmPayment(ConfirmPaymentRequest request)
         {
             try
@@ -209,6 +215,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("delete-payment")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage DeletePayment(ConfirmPaymentRequest request)
         {
             try
@@ -244,6 +251,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("generate-payment-reference")]
+        [UnAuthorized]
         public HttpResponseMessage GeneratePaymentReference(CreatePaymentRequest request)
         {
             try

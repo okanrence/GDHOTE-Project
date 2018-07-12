@@ -15,7 +15,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: PaymentType
         public ActionResult Index()
         {
-            var paymentTypes = PortalPaymentTypeService.GetAllPaymentTypes().ToList();
+            var paymentTypes = PortalPaymentTypeService.GetAllPaymentTypes(SetToken());
             return View(paymentTypes);
         }
         public ActionResult New()
@@ -31,7 +31,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 viewModel = JsonConvert.DeserializeObject<PaymentTypeFormViewModel>(item);
                 return View("PaymentTypeForm", viewModel);
             }
-            var result = PortalPaymentTypeService.CreatePaymentType(createRequest);
+            var result = PortalPaymentTypeService.CreatePaymentType(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -57,13 +57,13 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeletePaymentType(string id)
         {
-            var result = PortalPaymentTypeService.DeletePaymentType(id);
+            var result = PortalPaymentTypeService.DeletePaymentType(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Edit(string id)
         {
-            var paymentType = PortalPaymentTypeService.GetPaymentType(id);
+            var paymentType = PortalPaymentTypeService.GetPaymentType(id, SetToken());
             var viewModel = ReturnViewModel();
             var item = JsonConvert.SerializeObject(paymentType);
             viewModel = JsonConvert.DeserializeObject<PaymentTypeFormViewModel>(item);
@@ -72,7 +72,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         private PaymentTypeFormViewModel ReturnViewModel()
         {
-            var statuses = PortalStatusService.GetStatuses();
+            var statuses = PortalStatusService.GetStatuses(SetToken());
             var internalAccounts = PortalAccountService.GetActiveInternalAccounts(SetToken());
             var viewModel = new PaymentTypeFormViewModel
             {

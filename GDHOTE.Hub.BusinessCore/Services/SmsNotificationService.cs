@@ -13,7 +13,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 {
     public class SmsNotificationService : BaseService
     {
-        public static Response SendMessage(SmsMessageRequest request, string currentUser)
+        public static Response SendMessage(SendSmsRequest request, string currentUser)
         {
             try
             {

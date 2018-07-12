@@ -16,7 +16,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: RoleMenu
         public ActionResult Index()
         {
-            var roleMenus = PortalRoleMenuService.GetRoleMenus().ToList();
+            var roleMenus = PortalRoleMenuService.GetRoleMenus(SetToken());
             return View("RoleMenuIndex", roleMenus);
         }
         public ActionResult New()
@@ -26,7 +26,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var roleMenu = PortalRoleMenuService.GetRoleMenu(id);
+            var roleMenu = PortalRoleMenuService.GetRoleMenu(id, SetToken());
             if (roleMenu == null) return HttpNotFound();
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(roleMenu);
@@ -52,7 +52,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 return View("RoleMenuForm", viewModel);
             }
 
-            var result = PortalRoleMenuService.CreateRoleMenu(createRequest);
+            var result = PortalRoleMenuService.CreateRoleMenu(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -75,9 +75,9 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         private RoleMenuFormViewModel ReturnViewModel()
         {
-            var statuses = PortalStatusService.GetStatuses();
+            var statuses = PortalStatusService.GetStatuses(SetToken());
             var mainMenus = PortalMainMenuService.GetActiveMainMenus(SetToken());
-            var roles = PortalRoleService.GetActiveRoles().ToList();
+            var roles = PortalRoleService.GetActiveRoles(SetToken());
             var viewModel = new RoleMenuFormViewModel
             {
                 Statuses = statuses,

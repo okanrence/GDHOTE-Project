@@ -15,7 +15,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: Publication Category
         public ActionResult Index()
         {
-            var categories = PortalPublicationCategoryService.GetAllPublicationCategories().ToList();
+            var categories = PortalPublicationCategoryService.GetAllPublicationCategories(SetToken());
             return View("PublicationCategoryIndex", categories);
         }
         public ActionResult New()
@@ -38,7 +38,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 displayImageFile.InputStream.Read(createRequest.DisplayImageFileContent, 0, displayImageFile.ContentLength);
 
             }
-            var result = PortalPublicationCategoryService.CreatePublicationCategory(createRequest);
+            var result = PortalPublicationCategoryService.CreatePublicationCategory(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -62,7 +62,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         public ActionResult Edit(string id)
         {
-            var category = PortalPublicationCategoryService.GetPublicationCategory(id);
+            var category = PortalPublicationCategoryService.GetPublicationCategory(id, SetToken());
             var viewModel = new CreatePublicationCategoryRequest();
             var item = JsonConvert.SerializeObject(category);
             viewModel = JsonConvert.DeserializeObject<CreatePublicationCategoryRequest>(item);
@@ -74,7 +74,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeletePublicationCategory(string id)
         {
-            var result = PortalPublicationCategoryService.DeletePublicationCategory(id);
+            var result = PortalPublicationCategoryService.DeletePublicationCategory(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

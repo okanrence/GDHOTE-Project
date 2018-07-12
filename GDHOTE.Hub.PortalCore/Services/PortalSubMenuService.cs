@@ -7,6 +7,7 @@ using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Models;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -14,14 +15,14 @@ namespace GDHOTE.Hub.PortalCore.Services
 {
     public class PortalSubMenuService
     {
-        public static List<SubMenuViewModel> GetAllSubMenus()
+        public static List<SubMenuViewModel> GetAllSubMenus(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-all-sub-menus";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<SubMenuViewModel>();
@@ -43,14 +44,14 @@ namespace GDHOTE.Hub.PortalCore.Services
         }
 
 
-        public static List<SubMenuResponse> GetActiveSubMenus()
+        public static List<SubMenuResponse> GetActiveSubMenus(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-active-sub-menus";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.RequestFormat = DataFormat.Json;
 
             var result = new List<SubMenuResponse>();
@@ -72,14 +73,14 @@ namespace GDHOTE.Hub.PortalCore.Services
         }
 
 
-        public static List<SubMenuResponse> GetSubMenusByMainMenu(string id)
+        public static List<SubMenuResponse> GetSubMenusByMainMenu(string id, Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-sub-menus-by-main-menu";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("id", id, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
 
@@ -102,14 +103,14 @@ namespace GDHOTE.Hub.PortalCore.Services
         }
 
 
-        public static SubMenu GetSubMenu(string id)
+        public static SubMenu GetSubMenu(string id, Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/get-sub-menu";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.GET);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("id", id);
             request.RequestFormat = DataFormat.Json;
 
@@ -131,15 +132,15 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
-        public static Response CreateSubMenu(CreateSubMenuRequest createRequest)
+        public static Response CreateSubMenu(CreateSubMenuRequest createRequest, Token token)
         {
             var requestData = JsonConvert.SerializeObject(createRequest);
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/create-sub-menu";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("application/json", requestData, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;
 
@@ -162,15 +163,15 @@ namespace GDHOTE.Hub.PortalCore.Services
         }
 
 
-        public static Response DeleteSubMenu(string id)
+        public static Response DeleteSubMenu(string id, Token token)
         {
 
             string fullUrl = ConfigService.ReturnBaseUrl() + "/menu/delete-sub-menu";
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("id", id, ParameterType.QueryString);
             request.RequestFormat = DataFormat.Json;
 

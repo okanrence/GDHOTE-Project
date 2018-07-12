@@ -16,7 +16,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         public ActionResult Index()
         {
 
-            var subMenus = PortalSubMenuService.GetAllSubMenus().ToList();
+            var subMenus = PortalSubMenuService.GetAllSubMenus(SetToken());
             return View("SubMenuIndex", subMenus);
         }
         public ActionResult New()
@@ -26,7 +26,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var subMenu = PortalSubMenuService.GetSubMenu(id);
+            var subMenu = PortalSubMenuService.GetSubMenu(id, SetToken());
             if (subMenu == null) return HttpNotFound();
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(subMenu);
@@ -49,7 +49,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 viewModel.MainMenus = viewModelTemp.MainMenus;
                 return View("SubMenuForm", viewModel);
             }
-            var result = PortalSubMenuService.CreateSubMenu(createRequest);
+            var result = PortalSubMenuService.CreateSubMenu(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -75,7 +75,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult GetSubMenusByMainMenu(string id)
         {
-            var result = PortalSubMenuService.GetSubMenusByMainMenu(id);
+            var result = PortalSubMenuService.GetSubMenusByMainMenu(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -83,13 +83,13 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeleteSubMenu(string id)
         {
-            var result = PortalSubMenuService.DeleteSubMenu(id);
+            var result = PortalSubMenuService.DeleteSubMenu(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         private SubMenuFormViewModel ReturnViewModel()
         {
             var mainMenus = PortalMainMenuService.GetActiveMainMenus(SetToken());
-            var statuses = PortalStatusService.GetStatuses();
+            var statuses = PortalStatusService.GetStatuses(SetToken());
             var viewModel = new SubMenuFormViewModel
             {
                 Statuses = statuses,

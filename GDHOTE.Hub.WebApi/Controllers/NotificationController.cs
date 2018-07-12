@@ -9,6 +9,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -19,6 +20,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
     {
         [HttpPost]
         [Route("send-birthday-email")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage SendBirthdayNotificationEmail(SendEmailRequest emailRequest)
         {
             try
@@ -56,6 +58,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("send-wedding-anniversary-email")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage SendWeddingAnniversaryNotificationEmail(SendEmailRequest emailRequest)
         {
             try
@@ -93,6 +96,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("send-email")]
+        [UnAuthorized]
         public HttpResponseMessage SendEmailMessage(SendEmailRequest emailRequest)
         {
             try
@@ -129,7 +133,8 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("send-sms")]
-        public HttpResponseMessage SendSms(SmsMessageRequest request)
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage SendSms(SendSmsRequest request)
         {
             try
             {

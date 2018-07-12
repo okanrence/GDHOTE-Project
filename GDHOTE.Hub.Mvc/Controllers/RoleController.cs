@@ -16,7 +16,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: Role
         public ActionResult Index()
         {
-            var roles = PortalRoleService.GetAllRoles().ToList();
+            var roles = PortalRoleService.GetAllRoles(SetToken());
             return View("RoleIndex", roles);
         }
         public ActionResult New()
@@ -25,7 +25,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         }
         public ActionResult Edit(string id)
         {
-            var role = PortalRoleService.GetRole(id);
+            var role = PortalRoleService.GetRole(id, SetToken());
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(role);
             var viewModel = JsonConvert.DeserializeObject<RoleFormViewModel>(item);
@@ -47,7 +47,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 viewModel.Statuses = viewModelTemp.Statuses;
                 return View("RoleForm", viewModel);
             }
-            var result = PortalRoleService.CreateRole(createRequest);
+            var result = PortalRoleService.CreateRole(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -72,7 +72,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult GetRolesByRoleTypeId(string id)
         {
-            var result = PortalRoleService.GetRolesByRoleType(id);
+            var result = PortalRoleService.GetRolesByRoleType(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -81,13 +81,13 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeleteRole(string id)
         {
-            var result = PortalRoleService.DeleteRole(id);
+            var result = PortalRoleService.DeleteRole(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        private static RoleFormViewModel ReturnViewModel()
+        private RoleFormViewModel ReturnViewModel()
         {
-            var statuses = PortalStatusService.GetStatuses().ToList();
-            var roleTypes = PortalRoleTypeService.GetActiveRoleTypes().ToList();
+            var statuses = PortalStatusService.GetStatuses(SetToken());
+            var roleTypes = PortalRoleTypeService.GetActiveRoleTypes(SetToken());
             var viewModel = new RoleFormViewModel
             {
                 Statuses = statuses,

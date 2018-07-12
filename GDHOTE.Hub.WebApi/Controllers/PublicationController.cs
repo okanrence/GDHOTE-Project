@@ -8,6 +8,7 @@ using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
 using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
@@ -17,6 +18,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
     {
         [HttpGet]
         [Route("get-all-publications")]
+        [UnAuthorized]
         public HttpResponseMessage GetAllPublications()
         {
             try
@@ -48,6 +50,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-active-publications")]
+        [UnAuthorized]
         public HttpResponseMessage GetActivePublications()
         {
             try
@@ -78,6 +81,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-publication")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage GetPublication(string id)
         {
             try
@@ -107,6 +111,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpGet]
         [Route("get-publications-by-category")]
+        [UnAuthorized]
         public HttpResponseMessage GetPublicationsByCategoryId(string id)
         {
             try
@@ -137,6 +142,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("create-publication")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage CreatePublication(CreatePublicationRequest createRequest)
         {
             try
@@ -173,6 +179,7 @@ namespace GDHOTE.Hub.WebApi.Controllers
 
         [HttpPost]
         [Route("delete-publication")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
         public HttpResponseMessage DeletePublication(string id)
         {
             try
@@ -187,11 +194,11 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
-
-
+        
 
         [HttpPost]
         [Route("mail-publication")]
+        [UnAuthorized]
         public HttpResponseMessage MailPublication(MailPublicationRequest mailRequest)
         {
             try

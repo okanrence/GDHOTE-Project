@@ -72,7 +72,7 @@ namespace GDHOTEindowsForm
                                     RecipientEmailAddress = member.EmailAddress
 
                                 };
-                                PortalNotificationService.SendWeddingAnniversaryNotificationEmail(emailRequest);
+                                PortalNotificationService.SendWeddingAnniversaryNotificationEmail(emailRequest, token);
                             }
 
                         }
@@ -138,7 +138,7 @@ namespace GDHOTEindowsForm
                                 {
                                     new Task(() =>
                                     {
-                                        var req = new SmsMessageRequest
+                                        var req = new SendSmsRequest
                                         {
                                             Message = "Happy Wedding Annivesary " + member.Surname + ". God bless you both",
                                             MobileNumber = member.MobileNumber

@@ -15,7 +15,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: Publication
         public ActionResult Index()
         {
-            var publications = PortalPublicationService.GetAllPublications().ToList();
+            var publications = PortalPublicationService.GetAllPublications(SetToken());
             return View("PublicationIndex", publications);
         }
 
@@ -45,7 +45,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 createRequest.UploadFile = uploadFile.FileName;
                 createRequest.UploadFileContent = new byte[uploadFile.ContentLength];
                 uploadFile.InputStream.Read(createRequest.UploadFileContent, 0, uploadFile.ContentLength);
-                
+
             }
             if (displayImageFile != null)
             {
@@ -54,7 +54,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 displayImageFile.InputStream.Read(createRequest.DisplayImageFileContent, 0, displayImageFile.ContentLength);
             }
 
-            var result = PortalPublicationService.CreatePublication(createRequest);
+            var result = PortalPublicationService.CreatePublication(createRequest, SetToken());
             if (result != null)
             {
                 //Successful
@@ -66,7 +66,6 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 {
                     ViewBag.ErrorBag = result.ErrorMessage;
                 }
-
             }
             else
             {
@@ -79,7 +78,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
 
         public ActionResult Edit(string id)
         {
-            var publication = PortalPublicationService.GetPublication(id);
+            var publication = PortalPublicationService.GetPublication(id, SetToken());
             var viewModelTemp = ReturnViewModel();
             var item = JsonConvert.SerializeObject(publication);
             var viewModel = JsonConvert.DeserializeObject<PublicationFormViewModel>(item);
@@ -93,7 +92,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult DeletePublication(string id)
         {
-            var result = PortalPublicationService.DeletePublication(id);
+            var result = PortalPublicationService.DeletePublication(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -101,15 +100,15 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult GetPublicationsByCategoryId(string id)
         {
-            var result = PortalPublicationService.GetPublicationsByCategoryId(id);
+            var result = PortalPublicationService.GetPublicationsByCategoryId(id, SetToken());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private static PublicationFormViewModel ReturnViewModel()
+        private PublicationFormViewModel ReturnViewModel()
         {
 
-            var categories = PortalPublicationCategoryService.GetActivePublicationCategories().ToList();
-            var accessrights = PortalPublicationAccessRightService.GetActivePublicationAccessRights().ToList();
+            var categories = PortalPublicationCategoryService.GetActivePublicationCategories(SetToken());
+            var accessrights = PortalPublicationAccessRightService.GetActivePublicationAccessRights(SetToken());
             var viewModel = new PublicationFormViewModel
             {
                 PublicationCategories = categories,
@@ -118,11 +117,5 @@ namespace GDHOTE.Hub.Mvc.Controllers
             };
             return viewModel;
         }
-
-        //public FileContentResult GetImageFile(int productId)
-        //{
-        //    //var myByte = new byte[];
-        //    //return File(new byte[], "");
-        //}
     }
 }

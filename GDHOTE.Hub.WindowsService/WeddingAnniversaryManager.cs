@@ -76,7 +76,7 @@ namespace GDHOTE.Hub.WindowsService
                                     RecipientEmailAddress = member.EmailAddress
 
                                 };
-                                PortalNotificationService.SendWeddingAnniversaryNotificationEmail(emailRequest);
+                                PortalNotificationService.SendWeddingAnniversaryNotificationEmail(emailRequest, token);
                             }
 
                         }
@@ -141,7 +141,7 @@ namespace GDHOTE.Hub.WindowsService
                                 {
                                     new Task(() =>
                                     {
-                                        var req = new SmsMessageRequest
+                                        var req = new SendSmsRequest
                                         {
                                             Message = "Dear Mr & Mrs " + member.Surname + ", your details has been successfully submitted.",
                                             MobileNumber = member.MobileNumber
