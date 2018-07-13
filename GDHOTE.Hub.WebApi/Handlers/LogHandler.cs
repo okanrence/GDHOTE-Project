@@ -48,7 +48,7 @@ namespace GDHOTE.Hub.WebApi.Handlers
                 //ignored
             }
 
-
+            
 
             var entry = CreateRequestResponseMessage(request);
 
@@ -97,7 +97,6 @@ namespace GDHOTE.Hub.WebApi.Handlers
                         if (resp?.Data != null)
                         {
                             response.Headers.Add("access_token", resp.Data.AccessToken);
-
                             response.Headers.Add("refresh_token", resp.Data.RefreshToken);
                         }
                     }

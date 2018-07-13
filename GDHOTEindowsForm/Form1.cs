@@ -19,9 +19,11 @@ namespace GDHOTEindowsForm
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //WeddingAnniversaryManager.StartEmailProcess();
+            WeddingAnniversaryManager.StartEmailProcess();
 
-            BirthdayAnniversaryManager.StartEmailProcess();
+            //WeddingAnniversaryManager.StartSmsProcess();
+
+            //BirthdayAnniversaryManager.StartEmailProcess();
 
             //BirthdayAnniversaryManager.StartSmsProcess();
         }

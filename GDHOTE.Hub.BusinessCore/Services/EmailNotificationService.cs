@@ -368,25 +368,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
         }
 
-        public static Response SendBirthdayNotificationEmailOld(SendEmailRequest sendRequest, string currentUser)
-        {
-            var response = new Response();
-
-            var emailRequest = new EmailRequest
-            {
-                RecipientEmailAddress = sendRequest.RecipientEmailAddress,
-                Subject = "Happy Birthday",
-                Type = EmailType.BirthdayNotification,
-                Data = new Hashtable
-                {
-                    ["FirstName"] = sendRequest.Firstname,
-                    ["LastName"] = sendRequest.Surname,
-                }
-            };
-            response = SendNotificationEmail(emailRequest, currentUser);
-            return response;
-        }
-
         public static Response SendBirthdayNotificationEmail(SendEmailRequest sendRequest, string currentUser)
         {
             try
@@ -426,7 +407,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 }
 
                 var emailType = EmailType.BirthdayNotification;
-                int templateCount = Convert.ToInt16(Get("settings.email.birthday.template.count"));
+                int templateCount = Convert.ToInt16(Get("settings.email.anniversary.template.count"));
                 Random rnd = new Random();
                 int number = rnd.Next(1, templateCount);
                 var mailTemplate = emailType.ToString() + number;
@@ -542,7 +523,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
 
             var emailType = EmailType.WeddingAnniversaryNotification;
-            int templateCount = 1;// Convert.ToInt16(Get("settings.email.birthday.template.count"));
+            int templateCount = Convert.ToInt16(Get("settings.email.anniversary.template.count"));
             Random rnd = new Random();
             int number = rnd.Next(1, templateCount);
             var mailTemplate = emailType.ToString() + number;

@@ -20,12 +20,38 @@ namespace GDHOTE.Hub.PortalCore.Services
             request.AddParameter("grant_type", "password");
             request.AddParameter("username", username);
             request.AddParameter("password", password);
+            try
+            {
+                var response = client.Execute<TokenResponse>(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
+                }
+                return response.Data;
+            }
+            catch (Exception ex)
+            {
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
+            }
+            return new TokenResponse();
+        }
+
+        public static TokenResponse LoginOld(string username, string password)
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/auth/token";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("user_type", "administrator");//"customer"
+            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.AddParameter("grant_type", "password");
+            request.AddParameter("username", username);
+            request.AddParameter("password", password);
 
             var result = new TokenResponse();
             IRestResponse response = new RestResponse();
             try
             {
-                response = client.Execute(request);
+                response = client.Execute<TokenResponse>(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));

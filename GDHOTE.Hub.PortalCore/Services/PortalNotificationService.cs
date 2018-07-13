@@ -20,8 +20,8 @@ namespace GDHOTE.Hub.PortalCore.Services
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("application/json", requestData, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;
 
@@ -51,8 +51,8 @@ namespace GDHOTE.Hub.PortalCore.Services
             var client = new RestClient(fullUrl);
             var request = new RestRequest(Method.POST);
             request.AddHeader("Content-Type", "application/json");
-            //request.AddHeader("Authorization", "Bearer " + token.AuthToken);
-            //request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
             request.AddParameter("application/json", requestData, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;
 

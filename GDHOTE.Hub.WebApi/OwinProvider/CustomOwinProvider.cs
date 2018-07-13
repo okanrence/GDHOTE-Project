@@ -120,7 +120,7 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                                 "as:client_id", adminUser.User.Id.ToString()
                             },
                             {
-                                "userName", context.UserName
+                                "Same", context.UserName
                             },
                             {
                                 "RoleId", adminUser.User.RoleId.ToString()

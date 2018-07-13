@@ -39,21 +39,24 @@ namespace GDHOTE.Hub.WindowsService
 
                 if (currentTime > startDate && currentTime < endDate)
                 {
+                    
                     //Authenticate user
-                    var integration = new LoginIntegration(Username, Password);
-                    TokenResponse tokenResponse = integration.Invoke();
-
-                    if (tokenResponse != null)
+                    TokenResponse tokenResponse = PortalAuthService.Login(Username, Password);
+                    if (tokenResponse == null)
                     {
-                        if (!string.IsNullOrEmpty(tokenResponse.AccessToken))
-                        {
-                            ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, "No Authentication response");
-                        }
+                        ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, "No Authentication response");
+                        return;
                     }
 
+                    if (string.IsNullOrEmpty(tokenResponse.AccessToken))
+                    {
+                        ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, "Authentication failed");
+                        return;
+                    }
                     token.AuthToken = tokenResponse.AccessToken;
                     token.RefreshToken = tokenResponse.RefreshToken;
 
+ 
 
                     //Check if serivce has ran
                     var checker = PortalCheckerService.GetChecker(appId, token);
@@ -122,11 +125,23 @@ namespace GDHOTE.Hub.WindowsService
 
                 if (currentTime > startDate && currentTime < endDate)
                 {
+                   
                     //Authenticate user
-                    var integration = new LoginIntegration(Username, Password);
-                    TokenResponse tokenResponse = integration.Invoke();
+                    TokenResponse tokenResponse = PortalAuthService.Login(Username, Password);
+                    if (tokenResponse == null)
+                    {
+                        ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, "No Authentication response");
+                        return;
+                    }
+
+                    if (string.IsNullOrEmpty(tokenResponse.AccessToken))
+                    {
+                        ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, "Authentication failed");
+                        return;
+                    }
                     token.AuthToken = tokenResponse.AccessToken;
                     token.RefreshToken = tokenResponse.RefreshToken;
+
 
 
                     //Check if serivce has ran
