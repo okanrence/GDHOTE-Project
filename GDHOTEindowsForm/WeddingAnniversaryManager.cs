@@ -69,11 +69,12 @@ namespace GDHOTEindowsForm
 
                     string anniversaryDateString = DateTime.Now.ToString("dd-MMM-yyyy");
 
+                    int itemCount = 0;
                     var memberList = PortalMemberService.GetMembersByWeddingAnniversary(anniversaryDateString, token);
-
                     if (memberList != null)
                     {
-                        if (memberList.Count > 0)
+                        itemCount = memberList.Count;
+                        if (itemCount > 0)
                         {
                             foreach (var member in memberList)
                             {
@@ -96,6 +97,14 @@ namespace GDHOTEindowsForm
 
                     //Update DB
                     var result = PortalCheckerService.UpdateChecker(appId, token);
+
+                    //Log to Service History
+                    var serviceLogRequest = new CreateServiceLogRequest
+                    {
+                        ServiceId = checker.Id,
+                        RecordCount = itemCount
+                    };
+                    var LogResult = PortalServiceLogService.CreateServiceLog(serviceLogRequest, token);
                 }
             }
             catch (Exception ex)
@@ -155,11 +164,14 @@ namespace GDHOTEindowsForm
 
                     string anniversaryDateString = DateTime.Now.ToString("dd-MMM-yyyy");
 
+                    int itemCount = 0;
                     var memberList = PortalMemberService.GetMembersByWeddingAnniversary(anniversaryDateString, token);
                     if (memberList != null)
                     {
-                        if (memberList.Count > 0)
+                        itemCount = memberList.Count;
+                        if (itemCount > 0)
                         {
+                            itemCount = memberList.Count;
                             foreach (var member in memberList)
                             {
                                 if (!string.IsNullOrEmpty(member.MobileNumber))
@@ -181,6 +193,14 @@ namespace GDHOTEindowsForm
 
                     //Update DB
                     var result = PortalCheckerService.UpdateChecker(appId, token);
+
+                    //Log to Service History
+                    var serviceLogRequest = new CreateServiceLogRequest
+                    {
+                        ServiceId = checker.Id,
+                        RecordCount = itemCount
+                    };
+                    var LogResult = PortalServiceLogService.CreateServiceLog(serviceLogRequest, token);
 
                 }
             }

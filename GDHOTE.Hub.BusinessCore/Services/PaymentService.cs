@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
+using GDHOTE.Hub.BusinessCore.Integrations;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
@@ -50,6 +51,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<PaymentViewModel>();
             }
         }
+
         public static List<PaymentViewModel> GetApprovedPayments(string startdate, string enddate)
         {
             try
@@ -227,8 +229,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
                     //insert payment
-                    string paymentReference = Guid.NewGuid().ToString();
-                    paymentReference = paymentReference.Replace("-", "");
+                    string paymentReference = UtilService.GenerateUniqueReference();
                     var payment = new Payment
                     {
                         MemberId = request.MemberId,
@@ -237,7 +238,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         PaymentModeId = request.PaymentModeId,
                         CurrencyId = request.CurrencyId,
                         Narration = narration,
-                        PaymentStatusId = (int)CoreObject.Enumerables.PaymentStatus.New,
+                        PaymentStatusId = (int)CoreObject.Enumerables.PaymentStatus.Pending,
                         CreatedById = user.Id,
                         PaymentReference = paymentReference,
                         DateCreated = DateTime.Now,
@@ -264,7 +265,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 Narration = narration,
                                 CurrencyId = request.CurrencyId,
                                 PaymentModeId = request.PaymentModeId,
-                                TransactionStatusId = (int)CoreObject.Enumerables.TransactionStatus.New,
+                                TransactionStatusId = (int)CoreObject.Enumerables.TransactionStatus.Pending,
                                 CreatedById = user.Id,
                                 DateCreated = DateTime.Now,
                                 RecordDate = DateTime.Now
@@ -281,7 +282,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                                 Narration = narration,
                                 CurrencyId = request.CurrencyId,
                                 PaymentModeId = request.PaymentModeId,
-                                TransactionStatusId = (int)CoreObject.Enumerables.TransactionStatus.New,
+                                TransactionStatusId = (int)CoreObject.Enumerables.TransactionStatus.Pending,
                                 CreatedById = user.Id,
                                 DateCreated = DateTime.Now,
                                 RecordDate = DateTime.Now
@@ -344,17 +345,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     var response = new Response();
 
-                    var payment = db.Fetch<Payment>()
-                        .SingleOrDefault(p => p.PaymentReference == request.PaymentReference);
-                    if (payment == null)
-                    {
-                        return new Response
-                        {
-                            ErrorCode = "01",
-                            ErrorMessage = "Record does not exist"
-                        };
-                    }
-
                     //Get User Initiating Creation Request
                     var user = UserService.GetUserByUserName(currentUser);
                     if (user == null)
@@ -366,11 +356,26 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         };
                     }
 
+                    var payment = db.Fetch<Payment>()
+                        .SingleOrDefault(p => p.PaymentReference == request.PaymentReference);
+                    if (payment == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
+                    }
+
+
+
                     //Update Payment
-                    //var action = request.Action;
+                    var action = request.Action;
 
                     payment.Remarks = request.Comment;
-                    payment.PaymentStatusId = (int)CoreObject.Enumerables.PaymentStatus.Deleted;
+                    payment.PaymentStatusId = action == "S" 
+                        ? (int)CoreObject.Enumerables.PaymentStatus.Approved 
+                        : (int)CoreObject.Enumerables.PaymentStatus.Deleted;
                     payment.DeletedById = user.Id;
                     payment.DateDeleted = DateTime.Now;
                     db.Update(payment);
@@ -434,8 +439,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         .SingleOrDefault(p => p.Id == request.PaymentTypeId);
 
                     //insert payment
-                    string paymentReference = Guid.NewGuid().ToString();
-                    paymentReference = paymentReference.Replace("-", "");
+                    string paymentReference = UtilService.GenerateUniqueReference();
                     var payment = new Payment
                     {
                         MemberId = request.MemberId,
@@ -518,7 +522,116 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     ErrorMessage = "Error occured while trying to insert record"
                 };
             }
+        }
 
+        public static Response VerifyGatewayPayment(VerifyPaymentRequest request, string currentUser)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+
+                    var response = new Response();
+
+                    //Get User Initiating Creation Request
+                    var user = UserService.GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
+
+                    var merchantResponse = FlutterWaveIntegration.ConfirmGatewayReference(request);
+                    if (merchantResponse == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to verify payment"
+                        };
+                    }
+                    if (merchantResponse.status == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to verify payment"
+                        };
+                    }
+
+                    string status = merchantResponse?.status;
+
+                    //get payment details from Db
+                    var payment = db.Fetch<Payment>()
+                        .SingleOrDefault(p => p.PaymentReference == request.PaymentReference);
+                    if (payment == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
+                    }
+
+                    //Update Payment
+                    payment.PaymentStatusId = status == "success"
+                        ? (int)CoreObject.Enumerables.PaymentStatus.Approved
+                        : (int)CoreObject.Enumerables.PaymentStatus.Declined;
+                    payment.ApprovedById = user.Id;
+                    payment.DateApproved = DateTime.Now;
+                    payment.DateUpdated = DateTime.Now;
+                    db.Update(payment);
+
+                    //get Transaction details from Db
+                    var transaction = db.Fetch<Transaction>()
+                        .SingleOrDefault(t => t.TransactionReference == request.PaymentReference);
+                    if (transaction == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
+                    }
+
+                    //Update Transaction
+                    transaction.TransactionStatusId = status == "success"
+                        ? (int)CoreObject.Enumerables.TransactionStatus.Successful
+                        : (int)CoreObject.Enumerables.TransactionStatus.Declined;
+                    transaction.GatewayReference = merchantResponse.data.flwref;
+                    transaction.GatewayResponseCode = merchantResponse.status;
+                    transaction.GatewayResponseDetails = merchantResponse.details;
+                    transaction.ApprovedById = user.Id;
+                    transaction.DateUpdated = DateTime.Now;
+                    transaction.DateApproved = DateTime.Now;
+                    db.Update(transaction);
+
+
+                    ////Update transaction
+                    //db.Update<Transaction>("set GatewayReference = @0,GatewayResponseCode = @1, GatewayResponseDetails = @2 where TransactionReference = @3",
+                    //    merchantResponse.data.flwref, merchantResponse.status, merchantResponse.details, request.PaymentReference);
+
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful",
+                        Reference = ""
+                    };
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to insert record"
+                };
+            }
         }
     }
 }

@@ -21,6 +21,7 @@ namespace GDHOTE.Hub.CoreObject.Models
         public int PaymentStatusId { get; set; }
         public string Remarks { get; set; }
         public string PaymentReference { get; set; }
+        public long ApprovedById { get; set; }
         public DateTime? DateApproved { get; set; }
     }
 }

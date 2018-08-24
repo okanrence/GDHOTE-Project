@@ -6,9 +6,9 @@ namespace GDHOTE.Hub.CoreObject.Enumerables
 {
     public enum PaymentStatus
     {
-        New = 1,
-        Approved = 2,
-        Pending =3,
-        Deleted = 4
+        Approved = 1,
+        Pending = 2,
+        Deleted = 3,
+        Declined = 4
     }
 }

@@ -70,11 +70,12 @@ namespace GDHOTE.Hub.WindowsService
 
                     string dateOfBirthString = DateTime.Now.ToString("dd-MMM-yyyy");
 
+                    int itemCount = 0;
                     var memberList = PortalMemberService.GetMembersByBirthdayAnniversary(dateOfBirthString, token);
-
                     if (memberList != null)
                     {
-                        if (memberList.Count > 0)
+                        itemCount = memberList.Count;
+                        if (itemCount > 0)
                         {
                             foreach (var member in memberList)
                             {
@@ -95,6 +96,14 @@ namespace GDHOTE.Hub.WindowsService
 
                     //Update DB
                     var result = PortalCheckerService.UpdateChecker(appId, token);
+
+                    //Log to Service History
+                    var serviceLogRequest = new CreateServiceLogRequest
+                    {
+                        ServiceId = checker.Id,
+                        RecordCount = itemCount
+                    };
+                    var LogResult = PortalServiceLogService.CreateServiceLog(serviceLogRequest, token);
                 }
 
             }
@@ -156,11 +165,12 @@ namespace GDHOTE.Hub.WindowsService
 
                     string dateOfBirthString = DateTime.Now.ToString("dd-MMM-yyyy");
 
+                    int itemCount = 0;
                     var memberList = PortalMemberService.GetMembersByBirthdayAnniversary(dateOfBirthString, token);
-
                     if (memberList != null)
                     {
-                        if (memberList.Count > 0)
+                        itemCount = memberList.Count;
+                        if (itemCount > 0)
                         {
                             foreach (var member in memberList)
                             {
@@ -183,6 +193,14 @@ namespace GDHOTE.Hub.WindowsService
 
                     //Update DB
                     var result = PortalCheckerService.UpdateChecker(appId, token);
+
+                    //Log to Service History
+                    var serviceLogRequest = new CreateServiceLogRequest
+                    {
+                        ServiceId = checker.Id,
+                        RecordCount = itemCount
+                    };
+                    var LogResult = PortalServiceLogService.CreateServiceLog(serviceLogRequest, token);
                 }
 
             }

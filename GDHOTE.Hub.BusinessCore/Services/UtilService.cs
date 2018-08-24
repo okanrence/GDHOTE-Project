@@ -71,6 +71,12 @@ namespace GDHOTE.Hub.BusinessCore.Services
             return hashValue;
         }
 
+        public static string GenerateUniqueReference()
+        {
+            string paymentReference = Guid.NewGuid().ToString();
+            paymentReference = paymentReference.Replace("-", "");
+            return paymentReference;
+        }
 
     }
 }

@@ -135,7 +135,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Delete Transaction
                     transaction.Remarks = request.Comment;
-                    transaction.TransactionStatusId = (int)CoreObject.Enumerables.TransactionStatus.Deleted;
+                    transaction.TransactionStatusId = (int)CoreObject.Enumerables.TransactionStatus.Cancelled;
                     transaction.DeletedById = user.Id;
                     transaction.DateDeleted = DateTime.Now;
                     db.Update(transaction);
@@ -190,10 +190,12 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     }
 
                     //Update Payment
-                    //var action = request.Action;
+                    var action = request.Action;
 
                     transaction.Remarks = request.Comment;
-                    transaction.TransactionStatusId = (int)CoreObject.Enumerables.TransactionStatus.Deleted;
+                    transaction.TransactionStatusId = action == "S"
+                        ? (int)CoreObject.Enumerables.PaymentStatus.Approved
+                        : (int)CoreObject.Enumerables.PaymentStatus.Deleted;
                     transaction.DeletedById = user.Id;
                     transaction.DateDeleted = DateTime.Now;
                     db.Update(transaction);
