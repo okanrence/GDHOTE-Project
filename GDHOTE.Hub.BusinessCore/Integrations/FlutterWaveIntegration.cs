@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.CoreObject.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -36,6 +38,27 @@ namespace GDHOTE.Hub.BusinessCore.Integrations
                 }
                 result = JsonConvert.DeserializeObject<FlutterWaveVerifyPaymentResponse>(response.Content);
                 result.details = JObject.Parse(response.Content).GetValue("data").ToString();
+
+                //Log Gateway Resposnse
+                new Task(() =>
+                {
+                    using (var db = BaseService.GdhoteConnection())
+                    {
+                        var paymentGatewayDetail = new PaymentGatewayDetail
+                        {
+                            GatewayId = verifyRequest.GatewayId,
+                            PaymentReference = verifyRequest.PaymentReference,
+                            MerchantReference = result.data.flwref,
+                            GatewayResponseCode = result.status,
+                            GatewayResponseMessage = result.message,
+                            GatewayResponseDetails = result.details,
+                            DateCreated = DateTime.Now,
+                            RecordDate = DateTime.Now
+                        };
+                        db.Insert(paymentGatewayDetail);
+                    }
+
+                }).Start();
             }
             catch (Exception ex)
             {

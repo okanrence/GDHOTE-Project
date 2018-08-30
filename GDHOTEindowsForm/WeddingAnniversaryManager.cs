@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.PortalCore.Integrations;
 using GDHOTE.Hub.PortalCore.Models;
 using GDHOTE.Hub.PortalCore.Services;
 

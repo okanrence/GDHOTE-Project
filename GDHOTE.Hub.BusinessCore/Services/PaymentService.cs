@@ -373,8 +373,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                     var action = request.Action;
 
                     payment.Remarks = request.Comment;
-                    payment.PaymentStatusId = action == "S" 
-                        ? (int)CoreObject.Enumerables.PaymentStatus.Approved 
+                    payment.PaymentStatusId = action == "S"
+                        ? (int)CoreObject.Enumerables.PaymentStatus.Approved
                         : (int)CoreObject.Enumerables.PaymentStatus.Deleted;
                     payment.DeletedById = user.Id;
                     payment.DateDeleted = DateTime.Now;
@@ -572,7 +572,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         return new Response
                         {
                             ErrorCode = "01",
-                            ErrorMessage = "Record does not exist"
+                            ErrorMessage = "Payment does not exist"
                         };
                     }
 
@@ -593,7 +593,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         return new Response
                         {
                             ErrorCode = "01",
-                            ErrorMessage = "Record does not exist"
+                            ErrorMessage = "Transaction does not exist"
                         };
                     }
 
@@ -603,7 +603,6 @@ namespace GDHOTE.Hub.BusinessCore.Services
                         : (int)CoreObject.Enumerables.TransactionStatus.Declined;
                     transaction.GatewayReference = merchantResponse.data.flwref;
                     transaction.GatewayResponseCode = merchantResponse.status;
-                    transaction.GatewayResponseDetails = merchantResponse.details;
                     transaction.ApprovedById = user.Id;
                     transaction.DateUpdated = DateTime.Now;
                     transaction.DateApproved = DateTime.Now;

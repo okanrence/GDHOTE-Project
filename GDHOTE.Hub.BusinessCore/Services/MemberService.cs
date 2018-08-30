@@ -34,7 +34,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                throw new UnableToCompleteException(ex.Message, MethodBase.GetCurrentMethod().Name);
+                LogService.LogError(ex.Message);
+                if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
+                return "Error occured while trying to insert Checker";
             }
         }
         public static List<MemberViewModel> GetAllMembers()

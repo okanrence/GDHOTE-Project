@@ -21,6 +21,6 @@ namespace GDHOTE.Hub.CoreObject.Models
         public DateTime? DateApproved { get; set; }
         public string GatewayReference { get; set; }
         public string GatewayResponseCode { get; set; }
-        public string GatewayResponseDetails { get; set; }
+        //public string GatewayResponseDetails { get; set; }
     }
 }
