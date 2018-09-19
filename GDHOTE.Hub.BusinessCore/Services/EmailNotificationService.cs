@@ -580,5 +580,76 @@ namespace GDHOTE.Hub.BusinessCore.Services
             response = SendGenericEmail(emailRequest, currentUser);
             return response;
         }
+
+        public static Response SendPaymentConfirmation(EmailRequest emailRequest, string currentUser)
+        {
+            try
+            {
+                var response = new Response();
+
+                //Get User Initiating Creation Request
+                var user = UserService.GetUserByUserName(currentUser);
+
+                if (user == null)
+                {
+                    return new Response
+                    {
+                        ErrorCode = "01",
+                        ErrorMessage = "Unable to validate User"
+                    };
+                }
+
+
+                var viewsPath = Path.GetFullPath(EmailTemplatePath);
+                var engines = new ViewEngineCollection { new FileSystemRazorViewEngine(viewsPath) };
+                var service = new EmailService(engines);
+                dynamic email = new Email("PaymentConfirmation");
+                email.To = emailRequest.RecipientEmailAddress;
+                email.Subject = emailRequest.Subject;
+                email.FirstName = emailRequest.Data["FirstName"];
+                email.LastName = emailRequest.Data["LastName"];
+                email.Amount = emailRequest.Data["Amount"];
+                email.PaymentReference = emailRequest.Data["PaymentReference"];
+                email.PaymentStatus = emailRequest.Data["PaymentStatus"];
+                service.Send(email);
+
+                //Log Notification
+                new Task(() =>
+                {
+                    using (var db = GdhoteConnection())
+                    {
+                        var notification = new Notification
+                        {
+                            Recipient = emailRequest.RecipientEmailAddress,
+                            NotificationTypeId = (int)NotificationType.Email,
+                            ContentBody = emailRequest.Type.ToString(),
+                            Status = 'S',
+                            CreatedById = user.Id,
+                            DateCreated = DateTime.Now,
+                            RecordDate = DateTime.Now
+                        };
+                        db.Insert(notification);
+                    }
+
+                }).Start();
+
+                response = new Response
+                {
+                    ErrorCode = "00",
+                    ErrorMessage = "Successful"
+                };
+                return response;
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                var response = new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured Sending message"
+                };
+                return response;
+            }
+        }
     }
 }

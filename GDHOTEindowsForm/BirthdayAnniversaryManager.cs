@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.PortalCore.Integrations;
 using GDHOTE.Hub.PortalCore.Models;
 using GDHOTE.Hub.PortalCore.Services;
 
@@ -64,6 +60,8 @@ namespace GDHOTEindowsForm
                     if (checker == null) return;
 
                     if (string.IsNullOrEmpty(checker.ApplicationId)) return;
+
+                    if (checker.StatusId == (int)GDHOTE.Hub.CoreObject.Enumerables.Status.Active) return;
 
                     if (checker.CheckDate.Date == DateTime.Now.Date) return;
 
@@ -162,6 +160,8 @@ namespace GDHOTEindowsForm
                     if (checker == null) return;
 
                     if (string.IsNullOrEmpty(checker.ApplicationId)) return;
+
+                    if (checker.StatusId == (int)GDHOTE.Hub.CoreObject.Enumerables.Status.Active) return;
 
                     if (checker.CheckDate.Date == DateTime.Now.Date) return;
 

@@ -51,6 +51,7 @@ namespace GDHOTE.Hub.BusinessCore.Integrations
                             MerchantReference = result.data.flwref,
                             GatewayResponseCode = result.status,
                             GatewayResponseMessage = result.message,
+                            GatewayRequestDetails = requestData,
                             GatewayResponseDetails = result.details,
                             DateCreated = DateTime.Now,
                             RecordDate = DateTime.Now

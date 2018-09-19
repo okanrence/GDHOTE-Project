@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.BusinessCore.Integrations;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.CoreObject.Enumerables;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.ViewModels;
 
@@ -578,40 +580,66 @@ namespace GDHOTE.Hub.BusinessCore.Services
 
                     //Update Payment
                     payment.PaymentStatusId = status == "success"
-                        ? (int)CoreObject.Enumerables.PaymentStatus.Approved
-                        : (int)CoreObject.Enumerables.PaymentStatus.Declined;
+                        ? (int)PaymentStatus.Approved
+                        : (int)PaymentStatus.Declined;
                     payment.ApprovedById = user.Id;
                     payment.DateApproved = DateTime.Now;
                     payment.DateUpdated = DateTime.Now;
                     db.Update(payment);
 
                     //get Transaction details from Db
-                    var transaction = db.Fetch<Transaction>()
-                        .SingleOrDefault(t => t.TransactionReference == request.PaymentReference);
-                    if (transaction == null)
+                    var transactions = db.Fetch<Transaction>()
+                        .Where(t => t.TransactionReference == request.PaymentReference);
+
+                    int transactionStatus = 0;
+                    transactionStatus = status == "success"
+                        ? (int)TransactionStatus.Successful
+                        : (int)TransactionStatus.Declined;
+
+                    //Update Transactions
+                    foreach (var transaction in transactions)
                     {
-                        return new Response
-                        {
-                            ErrorCode = "01",
-                            ErrorMessage = "Transaction does not exist"
-                        };
+                        transaction.TransactionStatusId = transactionStatus;
+                        transaction.GatewayReference = merchantResponse.data.flwref;
+                        transaction.GatewayResponseCode = merchantResponse.status;
+                        transaction.ApprovedById = user.Id;
+                        transaction.DateUpdated = DateTime.Now;
+                        transaction.DateApproved = DateTime.Now;
+                        db.Update(transaction);
                     }
-
-                    //Update Transaction
-                    transaction.TransactionStatusId = status == "success"
-                        ? (int)CoreObject.Enumerables.TransactionStatus.Successful
-                        : (int)CoreObject.Enumerables.TransactionStatus.Declined;
-                    transaction.GatewayReference = merchantResponse.data.flwref;
-                    transaction.GatewayResponseCode = merchantResponse.status;
-                    transaction.ApprovedById = user.Id;
-                    transaction.DateUpdated = DateTime.Now;
-                    transaction.DateApproved = DateTime.Now;
-                    db.Update(transaction);
-
 
                     ////Update transaction
                     //db.Update<Transaction>("set GatewayReference = @0,GatewayResponseCode = @1, GatewayResponseDetails = @2 where TransactionReference = @3",
                     //    merchantResponse.data.flwref, merchantResponse.status, merchantResponse.details, request.PaymentReference);
+
+                    //Send mail
+                    new Task(() =>
+                    {
+                        //get member detailse
+                        var memberDetails = db.Query<MemberDetailsViewModel>
+                                ("select * from vx_HUB_MemberDetails where memberId = @0", payment.MemberId)
+                            .SingleOrDefault();
+
+                        if (memberDetails != null)
+                        {
+                            var req = new EmailRequest
+                            {
+                                Type = EmailType.PaymentConfirmation,
+                                Subject = Get("settings.organisation.name") + " Transaction",
+                                RecipientEmailAddress = memberDetails.EmailAddress,
+                                Data = new Hashtable
+                                {
+                                    ["FirstName"] = memberDetails.FirstName,
+                                    ["LastName"] = memberDetails.Surname,
+                                    ["Amount"] = payment.Amount,
+                                    ["PaymentReference"] = payment.PaymentReference,
+                                    ["PaymentStatus"] = status,
+                                }
+                            };
+
+                            EmailNotificationService.SendPaymentConfirmation(req, currentUser);
+                        }
+                    }).Start();
 
                     response = new Response
                     {

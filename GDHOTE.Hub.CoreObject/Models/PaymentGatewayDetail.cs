@@ -14,6 +14,7 @@ namespace GDHOTE.Hub.CoreObject.Models
         public string MerchantReference { get; set; }
         public string GatewayResponseCode { get; set; }
         public string GatewayResponseMessage { get; set; }
+        public string GatewayRequestDetails { get; set; }
         public string GatewayResponseDetails { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime RecordDate { get; set; }
