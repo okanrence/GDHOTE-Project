@@ -61,7 +61,7 @@ namespace GDHOTEindowsForm
 
                     if (string.IsNullOrEmpty(checker.ApplicationId)) return;
 
-                    if (checker.StatusId == (int)GDHOTE.Hub.CoreObject.Enumerables.Status.Active) return;
+                    if (checker.StatusId != (int)GDHOTE.Hub.CoreObject.Enumerables.Status.Active) return;
 
                     if (checker.CheckDate.Date == DateTime.Now.Date) return;
 
@@ -161,7 +161,7 @@ namespace GDHOTEindowsForm
 
                     if (string.IsNullOrEmpty(checker.ApplicationId)) return;
 
-                    if (checker.StatusId == (int)GDHOTE.Hub.CoreObject.Enumerables.Status.Active) return;
+                    if (checker.StatusId != (int)GDHOTE.Hub.CoreObject.Enumerables.Status.Active) return;
 
                     if (checker.CheckDate.Date == DateTime.Now.Date) return;
 

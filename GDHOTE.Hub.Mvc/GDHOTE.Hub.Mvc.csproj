@@ -774,7 +774,6 @@
     <Content Include="stylesheets\scss\layout\_hero.scss" />
     <Content Include="stylesheets\scss\pages\_index.scss" />
     <Content Include="stylesheets\scss\pages\_login.scss" />
-    <Content Include="Views\Account\Login - Copy.cshtml" />
     <Content Include="Views\Shared\_HomeLayout.cshtml" />
     <Content Include="Views\_ViewStart - Copy.cshtml" />
     <Content Include="Views\Account\ForgotPassword - Copy.cshtml" />
@@ -808,6 +807,7 @@
     <Content Include="Views\MemberDetails\UpdateDetailsForm.cshtml" />
     <Content Include="Views\ActivityType\UpdateActivityTypeForm.cshtml" />
     <Content Include="Views\AccrualType\UpdateAccrualTypeForm.cshtml" />
+    <Content Include="Views\Account\Login1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

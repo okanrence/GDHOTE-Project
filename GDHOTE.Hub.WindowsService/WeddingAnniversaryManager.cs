@@ -35,7 +35,7 @@ namespace GDHOTE.Hub.WindowsService
 
                 if (currentTime > startDate && currentTime < endDate)
                 {
-
+                    
                     //Authenticate user
                     TokenResponse tokenResponse = PortalAuthService.Login(Username, Password);
                     if (tokenResponse == null)
@@ -51,21 +51,24 @@ namespace GDHOTE.Hub.WindowsService
                     }
                     token.AuthToken = tokenResponse.AccessToken;
                     token.RefreshToken = tokenResponse.RefreshToken;
-
+                    
 
                     //Check if serivce has ran
                     var checker = PortalCheckerService.GetChecker(appId, token);
+                 
 
                     if (checker == null) return;
 
                     if (string.IsNullOrEmpty(checker.ApplicationId)) return;
 
-                    if (checker.StatusId == (int)CoreObject.Enumerables.Status.Active) return;
+                   
+                    if (checker.StatusId != (int)CoreObject.Enumerables.Status.Active) return;
 
                     if (checker.CheckDate.Date == DateTime.Now.Date) return;
-
+                  
 
                     string anniversaryDateString = DateTime.Now.ToString("dd-MMM-yyyy");
+
 
                     int itemCount = 0;
                     var memberList = PortalMemberService.GetMembersByWeddingAnniversary(anniversaryDateString, token);
@@ -156,7 +159,7 @@ namespace GDHOTE.Hub.WindowsService
 
                     if (string.IsNullOrEmpty(checker.ApplicationId)) return;
 
-                    if (checker.StatusId == (int)CoreObject.Enumerables.Status.Active) return;
+                    if (checker.StatusId != (int)CoreObject.Enumerables.Status.Active) return;
 
                     if (checker.CheckDate.Date == DateTime.Now.Date) return;
 

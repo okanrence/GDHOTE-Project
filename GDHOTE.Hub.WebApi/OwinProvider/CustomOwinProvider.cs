@@ -76,7 +76,7 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                         role = customerUser.User.UserRole;
                         props = new AuthenticationProperties(new Dictionary<string, string>
                         {
-                            { "as:clientRefreshTokenLifeTime","10"},
+                            { "as:clientRefreshTokenLifeTime","30"},
                             {"as:clientAllowedOrigin","*" },
                             {
                                 "firstName",customerUser.User.FirstName
@@ -108,7 +108,7 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                         role = adminUser.User.UserRole;
                         props = new AuthenticationProperties(new Dictionary<string, string>
                         {
-                            { "as:clientRefreshTokenLifeTime","10"},
+                            { "as:clientRefreshTokenLifeTime","30"},
                             {"as:clientAllowedOrigin","*" },
                             {
                                 "firstName",adminUser.User.FirstName

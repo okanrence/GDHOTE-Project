@@ -61,7 +61,7 @@ namespace GDHOTE.Hub.WindowsService
 
                     if (string.IsNullOrEmpty(checker.ApplicationId)) return;
 
-                    if (checker.StatusId == (int)CoreObject.Enumerables.Status.Active) return;
+                    if (checker.StatusId != (int)CoreObject.Enumerables.Status.Active) return;
 
                     if (checker.CheckDate.Date == DateTime.Now.Date) return;
 
@@ -158,7 +158,7 @@ namespace GDHOTE.Hub.WindowsService
 
                     if (string.IsNullOrEmpty(checker.ApplicationId)) return;
 
-                    if (checker.StatusId == (int)CoreObject.Enumerables.Status.Active) return;
+                    if (checker.StatusId != (int)CoreObject.Enumerables.Status.Active) return;
 
                     if (checker.CheckDate.Date == DateTime.Now.Date) return;
 

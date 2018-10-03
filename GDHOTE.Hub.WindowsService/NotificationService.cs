@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GDHOTE.Hub.CommonServices.BusinessLogic;
 
 namespace GDHOTE.Hub.WindowsService
 {
@@ -15,7 +17,7 @@ namespace GDHOTE.Hub.WindowsService
     {
         private Timer _oTimer;
         private string _busyFlag = "";
-        private int _runInterval = 1;// BaseService.RunInterval();
+        private long _runInterval = Int64.Parse(ConfigurationManager.AppSettings["settings.service.run.interval"]);
         private string _serviceName = "";// BaseService.Get("settings.service.service.name");
         private string _deployedServerIp = "";// BaseService.Get("settings.service.deployed.server");
         public NotificationService()
@@ -39,7 +41,12 @@ namespace GDHOTE.Hub.WindowsService
         {
             _busyFlag = "Y";
 
+            ErrorLogManager.LogError("Service Process", "Started");
+
             WeddingAnniversaryManager.StartEmailProcess();
+
+            ErrorLogManager.LogError("Service Process", "Ended");
+
 
             _busyFlag = "N";
         }

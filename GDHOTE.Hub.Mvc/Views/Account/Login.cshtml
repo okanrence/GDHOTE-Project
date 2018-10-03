@@ -11,7 +11,7 @@
 <div class="login-wrapper">
     <div class="card">
         <section id="loginForm">
-            <h2>Account Sign In</h2>
+            <h2 class="h3 mb-3 font-weight-normal">Please sign in</h2>
             <div>
                 @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
@@ -19,21 +19,24 @@
                     <hr />
                     <span class="text-danger">@ViewBag.ErrorBag</span>
                     <div class="form-group">
-                        <div class="col-md-10">
-                            @Html.TextBoxFor(m => m.EmailAddress, new { placeholder = "Email Address", @class = "form-control", autocomplete = "off" })
-                            @Html.ValidationMessageFor(m => m.EmailAddress, "", new { @class = "text-danger" })
-                        </div>
+                        @Html.TextBoxFor(m => m.EmailAddress, new { placeholder = "Email Address", @class = "form-control", autocomplete = "off" })
+                        @Html.ValidationMessageFor(m => m.EmailAddress, "", new { @class = "text-danger" })
+                        @*<div class="col-md-10">
+
+                        </div>*@
                     </div>
                     <div class="form-group">
-                        <div class="col-md-10">
-                            @Html.PasswordFor(m => m.Password, new { placeholder = "Password", @class = "form-control", autocomplete = "off" })
-                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                        </div>
+                        @Html.PasswordFor(m => m.Password, new { placeholder = "Password", @class = "form-control", autocomplete = "off" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        @*<div class="col-md-10">
+
+                        </div>*@
                     </div>
                     <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Log in" class="btn btn-primary" />
-                        </div>
+                        <input type="submit" value="Log in" class="btn btn-primary  btn-block" />
+                        @*<div class="col-md-offset-2 col-md-10">
+
+                        </div>*@
                     </div>
                     <span class="text-danger">@ViewBag.LoginError</span>
                     
