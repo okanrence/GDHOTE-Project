@@ -36,8 +36,8 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 return View(loginRequest);
             }
 
-            var integration = new LoginIntegration(loginRequest.UserName, loginRequest.Password);
-            TokenResponse token = integration.Invoke();
+            //var integration = new LoginIntegration(loginRequest.UserName, loginRequest.Password);
+            //TokenResponse token = integration.Invoke();
 
             var result = UserService.AuthenticateUser(loginRequest);
             if (result != null)

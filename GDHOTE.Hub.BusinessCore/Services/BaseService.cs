@@ -16,7 +16,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             string dbConnection = "";
             dbConnection = UseLive() == "Y"
                 ? "Data Source=192.99.150.165;Initial Catalog=GDHOTE;user Id=gdhote;password=HolyOrder@123#"
-                : "Data Source=.;Initial Catalog=GDHOTE;user Id=sa;password=Gmt123456";
+                : "Data Source=.;Initial Catalog=GDHOTE;user Id=sa;password=password10$";
             return new Database(dbConnection, DatabaseType.SqlServer2012, SqlClientFactory.Instance);
             //ConfigurationManager.ConnectionStrings["GdhoteConnection"].ConnectionString;
         }
