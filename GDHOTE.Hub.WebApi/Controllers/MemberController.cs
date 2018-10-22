@@ -47,6 +47,68 @@ namespace GDHOTE.Hub.WebApi.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("recent")]
+        //[UnAuthorized]
+        public HttpResponseMessage GetRecentMembers()
+        {
+            try
+            {
+                var response = MemberService.GetRecentMembers();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        //[UnAuthorized]
+        public HttpResponseMessage GetMemberById(string Id)
+        {
+            try
+            {
+                var response = MemberService.GetMemberByID(Id);
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
 
         [HttpGet]
         [Route("get-active-members")]
@@ -142,6 +204,8 @@ namespace GDHOTE.Hub.WebApi.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
+
+     
 
         [HttpPost]
         [Route("delete-member")]
@@ -405,6 +469,37 @@ namespace GDHOTE.Hub.WebApi.Controllers
                     RequestMessage = Request,
                     Content = new StringContent(
                         JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+        [HttpGet]
+        [Route("search")]
+       // [UnAuthorized]
+        public HttpResponseMessage SearchMember(string searchTerm)
+        {
+            try
+            {
+                var response = MemberInfoService.SearchMember(searchTerm);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request
+                    //Content = new StringContent(
+                    //    JsonConvert.SerializeObject(response, Formatting.Indented))
                 };
             }
             catch (UnableToCompleteException ex)

@@ -48,6 +48,37 @@ namespace GDHOTE.Hub.WebApi.Controllers
         }
 
         [HttpGet]
+        [Route("details/recent")]
+        [UnAuthorized]
+        public HttpResponseMessage GetRecentMembersDetails()
+        {
+            try
+            {
+                var response = MemberDetailsService.GetRecentMembersDetails().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+        [HttpGet]
         [Route("get-member-details")]
         [UnAuthorized]
         public HttpResponseMessage GetMemberDetails(string id)

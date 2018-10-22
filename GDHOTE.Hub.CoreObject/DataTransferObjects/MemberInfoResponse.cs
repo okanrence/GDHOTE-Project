@@ -12,4 +12,6 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
         public MemberDetailsViewModel MemberDetails { get; set; }
         public List<ActivityViewModel> Activities { get; set; }
     }
+
+    
 }

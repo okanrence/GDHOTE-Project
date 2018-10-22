@@ -43,6 +43,34 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
+        public static List<MemberDetailsViewModel> GetRecentMembersDetails(Token token)
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/details/recent";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new List<MemberDetailsViewModel>();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<List<MemberDetailsViewModel>>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
+            }
+            return result;
+        }
+
         public static MemberDetails GetMemberDetails(string id, Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-member-details";

@@ -134,5 +134,38 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
 
         }
-      }
+
+       
+        public static List<MemberDetailsViewModel> SearchMember(string searchTerm)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    //var member = db.Query<MemberViewModel>("select * from vx_HUB_Members where Surname like '%@0%' or FirstName like '%@0%' or OtherNames like '%@0%'", searchTerm).ToList();
+                    var member = db.Query<MemberDetailsViewModel>($"select * from vx_HUB_MemberDetails where Surname like '%{searchTerm}%' or FirstName like '%{searchTerm}%' or OtherNames like'%{searchTerm}%' or MobileNumber like'%{searchTerm}%' ").ToList();
+                    
+                    //var memberDetails = db.Fetch<MemberDetailsViewModel>().SingleOrDefault(m => m.MemberId == member.Id);
+                    //var activities = db.Fetch<ActivityViewModel>()
+                    //    .Where(m => m.MemberId == member.Id)
+                    //    .OrderBy(m => m.StartDate).ToList();
+
+                    //var memberInfoResponse = new MemberInfoResponse
+                    //{
+                    //    Member = member,
+                    //    MemberDetails = memberDetails,
+                    //    Activities = activities
+                    //};
+
+                    return member;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new List<MemberDetailsViewModel>();
+            }
+
+        }
+    }
 }

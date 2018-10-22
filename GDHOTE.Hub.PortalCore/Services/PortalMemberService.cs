@@ -42,6 +42,63 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
+        public static List<MemberViewModel> GetMemberById(string id,Token token)
+        {
+            string fullUrl = $"{ConfigService.ReturnBaseUrl()}/member/{id}";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
+            //request.AddParameter("id", id);
+
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new List<MemberViewModel>();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<List<MemberViewModel>>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
+            }
+            return result;
+        }
+        public static List<MemberViewModel> GetRecentMembers(Token token)
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/recent";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new List<MemberViewModel>();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<List<MemberViewModel>>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
+            }
+            return result;
+        }
+
         public static List<MemberViewModel> GetPendingApproval(Token token)
         {
             string fullUrl = ConfigService.ReturnBaseUrl() + "/member/get-pending-approval";
@@ -304,6 +361,34 @@ namespace GDHOTE.Hub.PortalCore.Services
             return result;
         }
 
+        public static List<MemberDetailsViewModel> SearchMember(string searchTerm, Token token)
+        {
+            string fullUrl = ConfigService.ReturnBaseUrl() + "/member/search";
+            var client = new RestClient(fullUrl);
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Authorization", "Bearer " + token.AuthToken);
+            request.AddHeader("refresh_token", token.RefreshToken);
+            request.AddParameter("searchterm", searchTerm);
+            request.RequestFormat = DataFormat.Json;
+
+            var result = new List<MemberDetailsViewModel>();
+            IRestResponse response = new RestResponse();
+            try
+            {
+                response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, JsonConvert.SerializeObject(response));
+                }
+                result = JsonConvert.DeserializeObject<List<MemberDetailsViewModel>>(response.Content);
+            }
+            catch (Exception ex)
+            {
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
+            }
+            return result;
+        }
         public static Response UpdateMember(UpdateMemberRequest updateRequest, Token token)
         {
             var requestData = JsonConvert.SerializeObject(updateRequest);

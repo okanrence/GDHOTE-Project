@@ -20,6 +20,7 @@ namespace GDHOTE.Hub.Mvc
                        "~/Scripts/sweetalert.min.js",
                        "~/Scripts/jquery.unobtrusive-ajax.js",
                        "~/Scripts/typeahead.bundle.js",
+                       "~/Scripts/select2.full.js",
                         "~/Scripts/jquery-ui-{version}.js"
                         ));
 
@@ -39,6 +40,7 @@ namespace GDHOTE.Hub.Mvc
                       "~/Content/bootstrap-datepicker.css",
                       "~/Content/sweetalert.min.css",
                       "~/Content/typeahead.css",
+                      "~/Content/select2.css",
                       "~/Content/jquery-ui/jquery-ui.min.css",
                       "~/Content/site.css")); 
         }

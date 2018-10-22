@@ -4,72 +4,200 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    .table > tbody > tr > td {
+        vertical-align: middle !important;
+    }
+
+        .table > tbody > tr > td span.alert {
+            padding: 3px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+    .memberName {
+        height: calc(2.125rem + 2px);
+        border: 1px solid #d7e4eb;
+        background-color: transparent;
+        color: black;
+        display: block;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        line-height: 1.75;
+        background-color: #fff;
+        background-image: none;
+        background-clip: padding-box;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        border-radius: 0.25rem;
+        transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    }
+
+    .coy-sear .select2-container {
+        display: block !important;
+        width: 100% !important;
+    }
+</style>
+
 <h2>Members</h2>
-
-@if (Model == null || Model.Count == 0)
-{
-    <p>No record(s) found</p>
-}
-else
-{
-    <div id="responsive">
-        <div class="form-group">
-            @Html.AntiForgeryToken()
-        </div>
-
-        <div>
-            <table id="members" class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>SN</th>
-                        <th>Name</th>
-                        <th>Gender</th>
-                        <th>Martial Status</th>
-                        <th>Status</th>
-                        <th>Date Of Birth</th>
-                        <th>Magus</th>
-                        <th>Magus Date</th>
-                        <th>Date</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{ int i = 1; }
-                    @foreach (var member in Model)
-                    {
-                        <tr>
-                            <td>@i</td>  @{ i++; }
-                            <td><button id="btn-member-info" data-notification-id="@member.MemberKey" class="btn btn-link js-action">@member.Surname, @member.FirstName</button></td>
-                            <td>@member.Gender</td>
-                            <td>@member.MaritalStatus</td>
-                            <td>@member.MemberStatus</td>
-                            <td>@(member.DateOfBirth?.Date.ToString("dd-MMM-yyyy")) </td>
-                            <td>@((member.MagusStatus) ? "Y" : "N")</td>
-                            <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy")) </td>
-                            <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>
-                            <td>@Html.ActionLink("Edit", "Edit", "Member", new { id = member.MemberKey }, null)</td>
-                            <td><button data-member-id="@member.MemberKey" class="btn btn-link js-delete">Delete</button></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-
-
-        <div id='memberinfomodal' class='modal hide fade in'>
-            <div id='divResult'>
-            </div>
+<br />
+<div class="row">
+    <div class="form-group col-lg-5">
+        <div class="form-group coy-sear">
+            @*<label>Type Name or Phone Number</label>*@
+            <input type="hidden" id="tbIds" value="" />
+            <select name="memberName" class="form-control" id="memberName"></select>
         </div>
     </div>
-}
+</div>
 
-@section scripts
+    @if (Model == null || Model.Count == 0)
+    {
+        <p>No record(s) found</p>
+    }
+    else
+    {
+        <div id="responsive">
+            <div class="form-group">
+                @Html.AntiForgeryToken()
+            </div>
+
+            <div id='memberList'>
+                <div>
+                    <table id="members" class="table table-bordered table-hover table-responsive">
+                        <thead>
+                            <tr>
+                                <th>SN</th>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Martial Status</th>
+                                <th>Status</th>
+                                <th>Date Of Birth</th>
+                                <th>Magus</th>
+                                <th>Magus Date</th>
+                                <th>Date</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int i = 1; }
+                            @foreach (var member in Model)
+                            {
+                                <tr>
+                                    <td>@i</td>  @{ i++; }
+                                    <td><button id="btn-member-info" data-notification-id="@member.MemberKey" class="btn btn-link js-action">@member.Surname, @member.FirstName</button></td>
+                                    <td>@member.Gender</td>
+                                    <td>@member.MaritalStatus</td>
+                                    <td>@member.MemberStatus</td>
+                                    <td>@(member.DateOfBirth?.Date.ToString("dd-MMM-yyyy")) </td>
+                                    <td>@((member.MagusStatus) ? "Y" : "N")</td>
+                                    <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy")) </td>
+                                    <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>
+                                    <td>@Html.ActionLink("Edit", "Edit", "Member", new { id = member.MemberKey }, null)</td>
+                                    <td><button data-member-id="@member.MemberKey" class="btn btn-link js-delete">Delete</button></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id='memberinfomodal' class='modal hide fade in'>
+                <div id='divResult'>
+                </div>
+            </div>
+        </div>
+    }
+
+    @section scripts
 {
-    <script>
+        <script>
         $(document).ready(function () {
 
-           $("#members").DataTable();
+
+               $('#memberName').select2(
+        {
+            placeholder: 'Enter Member Name or Phone Number',
+            //Does the user have to enter any data before sending the ajax request
+            minimumInputLength: 4,
+            allowClear: true,
+            ajax: {
+                //How long the user has to pause their typing before sending the next request
+                delay: 150,
+                //The url of the json service
+                url: '@Url.Action("GetUser", "Member")',
+                dataType: 'json',
+                async: true,
+                //Our search term and what page we are on
+                data: function (params) {
+                    return {
+                        pageSize: 100,
+                        pageNum: params.page || 1,
+                        searchTerm: params.term,
+                        //Value from client side.
+                        countyId: 'vv'
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: $.map(data.Results, function (obj) {
+                            return { id: obj.id, text: obj.name };
+                        }),
+                        pagination: {
+                            more: (params.page * 100) <= data.Total
+                        }
+                    };
+                }
+            }
+        });
+
+            //function proc(obj) {
+            //    var ob = [];
+            //    $.each(obj, function (i, ch) {
+            //        var child = [];
+            //        $.each(ch.children, function (i, dt) {
+            //            var o = { id: dt.id, text: dt.name }
+            //            child.push(o);
+            //        });
+            //        var op = { text: ch.text, children: child }
+            //        ob.push(op);
+            //    });
+            //    return ob;
+            //};
+
+
+            $("#memberName").change(function () {
+
+                var memberId = $(this).val();
+                var url = "/Gdhote/member/GetMemberByID";
+                $.get(url, { Id: memberId }, function (data) {
+
+                    $("#memberList").html(data);
+                    //$(".loader_wrapper").fadeOut("fast");
+                    //$("#quicksearch").prop("disabled", false);
+                })
+            });
+
+
+
+
+
+            $("#members").DataTable({
+                //dom: 'Bfrtip',
+                "bProcessing": true,
+                "pageLength": 10,
+                "bFilter": true,
+                "bInfo": true,
+                scrolly: 400,
+                lengthMenu: [
+                    [10, 25, 50, 100, 500, -1],
+                    ['10 records', '25 records', '50 records', '100 records', '500 records', 'Show all']
+                ]
+
+            });
+
+           //$("#members").DataTable();
 
            $("#members").on("click", ".js-action", function () {
 
@@ -144,5 +272,5 @@ else
 
 
         });
-    </script>
-}
+        </script>
+    }

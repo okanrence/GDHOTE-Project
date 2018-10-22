@@ -16,7 +16,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: MemberDetails
         public ActionResult Index()
         {
-            var memberDetails = PortalMemberDetailsService.GetMembersDetails(SetToken());
+            var memberDetails = PortalMemberDetailsService.GetRecentMembersDetails(SetToken());
             return View(memberDetails);
         }
         public ActionResult New()

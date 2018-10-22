@@ -51,6 +51,24 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 return new List<MemberDetailsViewModel>();
             }
         }
+
+        public static List<MemberDetailsViewModel> GetRecentMembersDetails()
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var membersdetails = db.Query<MemberDetailsViewModel>("Select top (50) * from vx_HUB_MemberDetails order by DateCreated desc")
+                        .ToList();
+                    return membersdetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new List<MemberDetailsViewModel>();
+            }
+        }
         public static MemberDetails GetMemberDetails(string memberDetailsKey)
         {
             try

@@ -20,8 +20,19 @@ namespace GDHOTE.Hub.Mvc.Controllers
             //string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
             //var members = PortalMemberService.GetMembersByCriteria(criteria, startDate, endDate).ToList();
 
-            var members = PortalMemberService.GetAllMembers(SetToken());
+            var members = PortalMemberService.GetRecentMembers(SetToken());
             return View(members);
+        }
+
+        public ActionResult GetMemberByID(string id)
+        {
+            //string criteria = "";
+            //string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
+            //string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
+            //var members = PortalMemberService.GetMembersByCriteria(criteria, startDate, endDate).ToList();
+
+            var member = PortalMemberService.GetMemberById(id,SetToken());
+            return View("_Index", member);
         }
         public ActionResult List()
         {
@@ -61,7 +72,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
                 //Successful
                 if (result.ErrorCode == "00")
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", "MemberDetails");
                 }
                 else
                 {
@@ -179,6 +190,31 @@ namespace GDHOTE.Hub.Mvc.Controllers
         {
             var result = PortalMemberService.GetMemberInformation(id, SetToken());
             return PartialView("_MemberInfo", result);
+        }
+
+        [HttpGet]
+        public ActionResult GetUser(string searchTerm, int pageSize, int pageNum)
+        {
+
+            var member = PortalMemberService.SearchMember(searchTerm, SetToken());
+
+            var data = member.Select(x => new { name = $"{x.Surname} {x.FirstName} {x.OtherNames} - {x.MobileNumber}", id = x.MemberId });
+           
+
+            var result = new
+            {
+                Total = data.Count(),
+                Results = data.Skip((pageNum * pageSize) - 100).Take(pageSize)
+            };
+
+            return new JsonResult
+            {
+                Data = result,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+
+
+
         }
 
 
