@@ -1,15 +1,11 @@
-﻿@model List<GDHOTE.Hub.CoreObject.Models.MemberDetails>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.MemberDetailsViewModel>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Contact Details</h2>
-@*<p>
-        @Html.ActionLink("New Contact", "New", "MemberDetails", null, new { @class = "btn btn-primary" })
-    </p>*@
-
-
+ 
 @if (Model == null || Model.Count == 0)
 {
     <p>No record(s) found</p>
@@ -20,14 +16,14 @@ else
         <table id="members" class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>Member Code</th>
+                    <th>Name</th>
                     <th>Mobile No</th>
                     <th>Email</th>
-                    <th>State Of Origin</th>
+                    @*<th>State Of Origin</th>
                     <th>Country Of Origin</th>
-                    <th>Residence Country</th>
+                    <th>Residence Country</th>*@
                     <th>Year Group</th>
-                    <th>Record Date</th>
+                    <th>Date</th>
                     <th></th>
                 </tr>
             </thead>
@@ -35,15 +31,15 @@ else
                 @foreach (var member in Model)
                 {
                     <tr>
-                        <td>@Html.ActionLink(!string.IsNullOrEmpty(member.MobileNumber) ? member.MobileNumber : "NA", "Edit", "MemberDetails", new { id = member.MemberDetailsId }, null)</td>
+                        <td>@Html.ActionLink(member.Surname + ", " + member.FirstName, "Edit", "MemberDetails", new { id = member.MemberDetailsKey }, null)</td>
                         <td>@member.MobileNumber</td>
                         <td>@member.EmailAddress</td>
-                        <td>@member.StateOfOriginCode</td>
-                        <td>@member.CountryOfOriginCode</td>
-                        <td>@member.ResidenceCountryCode</td>
-                        <td>@member.YearGroupCode</td>
-                        <td>@member.RecordDate.ToString("dd-MMM-yyyy")</td>
-                        <td><button data-member-id="@member.MemberDetailsId" class="btn btn-link js-delete">Delete</button></td>
+                        @*<td>@member.StateOfOriginId</td>
+                        <td>@member.CountryOfOriginId</td>
+                        <td>@member.ResidenceCountryId</td>*@
+                        <td>@member.YearGroupId</td>
+                        <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>
+                        <td><button data-member-id="@member.MemberDetailsKey" class="btn btn-link js-delete">Delete</button></td>
                     </tr>
                 }
             </tbody>

@@ -51,7 +51,7 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                 return;
             }
 
-            long id = 0;
+            string id = string.Empty;
             string role = string.Empty;
 
             AuthenticationProperties props = null;
@@ -60,27 +60,32 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                 switch (userType)
                 {
                     case "customer":
-                        var loginRequest = new LoginRequest
+                        var loginRequest = new AdminLoginRequest
                         {
-                            UserName = context.UserName,
+                            EmailAddress = context.UserName,
                             Password = context.Password
                         };
-                        var customerUser = UserService.AuthenticateUser(loginRequest);
-                        
-                        //id = customer.Customer.Id;
-                        //role = customer.CustomerUserViewModel.RoleName;
+                        var customerUser = AdminAuthService.AuthenticateUser(loginRequest);
+                        if (customerUser.ErrorCode != "00")
+                        {
+                            context.SetError("invalid_grant", customerUser.ErrorMessage);
+                            return;
+                        }
+
+                        id = customerUser.User.Id.ToString();
+                        role = customerUser.User.UserRole;
                         props = new AuthenticationProperties(new Dictionary<string, string>
                         {
-                            { "as:clientRefreshTokenLifeTime","10"},
+                            { "as:clientRefreshTokenLifeTime","30"},
                             {"as:clientAllowedOrigin","*" },
                             {
-                                "firstName",customerUser.FirstName
+                                "firstName",customerUser.User.FirstName
                             },
                             {
-                                "lastName",customerUser.LastName//customer.Customer.LastName
+                                "lastName",customerUser.User.LastName
                             },
                             {
-                                "as:client_id",customerUser.UserId// customer.Customer.Id.ToString()
+                                "as:client_id",customerUser.User.Id.ToString()
                             },
                             {
                                 "userName", context.UserName
@@ -88,43 +93,53 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
                         });
                         break;
                     case "administrator":
-                        var adminloginRequest = new LoginRequest
+                        var adminloginRequest = new AdminLoginRequest
                         {
-                            UserName = context.UserName,
+                            EmailAddress = context.UserName,
                             Password = context.Password
                         };
-                        var adminUser = UserService.AuthenticateUser(adminloginRequest);
-                        id = 1;// admin.User.Id;
-                        role = adminUser.RoleId;
+                        var adminUser = AdminAuthService.AuthenticateUser(adminloginRequest);
+                        if (adminUser.ErrorCode != "00")
+                        {
+                            context.SetError("invalid_grant", adminUser.ErrorMessage);
+                            return;
+                        }
+                        id = adminUser.User.Id.ToString();
+                        role = adminUser.User.UserRole;
                         props = new AuthenticationProperties(new Dictionary<string, string>
                         {
-                            { "as:clientRefreshTokenLifeTime","10"},
+                            { "as:clientRefreshTokenLifeTime","30"},
                             {"as:clientAllowedOrigin","*" },
                             {
-                                "as:client_id", adminUser.RoleId 
+                                "firstName",adminUser.User.FirstName
                             },
                             {
-                                "userName", context.UserName
+                                "lastName",adminUser.User.LastName
+                            },
+                            {
+                                "as:client_id", adminUser.User.Id.ToString()
+                            },
+                            {
+                                "Same", context.UserName
+                            },
+                            {
+                                "RoleId", adminUser.User.RoleId.ToString()
                             }
                         });
                         break;
                     default:
                         context.SetError("invalid_grant", "Please specify your password");
                         return;
-
-
                 }
                 Claim claim1 = new Claim(ClaimTypes.Name, context.UserName);
                 Claim[] claims = new Claim[] { claim1 };
-                //string dateNow = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
                 var identity = new ClaimsIdentity(claims, context.Options.AuthenticationType);
                 identity.AddClaim(new Claim("Name", context.UserName));
-                identity.AddClaim(new Claim("id", id.ToString()));
+                identity.AddClaim(new Claim("id", id));
                 identity.AddClaim(new Claim(ClaimTypes.Role, role));
                 var ticket = new AuthenticationTicket(identity, props);
                 context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
                 context.Validated(ticket);
-
             }
             catch (InvalidRequestException ex)
             {
@@ -143,12 +158,8 @@ namespace GDHOTE.Hub.WebApi.OwinProvider
         {
             foreach (KeyValuePair<string, string> property in context.Properties.Dictionary)
             {
-
                 context.AdditionalResponseParameters.Add(property.Key, property.Value);
-
-
             }
-
             return Task.FromResult<object>(null);
         }
 

@@ -1,6 +1,6 @@
 ﻿@model GDHOTE.Hub.CoreObject.ViewModels.StateFormViewModel
 @{
-    ViewBag.Title = "NewState";
+    ViewBag.Title = "New State";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -8,7 +8,7 @@
     var pagename = "";
     if (Model != null)
     {
-        pagename = Model.State.StateId == 0 ? "New State" : "Edit State";
+        pagename = Model.Name == null ? "New State" : "Edit State";
     }
 
 }
@@ -16,37 +16,22 @@
 @using (Html.BeginForm("Save", "State"))
 {
     <div>
-        @*@Html.ValidationSummary(true, "Please fix the below errors.")*@
-        <div class="col-md-7 col-sm-7 col-lg-7 col-xs-12">
-            <div class="form-group">
-                @Html.LabelFor(s => s.State.StateCode)
-                @Html.TextBoxFor(s => s.State.StateCode, new { @class = "form-control gdhote-text-uppercase" })
-                @Html.ValidationMessageFor(s => s.State.StateCode)
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(s => s.State.StateName)
-                @Html.TextBoxFor(s => s.State.StateName, new { @class = "form-control gdhote-text-capitalize" })
-                @Html.ValidationMessageFor(s => s.State.StateName)
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(s => s.State.CountryCode)
-                @Html.DropDownListFor(s => s.State.CountryCode, new SelectList(Model.Countries, "CountryCode", "CountryName"), "Select Country", new { @class = "form-control" })
-                @Html.ValidationMessageFor(s => s.State.CountryCode)
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(s => s.State.Status)
-                @Html.DropDownListFor(s => s.State.Status, new SelectList(Model.Status, "Code", "Description"), "Select Status", new { @class = "form-control" })
-                @Html.ValidationMessageFor(s => s.State.Status)
-            </div>
-            <div class="form-group">
-                <div>@Html.HiddenFor(s => s.State.StateId)</div>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-            <div>
-                @Html.AntiForgeryToken()
-            </div>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+        <div class="form-group">
+            @Html.LabelFor(s => s.Name)
+            @Html.TextBoxFor(s => s.Name, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(s => s.Name)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(s => s.CountryId)
+            @Html.DropDownListFor(s => s.CountryId, new SelectList(Model.Countries, "Id", "Name"), "Select Country", new { @class = "form-control" })
+            @Html.ValidationMessageFor(s => s.CountryId)
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div>
+            @Html.AntiForgeryToken()
         </div>
     </div>
 

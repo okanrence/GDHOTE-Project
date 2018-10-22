@@ -8,18 +8,11 @@ using NPoco;
 
 namespace GDHOTE.Hub.CoreObject.Models
 {
-    [TableName("HUB_YearGroup")]
-    public class YearGroup
+    [TableName("HUB_YearGroups")]
+    public class YearGroup : BaseModel
     {
         public int Id { get; set; }
-        [Required]
-        [Display(Name = "Year Code")]
-        public string YearGroupCode { get; set; }
-        [Required]
-        [Display(Name = "Year Description")]
-        public string Description { get; set; }
-        [Required]
-        public string Status { get; set; }
-        public DateTime RecordDate { get; set; }
+        public string Name { get; set; }
+        public int StatusId { get; set; }
     }
 }

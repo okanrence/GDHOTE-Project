@@ -19,11 +19,21 @@ namespace GDHOTE.Hub.WebApi
         protected void Application_BeginRequest(Object sender, EventArgs e)
         {
             //HttpContext.Current.Response.AddHeader("Access-Control-Allow-Origin", "*");
+            //var origin = HttpContext.Current.Request.Headers["Origin"];
+            //if (origin != null)
+            //{
+            //    HttpContext.Current.Response.AddHeader("Access-Control-Allow-Origin", origin);
+            //    HttpContext.Current.Response.AddHeader("Access-Control-Allow-Methods", "GET,POST");
+            //}
+
             if (HttpContext.Current.Request.HttpMethod == "OPTIONS")
             {
                 HttpContext.Current.Response.AddHeader("Cache-Control", "no-cache");
+                //HttpContext.Current.Response.AddHeader("Access-Control-Allow-Origin", "");
+                HttpContext.Current.Response.AddHeader("Access-Control-Allow-Origin", "*");
                 HttpContext.Current.Response.AddHeader("Access-Control-Allow-Methods", "GET, POST");
-                HttpContext.Current.Response.AddHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+                HttpContext.Current.Response.AddHeader("Access-Control-Allow-Headers", "Content-Type, Accept, Access-Control-Allow-Headers, Origin, X-Requested-With, Access-Control-Request-Method, Access-Control-Request-Headers");
+                //HttpContext.Current.Response.AddHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
                 HttpContext.Current.Response.AddHeader("Access-Control-Max-Age", "1728000");
                 HttpContext.Current.Response.End();
             }
@@ -35,6 +45,10 @@ namespace GDHOTE.Hub.WebApi
 
         protected void Application_Error(object sender, EventArgs e)
         {
+            //    Exception exception = Server.GetLastError();
+            //    string s = exception.Message;
+            //    Server.ClearError();
+            //Log Error
 
         }
 

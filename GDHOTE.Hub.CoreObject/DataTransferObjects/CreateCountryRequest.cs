@@ -9,7 +9,8 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
     public class CreateCountryRequest
     {
-        public string CountryCode { get; set; }
-        public string CountryName { get; set; }
+        [Required(ErrorMessage = "Please specify Country")]
+        [Display(Name = "Country")]
+        public string Name { get; set; }
     }
 }

@@ -5,36 +5,182 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
+using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
 {
     [RoutePrefix(ConstantManager.ApiDefaultNamespace + "menu")]
     public class MainMenuController : ApiController
     {
-        [Route("get-main-menus")]
-        public IHttpActionResult GetMainMenus()
+        [HttpGet]
+        [Route("get-all-main-menus")]
+        [UnAuthorized]
+        public HttpResponseMessage GetAllMainMenus()
         {
-            var countries = MainMenuService.GetMainMenus().ToList();
-            if (countries.Count == 0) return NotFound();
-            return Ok(countries);
-        }
-        [Route("get-main-menu")]
-        public IHttpActionResult GetMainMenu(string id)
-        {
-            var mainMenu = MainMenuService.GetMainMenu(id);
-            if (mainMenu == null) return NotFound();
-            return Ok(mainMenu);
+            try
+            {
+                var response = MainMenuService.GetAllMainMenus().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
         }
 
-        [HttpDelete]
-        [Route("delete-main-menu")]
-        public IHttpActionResult DeleteMainMenu(string id)
+
+        [HttpGet]
+        [Route("get-active-main-menus")]
+        [UnAuthorized]
+        public HttpResponseMessage GetActiveMainMenus()
         {
-            var mainMenuInDb = MainMenuService.GetMainMenu(id);
-            if (mainMenuInDb == null) return NotFound();
-            var result = MainMenuService.Delete(id);
-            return Ok(result);
+            try
+            {
+                var response = MainMenuService.GetActiveMainMenus().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+        [HttpGet]
+        [Route("get-main-menu")]
+        [UnAuthorized]
+        public HttpResponseMessage GetMainMenu(string id)
+        {
+            try
+            {
+                var response = MainMenuService.GetMainMenu(id);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpPost]
+        [Route("create-main-menu")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage CreateMainMenu(CreateMainMenuRequest request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+                string username = User.Identity.Name;
+                var response = MainMenuService.CreateMainMenu(request, username);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpPost]
+        [Route("delete-main-menu")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage DeleteMainMenu(string id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+                string username = User.Identity.Name;
+                var response = MainMenuService.Delete(id, username);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
         }
     }
 }

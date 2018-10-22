@@ -4,8 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -14,62 +15,68 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: MainMenu
         public ActionResult Index()
         {
-            var mainMenus = MainMenuService.GetMainMenus().ToList();
+            var mainMenus = PortalMainMenuService.GetAllMainMenus(SetToken());
             return View("MainMenuIndex", mainMenus);
         }
         public ActionResult New()
         {
-            var statuses = StatusService.GetStatus().ToList();
-            var viewModel = new MainMenuViewModel
-            {
-                Status = statuses,
-                MainMenu = new MainMenu()
-            };
+            var viewModel = ReturnViewModel();
             return View("MainMenuForm", viewModel);
         }
         public ActionResult Edit(string id)
         {
-            var mainMenu = MainMenuService.GetMainMenu(id);
+            var mainMenu = PortalMainMenuService.GetMainMenu(id, SetToken());
             if (mainMenu == null) return HttpNotFound();
-            var statuses = StatusService.GetStatus().ToList();
-            var viewModel = new MainMenuViewModel
-            {
-                Status = statuses,
-                MainMenu = mainMenu
-            };
+            var viewModel = ReturnViewModel();
             return View("MainMenuForm", viewModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(MainMenu mainMenu)
+        public ActionResult Save(CreateMainMenuRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
-                var statuses = StatusService.GetStatus().ToList();
-                var viewModel = new MainMenuViewModel
-                {
-                    Status = statuses,
-                    MainMenu = new MainMenu()
-                };
+                var viewModel = ReturnViewModel();
                 return View("MainMenuForm", viewModel);
             }
-            if (mainMenu.MenuId == null)
+            var result = PortalMainMenuService.CreateMainMenu(createRequest, SetToken());
+            if (result != null)
             {
-                mainMenu.MenuId = Guid.NewGuid().ToString();
-                mainMenu.CreatedDate = DateTime.Now;
-                mainMenu.CreatedBy = User.Identity.Name;
-                var result = MainMenuService.Save(mainMenu);
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
             }
             else
             {
-                var mainMenuInDb = MainMenuService.GetMainMenu(mainMenu.MenuId);
-                if (mainMenuInDb == null) return HttpNotFound();
-                mainMenuInDb.Name = mainMenu.Name;
-                mainMenuInDb.Status = mainMenu.Status;
-                mainMenuInDb.DisplaySequence = mainMenu.DisplaySequence;
-                var result = MainMenuService.Update(mainMenuInDb);
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            return RedirectToAction("Index", "MainMenu");
+            // If we got this far, something failed, redisplay form
+            return View("MainMenuForm", ReturnViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteMainMenu(string id)
+        {
+            var result = PortalMainMenuService.DeleteMainMenu(id, SetToken());
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private MainMenuFormViewModel ReturnViewModel()
+        {
+            var statuses = PortalStatusService.GetStatuses(SetToken());
+            var viewModel = new MainMenuFormViewModel
+            {
+                Statuses = statuses
+            };
+            return viewModel;
         }
     }
 }

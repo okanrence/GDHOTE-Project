@@ -5,30 +5,241 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
+using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
 {
     [RoutePrefix(ConstantManager.ApiDefaultNamespace + "user")]
     public class UserController : ApiController
     {
+
+        [HttpGet]
+        [Route("get-all-users")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage GetUsers()
+        {
+            try
+            {
+                var response = UserService.GetAllUsers().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpGet]
+        [Route("get-user")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage GetUser(string id)
+        {
+            try
+            {
+                var response = UserService.GetUser(id);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
         [HttpPost]
-        [Route("authenticate-user")]
-        public IHttpActionResult AuthenticationUser(LoginRequest model)
+        [Route("create-user")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage CreateUser(CreateAdminUserRequest createRequest)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
                 }
-                var response = UserService.AuthenticateUser(model);
-                return Ok(response);
+
+                string headerKey = "channel";
+                var headers = Request.Headers.GetValues(headerKey);
+                var headerValue = headers.FirstOrDefault();
+                if (!int.TryParse(headerValue, out var channelCode))
+                    channelCode = (int)CoreObject.Enumerables.Channel.Kiosk;
+
+
+                string username = User.Identity.Name;
+                var response = UserService.CreateUser(createRequest, username, channelCode);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
             }
-            catch (Exception ex)
+            catch (UnableToCompleteException ex)
             {
-                return BadRequest(ex.Message);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpPost]
+        [Route("update-user")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage UpdateUser(UpdateAdminUserRequest updateRequest)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+
+                string headerKey = "channel";
+                var headers = Request.Headers.GetValues(headerKey);
+                var headerValue = headers.FirstOrDefault();
+                if (!int.TryParse(headerValue, out var channelCode))
+                    channelCode = (int)CoreObject.Enumerables.Channel.Kiosk;
+
+
+                string username = User.Identity.Name;
+                var response = UserService.UpdateUser(updateRequest, username, channelCode);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpPost]
+        [Route("delete-user")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage DeleteAdminUser(string id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+
+                string username = User.Identity.Name;
+                var response = UserService.Delete(id, username);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpPost]
+        [Route("start-reset-password")]
+        public HttpResponseMessage RequestResetPassword(PasswordResetRequest resetRequest)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+
+                var response = UserService.RequestResetPassword(resetRequest);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
             }
         }
     }

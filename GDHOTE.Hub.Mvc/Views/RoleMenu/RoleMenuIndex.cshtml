@@ -1,4 +1,4 @@
-﻿@model List<GDHOTE.Hub.CoreObject.Models.RoleSubMenuView>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.RoleMenuViewModel>
 
 @{
     ViewBag.Title = "RoleMenuIndex";
@@ -32,11 +32,11 @@ else
                 @foreach (var roleMenu in Model)
                 {
                     <tr>
-                        <td>@Html.ActionLink(roleMenu.Name, "Edit", "RoleMenu", new { id = roleMenu.RoleMenuId }, null)</td>
+                        <td>@Html.ActionLink(roleMenu.SubMenu, "Edit", "RoleMenu", new { id = roleMenu.Id }, null)</td>
                         <td>@roleMenu.RoleName </td>
-                        <td>@roleMenu.RoleMenuStatus </td>
-                        <td>@roleMenu.RoleMenuDate.ToString("dd-MMM-yyyy")</td>
-                        <td><button data-rolemenu-id="@roleMenu.RoleMenuId" class="btn btn-link js-delete">Delete</button></td>
+                        <td>@roleMenu.Status </td>
+                        <td>@roleMenu.DateCreated.ToString("dd-MMM-yyyy")</td>
+                        <td><button data-rolemenu-id="@roleMenu.Id" class="btn btn-link js-delete">Delete</button></td>
                     </tr>
                 }
             </tbody>

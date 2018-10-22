@@ -9,25 +9,12 @@ using NPoco;
 namespace GDHOTE.Hub.CoreObject.Models
 {
     [TableName("HUB_RoleMenus")]
-    [PrimaryKey("RoleMenuId", AutoIncrement = false)]
-    public class RoleMenu
+    public class RoleMenu : BaseModel
     {
-        public string RoleMenuId { get; set; }
-        [Required]
-        [Display(Name = "Role")]
-        public string RoleId { get; set; }
-        [Ignore]
-        //[Required]
-        [Display(Name = "Main Menu")]
-        public string MenuId { get; set; }
-        [Required]
-        [Display(Name = "Sub Menu")]
-        public string SubMenuId { get; set; }
-        [Required]
-        public string Status { get; set; }
-        public string CreatedBy { get; set; }
-        public string LastUpdatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime? LastUpdatedDate { get; set; }
+        public int Id { get; set; }
+        public int RoleId { get; set; }
+        public int SubMenuId { get; set; }
+        public int StatusId { get; set; }
+        public string RoleMenuKey { get; set; }
     }
 }

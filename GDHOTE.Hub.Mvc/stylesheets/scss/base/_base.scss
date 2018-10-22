@@ -1,0 +1,63 @@
+body {
+    font-size: $font-base;
+    font-family: $font-stack;
+    font-weight: $font-normal;
+    color: $text-black;
+    background-color: #ECEEF1;
+    overflow-x:hidden;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+a{
+    text-decoration:none;
+    &:hover{
+        text-decoration:none;
+    }
+}
+
+html, html a {
+    -webkit-font-smoothing: antialiased;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    height: 32px;
+    width: 32px;
+    display: inline-block; 
+    fill: currentColor;
+
+    &.icon-md {
+        height: 25px;
+        width: 25px;
+    }
+
+    &.icon-sm {
+        height: 20px;
+        width: 20px;
+    }
+
+    &.icon-xs {
+        height: 15px;
+        width: 15px;
+    }
+    &.icon-ss {
+        height: 18px;
+        width: 18px;
+    }
+}
+ul{
+    padding-left:0;
+}
+
+hr{
+    border-color: #ececec;
+    border-width: 0.5px;
+}
+
+.btn-primary {
+    background-color: #417505 !important;
+}

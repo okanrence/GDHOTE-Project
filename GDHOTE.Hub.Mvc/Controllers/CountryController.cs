@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GDHOTE.Hub.BusinessCore.BusinessLogic;
-using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.PortalCore.Services;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -14,46 +14,60 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: Country
         public ActionResult Index()
         {
-            var countries = CountryService.GetCountries().ToList();
-            return View("CountryIndex",countries);
+            var countries = PortalCountryService.GetAllCountries(SetToken()).ToList();
+            return View("CountryIndex", countries);
         }
         public ActionResult New()
         {
-            var country = new Country();
-            return View("CountryForm", country);
+            var viewModel = new CreateCountryRequest();
+            return View("CountryForm", viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(Country country)
+        public ActionResult Save(CreateCountryRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
-                return View("CountryForm");
+                return View("CountryForm", createRequest);
             }
-            country.RecordDate = DateTime.Now;
-            country.Status = "A";
-            country.CountryCode = country.CountryCode.ToUpper();
-            country.CountryName = StringCaseManager.TitleCase(country.CountryName);
-            if (country.CountryId == 0)
+            var result = PortalCountryService.CreateCountry(createRequest, SetToken());
+            if (result != null)
             {
-                var result = CountryService.Save(country);
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
             }
             else
             {
-                var countryInDb = CountryService.GetCountry(country.CountryId);
-                if (countryInDb == null) return HttpNotFound();
-                countryInDb.CountryName = country.CountryName;
-                var result = CountryService.Update(countryInDb);
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            return RedirectToAction("Index", "Country");
+            // If we got this far, something failed, redisplay form
+            return View("CountryForm", createRequest);
         }
-        public ActionResult Edit(int id)
-        {
-            var country = CountryService.GetCountry(id);
-            if (country == null) return HttpNotFound();
-            return View("CountryForm", country);
 
+        public ActionResult Edit(string id)
+        {
+            var country = PortalCountryService.GetCountry(id, SetToken());
+            var viewModel = new CreateCountryRequest();
+            var item = JsonConvert.SerializeObject(country);
+            viewModel = JsonConvert.DeserializeObject<CreateCountryRequest>(item);
+            return View("CountryForm", viewModel);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteCountry(string id)
+        {
+            var result = PortalCountryService.DeleteCountry(id, SetToken());
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

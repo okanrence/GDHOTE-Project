@@ -8,66 +8,79 @@
     var pagename = "";
     if (Model != null)
     {
-        pagename = Model.MemberDetails.MemberKey == 0 ? "New Details" : "Edit Details";
+        pagename = Model.MobileNumber == null ? "New Details" : "Edit Details";
     }
 
 }
 <h2>@pagename</h2>
 @using (Html.BeginForm("Save", "MemberDetails"))
 {
-    @Html.ValidationSummary(true, "Please fix the below errors.")
+    <span class="text-danger">@ViewBag.ErrorBag</span>
     <div class="form-group">
-        @Html.LabelFor(m => m.MemberDetails.MobileNumber)
-        @Html.TextBoxFor(m => m.MemberDetails.MobileNumber, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MemberDetails.MobileNumber)
+        @Html.LabelFor(m => m.MobileNumber)
+        @Html.TextBoxFor(m => m.MobileNumber, new { @class = "form-control", autocomplete = "off" })
+        @Html.ValidationMessageFor(m => m.MobileNumber)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.MemberDetails.AlternateNumber)
-        @Html.TextBoxFor(m => m.MemberDetails.AlternateNumber, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MemberDetails.AlternateNumber)
+        @Html.LabelFor(m => m.AlternateNumber)
+        @Html.TextBoxFor(m => m.AlternateNumber, new { @class = "form-control", autocomplete = "off" })
+        @Html.ValidationMessageFor(m => m.AlternateNumber)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.MemberDetails.EmailAddress)
-        @Html.TextBoxFor(m => m.MemberDetails.EmailAddress, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MemberDetails.EmailAddress)
+        @Html.LabelFor(m => m.EmailAddress)
+        @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control", autocomplete = "off" })
+        @Html.ValidationMessageFor(m => m.EmailAddress)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.MemberDetails.YearGroupCode)
-        @Html.DropDownListFor(m => m.MemberDetails.YearGroupCode, new SelectList(Model.YearGroups, "YearGroupCode", "Description"), "Select Year Group", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MemberDetails.YearGroupCode)
+        @Html.LabelFor(m => m.YearGroupId)
+        @Html.TextBoxFor(m => m.YearGroupId, new { @class = "form-control", autocomplete = "off" })
+        @Html.ValidationMessageFor(m => m.YearGroupId)
+    </div>
+    @*<div class="form-group">
+            @Html.LabelFor(m => m.YearGroupId)
+            @Html.DropDownListFor(m => m.YearGroupId, new SelectList(Model.YearGroups, "Id", "Name"), "Select Year Group", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.YearGroupId)
+        </div>*@
+    <div class="form-group">
+        @Html.LabelFor(m => m.CountryOfOriginId)
+        @Html.DropDownListFor(m => m.CountryOfOriginId, new SelectList(Model.Countries, "Id", "Name"), "Select Country", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.CountryOfOriginId)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.MemberDetails.CountryOfOriginCode)
-        @Html.DropDownListFor(m => m.MemberDetails.CountryOfOriginCode, new SelectList(Model.Countries, "CountryCode", "CountryName"), "Select Country", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MemberDetails.CountryOfOriginCode)
+        @Html.LabelFor(m => m.StateOfOriginId)
+        @Html.DropDownListFor(m => m.StateOfOriginId, new SelectList(Model.States, "Id", "Name"), "Select State", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.StateOfOriginId)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.MemberDetails.StateOfOriginCode)
-        @Html.DropDownListFor(m => m.MemberDetails.StateOfOriginCode, new SelectList(Model.States, "StateCode", "StateName"), "Select State", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MemberDetails.StateOfOriginCode)
+        @Html.LabelFor(m => m.ResidenceAddress)
+        @Html.TextAreaFor(m => m.ResidenceAddress, new { @class = "form-control", autocomplete = "off" })
+        @Html.ValidationMessageFor(m => m.ResidenceAddress)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.MemberDetails.ResidenceAddress)
-        @Html.TextBoxFor(m => m.MemberDetails.ResidenceAddress, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MemberDetails.ResidenceAddress)
+        @Html.LabelFor(m => m.ResidenceCountryId)
+        @Html.DropDownListFor(m => m.ResidenceCountryId, new SelectList(Model.Countries, "Id", "Name"), "Select Country", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.ResidenceCountryId)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.MemberDetails.ResidenceCountryCode)
-        @Html.DropDownListFor(m => m.MemberDetails.ResidenceCountryCode, new SelectList(Model.Countries, "CountryCode", "CountryName"), "Select Country", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MemberDetails.ResidenceCountryCode)
+        @Html.LabelFor(m => m.ResidenceStateId)
+        @Html.DropDownListFor(m => m.ResidenceStateId, new SelectList(Model.States, "Id", "Name"), "Select State", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.ResidenceStateId)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.MemberDetails.ResidenceStateCode)
-        @Html.DropDownListFor(m => m.MemberDetails.ResidenceStateCode, new SelectList(Model.States, "StateCode", "StateName"), "Select State", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MemberDetails.ResidenceStateCode)
+        @Html.LabelFor(m => m.DateWedded)
+        @Html.TextBoxFor(m => m.DateWedded, "{0:d MMM yyyy}", new { @class = "form-control", autocomplete = "off" })
+        @Html.ValidationMessageFor(m => m.DateWedded)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.MemberDetails.DateWedded)
-        @Html.TextBoxFor(m => m.MemberDetails.DateWedded, "{0:d MMM yyyy}", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MemberDetails.DateWedded)
+        @Html.LabelFor(m => m.HighestDegreeObtained)
+        @Html.TextAreaFor(m => m.HighestDegreeObtained, new { @class = "form-control", autocomplete = "off" })
+        @Html.ValidationMessageFor(m => m.HighestDegreeObtained)
     </div>
-    <div>@Html.HiddenFor(m => m.MemberDetails.MemberDetailsId)</div>
-    <div>@Html.HiddenFor(m => m.MemberDetails.MemberKey)</div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.CurrentWorkPlace)
+        @Html.TextAreaFor(m => m.CurrentWorkPlace, new { @class = "form-control", autocomplete = "off" })
+        @Html.ValidationMessageFor(m => m.CurrentWorkPlace)
+    </div>
     <div>
         <button type="submit" class="btn btn-primary">Save</button>
     </div>
@@ -79,7 +92,7 @@
     <script>
 
         $(function () {
-            $('#MemberDetails_DateWedded').datepicker({
+            $('#DateWedded').datepicker({
                 format: 'dd-M-yyyy',
                 autoclose: 1,
                 todayHighlight: 1

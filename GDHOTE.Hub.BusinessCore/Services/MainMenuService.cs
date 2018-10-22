@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using GDHOTE.Hub.BusinessCore.BusinessLogic;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.CoreObject.Enumerables;
+using GDHOTE.Hub.CoreObject.ViewModels;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.BusinessCore.Services
 {
@@ -23,40 +23,63 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.LogError(ex.Message);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
                 return "Error occured while trying to insert MainMenu";
             }
         }
-        public static IEnumerable<MainMenu> GetMainMenus()
+        public static List<MainMenuViewModel> GetAllMainMenus()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Fetch<MainMenu>().Where(c => c.Status == "A").OrderBy(c => c.DisplaySequence);
-                    return countries;
+                    var mainMenus = db.Fetch<MainMenuViewModel>()
+                        .OrderBy(c => c.DisplaySequence)
+                        .ToList();
+                    return mainMenus;
                 }
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return new List<MainMenu>();
+                LogService.LogError(ex.Message);
+                return new List<MainMenuViewModel>();
             }
         }
-        public static MainMenu GetMainMenu(string menuId)
+        public static List<MainMenuResponse> GetActiveMainMenus()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var mainMenu = db.Fetch<MainMenu>().SingleOrDefault(c => c.MenuId == menuId);
+                    var mainMenus = db.Fetch<MainMenu>()
+                        .Where(c => c.StatusId == (int)CoreObject.Enumerables.Status.Active)
+                        .OrderBy(c => c.DisplaySequence)
+                        .ToList();
+                    var item = JsonConvert.SerializeObject(mainMenus);
+                    var response = JsonConvert.DeserializeObject<List<MainMenuResponse>>(item);
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new List<MainMenuResponse>();
+            }
+        }
+        public static MainMenu GetMainMenu(string menuKey)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var mainMenu = db.Fetch<MainMenu>().SingleOrDefault(c => c.MenuKey == menuKey);
                     return mainMenu;
                 }
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.LogError(ex.Message);
                 return new MainMenu();
             }
         }
@@ -72,25 +95,134 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.LogError(ex.Message);
                 return "Error occured while trying to update MainMenu";
             }
         }
-        public static string Delete(string menuId)
+
+        public static Response CreateMainMenu(CreateMainMenuRequest request, string currentUser)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Delete<MainMenu>(menuId);
-                    return result.ToString();
+                    var response = new Response();
+
+                    //Get User Initiating Creation Request
+                    var user = UserService.GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
+
+
+                    //Check if menu already exist
+                    var menuExist = db.Fetch<MainMenu>()
+                        .SingleOrDefault(c => c.Name.ToLower().Equals(request.Name.ToLower()));
+                    if (menuExist != null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record already exist"
+                        };
+                    }
+
+                    string name = StringCaseService.TitleCase(request.Name);
+
+                    var mainMenu = new MainMenu
+                    {
+                        MenuKey = Guid.NewGuid().ToString(),
+                        Name = name,
+                        DisplaySequence = request.DisplaySequence,
+                        StatusId = (int)CoreObject.Enumerables.Status.Active,
+                        CreatedById = user.Id,
+                        DateCreated = DateTime.Now,
+                        RecordDate = DateTime.Now
+                    };
+
+                    db.Insert(mainMenu);
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
                 }
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return "Error occured while trying to delete record";
+                LogService.LogError(ex.Message);
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to insert record"
+                };
+            }
+
+        }
+
+        public static Response Delete(string menuKey, string currentUser)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+
+                    var response = new Response();
+
+                    var mainMenu = db.Fetch<MainMenu>().SingleOrDefault(c => c.MenuKey == menuKey);
+                    if (mainMenu == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
+
+                    }
+
+
+                    //Get User Initiating Creation Request
+                    var user = UserService.GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
+                    }
+
+
+
+                    //Delete MainMenu
+                    mainMenu.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
+                    mainMenu.DeletedById = user.Id;
+                    mainMenu.DateDeleted = DateTime.Now;
+                    db.Update(mainMenu);
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to delete record"
+                };
             }
         }
+
     }
 }

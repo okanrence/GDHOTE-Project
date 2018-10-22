@@ -7,13 +7,13 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using GDHOTE.Hub.CoreObject.DataTransferObjects;
-using GDHOTE.Hub.BusinessCore.Services;
 using GDHOTE.Hub.PortalCore.Integrations;
 using GDHOTE.Hub.CoreObject.Models;
+using GDHOTE.Hub.PortalCore.Services;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class AccountController : Controller
     {
         //
@@ -29,7 +29,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginRequest loginRequest, string returnUrl)
+        public ActionResult Login(AdminLoginRequest loginRequest, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -42,13 +42,19 @@ namespace GDHOTE.Hub.Mvc.Controllers
             var result = UserService.AuthenticateUser(loginRequest);
             if (result != null)
             {
-                if (!string.IsNullOrEmpty(result.UserName))
+                if (!string.IsNullOrEmpty(result.AccessToken))
                 {
-                    FormsAuthentication.SetAuthCookie(result.UserName, false);
-                    string roles = result.RoleId + "," + result.UserId;
-                    var authTicket = new FormsAuthenticationTicket(1, result.UserName, DateTime.Now, DateTime.Now.AddMinutes(5), false, roles);
+
+                    FormsAuthentication.SetAuthCookie(loginRequest.EmailAddress, false);
+                    string roles = result.RoleId;
+                    Session["RefreshToken"] = result.RefreshToken;
+                    Session["AccessToken"] = result.AccessToken;
+
+                    var authTicket = new FormsAuthenticationTicket(1, loginRequest.EmailAddress, DateTime.Now,
+                        DateTime.Now.AddMinutes(30), false, roles);
                     string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
                     var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+
                     HttpContext.Response.Cookies.Add(authCookie);
                     return RedirectToAction("Index", "Home");
                 }
@@ -64,6 +70,43 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult ForgotPassword(PasswordResetRequest resetRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            resetRequest.ChannelId = (int)CoreObject.Enumerables.Channel.Web;
+            var result = PortalUserService.StartPasswordReset(resetRequest);
+            if (result != null)
+            {
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("ForgotPasswordConfirmation");
+
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+            }
+            else
+            {
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
+            }
+            // If we got this far, something failed, redisplay form
+            return View();
+        }
 
 
         //
@@ -74,13 +117,6 @@ namespace GDHOTE.Hub.Mvc.Controllers
             return View();
         }
 
-        //
-        // GET: /Account/ResetPassword
-        [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
-        {
-            return code == null ? View("Error") : View();
-        }
 
         //
         // POST: /Account/LogOff

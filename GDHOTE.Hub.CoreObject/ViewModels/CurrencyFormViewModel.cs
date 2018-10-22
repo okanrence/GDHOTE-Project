@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 
 namespace GDHOTE.Hub.CoreObject.ViewModels
 {
-    public class CurrencyFormViewModel
+    public class CurrencyFormViewModel : CreateCurrencyRequest
     {
-        public Currency Currency { get; set; }
-        public List<Status> Status { get; set; }
+        public List<Status> Statuses { get; set; }
     }
 }

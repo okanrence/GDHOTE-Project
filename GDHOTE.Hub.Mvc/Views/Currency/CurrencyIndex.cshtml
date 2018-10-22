@@ -1,22 +1,27 @@
-﻿@model List<GDHOTE.Hub.CoreObject.Models.Currency>
-    @{
-        ViewBag.Title = "CurrencyIndex";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-    }
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.CurrencyViewModel>
+@{
+    ViewBag.Title = "CurrencyIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-    <h2>Currencies</h2>
+<h2>Currencies</h2>
 
-    <p>
-        @Html.ActionLink("New Currency", "New", "Currency", null, new { @class = "btn btn-primary" })
-    </p>
+<p>
+    @Html.ActionLink("New Currency", "New", "Currency", null, new { @class = "btn btn-primary" })
+</p>
 
 
-    @if (Model == null || Model.Count == 0)
-    {
-        <p>No record(s) found</p>
-    }
-    else
-    {
+@if (Model == null || Model.Count == 0)
+{
+    <p>No record(s) found</p>
+}
+else
+{
+    <div id="responsive">
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+
         <div>
             <table id="currencies" class="table table-bordered table-hover">
                 <thead>
@@ -24,6 +29,7 @@
                         <th>Code</th>
                         <th>Name</th>
                         <th>Status</th>
+                        <th>Date</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -31,31 +37,58 @@
                     @foreach (var currency in Model)
                     {
                         <tr>
-                            <td>@Html.ActionLink(currency.CurrencyCode, "Edit", "Currency", new { id = currency.CurrencyId }, null)</td>
-                            <td>@currency.Description</td>
+                            <td>@Html.ActionLink(currency.CurrencyCode, "Edit", "Currency", new { id = currency.Id }, null)</td>
+                            <td>@currency.Name</td>
                             <td>@currency.Status</td>
-                            <td><button data-currency-id="@currency.CurrencyId" class="btn btn-link js-delete">Delete</button></td>
+                            <td>@currency.DateCreated.ToString("dd-MMM-yyyy")</td>
+                            <td><button data-currency-id="@currency.Id" class="btn btn-link js-delete">Delete</button></td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
-    }
-    @section scripts
+    </div>
+
+}
+@section scripts
 {
-        <script>
+    <script>
             $(document).ready(function () {
                 $("#currencies").DataTable();
 
                 $("#currencies").on("click", ".js-delete", function () {
                     var button = $(this);
+
+                    var id = button.attr("data-currency-id");
+
+                    var form = $('#responsive');
+                    var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+                    //Submit request
+                    var request = { __RequestVerificationToken: token };
+
                     bootbox.confirm("Are you sure you want to proceed?", function (result) {
                         if (result) {
                             $.ajax({
-                                url: "../api/v1/currency/delete-currency?id=" + button.attr("data-currency-id"),
-                                method: "DELETE",
-                                success: function () {
-                                    button.parents("tr").remove();
+                                url: '@Url.Action("DeleteCurrency", "Currency")/' + id,
+                                method: "POST",
+                                data: request,
+                                success: function (data) {
+                                    if (data !== null) {
+                                        if (data.ErrorCode === "00") {
+                                           swal({
+                                                title: "Success",
+                                                text: "success",
+                                                type: "success"
+                                            });
+
+                                            window.location.reload(true);
+                                        }
+                                        else {
+                                            alert(data.ErrorMessage);
+                                        }
+                                    };
+
                                 }
                             });
                         }
@@ -63,5 +96,5 @@
 
                 });
             });
-        </script>
-    }
+    </script>
+}

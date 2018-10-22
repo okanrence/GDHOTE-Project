@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
+using GDHOTE.Hub.CommonServices.BusinessLogic;
 using GDHOTE.Hub.PortalCore.Services;
 using RestSharp;
 
@@ -24,6 +26,7 @@ namespace GDHOTE.Hub.PortalCore.Integrations
             }
             catch (Exception ex)
             {
+                ErrorLogManager.LogError(MethodBase.GetCurrentMethod().Name, ex);
                 throw;
             }
         }

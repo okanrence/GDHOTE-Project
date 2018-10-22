@@ -1,40 +1,167 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
+using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
 {
     [RoutePrefix(ConstantManager.ApiDefaultNamespace + "currency")]
     public class CurrencyController : ApiController
     {
-        [Route("get-currencies")]
-        public IHttpActionResult GetCountries()
+        [HttpGet]
+        [Route("get-all-currencies")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage GetAllCurrencies()
         {
-            var currencies = CurrencyService.GetActiveCurrencies().ToList();
-            if (currencies.Count == 0) return NotFound();
-            return Ok(currencies);
-        }
-        [Route("get-currency")]
-        public IHttpActionResult GetCurrency(int id)
-        {
-            var currency = CurrencyService.GetCurrency(id);
-            if (currency == null) return NotFound();
-            return Ok(currency);
+            try
+            {
+                var response = CurrencyService.GetAllCurrencies().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+
         }
 
-        [HttpDelete]
-        [Route("delete-currency")]
-        public IHttpActionResult DeleteCurrency(int id)
+        [HttpGet]
+        [Route("get-active-currencies")]
+        [UnAuthorized]
+        public HttpResponseMessage GetActiveCurrencies()
         {
-            var currencyInDb = CurrencyService.GetCurrency(id);
-            if (currencyInDb == null) return NotFound();
-            var result = CurrencyService.Delete(id);
-            return Ok(result);
+            try
+            {
+                var response = CurrencyService.GetActiveCurrencies().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+
+        }
+
+        [HttpGet]
+        [Route("get-currency")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage GetCurrency(string id)
+        {
+            try
+            {
+                var response = CurrencyService.GetCurrency(Convert.ToInt16(id));
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+
+        }
+
+        [HttpPost]
+        [Route("create-currency")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage CreateCurrency(CreateCurrencyRequest createRequest)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+
+                string username = User.Identity.Name;
+                var response = CurrencyService.CreateCurrency(createRequest, username);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+        [HttpPost]
+        [Route("delete-currency")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage DeleteCurrency(int id)
+        {
+            try
+            {
+                string username = User.Identity.Name;
+                var response = CurrencyService.Delete(Convert.ToInt16(id), username);
+                return Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
         }
     }
 }

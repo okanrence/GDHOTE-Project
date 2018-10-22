@@ -1,4 +1,4 @@
-﻿@model List<GDHOTE.Hub.CoreObject.Models.PaymentView>
+﻿
 
 @{
     ViewBag.Title = "Index";
@@ -7,55 +7,81 @@
 
 
 <h2>Payments</h2>
-<p>
-    @Html.ActionLink("New Payment", "New", "Payment", null, new { @class = "result-list-button" })
-</p>
 
 
-@if (Model == null || Model.Count == 0)
+<div id="loadDiv" style="display: none; background-color: rgba(0, 0, 0, 0.3); position: fixed; top: 0px; left: 0px; z-index: 999; height: 100%; width: 100%;">
+    <p align="center" style="margin-top: 20%">
+        <img src="~/images/download.gif" />
+    </p>
+</div>
+
+
+@using (Ajax.BeginForm("FetchReportByDate", "Payment", null, new AjaxOptions
 {
-    <p>No record(s) found</p>
-}
-else
+    HttpMethod = "POST",
+    LoadingElementId = "loadDiv",
+    //OnSuccess = "SuccessMessage",
+    //OnFailure = "FailMessage",
+    UpdateTargetId = "visitorsData"
+}))
 {
     <div>
-        <table id="paymentTypes" class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Narration</th>
-                    <th>Amount</th>
-                    <th>Mode</th>
-                    <th>Payment Type</th>
-                    <th>Currency</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var payment in Model)
-                {
-                    <tr>
-                        <td>@payment.Surname, @payment.FirstName</td>
-                        <td>@payment.Narration</td>
-                        <td>@($"{payment.Amount:#,##0.00}") </td>
-                        <td>@payment.PaymentMode</td>
-                        <td>@payment.PaymentType</td>
-                        <td>@payment.Currency</td>
-                        <td>@payment.PostedDate.ToString("dd-MMM-yyyy | HH:mm")</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        @Html.AntiForgeryToken()
+    </div>
+    <div>
+        <div class="form-group">
+            <label id="lbl-start-date">Start Date</label>
+            <input id="start-date" name="startdate" type="text" autocomplete="off" />
+            <label id="lbl-end-date">End Date</label>
+            <input id="end-date" name="enddate" type="text" autocomplete="off" />
+            <button type="button" id="btn-fetch" class="btn btn-primary">Fetch</button>
+            <button id="cmd-fetch" class="btn btn-primary" style="display:none">Fetch</button>
+            <br />
+        </div>
     </div>
 }
+
+
+<div id="visitorsData">
+    @Html.Partial("_PaymentReport")
+</div>
 
 
 @section scripts
 {
     <script>
+
         $(document).ready(function () {
-            $("#paymentTypes").DataTable();
+
+            $(function () {
+                $('#start-date, #end-date').datepicker({
+                    format: 'dd-M-yyyy',
+                    autoclose: 1,
+                    todayHighlight: 1
+                });
+            });
+
+            $("#btn-fetch").button().click(function () {
+                var startDate = $("#start-date").val();
+                var endDate = $("#end-date").val();
+                if (startDate === '') {
+                    alert('Please select a Start Date');
+                    return;
+                }
+
+                if (endDate === '') {
+                    alert('Please select a End Date');
+                    return;
+                }
+
+                $("#cmd-fetch").click();
+            });
+
+
+
 
         });
+
+
     </script>
 }

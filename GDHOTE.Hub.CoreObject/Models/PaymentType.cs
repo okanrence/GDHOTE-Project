@@ -9,14 +9,11 @@ using NPoco;
 namespace GDHOTE.Hub.CoreObject.Models
 {
     [TableName("HUB_PaymentTypes")]
-    [PrimaryKey("PaymentTypeId")]
-
-    public class PaymentType
+    public class PaymentType : BaseModel
     {
-        public int PaymentTypeId { get; set; }
-        [Required]
-        public string Description { get; set; }
-        [Required]
-        public string Status { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public long AccountId { get; set; }
+        public int StatusId { get; set; }
     }
 }

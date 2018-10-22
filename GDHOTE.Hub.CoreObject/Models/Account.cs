@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using NPoco;
+
+namespace GDHOTE.Hub.CoreObject.Models
+{
+    [TableName("HUB_Accounts")]
+    public class Account : BaseModel
+    {
+        public long Id { get; set; }
+        public string AccountNumber { get; set; }
+        public string AccountName { get; set; }
+        public long MemberId { get; set; }
+        public int BankId { get; set; }
+        public int CurrencyId { get; set; }
+        public decimal Balance { get; set; }
+        public int StatusId { get; set; }
+        public int AccountTypeId { get; set; }
+        public string AccountKey { get; set; }
+    }
+}

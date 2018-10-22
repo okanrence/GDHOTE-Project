@@ -10,10 +10,10 @@ namespace GDHOTE.Hub.CoreObject.Models
 {
     public class EmailRequest
     {
+        //public long MemberId { get; set; }
         public string RecipientEmailAddress { get; set; }
         public string Subject { get; set; }
         public EmailType Type { get; set; }
         public Hashtable Data { get; set; }
-
     }
 }

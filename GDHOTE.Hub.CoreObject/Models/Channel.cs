@@ -9,6 +9,6 @@ namespace GDHOTE.Hub.CoreObject.Models
     public class Channel
     {
         public int Id { get; set; }
-        public string ChannelName { get; set; }
+        public string Name { get; set; }
     }
 }

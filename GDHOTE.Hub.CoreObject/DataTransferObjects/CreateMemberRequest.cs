@@ -9,27 +9,33 @@ namespace GDHOTE.Hub.CoreObject.DataTransferObjects
 {
     public class CreateMemberRequest
     {
-        [Required(ErrorMessage = "Please specify First name")]
-        public string FirstName { get; set; }
-        public string MiddleName { get; set; }
         [Required(ErrorMessage = "Please specify Surname")]
         public string Surname { get; set; }
+        [Required(ErrorMessage = "Please specify First name")]
+        [Display(Name = "Firstname")]
+        public string FirstName { get; set; }
+        [Display(Name = "Other Names")]
+        public string OtherNames { get; set; }
         [Required(ErrorMessage = "Please specify Gender")]
         public string Gender { get; set; }
-        public bool MagusFlag { get; set; }
-        public bool InitiationFlag { get; set; }
+        public bool MagusStatus { get; set; }
+        [Display(Name = "Initiation")]
+        public bool InitiationStatus { get; set; }
+        [Required(ErrorMessage = "Please specify Martial Status")]
+        [Display(Name = "Martial Status")]
         public string MaritalStatus { get; set; }
-        //[Required(ErrorMessage = "Please specify a mobile number")]
-        //[RegularExpression("^[0-9]{6,14}$", ErrorMessage = "Please enter a valid mobile number")]
-        //[Display(Name = "Mobile Number")]
         public string MobileNumber { get; set; }
+        [Display(Name = "Email")]
+        [EmailAddress]
         public string EmailAddress { get; set; }
         [Required(ErrorMessage = "Please specify date of birth")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         [Display(Name = "Date Of Birth")]
         public DateTime DateOfBirth { get; set; }
-        public DateTime? MagusDate { get; set; }          
-
+        [Display(Name = "Date Initiated")]
+        public DateTime? InitiationDate { get; set; }
+        [Display(Name = "Magus Date")]
+        public DateTime? MagusDate { get; set; }
     }
 }

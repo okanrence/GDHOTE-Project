@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GDHOTE.Hub.CoreObject.Models;
+using NPoco;
 
 namespace GDHOTE.Hub.CoreObject.ViewModels
 {
-    public class UserViewModel
+    [TableName("vx_HUB_Users")]
+    public class UserViewModel : User
     {
-        public string UserId { get; set; }
-        public string UserName { get; set; }
-        public string EmailAddress { get; set; }
-        public int UserStatusId { get; set; }
-        public string RoleId { get; set; }
+        public int RoleTypeId { get; set; }
+        public string UserRole { get; set; }
+        public string UserStatus { get; set; }
     }
 }

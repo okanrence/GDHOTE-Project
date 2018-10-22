@@ -1,4 +1,4 @@
-﻿@model List<GDHOTE.Hub.CoreObject.Models.YearGroup>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.YearGroupViewModel>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -17,29 +17,38 @@
 }
 else
 {
-    <div>
-        <table id="yeargroups" class="table table-bordered table-hover">
-            <thead>
+    <div id="responsive">
+
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+
+        <div>
+            <table id="yeargroups" class="table table-bordered table-hover">
+                <thead>
                 <tr>
                     <th>Code</th>
-                    <th>Name</th>
                     <th>Status</th>
+                    <th>Date</th>
                     <th></th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 @foreach (var yearGroup in Model)
                 {
                     <tr>
-                        <td>@Html.ActionLink(yearGroup.YearGroupCode, "Edit", "YearGroup", new { id = yearGroup.Id }, null)</td>
-                        <td>@yearGroup.Description</td>
+                        <td>@Html.ActionLink(yearGroup.Name, "Edit", "YearGroup", new {id = yearGroup.Id}, null)</td>
                         <td>@yearGroup.Status</td>
-                        <td><button data-yeargroup-id="@yearGroup.Id" class="btn btn-link js-delete">Delete</button></td>
+                        <td>@yearGroup.DateCreated.ToString("dd-MMM-yyyy")</td>
+                        <td><button data-year-group-id="@yearGroup.Id" class="btn btn-link js-delete">Delete</button></td>
                     </tr>
                 }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+
     </div>
+
 }
 @section scripts
 {
@@ -49,19 +58,37 @@ else
 
             $("#yeargroups").on("click", ".js-delete", function () {
                 var button = $(this);
+
+                var id = button.attr("data-year-group-id");
+
+                var form = $('#responsive');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+                //Submit request
+                var request = { __RequestVerificationToken: token };
+
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: "../api/v1/yeargroup/delete-year-group?id=" + button.attr("data-yeargroup-id"),
-                            method: "DELETE",
-                            success: function () {
-                                swal({
-                                    title: "Success",
-                                    text: "success",
-                                    type: "success"
-                                });
+                            url: '@Url.Action("DeleteYearGroup", "YearGroup")/' + id,
+                            method: "POST",
+                            data: request,
+                            success: function (data) {
+                                if (data !== null) {
+                                    if (data.ErrorCode === "00") {
+                                        swal({
+                                            title: "Success",
+                                            text: "success",
+                                            type: "success"
+                                        });
 
-                                button.parents("tr").remove();
+                                        window.location.reload(true);
+                                    }
+                                    else {
+                                        alert(data.ErrorMessage);
+                                    }
+                                };
+
                             }
                         });
                     }

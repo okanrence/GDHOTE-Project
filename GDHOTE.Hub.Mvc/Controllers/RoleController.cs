@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GDHOTE.Hub.BusinessCore.BusinessLogic;
 using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -15,62 +16,84 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: Role
         public ActionResult Index()
         {
-            var roles = RoleService.GetRoles().ToList();
+            var roles = PortalRoleService.GetAllRoles(SetToken());
             return View("RoleIndex", roles);
         }
         public ActionResult New()
         {
-            var statuses = StatusService.GetStatus().ToList();
-            var viewModel = new RoleFormViewModel
-            {
-                Statuses = statuses,
-                Role = new Role()
-            };
-            return View("RoleForm", viewModel);
+            return View("RoleForm", ReturnViewModel());
         }
         public ActionResult Edit(string id)
         {
-            var role = RoleService.GetRole(id);
-            if (role == null) return HttpNotFound();
-            var statuses = StatusService.GetStatus().ToList();
-            var viewModel = new RoleFormViewModel
-            {
-                Statuses = statuses,
-                Role = role
-            };
+            var role = PortalRoleService.GetRole(id, SetToken());
+            var viewModelTemp = ReturnViewModel();
+            var item = JsonConvert.SerializeObject(role);
+            var viewModel = JsonConvert.DeserializeObject<RoleFormViewModel>(item);
+            viewModel.RoleTypes = viewModelTemp.RoleTypes;
+            viewModel.Statuses = viewModelTemp.Statuses;
             return View("RoleForm", viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(Role role)
+        public ActionResult Save(CreateRoleRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
-                var statuses = StatusService.GetStatus().ToList();
-                var viewModel = new RoleFormViewModel
-                {
-                    Statuses = statuses,
-                    Role = role
-                };
+                var item = JsonConvert.SerializeObject(createRequest);
+                var viewModelTemp = ReturnViewModel();
+                var viewModel = JsonConvert.DeserializeObject<RoleFormViewModel>(item);
+                viewModel.RoleTypes = viewModelTemp.RoleTypes;
+                viewModel.Statuses = viewModelTemp.Statuses;
                 return View("RoleForm", viewModel);
             }
-            role.Name = StringCaseManager.TitleCase(role.Name);
-            if (role.RoleId == null)
+            var result = PortalRoleService.CreateRole(createRequest, SetToken());
+            if (result != null)
             {
-                role.RoleId = Guid.NewGuid().ToString();
-                role.CreatedDate = DateTime.Now;
-                var result = RoleService.Save(role);
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+
             }
             else
             {
-                var roleInDb = RoleService.GetRole(role.RoleId);
-                if (roleInDb == null) return HttpNotFound();
-                roleInDb.Name = role.Name;
-                roleInDb.Status = role.Status;
-                var result = RoleService.Update(roleInDb);
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            return RedirectToAction("Index");
+            return View("RoleForm", ReturnViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult GetRolesByRoleTypeId(string id)
+        {
+            var result = PortalRoleService.GetRolesByRoleType(id, SetToken());
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteRole(string id)
+        {
+            var result = PortalRoleService.DeleteRole(id, SetToken());
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        private RoleFormViewModel ReturnViewModel()
+        {
+            var statuses = PortalStatusService.GetStatuses(SetToken());
+            var roleTypes = PortalRoleTypeService.GetActiveRoleTypes(SetToken());
+            var viewModel = new RoleFormViewModel
+            {
+                Statuses = statuses,
+                RoleTypes = roleTypes
+            };
+            return viewModel;
         }
     }
 }

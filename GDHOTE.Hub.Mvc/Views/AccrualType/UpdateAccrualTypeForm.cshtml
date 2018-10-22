@@ -1,0 +1,40 @@
+﻿@model  GDHOTE.Hub.CoreObject.ViewModels.UpdateAccrualTypeFormViewModel
+    @{
+        ViewBag.Title = "Update Accrual Type";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    @{
+        var pagename = "";
+        if (Model != null)
+        {
+            pagename = Model.Name == null ? "New Accrual Type" : "Edit Accrual Type";
+        }
+
+    }
+    <h2>@pagename</h2>
+    @using (Html.BeginForm("Update", "AccrualType"))
+    {
+        <div>
+            <span class="text-danger">@ViewBag.ErrorBag</span>
+            <div class="form-group">
+                @Html.LabelFor(c => c.Name)
+                @Html.TextBoxFor(c => c.Name, new { @class = "form-control gdhote-text-capitalize", autocomplete = "off" })
+                @Html.ValidationMessageFor(c => c.Name)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(a => a.StatusId)
+                @Html.DropDownListFor(a => a.StatusId, new SelectList(Model.Statuses, "Id", "Name"), "Select Status", new { @class = "form-control" })
+                @Html.ValidationMessageFor(a => a.StatusId)
+            </div>
+            <div>@Html.HiddenFor(a => a.Id)</div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+            <div class="form-group">
+                @Html.AntiForgeryToken()
+            </div>
+        </div>
+
+    }
+

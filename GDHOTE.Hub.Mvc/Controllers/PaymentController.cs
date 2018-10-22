@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -14,92 +12,105 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: Payment
         public ActionResult Index()
         {
-            //DateTime startDate = DateTime.Now;
-            var payments = PaymentViewService.GetPayments().ToList();
+            string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
+            string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
+            var payments = PortalPaymentService.GetPayments(startDate, endDate, SetToken());
             return View("PaymentIndex", payments);
         }
         public ActionResult New()
         {
-            var paymentModes = PaymentModeService.GetActivePaymentModes().ToList();
-            var paymentTypes = PaymentTypeService.GetActivePaymentTypes().ToList();
-            var currencies = CurrencyService.GetActiveCurrencies().ToList();
-            var paymentViewModel = new PaymentFormViewModel
-            {
-                Payment = new Payment(),
-                ModeOfPayments = paymentModes,
-                Currencies = currencies,
-                PaymentTypes = paymentTypes
-            };
-            return View("PaymentForm", paymentViewModel);
+            return View("PaymentForm", ReturnViewModel());
         }
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            var payment = PaymentService.GetPayment(id);
-            var paymentModes = PaymentModeService.GetActivePaymentModes().ToList();
-            var paymentTypes = PaymentTypeService.GetActivePaymentTypes().ToList();
-            var currencies = CurrencyService.GetActiveCurrencies().ToList();
-            var paymentViewModel = new PaymentFormViewModel
-            {
-                Payment = payment,
-                ModeOfPayments = paymentModes,
-                Currencies = currencies,
-                PaymentTypes = paymentTypes
-            };
-            if (payment == null) return HttpNotFound();
-            return View("PaymentForm", paymentViewModel);
+            var payment = PortalPaymentService.GetPayment(id, SetToken());
+            var viewModelTemp = ReturnViewModel();
+            var item = JsonConvert.SerializeObject(payment);
+            var viewModel = JsonConvert.DeserializeObject<PaymentFormViewModel>(item);
+            viewModel.Currencies = viewModelTemp.Currencies;
+            viewModel.PaymentTypes = viewModelTemp.PaymentTypes;
+            viewModel.ModeOfPayments = viewModelTemp.ModeOfPayments;
+            return View("PaymentForm", viewModel);
         }
-        public ActionResult Save(Payment payment)
+        public ActionResult Save(CreatePaymentRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
-                var paymentModes = PaymentModeService.GetActivePaymentModes().ToList();
-                var paymentTypes = PaymentTypeService.GetActivePaymentTypes().ToList();
-                var currencies = CurrencyService.GetActiveCurrencies().ToList();
-                var paymentViewModel = new PaymentFormViewModel
-                {
-                    ModeOfPayments = paymentModes,
-                    PaymentTypes = paymentTypes,
-                    Currencies = currencies,
-                    Payment = payment
-                };
-                return View("PaymentForm", paymentViewModel);
+                var viewModelTemp = ReturnViewModel();
+                var item = JsonConvert.SerializeObject(createRequest);
+                var viewModel = JsonConvert.DeserializeObject<PaymentFormViewModel>(item);
+                viewModel.Currencies = viewModelTemp.Currencies;
+                viewModel.PaymentTypes = viewModelTemp.PaymentTypes;
+                viewModel.ModeOfPayments = viewModelTemp.ModeOfPayments;
+                return View("PaymentForm", viewModel);
             }
-            if (payment.PaymentId == 0)
+            var result = PortalPaymentService.CreatePayment(createRequest, SetToken());
+            if (result != null)
             {
-                payment.ApprovedFlag = "N";
-                //payment.ApprovedBy = "NA";
-                payment.CreatedBy = User.Identity.Name;
-                payment.RecordDate = DateTime.Now;
-                payment.PostedDate = DateTime.Now;
-                
-                var result = PaymentService.Save(payment);
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+
             }
             else
             {
-                var paymentInDb = PaymentService.GetPayment(payment.PaymentId);
-                if (paymentInDb == null) return HttpNotFound();
-                paymentInDb.Narration = payment.Narration;
-                var result = PaymentService.Update(paymentInDb);
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            return RedirectToAction("Index", "Payment");
+            // If we got this far, something failed, redisplay form
+            return View("PaymentForm", ReturnViewModel());
         }
-        public ActionResult List()
-        {
-            var payments = PaymentViewService.GetPayments().ToList();
-            return View("ReadOnlyList", payments);
-        }
+
         public ActionResult Manage()
         {
-            //DateTime startDate = DateTime.Now;
-            var payments = PaymentViewService.GetPayments().ToList();
+            string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
+            string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
+            var payments = PortalPaymentService.GetPayments(startDate, endDate, SetToken());
             return View("ManagePayment", payments);
         }
-        public ActionResult List2(string startDate)
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteMember(ConfirmPaymentRequest confirmRequest)
         {
-            DateTime startDateTemp = DateTime.Now;
-            if (string.IsNullOrEmpty(startDate)) startDateTemp = DateTime.Now;
-            var payments = PaymentViewService.GetPaymentsByDate(startDateTemp).ToList();
-            return View("ReadOnlyList");
+            var result = PortalPaymentService.DeletePayment(confirmRequest, SetToken());
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult ConfirmPayment(ConfirmPaymentRequest confirmRequest)
+        {
+            var result = PortalPaymentService.ConfirmPayment(confirmRequest, SetToken());
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public PartialViewResult FetchReportByDate(string startDate, string endDate)
+        {
+            var payments = PortalPaymentService.GetPayments(startDate, endDate, SetToken());
+            return PartialView("_PaymentReport", payments);
+        }
+
+        private PaymentFormViewModel ReturnViewModel()
+        {
+            var paymentModes = PortalPaymentModeService.GetActivePaymentModes(SetToken());
+            var paymentTypes = PortalPaymentTypeService.GetActivePaymentTypes(SetToken());
+            var currencies = PortalCurrencyService.GetActiveCurrencies(SetToken());
+            var viewModel = new PaymentFormViewModel
+            {
+                PaymentTypes = paymentTypes,
+                ModeOfPayments = paymentModes,
+                Currencies = currencies
+            };
+            return viewModel;
         }
     }
 }

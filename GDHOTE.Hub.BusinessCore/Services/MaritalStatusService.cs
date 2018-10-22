@@ -16,7 +16,8 @@ namespace GDHOTE.Hub.BusinessCore.Services
                 new MaritalStatus {Code = "S", Description = "Single"},
                 new MaritalStatus {Code = "M", Description = "Married"},
                 new MaritalStatus {Code = "D", Description = "Divorced"},
-                new MaritalStatus {Code = "K", Description = "Seperated"}
+                new MaritalStatus {Code = "K", Description = "Seperated"},
+                new MaritalStatus {Code = "W", Description = "Widow"}
             };
             return maritalStatuses;
         }

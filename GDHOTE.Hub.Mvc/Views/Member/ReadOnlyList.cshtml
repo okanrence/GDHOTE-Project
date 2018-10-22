@@ -1,50 +1,92 @@
-﻿@model List<GDHOTE.Hub.CoreObject.Models.Member>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.MemberViewModel>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Members";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Members</h2>
 
-@if (Model == null || Model.Count == 0)
+
+
+<div id="loadDiv" style="display: none; background-color: rgba(0, 0, 0, 0.3); position: fixed; top: 0px; left: 0px; z-index: 999; height: 100%; width: 100%;">
+    <p align="center" style="margin-top: 20%">
+        <img src="~/images/download.gif" />
+    </p>
+</div>
+
+
+
+
+@using (Ajax.BeginForm("FetchReportByDate", "Member", null, new AjaxOptions
 {
-    <p>No record(s) found</p>
-}
-else
+    HttpMethod = "POST",
+    LoadingElementId = "loadDiv",
+    //OnSuccess = "SuccessMessage",
+    //OnFailure = "FailMessage",
+    UpdateTargetId = "membersData"
+}))
 {
     <div>
-        <table id="members" class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Member Code</th>
-                    <th>Surname</th>
-                    <th>Other Name(s)</th>
-                    <th>Gender</th>
-                    <th>Martial Status</th>
-                    <th>Status</th>
-                    <th>Date Of Birth</th>
-                    <th>Magus</th>
-                    <th>Magus Date</th>
-                    <th>Record Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var member in Model)
-                {
-                    <tr>
-                        <td>@member.MemberCode</td>
-                        <td>@member.Surname</td>
-                        <td>@member.FirstName, @member.MiddleName </td>
-                        <td>@member.Gender</td>
-                        <td>@member.MaritalStatus</td>
-                        <td>@member.StatusCode</td>
-                        <td>@member.DateOfBirth.ToString("dd-MMM-yyyy")</td>
-                        <td>@member.MagusFlag</td>
-                        <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy") ?? "") </td>
-                        <td>@member.RecordDate.ToString("dd-MMM-yyyy")</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        @Html.AntiForgeryToken()
     </div>
+    <div>
+        <div class="form-group">
+            <label id="lbl-criteria">Select Criteria</label>
+            <select name="criteria">
+                <option value="0">Select One</option>
+                <option value="1">Magus Date</option>
+                <option value="2">Initiation Date</option>
+                <option value="3">Date Of Birth</option>
+                <option value="4">Appointment Date</option>
+                <option value="5">Date Created</option>
+            </select>
+            <label id="lbl-start-date">Start Date</label>
+            <input id="start-date" name="startdate" type="text" autocomplete="off" />
+            <label id="lbl-end-date">End Date</label>
+            <input id="end-date" name="enddate" type="text" autocomplete="off" />
+            <button type="button" id="btn-fetch" class="btn btn-primary">Fetch</button>
+            <button id="cmd-fetch" class="btn btn-primary" style="display: none">Fetch</button>
+        </div>
+    </div>
+}
+
+
+<div id="membersData">
+    @Html.Partial("_MemberListReport")
+</div>
+
+
+@section scripts
+{
+    <script>
+
+        $(document).ready(function () {
+
+            $(function () {
+                $('#start-date, #end-date').datepicker({
+                    format: 'dd-M-yyyy',
+                    autoclose: 1,
+                    todayHighlight: 1
+                });
+            });
+
+            $("#btn-fetch").button().click(function () {
+                var startDate = $("#start-date").val();
+                var endDate = $("#end-date").val();
+                if (startDate === '') {
+                    alert('Please select a start date');
+                    return;
+                }
+
+                if (endDate === '') {
+                    alert('Please select a end date');
+                    return;
+                }
+
+                $("#cmd-fetch").click();
+            });
+
+        });
+
+    </script>
 }

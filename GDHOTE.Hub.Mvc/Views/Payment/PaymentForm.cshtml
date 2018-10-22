@@ -8,7 +8,7 @@
     var pagename = "";
     if (Model != null)
     {
-        pagename = Model.Payment.PaymentId == 0 ? "New Payment" : "Edit Payment";
+        pagename = Model.MemberId == 0 ? "New Payment" : "Edit Payment";
     }
 
 }
@@ -18,38 +18,40 @@
 @using (Html.BeginForm("Save", "Payment"))
 {
     <div>
-        @Html.ValidationSummary(true, "Please fix the below errors.")
+        <span class="text-danger">@ViewBag.ErrorBag</span>
         <div class="form-group">
-            @Html.LabelFor(p => p.Payment.MemberKey)
-            @Html.TextBoxFor(p => p.Payment.MemberKey, new { @class = "form-control" })
-            @Html.ValidationMessageFor(p => p.Payment.MemberKey)
-        </div>
-      <div class="form-group">
-            @Html.LabelFor(p => p.Payment.Amount)
-            @Html.TextBoxFor(p => p.Payment.Amount, new { @class = "form-control" })
-            @Html.ValidationMessageFor(p => p.Payment.Amount)
+            <label>Name</label>
+            <div>
+                <input id="membername" name="membername" required="" type="text" value="" class="form-control" />
+                <input id="MemberId" name="MemberId" type="hidden" value="" class="form-control" />
+                @Html.ValidationMessageFor(p => p.MemberId)
+            </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(p => p.Payment.PaymentTypeId)
-            @Html.DropDownListFor(p => p.Payment.PaymentTypeId, new SelectList(Model.PaymentTypes, "PaymentTypeId", "Description"), "Select Payment Type", new { @class = "form-control" })
-            @Html.ValidationMessageFor(p => p.Payment.PaymentTypeId)
+            @Html.LabelFor(p => p.PaymentTypeId)
+            @Html.DropDownListFor(p => p.PaymentTypeId, new SelectList(Model.PaymentTypes, "Id", "Name"), "Select Payment Type", new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.PaymentTypeId)
         </div>
         <div class="form-group">
-            @Html.LabelFor(p => p.Payment.PaymentModeId)
-            @Html.DropDownListFor(p => p.Payment.PaymentModeId, new SelectList(Model.ModeOfPayments, "PaymentModeId", "Description"), "Select Mode Of Payment", new { @class = "form-control" })
-            @Html.ValidationMessageFor(p => p.Payment.PaymentModeId)
+            @Html.LabelFor(p => p.PaymentModeId)
+            @Html.DropDownListFor(p => p.PaymentModeId, new SelectList(Model.ModeOfPayments, "Id", "Name"), "Select Mode Of Payment", new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.PaymentModeId)
         </div>
         <div class="form-group">
-            @Html.LabelFor(p => p.Payment.CurrencyId)
-            @Html.DropDownListFor(p => p.Payment.CurrencyId, new SelectList(Model.Currencies, "CurrencyId", "Description"), "Select Currency", new { @class = "form-control" })
-            @Html.ValidationMessageFor(p => p.Payment.CurrencyId)
+            @Html.LabelFor(p => p.CurrencyId)
+            @Html.DropDownListFor(p => p.CurrencyId, new SelectList(Model.Currencies, "Id", "Name"), "Select Currency", new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.CurrencyId)
         </div>
         <div class="form-group">
-            @Html.LabelFor(p => p.Payment.Narration)
-            @Html.TextBoxFor(p => p.Payment.Narration, new { @class = "form-control" })
-            @Html.ValidationMessageFor(p => p.Payment.Narration)
+            @Html.LabelFor(p => p.Amount)
+            @Html.TextBoxFor(p => p.Amount, new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.Amount)
         </div>
-        <div>@Html.HiddenFor(p => p.Payment.PaymentId)</div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.Narration)
+            @Html.TextBoxFor(p => p.Narration, new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.Narration)
+        </div>
         <div>
             <button type="submit" class="btn btn-primary">Save</button>
         </div>
@@ -57,5 +59,60 @@
     </div>
 
 }
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+            @*var viewModel = {
+                movieIds: []
+            };
+
+          var members = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('firstname'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '@Url.Action("GetMember", "Member")?query=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('#member').typeahead({
+                    minLength: 3,
+                    highlight: true
+                },
+                {
+                    name: 'members',
+                    display: 'firstname',
+                    source: members
+                }).on("typeahead:select",
+                function(e, member) {
+                    viewModel.memberkey = member.memberKey;
+                });*@
+
+
+
+            $("#membername").autocomplete({
+                source: '@Url.Action("GetMember", "Member")',
+                minLength: 5,
+                select: function (event, ui) {
+                    console.log(ui);
+                    $(this).val(ui.item.value);
+                    $(this).val(ui.item.label);
+                    $("#MemberId").val(ui.item.value);
+                    return false;
+                },
+                focus: function (event, ui) {
+                    return false;
+                }
+            });
+
+
+        });
+    </script>
+}
+
+
 
 

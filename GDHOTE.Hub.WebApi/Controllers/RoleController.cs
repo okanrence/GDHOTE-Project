@@ -5,37 +5,196 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using GDHOTE.Hub.BusinessCore.BusinessLogic;
+using GDHOTE.Hub.BusinessCore.Exceptions;
 using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.WebApi.OwinProvider;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.WebApi.Controllers
 {
     [RoutePrefix(ConstantManager.ApiDefaultNamespace + "role")]
     public class RoleController : ApiController
     {
-        [Route("get-roles")]
-        public IHttpActionResult GetRoles()
+        [HttpGet]
+        [Route("get-all-roles")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage GetAllRoles()
         {
-            var roles = RoleService.GetRoles().ToList();
-            if (roles.Count == 0) return NotFound();
-            return Ok(roles);
-        }
-        [Route("get-role")]
-        public IHttpActionResult GetRole(string id)
-        {
-            var role = RoleService.GetRole(id);
-            if (role == null) return NotFound();
-            return Ok(role);
+            try
+            {
+                var response = RoleService.GetAllRoles().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
         }
 
-        [HttpDelete]
-        [Route("delete-role")]
-        public IHttpActionResult DeleteRole(string id)
+
+        [HttpGet]
+        [Route("get-active-roles")]
+        [UnAuthorized]
+        public HttpResponseMessage GetActiveRoles()
         {
-            var roleInDb = RoleService.GetRole(id);
-            if (roleInDb == null) return NotFound();
-            //var result = RoleService.Delete(id);
-            var result = RoleService.Delete(roleInDb);
-            return Ok(result);
+            try
+            {
+                var response = RoleService.GetActiveRoles().ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpGet]
+        [Route("get-roles-by-role-type")]
+        [UnAuthorized]
+        public HttpResponseMessage GetRolesByRoleType(string id)
+        {
+            try
+            {
+                var response = RoleService.GetRolesByRoleType(Convert.ToInt16(id)).ToList();
+                if (response.Count > 0)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpGet]
+        [Route("get-role")]
+        [UnAuthorized]
+        public HttpResponseMessage GetRole(string id)
+        {
+            try
+            {
+                var response = RoleService.GetRole(id);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+
+        [HttpPost]
+        [Route("create-role")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage CreateRole(CreateRoleRequest createRequest)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+
+                string username = User.Identity.Name;
+                var response = RoleService.CreateRole(createRequest, username);
+                if (response != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        RequestMessage = Request,
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(response, Formatting.Indented))
+                    };
+                }
+                return new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    RequestMessage = Request,
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(response, Formatting.Indented))
+                };
+
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
+        }
+
+        [HttpPost]
+        [Route("delete-role")]
+        [UnAuthorized(Roles = "Super Admin, Adminstrator")]
+        public HttpResponseMessage DeleteRole(string id)
+        {
+            try
+            {
+                string username = User.Identity.Name;
+                var response = RoleService.Delete(id, username);
+                return Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            catch (UnableToCompleteException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.GetException());
+            }
         }
     }
 }

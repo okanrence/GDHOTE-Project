@@ -4,8 +4,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -14,81 +16,97 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: MemberDetails
         public ActionResult Index()
         {
-            var memberDetails = MemberDetailsService.GetMembersDetails().ToList();
+            var memberDetails = PortalMemberDetailsService.GetMembersDetails(SetToken());
             return View(memberDetails);
         }
         public ActionResult New()
         {
-            var states = StateService.GetStates().ToList();
-            var countries = CountryService.GetCountries().ToList();
-            var yearGroups = YearGroupService.GetActiveYearGroups().ToList();
-            var viewModel = new MemberDetailsFormModel
-            {
-                States = states,
-                Countries = countries,
-                YearGroups = yearGroups,
-                MemberDetails = new MemberDetails()
-            };
-
-            return View("MemberDetailsForm", viewModel);
+            return View("MemberDetailsForm", ReturnViewModel());
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            var memberDetails = MemberDetailsService.GetMemberDetails(id);
-            //Revist this line.
-            if (memberDetails == null) memberDetails = new MemberDetails { MemberKey = id };
-            var states = StateService.GetStates().ToList();
-            var countries = CountryService.GetCountries().ToList();
-            var yearGroups = YearGroupService.GetActiveYearGroups().ToList();
-            var viewModel = new MemberDetailsFormModel
-            {
-                States = states,
-                Countries = countries,
-                YearGroups = yearGroups,
-                MemberDetails = memberDetails// new MemberDetails()
-            };
-            return View("MemberDetailsForm", viewModel);
+            var memberDetails = PortalMemberDetailsService.GetMemberDetails(id, SetToken());
+            var viewModelTemp = ReturnViewModel();
+            var item = JsonConvert.SerializeObject(memberDetails);
+            var viewModel = JsonConvert.DeserializeObject<UpdateMemberDetailsFormModel>(item);
+            viewModel.Countries = viewModelTemp.Countries;
+            viewModel.States = viewModelTemp.States;
+            //viewModel.YearGroups = viewModelTemp.YearGroups;
+            return View("UpdateDetailsForm", viewModel);
         }
-        public ActionResult Save(MemberDetails memberDetails)
+
+        public ActionResult Save(CreateMemberDetailsRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
-                var states = StateService.GetStates().ToList();
-                var countries = CountryService.GetCountries().ToList();
-                var yearGroups = YearGroupService.GetActiveYearGroups().ToList();
-                var viewModel = new MemberDetailsFormModel
-                {
-                    States = states,
-                    Countries = countries,
-                    YearGroups = yearGroups,
-                    MemberDetails = memberDetails
-                };
+                var viewModel = ReturnViewModel();
+                var item = JsonConvert.SerializeObject(createRequest);
+                viewModel = JsonConvert.DeserializeObject<MemberDetailsFormModel>(item);
                 return View("MemberDetailsForm", viewModel);
             }
-            
-            if (memberDetails.MemberDetailsId == 0)
+
+            var result = PortalMemberDetailsService.CreateMemberDetails(createRequest, SetToken());
+            if (result != null)
             {
-                memberDetails.CreatedBy = User.Identity.Name;
-                memberDetails.RecordDate = DateTime.Now;
-                memberDetails.PostedDate = DateTime.Now;
-                var result = MemberDetailsService.Save(memberDetails);
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+
             }
             else
             {
-                var memberDetailsInDb = MemberDetailsService.GetMemberDetails(memberDetails.MemberDetailsId);
-                if (memberDetailsInDb == null) return HttpNotFound();
-                memberDetailsInDb.YearGroupCode = memberDetails.YearGroupCode;
-                memberDetailsInDb.DateWedded = memberDetails.DateWedded;
-                memberDetailsInDb.ResidenceAddress = memberDetails.ResidenceAddress;
-                memberDetailsInDb.MobileNumber = memberDetails.MobileNumber;
-                memberDetailsInDb.AlternateNumber = memberDetails.AlternateNumber;
-                memberDetailsInDb.EmailAddress = memberDetails.EmailAddress;
-                memberDetailsInDb.LastUpdatedBy = User.Identity.Name;
-                memberDetailsInDb.LastUpdatedDate = DateTime.Now;
-                var result = MemberDetailsService.Update(memberDetailsInDb);
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            return RedirectToAction("Index", "MemberDetails");
+            // If we got this far, something failed, redisplay form
+            return View("MemberDetailsForm", ReturnViewModel());
+        }
+
+
+        public ActionResult Update(UpdateMemberDetailsRequest updateRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("UpdateDetailsForm");
+            }
+            var result = PortalMemberDetailsService.UpdateMemberDetails(updateRequest, SetToken());
+            if (result != null)
+            {
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+            }
+            else
+            {
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
+            }
+            // If we got this far, something failed, redisplay form
+            return View("UpdateDetailsForm");
+        }
+        private MemberDetailsFormModel ReturnViewModel()
+        {
+            var states = PortalStateService.GetActiveStates(SetToken());
+            var countries = PortalCountryService.GetActiveCountries();
+            var yearGroups = PortalYearGroupService.GetActiveYearGroups(SetToken());
+            var viewModel = new MemberDetailsFormModel
+            {
+                States = states,
+                Countries = countries,
+                YearGroups = yearGroups
+            };
+            return viewModel;
         }
     }
 }

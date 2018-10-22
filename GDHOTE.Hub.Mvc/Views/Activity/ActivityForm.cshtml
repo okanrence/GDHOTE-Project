@@ -1,0 +1,92 @@
+﻿@model GDHOTE.Hub.CoreObject.ViewModels.ActivityFormViewModel
+
+
+@{
+    ViewBag.Title = "Activity Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model.MemberId == 0 ? "New Activity" : "Edit Activity";
+    }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "Activity"))
+{
+    <div>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+        <div class="form-group">
+            <label>Name</label>
+            <div>
+                <input id="membername" name="membername" required="" type="text" value="" class="form-control" />
+                <input id="MemberId" name="MemberId" type="hidden" value="" class="form-control" />
+                @Html.ValidationMessageFor(p => p.MemberId)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(a => a.ActivityTypeId)
+            @Html.DropDownListFor(a => a.ActivityTypeId, new SelectList(Model.ActivityTypes, "Id", "Name"), "Select Activity", new { @class = "form-control" })
+            @Html.ValidationMessageFor(a => a.ActivityTypeId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.StartDate)
+            @Html.TextBoxFor(m => m.StartDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.StartDate)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.EndDate)
+            @Html.TextBoxFor(m => m.EndDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.EndDate)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(a => a.Remarks)
+            @Html.TextAreaFor(a => a.Remarks, new { @class = "form-control", autocomplete = "off" })
+            @Html.ValidationMessageFor(a => a.Remarks)
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+    </div>
+
+}
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+
+            $(function () {
+                $('#StartDate, #EndDate').datepicker({
+                    format: 'dd M yyyy',
+                    autoclose: 1,
+                    todayHighlight: 1
+                });
+            });
+
+            $("#membername").autocomplete({
+                source: '@Url.Action("GetMember", "Member")',
+                minLength: 5,
+                select: function (event, ui) {
+                    console.log(ui);
+                    $(this).val(ui.item.value);
+                    $(this).val(ui.item.label);
+                    $("#MemberId").val(ui.item.value);
+                    return false;
+                },
+                focus: function (event, ui) {
+                    return false;
+                }
+            });
+
+        });
+
+    </script>
+}

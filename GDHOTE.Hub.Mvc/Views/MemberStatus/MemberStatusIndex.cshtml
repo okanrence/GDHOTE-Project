@@ -1,0 +1,103 @@
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.MemberStatusViewModel>
+
+@{
+    ViewBag.Title = "Member Status Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Member Status</h2>
+<p>
+    @Html.ActionLink("New Status", "New", "MemberStatus", null, new { @class = "btn btn-primary" })
+</p>
+
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No record(s) found</p>
+}
+else
+{
+    <div id="responsive">
+
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+
+        <div>
+            <table id="memberstatuses" class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Member Status</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var memberStatus in Model)
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(memberStatus.Name, "Edit", "MemberStatus", new { id = memberStatus.Id }, null)</td>
+                            <td>@memberStatus.Status</td>
+                            <td>@memberStatus.DateCreated.ToString("dd-MMM-yyyy")</td>
+                            <td><button data-member-status-id="@memberStatus.Id" class="btn btn-link js-delete">Delete</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+}
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#memberstatuses").DataTable();
+
+            $("#memberstatuses").on("click", ".js-delete", function () {
+                var button = $(this);
+
+                var id = button.attr("data-member-status-id");
+
+                var form = $('#responsive');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+                //Submit request
+                var request = { __RequestVerificationToken: token };
+
+                bootbox.confirm("Are you sure you want to proceed?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '@Url.Action("DeleteMemberStatus", "MemberStatus")/' + id,
+                            method: "POST",
+                            data: request,
+                            success: function (data) {
+                                if (data !== null) {
+                                    if (data.ErrorCode === "00") {
+                                        swal({
+                                            title: "Success",
+                                            text: "success",
+                                            type: "success"
+                                        });
+
+                                        window.location.reload(true);
+                                    }
+                                    else {
+                                        alert(data.ErrorMessage);
+                                    }
+                                };
+
+                            }
+                        });
+                    }
+                });
+
+            });
+        });
+    </script>
+}
+

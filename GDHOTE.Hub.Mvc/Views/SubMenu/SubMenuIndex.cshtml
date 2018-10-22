@@ -1,4 +1,4 @@
-﻿@model List<GDHOTE.Hub.CoreObject.Models.SubMenuView>
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.SubMenuViewModel>
 
 @{
     ViewBag.Title = "SubMenuIndex";
@@ -17,9 +17,15 @@
 }
 else
 {
-    <div>
-        <table id="submenus" class="table table-bordered table-hover">
-            <thead>
+
+    <div id="responsive">
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+
+        <div>
+            <table id="submenus" class="table table-bordered table-hover">
+                <thead>
                 <tr>
                     <th>Name</th>
                     <th>Main Menu</th>
@@ -29,23 +35,26 @@ else
                     <th>CreatedDate</th>
                     <th></th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 @foreach (var subMenu in Model)
                 {
                     <tr>
-                        <td>@Html.ActionLink(subMenu.Name, "Edit", "SubMenu", new { id = subMenu.SubMenuId }, null)</td>
-                        <td>@subMenu.MenuName </td>
+                        <td>@Html.ActionLink(subMenu.Name, "Edit", "SubMenu", new { id = subMenu.SubMenuKey }, null)</td>
+                        <td>@subMenu.Name </td>
                         <td>@subMenu.Url </td>
                         <td>@subMenu.Status</td>
                         <td>@subMenu.DisplaySequence</td>
-                        <td>@subMenu.CreatedDate.ToString("dd-MMM-yyyy")</td>
-                        <td><button data-submenu-id="@subMenu.SubMenuId" class="btn btn-link js-delete">Delete</button></td>
+                        <td>@subMenu.DateCreated.ToString("dd-MMM-yyyy")</td>
+                        <td><button data-sub-menu-id="@subMenu.SubMenuKey" class="btn btn-link js-delete">Delete</button></td>
                     </tr>
                 }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    
 }
 @section scripts
 {
@@ -55,13 +64,37 @@ else
 
             $("#submenus").on("click", ".js-delete", function () {
                 var button = $(this);
+
+                var id = button.attr("data-sub-menu-id");
+
+                var form = $('#responsive');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+                //Submit request
+                var request = { __RequestVerificationToken: token };
+
                 bootbox.confirm("Are you sure you want to proceed?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: "../api/v1/menu/delete-sub-menu?id=" + button.attr("data-submenu-id"),
-                            method: "DELETE",
-                            success: function () {
-                                button.parents("tr").remove();
+                            url: '@Url.Action("DeleteSubMenu", "SubMenu")/' + id,
+                            method: "POST",
+                            data: request,
+                            success: function (data) {
+                                if (data !== null) {
+                                    if (data.ErrorCode === "00") {
+                                        swal({
+                                            title: "Success",
+                                            text: "success",
+                                            type: "success"
+                                        });
+
+                                        window.location.reload(true);
+                                    }
+                                    else {
+                                        alert(data.ErrorMessage);
+                                    }
+                                };
+
                             }
                         });
                     }

@@ -13,9 +13,9 @@ namespace GDHOTE.Hub.BusinessCore.Services
         {
             var channels = new List<Channel>
             {
-                new Channel {Id = 1, ChannelName="Web" },
-                new Channel {Id = 2, ChannelName ="Mobile"},
-                new Channel {Id = 3, ChannelName ="Kiosk"}
+                new Channel {Id = 1, Name= "Web" },
+                new Channel {Id = 2, Name ="Mobile"},
+                new Channel {Id = 3, Name ="Kiosk"}
             };
             return channels;
         }

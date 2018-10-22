@@ -4,8 +4,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using GDHOTE.Hub.BusinessCore.BusinessLogic;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 using GDHOTE.Hub.CoreObject.Enumerables;
+using GDHOTE.Hub.CoreObject.ViewModels;
+
 namespace GDHOTE.Hub.BusinessCore.Services
 {
     public class YearGroupService : BaseService
@@ -22,43 +26,49 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.LogError(ex.Message);
                 if (ex.Message.Contains("The duplicate key")) return "Cannot Insert duplicate record";
                 return "Error occured while trying to insert YearGroup";
             }
         }
-        public static IEnumerable<YearGroup> GetActiveYearGroups()
+        public static List<YearGroupViewModel> GetAllYearGroups()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Fetch<YearGroup>().Where(c => c.Status == "A").OrderBy(c => c.Description);
-                    return countries;
+                    var yearGroups = db.Fetch<YearGroupViewModel>()
+                        .OrderBy(c => c.Name)
+                        .ToList();
+                    return yearGroups;
                 }
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return new List<YearGroup>();
+                LogService.LogError(ex.Message);
+                return new List<YearGroupViewModel>();
             }
         }
-        public static IEnumerable<YearGroup> GetYearGroups()
+        public static List<YearGroup> GetActiveYearGroups()
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var countries = db.Fetch<YearGroup>().OrderBy(c => c.Description);
-                    return countries;
+                    var yearGroups = db.Fetch<YearGroup>()
+                        .Where(y => y.StatusId == (int)CoreObject.Enumerables.Status.Active && y.DateDeleted == null)
+                        .OrderBy(y => y.Name)
+                        .ToList();
+                    return yearGroups;
                 }
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.LogError(ex.Message);
                 return new List<YearGroup>();
             }
         }
+       
         public static YearGroup GetYearGroup(int id)
         {
             try
@@ -71,7 +81,7 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.LogError(ex.Message);
                 return new YearGroup();
             }
         }
@@ -87,25 +97,130 @@ namespace GDHOTE.Hub.BusinessCore.Services
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
+                LogService.LogError(ex.Message);
                 return "Error occured while trying to update YearGroup";
             }
         }
-        public static string Delete(int id)
+        public static Response Delete(int id, string currentUser)
         {
             try
             {
                 using (var db = GdhoteConnection())
                 {
-                    var result = db.Delete<YearGroup>(id);
-                    return result.ToString();
+                    var response = new Response();
+
+                    var yearGroup = db.Fetch<YearGroup>().SingleOrDefault(c => c.Id == id);
+                    if (yearGroup == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record does not exist"
+                        };
+                    }
+
+                    //Get User Initiating Creation Request
+                    var user = UserService.GetUserByUserName(currentUser);
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
+
+
+                    //Delete Year Group
+                    yearGroup.StatusId = (int)CoreObject.Enumerables.Status.Deleted;
+                    yearGroup.DeletedById = user.Id;
+                    yearGroup.DateDeleted = DateTime.Now;
+                    db.Update(yearGroup);
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
                 }
             }
             catch (Exception ex)
             {
-                LogService.Log(LogType.Error, "", MethodBase.GetCurrentMethod().Name, ex);
-                return "Error occured while trying to delete record";
+                LogService.LogError(ex.Message);
+                return new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to delete record"
+                };
             }
+        }
+
+
+        public static Response CreateYearGroup(CreateYearGroupRequest request, string currentUser)
+        {
+            try
+            {
+                using (var db = GdhoteConnection())
+                {
+                    var response = new Response();
+
+                    //Get User Initiating Creation Request
+                    var user = UserService.GetUserByUserName(currentUser);
+
+                    if (user == null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Unable to validate User"
+                        };
+                    }
+
+                    //Check if name already exist
+                    var yearGroupExist = db.Fetch<YearGroup>()
+                        .SingleOrDefault(c => c.Name.ToLower().Equals(request.Name.ToLower()));
+                    if (yearGroupExist != null)
+                    {
+                        return new Response
+                        {
+                            ErrorCode = "01",
+                            ErrorMessage = "Record already exist"
+                        };
+                    }
+
+
+                    string yearName = StringCaseService.TitleCase(request.Name);
+
+
+                    var yearGroup = new YearGroup
+                    {
+                        Name = yearName,
+                        StatusId = (int)CoreObject.Enumerables.Status.Active,
+                        CreatedById = user.Id,
+                        DateCreated = DateTime.Now,
+                        RecordDate = DateTime.Now
+                    };
+
+                    db.Insert(yearGroup);
+                    response = new Response
+                    {
+                        ErrorCode = "00",
+                        ErrorMessage = "Successful"
+                    };
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError(ex.Message);
+                var response = new Response
+                {
+                    ErrorCode = "01",
+                    ErrorMessage = "Error occured while trying to insert record"
+                };
+                return response;
+            }
+
         }
 
     }

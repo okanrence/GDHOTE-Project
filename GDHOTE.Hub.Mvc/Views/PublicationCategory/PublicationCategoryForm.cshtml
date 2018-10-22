@@ -1,0 +1,41 @@
+﻿@model  GDHOTE.Hub.CoreObject.DataTransferObjects.CreatePublicationCategoryRequest
+@{
+    ViewBag.Title = "Publication Category Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model.Name == null ? "New Publication" : "Edit Publication";
+    }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "PublicationCategory", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+        <div class="form-group">
+            @Html.LabelFor(c => c.Name)
+            @Html.TextBoxFor(c => c.Name, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(c => c.Name)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.DisplayImageFile)
+            @Html.TextBoxFor(p => p.DisplayImageFile, new { type = "file", accept = "image/*" })
+            @Html.ValidationMessageFor(p => p.DisplayImageFile)
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+    </div>
+
+}
+
+
+

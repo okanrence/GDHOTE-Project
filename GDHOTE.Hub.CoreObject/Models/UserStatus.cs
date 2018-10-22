@@ -8,12 +8,10 @@ using NPoco;
 
 namespace GDHOTE.Hub.CoreObject.Models
 {
-    [TableName("HUB_UserStatus")]
-    [PrimaryKey("UserStatusId")]
-    public class UserStatus
+    [TableName("HUB_UserStatuses")]
+    public class UserStatus : BaseModel
     {
-        public int UserStatusId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime DateCreated { get; set; }
     }
 }

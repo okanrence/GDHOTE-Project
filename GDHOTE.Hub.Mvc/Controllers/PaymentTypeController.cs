@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GDHOTE.Hub.BusinessCore.BusinessLogic;
-using GDHOTE.Hub.CoreObject.Models;
-using GDHOTE.Hub.BusinessCore.Services;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
+using Newtonsoft.Json;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
@@ -15,57 +15,71 @@ namespace GDHOTE.Hub.Mvc.Controllers
         // GET: PaymentType
         public ActionResult Index()
         {
-            var paymentTypes = PaymentTypeService.GetPaymentTypes().ToList();
+            var paymentTypes = PortalPaymentTypeService.GetAllPaymentTypes(SetToken());
             return View(paymentTypes);
         }
         public ActionResult New()
         {
-            var statuses = StatusService.GetStatus().ToList();
-            var viewModel = new PaymentTypeFormViewModel
-            {
-                Status = statuses,
-                PaymentType = new PaymentType()
-            };
-            return View("PaymentTypeForm", viewModel);
+            return View("PaymentTypeForm", ReturnViewModel());
         }
-        public ActionResult Save(PaymentType paymentType)
+        public ActionResult Save(CreatePaymentTypeRequest createRequest)
         {
             if (!ModelState.IsValid)
             {
-                var statuses = StatusService.GetStatus().ToList();
-                var viewModel = new PaymentTypeFormViewModel
-                {
-                    Status = statuses,
-                    PaymentType = paymentType
-                };
+                var viewModel = ReturnViewModel();
+                var item = JsonConvert.SerializeObject(createRequest);
+                viewModel = JsonConvert.DeserializeObject<PaymentTypeFormViewModel>(item);
                 return View("PaymentTypeForm", viewModel);
             }
-            paymentType.Description = StringCaseManager.TitleCase(paymentType.Description);
-            if (paymentType.PaymentTypeId == 0)
+            var result = PortalPaymentTypeService.CreatePaymentType(createRequest, SetToken());
+            if (result != null)
             {
-                var result = PaymentTypeService.Save(paymentType);
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+
             }
             else
             {
-                var paymentTypeInDb = PaymentTypeService.GetPaymentType(paymentType.PaymentTypeId);
-                if (paymentTypeInDb == null) return HttpNotFound();
-                paymentTypeInDb.Status = paymentType.Status;
-                paymentTypeInDb.Description = paymentType.Description;
-                var result = PaymentTypeService.Update(paymentTypeInDb);
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
             }
-            return RedirectToAction("Index", "PaymentType");
+            // If we got this far, something failed, redisplay form
+            return View("PaymentTypeForm");
         }
-        public ActionResult Edit(int id)
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeletePaymentType(string id)
         {
-            var paymentType = PaymentTypeService.GetPaymentType(id);
-            if (paymentType == null) return HttpNotFound();
-            var statuses = StatusService.GetStatus().ToList();
+            var result = PortalPaymentTypeService.DeletePaymentType(id, SetToken());
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Edit(string id)
+        {
+            var paymentType = PortalPaymentTypeService.GetPaymentType(id, SetToken());
+            var viewModel = ReturnViewModel();
+            var item = JsonConvert.SerializeObject(paymentType);
+            viewModel = JsonConvert.DeserializeObject<PaymentTypeFormViewModel>(item);
+            return View("PaymentTypeForm", viewModel);
+        }
+
+        private PaymentTypeFormViewModel ReturnViewModel()
+        {
+            var statuses = PortalStatusService.GetStatuses(SetToken());
+            var internalAccounts = PortalAccountService.GetActiveInternalAccounts(SetToken());
             var viewModel = new PaymentTypeFormViewModel
             {
-                Status = statuses,
-                PaymentType = paymentType
+                Statuses = statuses,
+                InternalAccounts = internalAccounts
             };
-            return View("PaymentTypeForm", viewModel);
+            return viewModel;
         }
     }
 }

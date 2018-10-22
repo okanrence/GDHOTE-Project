@@ -9,22 +9,14 @@ using NPoco;
 namespace GDHOTE.Hub.CoreObject.Models
 {
     [TableName("HUB_SubMenus")]
-    [PrimaryKey("SubMenuId", AutoIncrement = false)]
-    public class SubMenu
+    public class SubMenu : BaseModel
     {
-        public string SubMenuId { get; set; }
-        [Required]
-        [Display(Name = "Main Menu")]
-        public string MenuId { get; set; }
-        [Required]
+        public int Id { get; set; }
         public string Name { get; set; }
-        [Required]
+        public int MenuId { get; set; }
         public string Url { get; set; }
-        [Required]
-        public string Status { get; set; }
-        [Required]
-        public string DisplaySequence { get; set; }
-        public int CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public int StatusId { get; set; }
+        public int DisplaySequence { get; set; }
+        public string SubMenuKey { get; set; }
     }
 }

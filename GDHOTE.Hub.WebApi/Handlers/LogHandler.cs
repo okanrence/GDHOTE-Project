@@ -23,9 +23,9 @@ namespace GDHOTE.Hub.WebApi.Handlers
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            var routeData = request.RequestUri.AbsolutePath;
+            var routeData = request.RequestUri.AbsolutePath.ToLower();
 
-            if (!routeData.StartsWith("/api"))
+            if (!routeData.StartsWith("/gdhotecore/api") && !routeData.StartsWith("/api"))
             {
                 return await base.SendAsync(request, cancellationToken);
             }
@@ -48,7 +48,7 @@ namespace GDHOTE.Hub.WebApi.Handlers
                 //ignored
             }
 
-
+            
 
             var entry = CreateRequestResponseMessage(request);
 
@@ -82,23 +82,22 @@ namespace GDHOTE.Hub.WebApi.Handlers
                 var response = task.Result;
                 //response.Headers.Add("X-Dummy-Header", Guid.NewGuid().ToString());
                 //call the refresh token and send it as part of the response
-                var refresh_token = GetHeaderValue(request.Headers, "refresh_token");
+                var refreshToken = GetHeaderValue(request.Headers, "refresh_token");
                 //context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
-                if (!string.IsNullOrEmpty(refresh_token))
+                if (!string.IsNullOrEmpty(refreshToken))
                 {
                     try
                     {
                         var client = new RestClient(ConfigurationManager.AppSettings["settings.base.url"]);
-                        var req = new RestRequest(ConfigurationManager.AppSettings["settings.refeesh.token.url"], Method.POST);
+                        var req = new RestRequest(ConfigurationManager.AppSettings["settings.refresh.token.url"], Method.POST);
                         req.AddHeader("Content-Type", "application/x-www-form-urlencoded");
                         req.AddParameter("grant_type", "refresh_token");
-                        req.AddParameter("refresh_token", refresh_token);
+                        req.AddParameter("refresh_token", refreshToken);
                         var resp = client.Execute<TokenResponse>(req);
                         if (resp?.Data != null)
                         {
-                            response.Headers.Add("access_token", resp.Data.access_token);
-
-                            response.Headers.Add("refresh_token", resp.Data.refresh_token);
+                            response.Headers.Add("access_token", resp.Data.AccessToken);
+                            response.Headers.Add("refresh_token", resp.Data.RefreshToken);
                         }
                     }
                     catch (Exception e)

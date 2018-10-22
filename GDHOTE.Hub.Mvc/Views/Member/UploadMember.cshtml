@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "UploadMember";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>UploadMember</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <span class="text-danger">@ViewBag.ErrorBag</span>
+            <div class="panel-heading">
+                <h3 class="panel-title">Upload Date</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" action="@Url.Action("UploadMember", "Member")" role="form" class="form-inline" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <div class="control-label col-md-4">Select File</div>
+                        <div class="control-label col-md-8">
+                            <input type="file" name="uploadFile" accept="application/vnd.ms-excel"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="form-group">
+                        <div class="control-label col-md-3">&nbsp;</div>
+                        <div class="control-label col-md-9">
+                            <button class="btn btn-success" type="submit">Upload</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-12">
+        <div class="jumbotron">
+            <h5>Steps to uploading the Member Data</h5>
+            <ul type="circle" style="font-size: 13px !important;">
+                <li>Please Download the template <a href="~/template.xlsx">here</a></li>
+                <li>Add the card information and do not remove the header</li>
+                <li>Save the file, close it and upload it using the form to the left</li>
+            </ul>
+        </div>
+    </div>
+</div>

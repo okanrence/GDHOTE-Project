@@ -1,0 +1,101 @@
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.ActivityTypeViewModel>
+
+@{
+    ViewBag.Title = "Activity Types";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Activity Types</h2>
+
+<p>
+    @Html.ActionLink("New Activity Type", "New", "ActivityType", null, new { @class = "btn btn-primary" })
+</p>
+
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No record(s) found</p>
+}
+else
+{
+    <div id="responsive">
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+        <div>
+            <table id="activitytypes" class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Dependency</th>
+                        <th>Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var activityType in Model)
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(activityType.Name, "Edit", "ActivityType", new { id = activityType.ActivityTypeKey }, null)</td>
+                            <td>@activityType.Status</td>
+                            <td>@activityType.Dependency</td>
+                            <td>@activityType.DateCreated.ToString("dd-MMM-yyyy")</td>
+                            <td><button data-activitytype-id="@activityType.ActivityTypeKey" class="btn btn-link js-delete">Delete</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+}
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#activitytypes").DataTable();
+
+            $("#activitytypes").on("click", ".js-delete", function () {
+                var button = $(this);
+                var id = button.attr("data-activitytype-id");
+
+                var form = $('#responsive');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+                //Submit request
+                var request = { __RequestVerificationToken: token };
+
+                bootbox.confirm("Are you sure you want to proceed?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '@Url.Action("DeleteActivityType", "ActivityType")/' + id,
+                            method: "POST",
+                            data: request,
+                            success: function (data) {
+                                if (data !== null) {
+                                    if (data.ErrorCode === "00") {
+                                        swal({
+                                            title: "Success",
+                                            text: "success",
+                                            type: "success"
+                                        });
+
+                                        window.location.reload(true);
+                                    }
+                                    else {
+                                        alert(data.ErrorMessage);
+                                    }
+                                };
+
+                            }
+                        });
+                    }
+                });
+
+            });
+        });
+    </script>
+}
+

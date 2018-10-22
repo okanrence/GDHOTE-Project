@@ -1,0 +1,92 @@
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.ActivityViewModel>
+@{
+    ViewBag.Title = "Activities";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Activities</h2>
+
+
+
+<div id="loadDiv" style="display: none; background-color: rgba(0, 0, 0, 0.3); position: fixed; top: 0px; left: 0px; z-index: 999; height: 100%; width: 100%;">
+    <p align="center" style="margin-top: 20%">
+        <img src="~/images/download.gif" />
+    </p>
+</div>
+
+
+
+
+@using (Ajax.BeginForm("FetchReportByDate", "Activity", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    LoadingElementId = "loadDiv",
+    //OnSuccess = "SuccessMessage",
+    //OnFailure = "FailMessage",
+    UpdateTargetId = "activitiesData"
+}))
+{
+    <div>
+        @Html.AntiForgeryToken()
+    </div>
+    <div>
+        <div class="form-group">
+            <label id="lbl-criteria">Select Criteria</label>
+            <select name="criteria">
+                <option value="0">Select One</option>
+                <option value="1">Magus Date</option>
+                <option value="2">Initiation Date</option>
+                <option value="3">Date Of Birth</option>
+                <option value="4">Appointment Date</option>
+                <option value="5">Date Created</option>
+            </select>
+            <label id="lbl-start-date">Start Date</label>
+            <input id="start-date" name="startdate" type="text" autocomplete="off" />
+            <label id="lbl-end-date">End Date</label>
+            <input id="end-date" name="enddate" type="text" autocomplete="off" />
+            <button type="button" id="btn-fetch" class="btn btn-primary">Fetch</button>
+            <button id="cmd-fetch" class="btn btn-primary" style="display: none">Fetch</button>
+        </div>
+    </div>
+}
+
+
+<div id="activitiesData">
+    @Html.Partial("_ActivityReport")
+</div>
+
+
+@section scripts
+{
+    <script>
+
+        $(document).ready(function () {
+
+            $(function () {
+                $('#start-date, #end-date').datepicker({
+                    format: 'dd-M-yyyy',
+                    autoclose: 1,
+                    todayHighlight: 1
+                });
+            });
+
+            $("#btn-fetch").button().click(function () {
+                var startDate = $("#start-date").val();
+                var endDate = $("#end-date").val();
+                if (startDate === '') {
+                    alert('Please select a start date');
+                    return;
+                }
+
+                if (endDate === '') {
+                    alert('Please select a end date');
+                    return;
+                }
+
+                $("#cmd-fetch").click();
+            });
+
+        });
+
+    </script>
+}

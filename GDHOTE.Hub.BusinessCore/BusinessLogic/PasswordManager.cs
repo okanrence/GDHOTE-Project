@@ -14,7 +14,7 @@ namespace GDHOTE.Hub.BusinessCore.BusinessLogic
         {
             string result = "";
             if (string.IsNullOrEmpty(passwordString)) return result;
-            result = CommonServices.CreateHash(passwordString, HashTypes.Sha256, HashEncoding.Hex);
+            result = UtilService.CreateHash(passwordString, HashTypes.Sha256, HashEncoding.Hex);
             return result;
         }
     }

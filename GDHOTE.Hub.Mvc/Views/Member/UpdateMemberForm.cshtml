@@ -1,4 +1,4 @@
-﻿@model GDHOTE.Hub.CoreObject.ViewModels.MemberFormViewModel
+﻿@model GDHOTE.Hub.CoreObject.ViewModels.UpdateMemberFormViewModel
 
 @{
     ViewBag.Title = "MemberForm";
@@ -10,23 +10,23 @@
 {
     @Html.ValidationSummary(true, "Please fix the below errors.")
     <div class="form-group">
-        @Html.LabelFor(m => m.FirstName)
-        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.FirstName)
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.MiddleName)
-        @Html.TextBoxFor(m => m.MiddleName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.MiddleName)
-    </div>
-    <div class="form-group">
         @Html.LabelFor(m => m.Surname)
-        @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.Surname, new { @class = "form-control", autocomplete = "off" })
         @Html.ValidationMessageFor(m => m.Surname)
     </div>
     <div class="form-group">
+        @Html.LabelFor(m => m.FirstName)
+        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", autocomplete = "off" })
+        @Html.ValidationMessageFor(m => m.FirstName)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.OtherNames)
+        @Html.TextBoxFor(m => m.OtherNames, new { @class = "form-control", autocomplete = "off" })
+        @Html.ValidationMessageFor(m => m.OtherNames)
+    </div>
+    <div class="form-group">
         @Html.LabelFor(m => m.DateOfBirth)
-        @Html.TextBoxFor(m => m.DateOfBirth, "{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.DateOfBirth, "{0:d MMM yyyy}", new { @class = "form-control", autocomplete = "off" })
         @Html.ValidationMessageFor(m => m.DateOfBirth)
     </div>
     <div class="form-group">
@@ -41,20 +41,20 @@
     </div>
     <div class="checkbox">
         <label>
-            @Html.CheckBoxFor(m => m.InitiationFlag) Initiation?
+            @Html.CheckBoxFor(m => m.InitiationStatus) Initiation?
         </label>
     </div>
     <div class="checkbox">
         <label>
-            @Html.CheckBoxFor(m => m.MagusFlag) Is Magus?
+            @Html.CheckBoxFor(m => m.MagusStatus) Is Magus?
         </label>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.MagusDate)
-        @Html.TextBoxFor(m => m.MagusDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.TextBoxFor(m => m.MagusDate, "{0:d MMM yyyy}", new { @class = "form-control", autocomplete = "off" })
         @Html.ValidationMessageFor(m => m.MagusDate)
     </div>
-    @*<div>@Html.HiddenFor(m => m.MemberKey)</div>*@
+    <div>@Html.HiddenFor(m => m.MemberKey)</div>
     <div>
         <button type="submit" class="btn btn-primary">Save</button>
     </div>

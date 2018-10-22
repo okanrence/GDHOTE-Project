@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
 using GDHOTE.Hub.CoreObject.Models;
 
 namespace GDHOTE.Hub.CoreObject.ViewModels
 {
-    public class ActivityTypeFormViewModel
+    public class ActivityTypeFormViewModel : CreateActivityTypeRequest
     {
-        public ActivityType ActivityType { get; set; }
-        public List<Status> Status { get; set; }
+        //public List<Status> Statuses { get; set; }
         public List<ActivityType> DependencyTypes { get; set; }
     }
 }
