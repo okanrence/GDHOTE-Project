@@ -43,9 +43,9 @@ desired effect
             <!-- Logo -->
             <a href="index2.html" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>A</b>LT</span>
+                @*<span class="logo-mini"><b>A</b>LT</span>*@
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>Admin</b>LTE</span>
+                <span class="logo-lg"><b>GDHOTE</b>App</span>
             </a>
             <!-- Header Navbar -->
             <nav class="navbar navbar-static-top" role="navigation">
@@ -64,7 +64,7 @@ desired effect
                                 <span class="label label-success">4</span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">You have 4 messages</li>
+                                <li class="header">You have unread messages</li>
                                 <li>
                                     <!-- inner menu: contains the messages -->
                                     <ul class="menu">
@@ -73,16 +73,15 @@ desired effect
                                             <a href="#">
                                                 <div class="pull-left">
                                                     <!-- User Image -->
-                                                    @*<img src="Content/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">*@
                                                     <img src="~/Content/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                                                 </div>
                                                 <!-- Message title and timestamp -->
                                                 <h4>
-                                                    Support Team
+                                                    GDHOTE App
                                                     <small><i class="fa fa-clock-o"></i> 5 mins</small>
                                                 </h4>
                                                 <!-- The message -->
-                                                <p>Why not buy a new awesome theme?</p>
+                                                <p>You have 2 new registered members</p>
                                             </a>
                                         </li>
                                         <!-- end message -->
@@ -94,7 +93,7 @@ desired effect
                         </li>
                         <!-- /.messages-menu -->
                         <!-- Notifications Menu -->
-                        <li class="dropdown notifications-menu">
+                        @*<li class="dropdown notifications-menu">
                             <!-- Menu toggle button -->
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-bell-o"></i>
@@ -154,7 +153,7 @@ desired effect
                                     <a href="#">View all tasks</a>
                                 </li>
                             </ul>
-                        </li>
+                        </li>*@
                         <!-- User Account Menu -->
                         <li class="dropdown user user-menu">
                             <!-- Menu Toggle Button -->
@@ -162,19 +161,19 @@ desired effect
                                 <!-- The user image in the navbar-->
                                 <img src="~/Content/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
                                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                                <span class="hidden-xs">Alexander Pierce</span>
+                                <span class="hidden-xs">  @User.Identity.Name </span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- The user image in the menu -->
                                 <li class="user-header">
                                     <img src="~/Content/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                                     <p>
-                                        Alexander Pierce - Web Developer
-                                        <small>Member since Nov. 2012</small>
+                                        @User.Identity.Name 
+                                        <small>Last Login Date : 10-Oct-2018</small>
                                     </p>
                                 </li>
                                 <!-- Menu Body -->
-                                <li class="user-body">
+                                @*<li class="user-body">
                                     <div class="row">
                                         <div class="col-xs-4 text-center">
                                             <a href="#">Followers</a>
@@ -185,14 +184,14 @@ desired effect
                                         <div class="col-xs-4 text-center">
                                             <a href="#">Friends</a>
                                         </div>
-                                    </div>
+                                    </div>*@
                                     <!-- /.row -->
-                                </li>
+                                @*</li>*@
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
-                                    <div class="pull-left">
+                                    @*<div class="pull-left">
                                         <a href="#" class="btn btn-default btn-flat">Profile</a>
-                                    </div>
+                                    </div>*@
                                     <div class="pull-right">
                                         <a href="#" class="btn btn-default btn-flat">Sign out</a>
                                     </div>
@@ -217,13 +216,13 @@ desired effect
                         <img src="~/Content/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                     </div>
                     <div class="pull-left info">
-                        <p>Alexander Pierce</p>
+                        <p>@User.Identity.Name</p>
                         <!-- Status -->
                         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                     </div>
                 </div>
                 <!-- search form (Optional) -->
-                <form action="#" method="get" class="sidebar-form">
+                @*<form action="#" method="get" class="sidebar-form">
                     <div class="input-group">
                         <input type="text" name="q" class="form-control" placeholder="Search...">
                         <span class="input-group-btn">
@@ -232,7 +231,7 @@ desired effect
                             </button>
                         </span>
                     </div>
-                </form>
+                </form>*@
                 <!-- /.search form -->
                 <!-- Sidebar Menu -->
                 @Html.Partial("_NavMenu")
@@ -264,10 +263,10 @@ desired effect
         <footer class="main-footer">
             <!-- To the right -->
             <div class="pull-right hidden-xs">
-                Anything you want
+                Love, Liberty and Unity.
             </div>
             <!-- Default to the left -->
-            <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
+            <strong>Copyright &copy; 2016 <a href="#">GDHOTE</a>.</strong> All rights reserved.
         </footer>
         <!-- Control Sidebar -->
         <!-- /.control-sidebar -->
