@@ -1,86 +1,78 @@
 ﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.MemberViewModel>
 
+
 @if (Model == null || Model.Count == 0)
 {
     <p>No record(s) found</p>
 }
 else
 {
-    <div id="responsive">
-        <div class="form-group">
-            @Html.AntiForgeryToken()
-        </div>
-
-        <div>
-            <table id="members" class="table table-bordered table-hover table-responsive">
-                <thead>
+    <div>
+        <table id="members" class="table table-bordered table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th>SN</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Martial Status</th>
+                    <th>Status</th>
+                    <th>Date Of Birth</th>
+                    <th>Magus</th>
+                    <th>Magus Date</th>
+                    <th>Date</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int i = 1; }
+                @foreach (var member in Model)
+                {
                     <tr>
-                        <th>SN</th>
-                        <th>Name</th>
-                        <th>Gender</th>
-                        <th>Martial Status</th>
-                        <th>Status</th>
-                        <th>Date Of Birth</th>
-                        <th>Magus</th>
-                        <th>Magus Date</th>
-                        <th>Date</th>
-                        <th></th>
-                        <th></th>
+                        <td>@i</td>  @{ i++; }
+                        <td><button id="btn-member-info" data-notification-id="@member.MemberKey" class="btn btn-link js-action">@member.Surname, @member.FirstName</button></td>
+                        <td>@member.Gender</td>
+                        <td>@member.MaritalStatus</td>
+                        <td>@member.MemberStatus</td>
+                        <td>@(member.DateOfBirth?.Date.ToString("dd-MMM-yyyy")) </td>
+                        <td>@((member.MagusStatus) ? "Y" : "N")</td>
+                        <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy")) </td>
+                        <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>
+                        <td>@Html.ActionLink("Edit", "Edit", "Member", new { id = member.MemberKey }, null)</td>
+                        <td><button data-member-id="@member.MemberKey" class="btn btn-link js-delete">Delete</button></td>
                     </tr>
-                </thead>
-                <tbody>
-                    @{ int i = 1; }
-                    @foreach (var member in Model)
-                    {
-                        <tr>
-                            <td>@i</td>  @{ i++; }
-                            <td><button id="btn-member-info" data-notification-id="@member.MemberKey" class="btn btn-link js-action">@member.Surname, @member.FirstName</button></td>
-                            <td>@member.Gender</td>
-                            <td>@member.MaritalStatus</td>
-                            <td>@member.MemberStatus</td>
-                            <td>@(member.DateOfBirth?.Date.ToString("dd-MMM-yyyy")) </td>
-                            <td>@((member.MagusStatus) ? "Y" : "N")</td>
-                            <td>@(member.MagusDate?.Date.ToString("dd-MMM-yyyy")) </td>
-                            <td>@member.DateCreated.ToString("dd-MMM-yyyy")</td>
-                            <td>@Html.ActionLink("Edit", "Edit", "Member", new { id = member.MemberKey }, null)</td>
-                            <td><button data-member-id="@member.MemberKey" class="btn btn-link js-delete">Delete</button></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                }
+            </tbody>
+        </table>
+    </div>
 
 
-        <div id='memberinfomodal' class='modal hide fade in'>
+    @*<div id='memberinfomodal' class='modal hide fade in'>
             <div id='divResult'>
             </div>
-        </div>
-    </div>
+        </div>*@
+
 }
 
-@section scripts
-{
     <script>
-        $(document).ready(function () {
 
-      
-            $("#members").DataTable({
-                //dom: 'Bfrtip',
-                "bProcessing": true,
-                "pageLength": 10,
-                "bFilter": true,
-                "bInfo": true,
-                scrolly: 400,
-                lengthMenu: [
-                    [10, 25, 50, 100, 500, -1],
-                    ['10 records', '25 records', '50 records', '100 records', '500 records', 'Show all']
-                ]
 
-            });
+        $("#members").DataTable({
+            //dom: 'Bfrtip',
+            "bProcessing": true,
+            "pageLength": 10,
+            "bFilter": true,
+            "bInfo": true,
+            scrolly: 400,
+            lengthMenu: [
+                [10, 25, 50, 100, 500, -1],
+                ['10 records', '25 records', '50 records', '100 records', '500 records', 'Show all']
+            ]
 
-           //$("#members").DataTable();
+        });
 
-           $("#members").on("click", ".js-action", function () {
+
+         $("#members").on("click", ".js-action", function () {
 
                 var button = $(this);
                 var id = button.attr("data-notification-id");
@@ -149,10 +141,4 @@ else
                             }
                         });
            });
-
-
-
-        });
     </script>
-}
-

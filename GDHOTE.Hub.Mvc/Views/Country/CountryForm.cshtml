@@ -19,8 +19,10 @@
         <span class="text-danger">@ViewBag.ErrorBag</span>
         <div class="form-group">
             @Html.LabelFor(c => c.Name)
-            @Html.TextBoxFor(c => c.Name, new { @class = "form-control gdhote-text-capitalize", autocomplete = "off" })
-            @Html.ValidationMessageFor(c => c.Name)
+            <div class="col-sm-4">
+                @Html.TextBoxFor(c => c.Name, new { @class = "form-control gdhote-text-capitalize", autocomplete = "off" })
+                @Html.ValidationMessageFor(c => c.Name)
+            </div>
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Save</button>

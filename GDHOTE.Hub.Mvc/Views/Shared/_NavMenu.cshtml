@@ -3,7 +3,7 @@
 @using GDHOTE.Hub.CoreObject.ViewModels
 
 <ul class="sidebar-menu" data-widget="tree">
-    <li class="header">MENU</li>
+
     <!-- Optionally, you can add icons to the links -->
     @{
         IEnumerable<MainMenuResponse> mainMenus = ViewBag.MainMenu;
@@ -12,6 +12,7 @@
 
         if (mainMenus != null)
         {
+            <li class="header">MENU</li>
             foreach (var mainMenu in mainMenus)
             {
                 var childrenMenu = subMenus.ToList().Where(s => s.MenuId == mainMenu.Id).OrderBy(s => s.DisplaySequence);

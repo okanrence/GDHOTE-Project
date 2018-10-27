@@ -20,11 +20,20 @@ namespace GDHOTE.Hub.Mvc.Controllers
             //string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
             //var members = PortalMemberService.GetMembersByCriteria(criteria, startDate, endDate).ToList();
 
-            var members = PortalMemberService.GetRecentMembers(SetToken());
-            return View(members);
+            //var members = PortalMemberService.GetRecentMembers(SetToken());
+            return View();
         }
+        public PartialViewResult GetRecentMembers(string id)
+        {
+            //string criteria = "";
+            //string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
+            //string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
+            //var members = PortalMemberService.GetMembersByCriteria(criteria, startDate, endDate).ToList();
 
-        public ActionResult GetMemberByID(string id)
+            var member = PortalMemberService.GetRecentMembers(SetToken());
+            return PartialView("_Index", member);
+        }
+        public PartialViewResult GetMemberByID(string id)
         {
             //string criteria = "";
             //string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
@@ -32,7 +41,7 @@ namespace GDHOTE.Hub.Mvc.Controllers
             //var members = PortalMemberService.GetMembersByCriteria(criteria, startDate, endDate).ToList();
 
             var member = PortalMemberService.GetMemberById(id,SetToken());
-            return View("_Index", member);
+            return PartialView("_Index", member);
         }
         public ActionResult List()
         {

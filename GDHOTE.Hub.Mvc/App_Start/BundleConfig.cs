@@ -19,19 +19,19 @@ namespace GDHOTE.Hub.Mvc
                         //"~/Content/bower_components/bootstrap-daterangepicker/daterangepicker.js",
                         //"~/Content/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
                         //"~/Content/bower_components/jquery-slimscroll/jquery.slimscroll.min.js",
-                        "~/Content/dist/js/adminlte.min.js"
+                        "~/Content/dist/js/adminlte.min.js",
                         //"~/Content/dist/js/pages/dashboard.js",
-                        ////"~/Scripts/bootbox.js",
-                        //"~/Scripts/respond.js",
-                        //"~/Scripts/datatables/jquery.datatables.js",
-                        //"~/Scripts/datatables/datatables.bootstrap.js",
-                        //"~/Scripts/moment.js",
-                        //"~/Scripts/bootstrap-datepicker.js",
-                        //"~/Scripts/sweetalert.min.js",
+                        "~/Scripts/bootbox.js",
+                        "~/Scripts/respond.js",
+                        "~/Scripts/datatables/jquery.datatables.js",
+                        "~/Scripts/datatables/datatables.bootstrap.js",
+                        "~/Scripts/moment.js",
+                        "~/Scripts/bootstrap-datepicker.js",
+                        "~/Scripts/sweetalert.min.js",
                         //"~/Scripts/jquery.unobtrusive-ajax.js",
-                        //"~/Scripts/typeahead.bundle.js",
-                        //"~/Scripts/select2.full.js",
-                        //"~/Scripts/jquery-ui-{version}.js"
+                        "~/Scripts/typeahead.bundle.js",
+                        "~/Scripts/select2.full.js",
+                        "~/Scripts/jquery-ui-{version}.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -57,11 +57,12 @@ namespace GDHOTE.Hub.Mvc
                      "~/Content/sweetalert.min.css",
                       "~/Content/typeahead.css",
                       "~/Content/select2.css",
+                      "~/Content/loader.css",
                        "~/Content/jquery-ui/jquery-ui.min.css",
                        "~/Content/dist/css/AdminLTE.min.css",
                       "~/Content/dist/css/skins/skin-blue.min.css"
-                     
-                      /*"~/Content/site.css"*/)); 
+
+                     /* "~/Content/site.css"*/)); 
         }
     }
 }
