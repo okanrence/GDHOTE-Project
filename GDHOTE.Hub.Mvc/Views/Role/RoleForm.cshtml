@@ -1,0 +1,39 @@
+﻿@model GDHOTE.Hub.CoreObject.ViewModels.RoleFormViewModel
+@{
+    ViewBag.Title = "RoleForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model.Name == null ? "New Role" : "Edit Role";
+    }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "Role"))
+{
+    <div>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+        <div class="form-group">
+            @Html.LabelFor(r => r.Name)
+            @Html.TextBoxFor(r => r.Name, new {@class = "form-control gdhote-text-capitalize"})
+            @Html.ValidationMessageFor(r => r.Name)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.RoleTypeId)
+            @Html.DropDownListFor(m => m.RoleTypeId, new SelectList(Model.RoleTypes, "Id", "Name"), "Select Role Type", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.RoleTypeId)
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+    </div>
+
+}

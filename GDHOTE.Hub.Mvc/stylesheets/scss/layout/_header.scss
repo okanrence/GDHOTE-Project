@@ -1,0 +1,79 @@
+.header {
+	width: 100%;
+	height: auto;
+	.hero {
+		width: 100%;
+		height: 450px;
+		background: url(../../images/man.png);
+		background-size: contain;
+		text-align: left;
+		h1 {
+			font-size: 48px;
+			margin: 50px auto;
+			text-transform: none;
+			font-weight: bold;
+			color: #000000;
+		}
+		h2 {
+			font-size: 14px;
+			font-weight: 400;
+			color: #000000;
+		}
+		.search {
+			width: 65%;
+			input {
+				width: 100%;
+				padding: 15px;
+				outline: none;
+				border: 1px solid #979797;
+				border-radius: 4px;
+				color: #333333;
+				font-size: 14px;
+			}
+		}
+	}
+}
+
+.navigation {
+	width: 100%;
+	padding: 15px;
+	background-color: #ffffff;
+
+	.logo {
+		width: 150px;
+		height: auto;
+		float: left;
+		img {
+			height: 40px;
+		}
+	}
+	.nav-search {
+		width: 50%;
+		float: left;
+		input {
+				width: 100%;
+				padding: 10px;
+				outline: none;
+				border: 1px solid #979797;
+				color: #333333;
+				font-size: 14px;
+			}
+	}
+	.nav-items {
+		text-align: right;
+		text-transform: uppercase;
+		button {
+			color: #ffffff;
+			background: #417505;
+			font-weight: 600;
+			font-size: 14px;
+			text-transform: uppercase;
+			margin-left: 20px;
+		}
+		a {
+			margin-left: 20px;
+			color: #4A4A4A;
+			font-weight: 600;
+		}
+	}
+}

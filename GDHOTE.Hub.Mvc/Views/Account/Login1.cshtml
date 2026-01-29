@@ -1,0 +1,38 @@
+﻿
+@model GDHOTE.Hub.CoreObject.DataTransferObjects.AdminLoginRequest
+
+
+@{
+    ViewBag.Title = "Login";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-5">
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <hr />
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+        <div class="form-group">
+            @Html.TextBoxFor(m => m.EmailAddress, new { placeholder = "Email Address", @class = "form-control", autocomplete = "off" })
+            @Html.ValidationMessageFor(m => m.EmailAddress, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.PasswordFor(m => m.Password, new { placeholder = "Password", @class = "form-control", autocomplete = "off" })
+            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Log in" class="btn btn-primary btn-block" />
+        </div>
+        @*<button type="submit" class="btn btn-primary btn-block">Submit</button>*@
+        <span class="text-danger">@ViewBag.LoginError</span>
+
+        <p>
+            @Html.ActionLink("Forgot your password?", "ForgotPassword")
+        </p>
+}
+    </div>
+</div>

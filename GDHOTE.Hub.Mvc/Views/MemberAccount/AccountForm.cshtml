@@ -1,0 +1,92 @@
+﻿@model GDHOTE.Hub.CoreObject.ViewModels.AccountFormViewModel
+@{
+    ViewBag.Title = "AccountForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model.MemberId == 0 ? "New Account" : "Edit Account";
+    }
+
+}
+<h2>@pagename</h2>
+
+
+@using (Html.BeginForm("Save", "MemberAccount"))
+{
+    <div>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+        <div class="form-group">
+            @Html.LabelFor(a => a.AccountTypeId)
+            @Html.DropDownListFor(a => a.AccountTypeId, new SelectList(Model.AccountTypes, "Id", "Name"), "Select Account Type", new { @class = "form-control" })
+            @Html.ValidationMessageFor(a => a.AccountTypeId)
+        </div>
+        <div class="form-group">
+            <label>Name</label>
+            <div>
+                <input id="membername" name="membername" required="" type="text" value="" class="form-control" />
+                <input id="MemberId" name="MemberId" type="hidden" value="" class="form-control" />
+                @Html.ValidationMessageFor(p => p.MemberId)
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                @Html.LabelFor(p => p.PaymentModeId)
+                @Html.DropDownListFor(p => p.PaymentModeId, new SelectList(Model.ModeOfPayments, "Id", "Name"), "Select Mode Of Payment", new { @class = "form-control" })
+                @Html.ValidationMessageFor(p => p.PaymentModeId)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.CurrencyId)
+                @Html.DropDownListFor(p => p.CurrencyId, new SelectList(Model.Currencies, "Id", "Name"), "Select Currency", new { @class = "form-control" })
+                @Html.ValidationMessageFor(p => p.CurrencyId)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Amount)
+                @Html.TextBoxFor(p => p.Amount, new { @class = "form-control" })
+                @Html.ValidationMessageFor(p => p.Amount)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Narration)
+                @Html.TextBoxFor(p => p.Narration, new { @class = "form-control" })
+                @Html.ValidationMessageFor(p => p.Narration)
+            </div>*@
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div>@Html.AntiForgeryToken()</div>
+    </div>
+
+}
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+
+            $("#membername").autocomplete({
+                source: '@Url.Action("GetMember", "Member")',
+                minLength: 5,
+                select: function (event, ui) {
+                    console.log(ui);
+                    $(this).val(ui.item.value);
+                    $(this).val(ui.item.label);
+                    $("#MemberId").val(ui.item.value);
+                    return false;
+                },
+                focus: function (event, ui) {
+                    return false;
+                }
+            });
+
+
+        });
+    </script>
+}
+
+
+
+

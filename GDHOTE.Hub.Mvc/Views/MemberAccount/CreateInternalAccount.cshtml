@@ -1,0 +1,50 @@
+﻿@model GDHOTE.Hub.CoreObject.ViewModels.InternalAccountFormViewModel
+@{
+    ViewBag.Title = "Create Account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h2>New Account</h2>
+
+
+@using (Html.BeginForm("SaveInternalAccount", "MemberAccount"))
+{
+    <div>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+        <div class="form-group">
+            @Html.LabelFor(a => a.BankId)
+            @Html.DropDownListFor(a => a.BankId, new SelectList(Model.Banks, "Id", "Name"), "Select Bank", new { @class = "form-control" })
+            @Html.ValidationMessageFor(a => a.BankId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(a => a.AccountNumber)
+            @Html.TextBoxFor(a => a.AccountNumber, new { @class = "form-control gdhote-text-capitalize", autocomplete = "off" })
+            @Html.ValidationMessageFor(a => a.AccountNumber)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(a => a.AccountName)
+            @Html.TextBoxFor(a => a.AccountName, new { @class = "form-control gdhote-text-capitalize", autocomplete = "off" })
+            @Html.ValidationMessageFor(a => a.AccountName)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(a => a.AccountTypeId)
+            @Html.DropDownListFor(a => a.AccountTypeId, new SelectList(Model.AccountTypes, "Id", "Name"), "Select Type", new { @class = "form-control", disabled = "disabled" })
+            @Html.ValidationMessageFor(a => a.AccountTypeId)
+            @Html.HiddenFor(a => a.AccountTypeId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(a => a.CurrencyId)
+            @Html.DropDownListFor(a => a.CurrencyId, new SelectList(Model.Currencies, "Id", "Name"), "Select Currency", new { @class = "form-control" })
+            @Html.ValidationMessageFor(a => a.CurrencyId)
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div>@Html.AntiForgeryToken()</div>
+    </div>
+
+}
+
+

@@ -1,0 +1,36 @@
+﻿@model  GDHOTE.Hub.CoreObject.DataTransferObjects.CreateCountryRequest
+@{
+    ViewBag.Title = "CountryForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model.Name == null ? "New Country" : "Edit Country";
+    }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "Country"))
+{
+    <div>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+        <div class="form-group">
+            @Html.LabelFor(c => c.Name)
+            <div class="col-sm-4">
+                @Html.TextBoxFor(c => c.Name, new { @class = "form-control gdhote-text-capitalize", autocomplete = "off" })
+                @Html.ValidationMessageFor(c => c.Name)
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+    </div>
+
+}
+

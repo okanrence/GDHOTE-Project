@@ -1,0 +1,87 @@
+﻿@model  GDHOTE.Hub.CoreObject.ViewModels.PublicationFormViewModel
+@{
+    ViewBag.Title = "PublicationForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model.Title == null ? "New Publication" : "Edit Publication";
+    }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "Publication", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+        <div class="form-group">
+            @Html.LabelFor(p => p.Title)
+            @Html.TextBoxFor(p => p.Title, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(p => p.Title)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.Description)
+            @Html.TextAreaFor(p => p.Description, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(p => p.Description)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.CategoryId)
+            @Html.DropDownListFor(p => p.CategoryId, new SelectList(Model.PublicationCategories, "Id", "Name"), "Select Category", new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.CategoryId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.DatePublished)
+            @Html.TextBoxFor(m => m.DatePublished, "{0:d MMM yyyy}", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.DatePublished)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.Author)
+            @Html.TextBoxFor(p => p.Author, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(p => p.Author)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.AccessRightId)
+            @Html.DropDownListFor(p => p.AccessRightId, new SelectList(Model.PublicationAccessRights, "Id", "Name"), "Select Access Right", new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.AccessRightId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.UploadFile)
+            @Html.TextBoxFor(p => p.UploadFile, new { type = "file", accept = "application/pdf" })
+            @Html.ValidationMessageFor(p => p.UploadFile)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.DisplayImageFile)
+            @Html.TextBoxFor(p => p.DisplayImageFile, new { type = "file", accept = "image/*" })
+            @Html.ValidationMessageFor(p => p.DisplayImageFile)
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+    </div>
+}
+
+@section scripts
+{
+    <script>
+
+        $(document).ready(function () {
+
+            $(function () {
+                $('#DatePublished').datepicker({
+                    format: 'dd M yyyy',
+                    autoclose: 1,
+                    todayHighlight: 1
+                });
+            });
+
+        });
+
+    </script>
+}
+

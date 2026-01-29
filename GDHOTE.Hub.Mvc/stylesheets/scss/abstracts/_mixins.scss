@@ -1,0 +1,165 @@
+@mixin for-phone-only {
+	@media (max-width: 599px) { @content; }
+}
+@mixin for-phone-landscape-up {
+	@media (min-width: 600px) { @content; }
+}
+@mixin for-phone-landscape-only {
+	@media (min-width: 600px) and (max-width: 767px) { @content; }
+}
+@mixin for-tablet-portrait-up {
+	@media (min-width: 768px) { @content; }
+}
+@mixin for-tablet-portait-only {
+	@media (min-width: 768px) and (max-width: 991px) { @content; }
+}
+@mixin for-tablet-landscape-up {
+	@media (min-width: 992px) { @content; }
+}
+@mixin for-tablet-landscape-only {
+	@media (min-width: 992px) and (max-width: 1199px) { @content; }
+}
+@mixin for-desktop-up {
+	@media (min-width: 1200px) { @content; }
+}
+@mixin for-desktop-only {
+	@media (min-width: 1200px) and (max-width:1799px) { @content; }
+}
+@mixin for-big-desktop-up {
+	@media (min-width: 1800px) { @content; }
+}
+
+@mixin title-font{
+	font-family: 'Open Sans', sans-serif;
+}
+
+/* MIXINS FOR MEDIA QUERIES ----------- */
+
+@mixin screen($size, $type: max, $pixels: 600) {
+    $breakpoint-med: 980px;
+    $breakpoint-small: 600px;
+    $breakpoint-med-small: 750px;
+
+    @if $size=='tiny' {
+        @media screen and (max-width: 400px) {
+            @content;
+        }
+    }
+    @if $size=='small' {
+        @media screen and (max-width: $breakpoint-small) {
+            @content;
+        }
+    }
+    @if $size=='med-small' {
+        @media screen and (max-width: $breakpoint-med-small) {
+            @content;
+        }
+    }
+    @else if $size=='med' {
+        @media screen and (max-width: $breakpoint-med) {
+            @content;
+        }
+    }
+    @else if $size=='mid' {
+        @media screen and (min-width: $breakpoint-med-small) and (max-width: $breakpoint-med) {
+            @content;
+        }
+    }
+    @else if $size=='large' {
+        @media screen and (min-width: $breakpoint-med) {
+            @content;
+        }
+    }
+    @else if $size=='custom' {
+        @media screen and ($type + -width: $pixels + px) {
+            @content;
+        }
+    }
+}
+
+
+// Mixin for media queries but strictly uses min-width for it's queries
+@mixin screen-breakpoint($size) {
+    @if $size=='xxs' {
+        @media screen and (min-width: $breakpoint-xxs-min) {
+            @content;
+        }
+    }
+    @if $size=='xs' {
+        @media screen and (min-width: $breakpoint-xs-min) {
+            @content;
+        }
+    }
+    @if $size=='sm' {
+        @media screen and (min-width: $breakpoint-sm-min) {
+            @content;
+        }
+    }
+    @if $size=='md' {
+        @media screen and (min-width: $breakpoint-md-min) {
+            @content;
+        }
+    }
+    @else if $size=='lg' {
+        @media screen and (min-width: $breakpoint-lg-min) {
+            @content;
+        }
+    }
+    @else if $size=='xl' {
+        @media screen and (min-width: $breakpoint-xl-min) {
+            @content;
+        }
+    }
+    @else if $size=='xxl' {
+        @media screen and (min-width: $breakpoint-xxl-min) {
+            @content;
+        }
+    }
+}
+
+//animation for slider
+@mixin slider-transform{
+	50%   {
+		-webkit-transform: scale(0.5);
+		-ms-transform: scale(0.5);
+		transform: scale(0.5);
+	}
+
+	100%  {
+		-webkit-transform: scale(1);
+		-ms-transform: scale(1);
+		transform: scale(1);
+	}
+	//100% {
+		//  -webkit-transform: scale(2);
+		//  -ms-transform: scale(2);
+		//  transform: scale(2);
+		//}
+	}
+
+	@mixin card-icon($background:white){
+		width:48px;
+		height:48px;
+		border-radius:50%;
+		box-shadow: 0 0.5px 2px 0 rgba(0, 0, 0, 0.15);
+		background:$background;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	@mixin icon-shape($width:48px, $height:48px, $width-lg:92px, $height-lg:92px, $border-radius:16px){
+		width: $width;
+		height: $height;
+		border-radius: $border-radius;
+		background-color: #ffffff;
+		box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
+		display:flex;
+		align-items: center;
+		justify-content: center;
+		@include media(768px){
+			width: $width-lg;
+			height: $height-lg;
+		}
+
+	}

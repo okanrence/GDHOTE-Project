@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="keywords" content="" />
+    <meta name="author" content="">
+    <link rel="canonical" href="" />
+    <meta name="geo.region" content="Lagos" />
+    <link rel="icon" href="favicon.ico">
+
+    <!-- Twitter Card -->
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="" />
+    <meta name="twitter:creator" content="" />
+    <meta name="twitter:title" content="Rave" />
+    <meta name="twitter:description" content="" />
+
+    <title>Jobs platform</title>
+
+
+    <!-- Custom styles for this template -->
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <!--<link href="stylesheets/css/tabs.min.css" rel="stylesheet">-->
+    <link href="~/stylesheets/css/app.css" rel="stylesheet">
+    <link href="~/stylesheets/vendors/bootstrap.min.css" rel="stylesheet">
+
+    @*@Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")*@
+
+    @Scripts.Render("~/bundles/lib")
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <section class="header">
+        <div class="hero">
+            <nav class="navigation">
+                <div class="container">
+                    <div class="logo">
+                        <a href="#"><img src="~/images/logo.png"></a>
+                    </div>
+                    <div class="nav-items">
+                        @*<a href="@Url.Action("Faq", "Policy")">FAQ's</a>*@
+                        <a href="@Url.Action("Login", "Account")">Login</a>
+                        @*<a href="@Url.Action("Register", "Account")"><button class="btn btn-sm">Signup</button></a>*@
+                    </div>
+                </div>
+            </nav>
+            @*<div class="container">
+                    <h1>
+                        Let's find you a job you <br>will love.
+                    </h1>
+                    <div class="search">
+                        <input type="text" name="search-bar" placeholder="What type of job do you need?">
+                    </div>
+                    <h2>The best place to find and list jobs! Search and apply to <br>hundreds of jobs.</h2>
+                </div>*@
+        </div>
+    </section>
+
+    @*@Html.Partial("_NavMenu")*@
+    <section class="content container">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Jobify</p>
+        </footer>
+    </section>
+
+    @Scripts.Render("~/bundles/jqueryval")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

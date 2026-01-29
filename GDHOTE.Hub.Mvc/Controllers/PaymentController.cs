@@ -1,0 +1,116 @@
+﻿using System;
+using System.Web.Mvc;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
+using Newtonsoft.Json;
+
+namespace GDHOTE.Hub.Mvc.Controllers
+{
+    public class PaymentController : BaseController
+    {
+        // GET: Payment
+        public ActionResult Index()
+        {
+            string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
+            string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
+            var payments = PortalPaymentService.GetPayments(startDate, endDate, SetToken());
+            return View("PaymentIndex", payments);
+        }
+        public ActionResult New()
+        {
+            return View("PaymentForm", ReturnViewModel());
+        }
+        public ActionResult Edit(string id)
+        {
+            var payment = PortalPaymentService.GetPayment(id, SetToken());
+            var viewModelTemp = ReturnViewModel();
+            var item = JsonConvert.SerializeObject(payment);
+            var viewModel = JsonConvert.DeserializeObject<PaymentFormViewModel>(item);
+            viewModel.Currencies = viewModelTemp.Currencies;
+            viewModel.PaymentTypes = viewModelTemp.PaymentTypes;
+            viewModel.ModeOfPayments = viewModelTemp.ModeOfPayments;
+            return View("PaymentForm", viewModel);
+        }
+        public ActionResult Save(CreatePaymentRequest createRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                var viewModelTemp = ReturnViewModel();
+                var item = JsonConvert.SerializeObject(createRequest);
+                var viewModel = JsonConvert.DeserializeObject<PaymentFormViewModel>(item);
+                viewModel.Currencies = viewModelTemp.Currencies;
+                viewModel.PaymentTypes = viewModelTemp.PaymentTypes;
+                viewModel.ModeOfPayments = viewModelTemp.ModeOfPayments;
+                return View("PaymentForm", viewModel);
+            }
+            var result = PortalPaymentService.CreatePayment(createRequest, SetToken());
+            if (result != null)
+            {
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+
+            }
+            else
+            {
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
+            }
+            // If we got this far, something failed, redisplay form
+            return View("PaymentForm", ReturnViewModel());
+        }
+
+        public ActionResult Manage()
+        {
+            string startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd-MMM-yyyy");
+            string endDate = DateTime.Now.ToString("dd-MMM-yyyy");
+            var payments = PortalPaymentService.GetPayments(startDate, endDate, SetToken());
+            return View("ManagePayment", payments);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteMember(ConfirmPaymentRequest confirmRequest)
+        {
+            var result = PortalPaymentService.DeletePayment(confirmRequest, SetToken());
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult ConfirmPayment(ConfirmPaymentRequest confirmRequest)
+        {
+            var result = PortalPaymentService.ConfirmPayment(confirmRequest, SetToken());
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public PartialViewResult FetchReportByDate(string startDate, string endDate)
+        {
+            var payments = PortalPaymentService.GetPayments(startDate, endDate, SetToken());
+            return PartialView("_PaymentReport", payments);
+        }
+
+        private PaymentFormViewModel ReturnViewModel()
+        {
+            var paymentModes = PortalPaymentModeService.GetActivePaymentModes(SetToken());
+            var paymentTypes = PortalPaymentTypeService.GetActivePaymentTypes(SetToken());
+            var currencies = PortalCurrencyService.GetActiveCurrencies(SetToken());
+            var viewModel = new PaymentFormViewModel
+            {
+                PaymentTypes = paymentTypes,
+                ModeOfPayments = paymentModes,
+                Currencies = currencies
+            };
+            return viewModel;
+        }
+    }
+}

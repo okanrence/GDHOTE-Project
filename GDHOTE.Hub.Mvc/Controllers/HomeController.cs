@@ -6,7 +6,8 @@ using System.Web.Mvc;
 
 namespace GDHOTE.Hub.Mvc.Controllers
 {
-    public class HomeController : Controller
+    [AllowAnonymous]
+    public class HomeController : BaseController
     {
         public ActionResult Index()
         {

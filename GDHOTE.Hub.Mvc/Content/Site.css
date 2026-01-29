@@ -22,3 +22,33 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.field-validation-error,
+label.error {
+    color: red;
+}
+
+.input-validation-error,
+input.error {
+    border: 2px solid red;
+}
+
+.validation-summary-errors {
+    color: red;
+}
+
+.gdhote-text-uppercase {
+    text-transform: uppercase;
+}
+
+.gdhote-text-capitalize {
+    text-transform: capitalize;
+}
+
+.ui-autocomplete-loading {
+    background-color: #ffffff;
+    background-image: url("../images/3.gif") !important;
+    background-size: 25px 25px;
+    background-position: right center !important;
+    background-repeat: no-repeat !important;
+}

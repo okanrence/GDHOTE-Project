@@ -1,0 +1,37 @@
+﻿@model GDHOTE.Hub.CoreObject.ViewModels.PaymentTypeFormViewModel
+@{
+    ViewBag.Title = "PaymentTypeForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model.Name == null ? "New Payment Type" : "Edit Payment Type";
+    }
+
+}
+<h2>@pagename</h2>
+
+@using (Html.BeginForm("Save", "PaymentType"))
+{
+    <div>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+        <div class="form-group">
+            @Html.LabelFor(p => p.Name)
+            @Html.TextBoxFor(p => p.Name, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(p => p.Name)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(a => a.AccountId)
+            @Html.DropDownListFor(a => a.AccountId, new SelectList(Model.InternalAccounts, "Id", "AccountNumber"), "Select Type", new { @class = "form-control" })
+            @Html.ValidationMessageFor(a => a.AccountId)
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div>@Html.AntiForgeryToken()</div>
+    </div>
+}
+

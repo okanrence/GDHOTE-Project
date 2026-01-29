@@ -1,0 +1,145 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using GDHOTE.Hub.CoreObject.Models;
+using GDHOTE.Hub.CoreObject.DataTransferObjects;
+using GDHOTE.Hub.CoreObject.ViewModels;
+using GDHOTE.Hub.PortalCore.Services;
+using Newtonsoft.Json;
+
+namespace GDHOTE.Hub.Mvc.Controllers
+{
+    public class UserController : BaseController
+    {
+        // GET: User
+        public ActionResult Index()
+        {
+            var users = PortalUserService.GetAllUsers(SetToken());
+            return View("UserIndex", users);
+        }
+
+        //GET: User/Details/5
+        public ActionResult Details(string id)
+        {
+            return View("UserIndex");
+        }
+
+        // GET: User/Create
+        public ActionResult New()
+        {
+            return View("UserForm", ReturnViewModel());
+        }
+        // GET: User/Edit/5
+        public ActionResult Edit(string id)
+        {
+            var user = PortalUserService.GetUser(id, SetToken());
+            if (user == null) return HttpNotFound();
+            var viewModelTemp = ReturnUpdateViewModel();
+            var item = JsonConvert.SerializeObject(user);
+            var viewModel = JsonConvert.DeserializeObject<UpdateAdminUserFormViewModel>(item);
+            viewModel.RoleTypes = viewModelTemp.RoleTypes;
+            viewModel.Roles = viewModelTemp.Roles;
+            viewModel.UserStatuses = viewModelTemp.UserStatuses;
+            return View("EditUser", viewModel);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Save(CreateAdminUserRequest createRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = ReturnViewModel();
+                return View("UserForm", viewModel);
+            }
+            var result = PortalUserService.CreateUser(createRequest, SetToken());
+            if (result != null)
+            {
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+
+            }
+            else
+            {
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
+            }
+            // If we got this far, something failed, redisplay form
+            return View("UserForm", ReturnViewModel());
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Update(UpdateAdminUserRequest updateRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = ReturnUpdateViewModel();
+                return View("EditUser", viewModel);
+            }
+            var result = PortalUserService.UpdateUser(updateRequest, SetToken());
+            if (result != null)
+            {
+                //Successful
+                if (result.ErrorCode == "00")
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.ErrorBag = result.ErrorMessage;
+                }
+
+            }
+            else
+            {
+                ViewBag.ErrorBag = "Unable to complete your request at the moment";
+            }
+            // If we got this far, something failed, redisplay form
+            return View("EditUser", ReturnUpdateViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteUser(string id)
+        {
+            var result = PortalUserService.DeleteUser(id, SetToken());
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private AdminUserFormViewModel ReturnViewModel()
+        {
+            var roleTypes = PortalRoleTypeService.GetActiveRoleTypes(SetToken());
+            var roles = new List<RoleResponse>();
+            var viewModel = new AdminUserFormViewModel
+            {
+                RoleTypes = roleTypes,
+                Roles = roles
+            };
+            return viewModel;
+        }
+        private UpdateAdminUserFormViewModel ReturnUpdateViewModel()
+        {
+            var roleTypes = PortalRoleTypeService.GetActiveRoleTypes(SetToken());
+            var roles = PortalRoleService.GetActiveRoles(SetToken());
+            var userStatues = PortalUserStatusService.GetActiveUserStatuses(SetToken());
+            var viewModel = new UpdateAdminUserFormViewModel
+            {
+                RoleTypes = roleTypes,
+                Roles = roles,
+                UserStatuses = userStatues
+            };
+            return viewModel;
+        }
+    }
+}

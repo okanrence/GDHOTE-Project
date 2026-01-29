@@ -1,0 +1,48 @@
+﻿@using System.Collections
+@using GDHOTE.Hub.CoreObject.DataTransferObjects
+@using GDHOTE.Hub.CoreObject.ViewModels
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("GDHOTE", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                @{
+                    IEnumerable<MainMenuResponse> mainMenus = ViewBag.MainMenu;
+                    IEnumerable<RoleMenuViewModel> subMenus = ViewBag.SubMenu;
+                    var deployedName = ViewBag.DeployedAppName;
+
+                    if (mainMenus != null)
+                    {
+                        foreach (var mainMenu in mainMenus)
+                        {
+                            var childrenMenu = subMenus.ToList().Where(s => s.MenuId == mainMenu.Id).OrderBy(s => s.DisplaySequence);
+                            if (childrenMenu.Any())
+                            {
+                                @:<li class="dropdown">
+                                    @:<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@mainMenu.Name<span class="caret"></span></a>
+                                    @:<ul class="dropdown-menu">
+                                        foreach (var child in childrenMenu)
+                                        {
+                                            @:<li><a href="@deployedName@child.SubMenuUrl">@child.SubMenu</a></li>
+                                        }
+                                        @:</ul>
+                                    @:</li>
+                            }
+
+                        }
+                    }
+
+                }
+
+            </ul>
+            @Html.Partial("_LoginPartial")
+        </div>
+    </div>
+</div>

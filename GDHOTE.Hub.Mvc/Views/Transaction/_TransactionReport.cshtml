@@ -1,0 +1,52 @@
+﻿@model List<GDHOTE.Hub.CoreObject.ViewModels.TransactionViewModel>
+
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No record(s) found</p>
+}
+else
+{
+    <div>
+        <table id="transactions" class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Narration</th>
+                <th>Amount</th>
+                <th>Mode</th>
+                <th>Currency</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var transaction in Model)
+            {
+                <tr>
+                    <td>@transaction.AccountName</td>
+                    <td>@transaction.Narration</td>
+                    <td>@($"{transaction.Amount:#,##0.00}") </td>
+                    <td>@transaction.PaymentMode</td>
+                    <td>@transaction.Currency</td>
+                    <td>@transaction.TransactionStatus</td>
+                    <td>@transaction.DateCreated.ToString("dd-MMM-yyyy | HH:mm")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#transactions").DataTable();
+
+        });
+    </script>
+}
+
+

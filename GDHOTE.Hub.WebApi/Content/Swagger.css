@@ -1,0 +1,21 @@
+﻿.swagger-section #header {
+    background-color: #00246E;
+    padding: 14px;
+    color: #fff0f5 !important;
+}
+
+
+
+body.swagger-section #header .swagger-ui-wrap #logo {
+    display: none;
+}
+
+.header__btn{
+    background-color: #FF6F03 !important;
+    color: #fff !important;
+}
+
+body {
+    font-family: "Segoe UI";
+    font-weight: lighter !important;
+}

@@ -1,0 +1,45 @@
+// Font Weights
+$font-light: 300;
+$font-normal: 400;
+$font-medium: 500;
+$font-semi-bold: 600;
+$font-bold: 700;
+$font-extra-bold: 800;
+
+// Default Font Size
+$font-base: 16px;
+
+
+// Font Stack
+$font-stack: "Avenir" !important;
+
+@font-face {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 300;
+    src: url("../css/fonts/avenir/AvenirLTStd-Light.otf") format("opentype");
+}
+
+
+@font-face {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 500;
+    src: url("../css/fonts/avenir/AvenirLTStd-Book.otf") format("opentype");
+}
+
+@font-face {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 600;
+    src: url("../css/fonts/avenir/AvenirLTStd-Roman.otf") format("opentype");
+}
+
+@font-face {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 900;
+    src: url("../css/fonts/avenir/AvenirLTStd-Black.otf") format("opentype");
+}
+
+

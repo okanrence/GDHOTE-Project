@@ -1,0 +1,41 @@
+﻿@model GDHOTE.Hub.CoreObject.ViewModels.CurrencyFormViewModel
+
+@{
+    ViewBag.Title = "Currency Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model == null ? "New Currency" : "Edit Currency";
+    }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "Currency"))
+{
+    <div>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+        <div class="form-group">
+            @Html.LabelFor(c => c.CurrencyCode)
+            @Html.TextBoxFor(c => c.CurrencyCode, new {@class = "form-control gdhote-text-uppercase", autocomplete = "off" })
+            @Html.ValidationMessageFor(c => c.CurrencyCode)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(c => c.Name)
+            @Html.TextBoxFor(c => c.Name, new {@class = "form-control gdhote-text-capitalize", autocomplete = "off" })
+            @Html.ValidationMessageFor(c => c.Name)
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+    </div>
+
+}
+

@@ -1,0 +1,40 @@
+﻿@model GDHOTE.Hub.CoreObject.ViewModels.ActivityTypeFormViewModel
+
+
+@{
+    ViewBag.Title = "ActivityTypeForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var pagename = "";
+    if (Model != null)
+    {
+        pagename = Model.Name == null ? "New Activity Type" : "Edit Activity Type";
+    }
+
+}
+<h2>@pagename</h2>
+@using (Html.BeginForm("Save", "ActivityType"))
+{
+    <div>
+        <span class="text-danger">@ViewBag.ErrorBag</span>
+        <div class="form-group">
+            @Html.LabelFor(a => a.Name)
+            @Html.TextBoxFor(a => a.Name, new { @class = "form-control gdhote-text-capitalize" })
+            @Html.ValidationMessageFor(a => a.Name)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(a => a.DependencyTypeId)
+            @Html.DropDownListFor(a => a.DependencyTypeId, new SelectList(Model.DependencyTypes, "Id", "Name"), "Select Dependency", new { @class = "form-control" })
+            @Html.ValidationMessageFor(a => a.DependencyTypeId)
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+        </div>
+    </div>
+
+}
